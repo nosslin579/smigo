@@ -1,0 +1,511 @@
+@CHARSET "ISO-8859-1";
+body {
+    background-color: #eee;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+}
+
+/* frame */
+.smigoframe {
+    margin: 40px 0px 0px 60px;
+    box-shadow: 0 0 5px #666;
+    border: 1px solid #618039;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+/* frame header */
+.smigoframeheader {
+    background-color: #618039;
+    color: #CCC;
+    padding: 6px 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+/* frame content */
+.smigoframecontent {
+    margin: 13px 10px;
+    background-color: #fff;
+}
+
+.largecenteredsmigoframe {
+    width: 600px;
+    margin: 100px auto;
+}
+
+.smigolink {
+    text-decoration: none;
+    color: #00e;
+    cursor: pointer;
+}
+
+.smigolink:hover {
+    text-decoration: underline;
+}
+
+.errorBlock, .error {
+    color: red;
+}
+
+/*###############  title and accountbox ################*/
+#smigotitle {
+    padding: 20px;
+    background: #618039; /* Old browsers */
+    background: -moz-linear-gradient(top, #618039 0%, #ffffff 32%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #618039), color-stop(32%, #ffffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #618039 0%, #ffffff 32%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #618039 0%, #ffffff 32%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #618039 0%, #ffffff 32%); /* IE10+ */
+    background: linear-gradient(to bottom, #618039 0%, #ffffff 32%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#618039', endColorstr='#ffffff', GradientType=0); /* IE6-9 */
+}
+
+#smigotitle a {
+    font-size: 5em;
+    text-decoration: none;
+    margin: 40px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    color: #444;
+}
+
+#smigotitle span {
+    font-size: 2.4em;
+    color: #7a7a7a;
+}
+
+#accountbox {
+    z-index: 100;
+    position: absolute;
+    right: 100px;
+    top: 0px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    background-color: #eee;
+    padding: 10px;
+}
+
+/*############### menu #####################*/
+#mainmenu {
+    padding: 0 0 0 100px;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #618039;
+    height: 40px;
+    box-shadow: 0 4px 10px #CCC;
+    background: #769c46; /* Old browsers */
+    background: -moz-linear-gradient(top, #769c46 0%, #6e9141 45%, #618039 54%, #48750e 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #769c46), color-stop(45%, #6e9141), color-stop(54%, #618039), color-stop(100%, #48750e)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #769c46 0%, #6e9141 45%, #618039 54%, #48750e 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #769c46 0%, #6e9141 45%, #618039 54%, #48750e 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #769c46 0%, #6e9141 45%, #618039 54%, #48750e 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #769c46 0%, #6e9141 45%, #618039 54%, #48750e 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#769c46', endColorstr='#48750e', GradientType=0); /* IE6-9 */
+}
+
+#mainmenu .mainmenuitem:hover {
+    background: #466919 !important;
+    text-decoration: underline;
+}
+
+#mainmenu .mainmenuitem a {
+    font-size: 1.5em;
+    width: 170px;
+    display: block;
+    height: 20px;
+    padding: 10px;
+    text-decoration: none;
+    color: #CCC;
+}
+
+#mainmenu .separator {
+    width: 1px;
+    background-color: #427028;
+    height: 36px;
+    margin: 2px;
+    box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.5);
+}
+
+/*#################### select species list #####################*/
+#selectspecieslist .selectspeciescontainer {
+}
+
+#selectspecieslist .selectspeciesitem:hover {
+    background-color: #d1dbc3;
+    text-decoration: underline;
+}
+
+#selectspecieslist .selected {
+    background-color: #d1dbc3;
+}
+
+#selectspecieslist .selectspeciesitem {
+    padding: 3px 30px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/*#################### gardenmenu #####################*/
+#gardenmenu .smigoframe:FIRST-CHILD {
+    margin-left: 0;
+}
+
+#gardenmenu .iconbutton {
+    margin: 0 8px;
+    cursor: pointer;
+}
+
+#gardenmenu .iconbuttons {
+    padding: 1px 0 0 0;
+}
+
+#gardenmenu #gardenyears .selectyears {
+    padding: 6px 0px;
+}
+
+#gardenmenu #gardenyears .selectyear {
+    margin: 0 2px;
+    color: black;
+    text-decoration: none;
+}
+
+#gardenmenu #gardenyears .selectyear:hover {
+    text-decoration: underline;
+}
+
+#gardenmenu #gardenyears .currentyear {
+    font-weight: bold;
+}
+
+#gardenmenu #userdialog {
+    padding: 6px 10px;
+    height: 16px;
+}
+
+/*#################### the grid #####################*/
+#thegrid {
+    overflow: auto;
+    margin: 0 70px 0 0;
+}
+
+#thegrid .smigoframe {
+    float: left;
+    margin-left: 0;
+}
+
+#thegrid .gridcontainer {
+    display: block; /*set to inline block for auto shrink*/
+    overflow: auto;
+}
+
+#thegrid .gridrow {
+}
+
+#thegrid .gridsquarecontainer {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+#thegrid #origo {
+    background-color: #fff;
+}
+
+/*#################### the grid tooltip #####################*/
+#thegrid .gridsquaretooltip {
+
+}
+
+#thegrid .gridsquaretooltipitem {
+    padding: 10px;
+}
+
+#thegrid .translation {
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#thegrid .scientificname {
+    text-align: center;
+    padding: 5px 0;
+    font-style: italic;
+}
+
+#thegrid .speciesicon {
+    text-align: center;
+    padding: 5px 0;
+}
+
+#thegrid .hintheader {
+    border-bottom: 1px solid #ccc;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+#thegrid .hint {
+    padding: 4px 0;
+}
+
+/*#################### the list tooltip and species info #####################*/
+#selectspecieslist {
+    margin-right: 60px;
+}
+
+#speciesinfo .speciesscientificname,
+#speciesinfo .speciestranslation {
+    text-align: center;
+}
+
+#speciesinfo .speciestranslation {
+    font-size: 2em;
+}
+
+#speciesinfo .speciesactions a {
+    margin: 10px;
+}
+
+#speciesinfo .speciesactions {
+    text-align: center;
+}
+
+#speciesinfo .speciesscientificname,
+#selectspecieslist .speciesscientificname {
+    font-style: italic;
+}
+
+#speciesinfo .speciesicon,
+#selectspecieslist .speciesicon {
+    text-align: center;
+}
+
+#speciesinfo .ruleheader,
+#speciesinfo .typeheader,
+#speciesinfo .familyheader,
+#selectspecieslist .ruleheader,
+#selectspecieslist .typeheader,
+#selectspecieslist .familyheader {
+    font-weight: bold;
+    margin: 16px 10px 2px 0;
+    border-bottom: 1px solid #aaa;
+    padding: 0 0 4px 0;
+}
+
+#speciesinfo .typeitem,
+#speciesinfo .familyitem,
+#speciesinfo .ruleitem,
+#selectspecieslist .typeitem,
+#selectspecieslist .familyitem,
+#selectspecieslist .ruleitem {
+    margin: 6px 6px;
+}
+
+#selectspecieslist .speciestranslation {
+
+}
+
+/*#################### the species list overview #####################*/
+
+#speciesoverview {
+    text-align: center;
+    margin: 80px auto;
+    width: 650px;
+
+}
+
+#speciesoverview .plantsheader {
+    font-size: 2em;
+}
+
+#speciesoverview .addplant {
+    margin: 10px 10px :
+}
+
+#speciesoverview #speciesoverviewcontainer {
+    margin: 10px 20px;
+}
+
+#speciesoverview #speciesoverviewtable {
+    width: 100%;
+}
+
+#speciesoverview .speciesrow a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#speciesoverview .speciesrow:nth-child(8n+1),
+#speciesoverview .speciesrow:nth-child(8n+2),
+#speciesoverview .speciesrow:nth-child(8n+3),
+#speciesoverview .speciesrow:nth-child(8n+4) {
+    background-color: #d1dbc3;
+}
+
+#speciesoverview .sientificnameheader {
+    width: 50%;
+    font-weight: bold;
+    padding-top: 20px !important;
+    padding-bottom: 10px !important;
+    text-align: left;
+}
+
+#speciesoverview .translationheader {
+    width: 30%;
+    font-weight: bold;
+    text-align: left;
+    padding: 0 0 0 50px;
+}
+
+#speciesoverview .translation {
+    text-align: left;
+    padding: 1px 0 1px 50px;
+}
+
+#speciesoverview .scientificname {
+    text-align: left;
+    font-style: italic;
+}
+
+#speciesoverview .showorhide {
+    width: 20%;
+    text-align: right;
+    padding: 1px 50px 1px 0;
+    color: #00e;
+    white-space: nowrap;
+}
+
+#speciesoverview .showtrue {
+    color: #000;
+}
+
+#speciesoverview .showfalse {
+    color: #666;
+}
+
+/*#####################     speciesform       ##########################*/
+#speciesform #speciesformtable {
+    width: 100%;
+}
+
+/*#####################     userform       ##########################*/
+#userform table {
+    width: 500px;
+    margin: 30px auto;
+}
+
+#userform td {
+    vertical-align: middle;
+}
+
+#userform select,
+#userform textarea,
+#userform input {
+    width: 160px;
+}
+
+#userform input[type*=checkbox],
+#userform input[type*=submit] {
+    width: auto;
+}
+
+#userform .namefield {
+    width: 40%;
+}
+
+#userform .valuefield {
+    width: 40%;
+}
+
+#userform .validationfield {
+    width: 20%;
+}
+
+/*#####################     userform       ##########################*/
+#loginform table {
+    width: 100%;
+    text-align: center;
+}
+
+#loginform td:nth-child(0) {
+    text-align: left;
+}
+
+#loginform td:nth-child(1) {
+    text-align: right;
+}
+
+/*#####################     userinfo       ##########################*/
+#userinfo {
+    width: 400px;
+}
+
+#userinfo .smigoframeheader {
+    text-align: center;
+}
+
+#userinfo .smigoframecontent {
+    margin: 30px;
+}
+
+#userinfo table {
+    width: 100%;
+}
+
+#userinfo td {
+    padding: 5px;
+}
+
+#userinfo .useraction {
+    text-align: center;
+    margin: 10px
+}
+
+/*#####################     userinfo       ##########################*/
+#help .faq {
+    margin: 10px 10px;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#help .questioncontainer {
+    margin-top: 30px;
+}
+
+#help .questionquestion {
+    font-weight: bold;
+    margin: 10px 10px;
+}
+
+#help .questionanswer {
+    margin: 10px 10px;
+}
+
+/*#####################    ruleform       ##########################*/
+#ruleform .errorblock {
+    height: 25px;;
+}
+
+#ruleform select {
+    margin: 10px 20px;
+    width: 300px;
+}
+
+#ruleform label {
+    margin: 10px;
+}
+
+#ruleform .buttons {
+    float: right;;
+}
+
+#ruleform #ruleformtable {
+    width: 100%;
+}
+
+#ruleform {
+}
+
+#ruleform {
+}

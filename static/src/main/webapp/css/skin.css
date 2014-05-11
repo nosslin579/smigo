@@ -1,0 +1,183 @@
+@CHARSET "ISO-8859-1";
+/* meyer reset 
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+body{line-height:1;}
+ol,ul{list-style:none;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+table{border-collapse:collapse;border-spacing:0;}
+*/
+
+/*general*/
+body {
+    margin: 0px;
+    background-color: #C1FF8E;
+}
+
+#backgroundimg {
+    width: 100%;
+}
+
+#topdiv {
+    height: 50px;
+    background-color: #666;
+    margin-bottom: 10px;
+}
+
+.middlewindow {
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.magnify:hover {
+    font-size: 16px;
+}
+
+.clickable:hover {
+    background-color: #C1FF8E;
+    cursor: pointer;
+}
+
+.clickable:active {
+    background-color: black;
+    cursor: wait;
+}
+
+.smalllogin {
+    width: 40px;
+    height: 18px;
+}
+
+.errorblock {
+    color: red;
+}
+
+/*links*/
+#gardenmenu a, #topdiv a, #mainmenu a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: none;
+    color: gray;
+    font-weight: bold;
+}
+
+/*garden*/
+.squaretooltip {
+    z-index: 100;
+    display: none;
+    background-color: #cccccc;
+    border-radius: 3px;
+    position: absolute
+}
+
+/*grid*/
+#gridtable {
+    overflow: scroll
+}
+
+.gridrow {
+    clear: both;
+    width: 2000px;
+    height: 48px
+}
+
+.gridcell {
+    border-radius: 1px;
+    border: 1px dotted #cccccc;
+    height: 48px;
+    width: 48px;
+    float: left;
+}
+
+.gridcell:hover .squaretooltip {
+    display: block;
+}
+
+.gridsquare {
+    /*background-color:#b0c4de;*/
+    height: 48px;
+    width: 48px;
+    position: relative; /*z-index:-3;*/
+}
+
+.speciesimage {
+}
+
+.smallspeciesimage {
+    width: 24px;
+    height: 24px;
+    float: left;
+}
+
+#origo {
+    background-color: #cccccc;
+}
+
+/*specieslist in garden*/
+#specieslist {
+    z-index: 100;
+    float: left;
+    position: relative;
+    margin: 0px 20px 10px 0px;
+    padding: 10px 0px 10px 10px;
+    border: 1px solid #666;
+    list-style-type: none;
+    border-radius: 0px 10px 10px 0px;
+    border-style: none;
+    background-color: white;
+    clear: left;
+}
+
+#specieslist li {
+    font-size: 10px;
+    margin: 0px;
+    border-radius: 5px;
+}
+
+.specieslistitem {
+    position: relative;
+}
+
+.specieslistitem:hover .listtooltip {
+    display: block;
+}
+
+#specieslist dl dt {
+    font-weight: bold;
+}
+
+#specieslist .selected {
+    background-color: #cccccc;
+}
+
+#specieslist>li>.listtooltip>ul>li {
+    white-space: nowrap;
+}
+
+.listtooltip {
+    z-index: 100;
+    display: none;
+    background-color: #cccccc;
+    border-radius: 3px;
+    position: absolute;
+    left: 99.5%;
+}
+
+.specisname {
+    font-style: italic;
+    text-align: center;
+}
+
+/*speciesoverview*/
+#speciesoverview {
+    text-align: center;
+}
