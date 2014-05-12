@@ -1,0 +1,24 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+*.iml
+
+catalina.base_IS_UNDEFINED/
+pic/
+static/target/
+web/catalina.base_IS_UNDEFINED/
+web/target/
+
+.idea/
+.svn/
+
