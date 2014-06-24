@@ -31,14 +31,14 @@
 <div id="accountbox">
 
     <sec:authorize access="isAnonymous()">
-        <a class="smigolink" href="${pageContext.request.contextPath}/signup"><spring:message code="signup"/></a>
-        <a class="smigolink" href="${pageContext.request.contextPath}/login"><spring:message code="account.login"/></a>
+        <a id="signup-link" class="smigolink" href="${pageContext.request.contextPath}/signup"><spring:message code="signup"/></a>
+        <a id="login-link" class="smigolink" href="${pageContext.request.contextPath}/login"><spring:message code="account.login"/></a>
     </sec:authorize>
 
     <sec:authorize access="isAuthenticated()">
-        <a class="smigolink" href="${pageContext.request.contextPath}/user"><sec:authentication
+        <a id="account-details-link" class="smigolink" href="${pageContext.request.contextPath}/user"><sec:authentication
                 property="principal.username"/></a>
-        <a class="smigolink" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message
+        <a id="logout-link" class="smigolink" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message
                 code="account.logout"/></a>
     </sec:authorize>
 
@@ -49,19 +49,19 @@
 <div id=mainmenu>
     <div class="mainmenuitem">
         <div class="separator"></div>
-        <a href="${pageContext.request.contextPath}/garden"><spring:message code="garden"/></a>
+        <a id="garden-menu-item" href="${pageContext.request.contextPath}/garden"><spring:message code="garden"/></a>
     </div>
     <div class="separator"></div>
     <div class="mainmenuitem">
-        <a href="${pageContext.request.contextPath}/listspecies"><spring:message code="plants"/></a>
+        <a id="plants-menu-item" href="${pageContext.request.contextPath}/listspecies"><spring:message code="plants"/></a>
     </div>
     <div class="separator"></div>
     <div class="mainmenuitem">
-        <a class="commandlink" href="${pageContext.request.contextPath}/help"><spring:message code="help"/></a>
+        <a id="help-menu-item" class="commandlink" href="${pageContext.request.contextPath}/help"><spring:message code="help"/></a>
     </div>
     <div class="separator"></div>
     <div class="mainmenuitem">
-        <a href="${pageContext.request.contextPath}/about"><spring:message code="about"/></a>
+        <a id="about-menu-item" href="${pageContext.request.contextPath}/about"><spring:message code="about"/></a>
     </div>
     <div class="separator"></div>
 </div>

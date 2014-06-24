@@ -26,7 +26,7 @@
                     <td><input type='password' name='j_password'></td>
                 </tr>
                 <tr>
-                    <td colspan='2'><input value="<spring:message code="account.login"/>" type="submit"></td>
+                    <td colspan='2'><input id="submit-loginform-form" value="<spring:message code="account.login"/>" type="submit"></td>
                 </tr>
             </table>
         </form>

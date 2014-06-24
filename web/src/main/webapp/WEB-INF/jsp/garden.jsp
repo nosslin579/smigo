@@ -429,7 +429,7 @@ function setSelectedSpecies() {
             <div class="iconbuttons smigoframecontent">
                 <a id="savebutton" class="iconbutton">
                     <img src="/static/icon/save.png" title="<spring:message code="save"/>"></a>
-                <a href="${pageContext.request.contextPath}/addyear" class="iconbutton">
+                <a id="add-year-link" href="${pageContext.request.contextPath}/addyear" class="iconbutton">
                     <img src="/static/icon/addyear.png" title="<spring:message code="addyear"/>"></a>
                 <a href="${pageContext.request.contextPath}/deleteyear" class="iconbutton">
                     <img src="/static/icon/deleteyear.png" title="<spring:message code="deleteyear"/>"></a>

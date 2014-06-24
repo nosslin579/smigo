@@ -42,8 +42,8 @@
 
         </table>
         <c:if test="${showall}">
-            <div class="useraction"><a href="${pageContext.request.contextPath}/edituser"><spring:message code="edit"/></a></div>
-            <div class="useraction"><a href="${pageContext.request.contextPath}/changepassword"><spring:message code="changepassword"/></a></div>
+            <div class="useraction"><a id="edit-account-details-link" href="${pageContext.request.contextPath}/edituser"><spring:message code="edit"/></a></div>
+            <div class="useraction"><a id="edit-password-link" href="${pageContext.request.contextPath}/changepassword"><spring:message code="changepassword"/></a></div>
         </c:if>
     </div>
 </div>

@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="<spring:message code="ok"/>"/>
+                        <input id="submit-password-button" type="submit" value="<spring:message code="ok"/>"/>
                     </td>
                 </tr>
             </table>

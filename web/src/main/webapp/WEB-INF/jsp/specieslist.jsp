@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="header.jsp"/>
 
@@ -14,7 +15,7 @@
     <div class="plantsheader smigoframeheader"><spring:message code="plants"/></div>
     <div class="addplant">
         <sec:authorize access="isAuthenticated()">
-            <a class="smigolink" href="${pageContext.request.contextPath}/add-species"><spring:message code="addspecies"/></a>
+            <a id="add-species-link" class="smigolink" href="${pageContext.request.contextPath}/add-species"><spring:message code="addspecies"/></a>
         </sec:authorize>
     </div>
     <div id="speciesoverviewcontainer">

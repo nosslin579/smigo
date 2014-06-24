@@ -57,7 +57,7 @@
                 </c:if>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" value="<spring:message code="ok"/>"/>
+                        <input id="submit-speciesform-button" type="submit" value="<spring:message code="ok"/>"/>
                         <input type="reset" value="<spring:message code="reset"/>"/>
                         <input type="button" value="<spring:message code="cancel"/>" onclick="history.go(-1)"/>
                     </td>

@@ -7,22 +7,14 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class AddPlantTest {
+public class SandboxTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    WebDriver w;
 
-    @BeforeTest
-    public void init() {
-//        w = new FirefoxDriver();
-    }
-
-    @Test
     public void testAdd() throws Exception {
-        log.debug("Running test qwer");
-//        w.get("http://localhost:8080/web");
-//        Assert.assertTrue(w.getPageSource().contains("asdf"));
+        Class<?>[] classes = getClass().getClasses();
+        Class<? extends ClassLoader> aClass = getClass().getClassLoader().getClass();
         Assert.assertTrue(true);
 
     }
