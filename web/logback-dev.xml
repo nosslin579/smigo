@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <configuration>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/nosslin2/smigo.log</file>
-        <append>true</append>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
@@ -16,7 +15,7 @@
     <logger name="org.apache.jasper" level="INFO"/>
 
     <root level="WARN">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
 
