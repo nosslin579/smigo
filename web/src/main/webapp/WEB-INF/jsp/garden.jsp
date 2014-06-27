@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
 
 <jsp:include page="header.jsp"/>
 
@@ -89,7 +90,7 @@ $(function () {
     }
 
     <c:forEach items="${specieslist}" var="sp">
-    speciesList[${sp.id}] = new Species(${sp.id}, "${sp.scientificName}", ${sp.item}, '${sp.translation}', '${sp.iconFileName}');
+    speciesList[${sp.id}] = new Species(${sp.id}, "${sp.scientificName}", ${sp.item}, '<spring:message code="${msg:species(sp)}"/>', '${sp.iconFileName}');
     </c:forEach>
     smigolog("speciesList", speciesList);
 
@@ -368,7 +369,7 @@ function setSelectedSpecies() {
             <c:forEach items="${specieslist}" var="currentspecies">
                 <div id="jslistspeciesid_${currentspecies.id}" class="selectspeciescontainer <c:if test="${currentspecies.item}"> item</c:if> <c:if test="${currentspecies.annual}"> annual</c:if>">
                     <div class="selectspeciesitem">
-                            ${currentspecies.translation}
+                        <spring:message code="${msg:species(currentspecies)}"/>
                     </div>
 
                     <div class="selectspeciestooltipcontainer smigoframe hide">

@@ -1,8 +1,8 @@
 package org.smigo;
 
 import org.smigo.persitance.UserSession;
-import org.sourceforge.kga.Garden;
-import org.sourceforge.kga.Square;
+import kga.Garden;
+import kga.Square;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

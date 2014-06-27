@@ -20,9 +20,9 @@
                     <td><input name="id" value="${species.id}" type="hidden"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="translation"><spring:message code="name"/></form:label></td>
-                    <td><form:input path="translation"/></td>
-                    <td><form:errors path="translation" cssClass="errorblock"/></td>
+                    <td><form:label path="vernacularName"><spring:message code="name"/></form:label></td>
+                    <td><form:input path="vernacularName"/></td>
+                    <td><form:errors path="vernacularName" cssClass="errorblock"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="scientificName"><spring:message code="scientificname"/></form:label></td>

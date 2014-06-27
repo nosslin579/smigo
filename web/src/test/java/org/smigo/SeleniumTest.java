@@ -83,7 +83,7 @@ public class SeleniumTest {
         d.findElement(By.id("plants-menu-item")).click();
         Assert.assertEquals(d.findElements(By.className("speciesrow")).size(), NUMBER_OF_SPECIES);
         d.findElement(By.id("add-species-link")).click();
-        d.findElement(By.name("translation")).sendKeys(SPECIES_NAME);
+        d.findElement(By.name("vernacularName")).sendKeys(SPECIES_NAME);
         d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
         new Select(d.findElement(By.name("family"))).selectByIndex(2);
         d.findElement(By.id("submit-speciesform-button")).click();

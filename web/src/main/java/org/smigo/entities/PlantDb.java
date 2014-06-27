@@ -1,11 +1,13 @@
 package org.smigo.entities;
 
+import kga.PlantData;
+
 /**
  * Jpa entity for a plant
  *
  * @author Christian Nilsson
  */
-public class PlantDb implements Comparable<PlantDb> {
+public class PlantDb implements PlantData,Comparable<PlantDb> {
   private int x;
   private int y;
   private int year;

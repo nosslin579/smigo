@@ -2,13 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
 
 <jsp:include page="header.jsp"/>
 
 <spring:message code="general.select" var="mselect"/>
 
 <div id="ruleform" class="smigoframe largecenteredsmigoframe">
-    <div class="smigoframeheader"><spring:message code="rule.addto" arguments="${host.translation}"/></div>
+    <spring:message var="hostTranslation" code="${msg:species(host)}"/>
+    <div class="smigoframeheader"><spring:message code="rule.addto" arguments="${hostTranslation}"/></div>
     <div class="smigoframecontent">
         <form:form method="post" action="addrule" commandName="ruleFormModel" enctype="multipart/form-data">
             <form:errors path="*" cssClass="errorblock" element="div"/>

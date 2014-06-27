@@ -2,7 +2,7 @@ package org.smigo.propertyeditors;
 
 
 import org.smigo.persitance.UserSession;
-import org.sourceforge.kga.Species;
+import kga.Species;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 

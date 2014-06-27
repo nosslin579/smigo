@@ -9,15 +9,14 @@ import org.smigo.formbean.AddYearFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.smigo.service.PlantConverter;
-import org.sourceforge.kga.Garden;
-import org.sourceforge.kga.errors.GardenException;
+import kga.Garden;
+import kga.errors.GardenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;

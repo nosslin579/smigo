@@ -1,7 +1,7 @@
 package org.smigo.propertyeditors;
 
 
-import org.sourceforge.kga.rules.RuleType;
+import kga.rules.RuleType;
 
 import java.beans.PropertyEditorSupport;
 

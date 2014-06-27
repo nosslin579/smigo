@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.smigo.factories.RuleFactory;
 import org.smigo.formbean.RuleFormModel;
 import org.smigo.persitance.UserSession;
-import org.sourceforge.kga.Species;
-import org.sourceforge.kga.rules.Rule;
-import org.sourceforge.kga.rules.RuleType;
+import kga.Species;
+import kga.rules.Rule;
+import kga.rules.RuleType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -32,7 +32,7 @@ public class RuleValidator implements ConstraintValidator<ValidRule, RuleFormMod
       }
       Species host = userSession.getSpecies(rule.getHost());
       Species causer = userSession.getSpecies(rule.getCauser());
-      Rule newRule = ruleFactory.createRule(-1, rule.getType().getId(), host, causer, rule.getGap(), true, 0, rule.getCauserfamily(), null, null);
+      Rule newRule = ruleFactory.createRule(-1, rule.getType().getId(), host, causer, rule.getGap(), true, 0, rule.getCauserfamily(), null);
       if (newRule == null) {
         context.buildConstraintViolationWithTemplate("No species/family/gap for rule").addConstraintViolation();
         return false;

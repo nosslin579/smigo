@@ -2,10 +2,10 @@ package org.smigo.persitance;
 
 import org.smigo.entities.PlantDb;
 import org.smigo.entities.User;
-import org.sourceforge.kga.Family;
-import org.sourceforge.kga.Garden;
-import org.sourceforge.kga.Species;
-import org.sourceforge.kga.rules.Rule;
+import kga.Family;
+import kga.Garden;
+import org.smigo.SpeciesView;
+import kga.rules.Rule;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,13 +13,13 @@ import java.util.Map;
 
 
 public interface UserSession extends Serializable {
-  List<Species> getVisibleSpecies();
+  List<SpeciesView> getVisibleSpecies();
 
-  Map<Integer, Species> getSpecies();
+  Map<Integer, SpeciesView> getSpecies();
 
-  List<Species> getAllSpecies();
+  List<SpeciesView> getAllSpecies();
 
-  Species getSpecies(Integer id);
+  SpeciesView getSpecies(Integer id);
 
   Map<Integer, Family> getFamilies();
 

@@ -6,8 +6,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.entities.PlantDb;
-import org.sourceforge.kga.Plant;
-import org.sourceforge.kga.Square;
+import kga.Plant;
+import kga.Square;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedInputStream;

@@ -3,7 +3,7 @@ package org.smigo.species;
 import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
-import org.sourceforge.kga.Species;
+import org.smigo.SpeciesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -18,14 +18,14 @@ public class SpeciesHandler {
   @Autowired
   private UserSession userSession;
 
-  public int updateSpecies(Species species) {
-    int id = species.getId();
+  public int updateSpecies(SpeciesView speciesView) {
+    int id = speciesView.getId();
     User user = userSession.getUser();
     if (id == 0) {
-      species.setCreator(user);
-      id = databaseresource.addSpecies(species);
+      speciesView.setCreator(user);
+      id = databaseresource.addSpecies(speciesView);
     } else {
-      databaseresource.updateUserSettingsForSpecies(species, user);
+      databaseresource.updateUserSettingsForSpecies(speciesView, user);
     }
     userSession.reloadSpecies();
     return id;

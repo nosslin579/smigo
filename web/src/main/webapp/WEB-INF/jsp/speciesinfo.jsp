@@ -1,13 +1,16 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
 
 <jsp:include page="header.jsp"/>
 
 <div id="speciesinfo" class="largecenteredsmigoframe">
 
     <div class="selectspeciestooltipcontainer smigoframe">
-        <div class="speciestranslation smigoframeheader">${species.translation}</div>
+        <div class="speciestranslation smigoframeheader"><spring:message code="${msg:species(species)}"/></div>
         <div class="smigoframecontent">
             <div class="speciesscientificname">${species.scientificName}</div>
             <div class="speciesicon"><img src="/pic/${species.iconFileName}"/></div>

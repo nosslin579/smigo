@@ -1,8 +1,8 @@
 package org.smigo.formbean;
 
 import org.smigo.constraints.ValidRule;
-import org.sourceforge.kga.Family;
-import org.sourceforge.kga.rules.RuleType;
+import kga.Family;
+import kga.rules.RuleType;
 
 @ValidRule
 public class RuleFormModel {

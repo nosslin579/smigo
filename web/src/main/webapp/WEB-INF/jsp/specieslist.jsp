@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
 
 <jsp:include page="header.jsp"/>
 
@@ -30,7 +31,7 @@
                 <tr id="jsspeciesrow_${currentspecies.id}" class="speciesrow show${currentspecies.display}">
                     <td class="translation">
                         <a class="smigolink" href="${pageContext.request.contextPath}/species/${currentspecies.id}">
-                            <c:out value="${currentspecies.translation}" escapeXml="false"/>
+                            <spring:message code="${msg:species(currentspecies)}"/>
                         </a>
                     </td>
                     <td class="scientificname">
