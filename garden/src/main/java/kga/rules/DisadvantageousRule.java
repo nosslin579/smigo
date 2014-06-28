@@ -42,8 +42,6 @@ public class DisadvantageousRule extends Rule {
     if (foe == null)
       throw new RuleException("Foe may not be null");
     this.foe = foe;
-    Object[] params = {getHost().getTranslation(), foe.getTranslation()};
-    setTextParams(params);
   }
 
   @Override

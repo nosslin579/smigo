@@ -27,7 +27,6 @@ import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -42,7 +41,6 @@ public class Species {
 
     private Set<Rule> rules = new HashSet<Rule>();
 
-//    @NotNull
     private Family family = null;
 
     // If plant not is annual it is perennial

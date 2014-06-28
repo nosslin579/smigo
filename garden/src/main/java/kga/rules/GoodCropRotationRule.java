@@ -44,8 +44,6 @@ public class GoodCropRotationRule extends Rule {
     if (family == null)
       throw new RuleException("Family may not be null");
     this.family = family;
-    Object[] params = {host.getTranslation(), family.getName()};
-    setTextParams(params);
   }
 
   @Override

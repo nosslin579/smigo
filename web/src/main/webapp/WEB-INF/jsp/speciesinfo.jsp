@@ -10,7 +10,7 @@
 <div id="speciesinfo" class="largecenteredsmigoframe">
 
     <div class="selectspeciestooltipcontainer smigoframe">
-        <div class="speciestranslation smigoframeheader"><spring:message code="${msg:species(species)}"/></div>
+        <div class="speciestranslation smigoframeheader"><spring:message code="${msg:species(species.getId())}"/></div>
         <div class="smigoframecontent">
             <div class="speciesscientificname">${species.scientificName}</div>
             <div class="speciesicon"><img src="/pic/${species.iconFileName}"/></div>
@@ -19,7 +19,6 @@
                     <c:if test="${not species.item}">
                         <a href="${pageContext.request.contextPath}/addrule?species=${species.id}"><spring:message code="rule.add"/></a>
                     </c:if>
-                    <a href="${pageContext.request.contextPath}/update-species?id=${species.id}"><spring:message code="edit"/></a>
                     <c:if test="${species.creator != null}">
                         <a href="${pageContext.request.contextPath}/deletespecies/${species.id}"><spring:message code="delete"/></a>
                     </c:if>

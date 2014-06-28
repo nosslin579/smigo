@@ -23,7 +23,6 @@ package org.smigo;
 
 import kga.Family;
 import kga.rules.Rule;
-import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.entities.User;
@@ -39,10 +38,7 @@ import java.util.HashSet;
 public class SpeciesView extends kga.Species {
     private static final Logger log = LoggerFactory.getLogger(SpeciesView.class);
 
-    @Length(min = 5, max = 255)
     private String scientificName;
-    @Length(min = 2, max = 100)
-    private String vernacularName;
     private boolean display;
     private User creator;
     private String iconFileName;
@@ -65,7 +61,7 @@ public class SpeciesView extends kga.Species {
     }
 
     public String getTranslation() {
-        return "species"+getId();//throw new UnsupportedOperationException("Remove when done");
+        throw new UnsupportedOperationException("Remove when done");
     }
 
     public boolean isDisplay() {
@@ -96,11 +92,4 @@ public class SpeciesView extends kga.Species {
         return iconFileName;
     }
 
-    public String getVernacularName() {
-        return vernacularName;
-    }
-
-    public void setVernacularName(String vernacularName) {
-        this.vernacularName = vernacularName;
-    }
 }

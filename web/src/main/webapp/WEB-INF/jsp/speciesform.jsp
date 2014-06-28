@@ -13,12 +13,10 @@
 <div id="speciesform" class="smigoframe largecenteredsmigoframe">
     <div class="smigoframeheader"><spring:message code="addspecies"/></div>
     <div class="smigoframecontent">
-        <form:form method="post" action="update-species" commandName="species">
+        <jsp:useBean id="speciesFormBean" class="org.smigo.formbean.SpeciesFormBean" scope="request"/>
+        <form:form method="post" action="add-species" commandName="speciesFormBean">
             <form:errors path="*" cssClass="errorblock" element="div"/>
             <table id="speciesformtable">
-                <tr>
-                    <td><input name="id" value="${species.id}" type="hidden"/></td>
-                </tr>
                 <tr>
                     <td><form:label path="vernacularName"><spring:message code="name"/></form:label></td>
                     <td><form:input path="vernacularName"/></td>
@@ -29,32 +27,20 @@
                     <td><form:input path="scientificName"/></td>
                     <td><form:errors path="scientificName" cssClass="errorblock"/></td>
                 </tr>
-                <c:if test="${species.id != 0}">
-                    <tr>
-                        <td>
-                            <select name="family" hidden="hidden">
-                                <option value="${species.family.id}">hiddenfamily</option>
-                            </select>
-                        </td>
-                    </tr>
-                </c:if>
-
-                <c:if test="${species.id == 0}">
-                    <tr>
-                        <td><form:label path="family"><spring:message code="family"/></form:label></td>
-                        <td><form:select path="family">
-                            <form:option value="0" label="-- ${selecttranslated} --"/>
-                            <form:options items="${families}" itemValue="id" itemLabel="name"/>
-                        </form:select></td>
-                        <td><form:errors path="family" cssClass="errorblock"/></td>
-                    </tr>
-                    <tr>
-                        <td><form:label path="annual"><spring:message code="type"/></form:label></td>
-                        <td><form:radiobutton path="annual" value="true" label="${annualtranslated}"/><br/>
-                            <form:radiobutton path="annual" value="false" label="${perennialtranslated}"/></td>
-                        <td><form:errors path="annual" cssClass="errorblock"/></td>
-                    </tr>
-                </c:if>
+                <tr>
+                    <td><form:label path="family"><spring:message code="family"/></form:label></td>
+                    <td><form:select path="family">
+                        <form:option value="0" label="-- ${selecttranslated} --"/>
+                        <form:options items="${families}" itemValue="id" itemLabel="name"/>
+                    </form:select></td>
+                    <td><form:errors path="family" cssClass="errorblock"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="annual"><spring:message code="type"/></form:label></td>
+                    <td><form:radiobutton path="annual" value="true" label="${annualtranslated}"/><br/>
+                        <form:radiobutton path="annual" value="false" label="${perennialtranslated}"/></td>
+                    <td><form:errors path="annual" cssClass="errorblock"/></td>
+                </tr>
                 <tr>
                     <td colspan="2">
                         <input id="submit-speciesform-button" type="submit" value="<spring:message code="ok"/>"/>

@@ -3,6 +3,7 @@ package org.smigo.persitance;
 import org.smigo.SpeciesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
@@ -13,6 +14,7 @@ import java.util.Locale;
 
 @Component
 @Scope(value = "prototype")
+@Lazy
 public class SpeciesComparator implements java.util.Comparator<org.smigo.SpeciesView> {
 
     @Autowired

@@ -90,7 +90,7 @@ $(function () {
     }
 
     <c:forEach items="${specieslist}" var="sp">
-    speciesList[${sp.id}] = new Species(${sp.id}, "${sp.scientificName}", ${sp.item}, '<spring:message code="${msg:species(sp)}"/>', '${sp.iconFileName}');
+    speciesList[${sp.id}] = new Species(${sp.id}, "${sp.scientificName}", ${sp.item}, '<spring:message code="${msg:species(sp.getId())}"/>', '${sp.iconFileName}');
     </c:forEach>
     smigolog("speciesList", speciesList);
 
@@ -369,11 +369,11 @@ function setSelectedSpecies() {
             <c:forEach items="${specieslist}" var="currentspecies">
                 <div id="jslistspeciesid_${currentspecies.id}" class="selectspeciescontainer <c:if test="${currentspecies.item}"> item</c:if> <c:if test="${currentspecies.annual}"> annual</c:if>">
                     <div class="selectspeciesitem">
-                        <spring:message code="${msg:species(currentspecies)}"/>
+                        <spring:message code="${msg:species(currentspecies.getId())}"/>
                     </div>
 
                     <div class="selectspeciestooltipcontainer smigoframe hide">
-                        <div class="speciestranslation smigoframeheader">${currentspecies.translation}</div>
+                        <div class="speciestranslation smigoframeheader"><spring:message code="${msg:species(currentspecies.id)}"/></div>
                         <div class="smigoframecontent">
                             <div class="speciesscientificname">${currentspecies.scientificName}</div>
                             <div class="speciesicon"><img src="/pic/${currentspecies.iconFileName}"/></div>
@@ -484,7 +484,7 @@ function setSelectedSpecies() {
                             <div class="gridsquaretooltip smigoframe">
                                 <c:forEach var="currentPlant" items="${currentSquare.plants}">
                                     <div class="gridsquaretooltipitem">
-                                        <div class="translation"><c:out value="${currentPlant.species.translation}"/></div>
+                                        <div class="translation"><spring:message code="${msg:species(currentPlant.species.id)}"/></div>
                                         <div class="scientificname"><c:out value="${currentPlant.species.scientificName}"/></div>
                                         <div class="speciesicon"><img src="/pic/${currentPlant.species.iconFileName}"/></div>
 

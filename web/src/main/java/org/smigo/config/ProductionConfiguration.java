@@ -3,6 +3,7 @@ package org.smigo.config;
 import com.jolbox.bonecp.BoneCPDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.i18n.UserAdaptiveMessageSource;
 import org.smigo.listener.VisitLogger;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -56,12 +57,7 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public MessageSource messageSource() {
         log.debug("getMessageSource");
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("messages", "classpath:messages");
-        messageSource.setUseCodeAsDefaultMessage(true);
-        messageSource.setCacheSeconds(-1);
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
+        return new UserAdaptiveMessageSource(-1);
     }
 
 }

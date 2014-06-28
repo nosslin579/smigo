@@ -53,8 +53,6 @@ public class PerennialRepetitionRule extends Rule {
       throw new RuleException("Gap must be greater than allowed repetitions");
     this.gap = gap;
     this.allowedRepetitions = allowedRepetitions;
-    Object[] params = {host.getTranslation(), gap, allowedRepetitions};
-    setInfo("god knows what this is");
   }
 
   public int getGap() {

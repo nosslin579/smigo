@@ -45,8 +45,6 @@ public class RepetitionRule extends Rule {
     if (gap <= 0)
       throw new RuleException("Gap must be greater than 0");
     this.gap = gap;
-    Object[] params = {host.getTranslation(), gap};
-    setTextParams(params);
   }
 
   public int getGap() {

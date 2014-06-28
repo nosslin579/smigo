@@ -31,7 +31,7 @@
                 <tr id="jsspeciesrow_${currentspecies.id}" class="speciesrow show${currentspecies.display}">
                     <td class="translation">
                         <a class="smigolink" href="${pageContext.request.contextPath}/species/${currentspecies.id}">
-                            <spring:message code="${msg:species(currentspecies)}"/>
+                            <spring:message code="${msg:species(currentspecies.getId())}"/>
                         </a>
                     </td>
                     <td class="scientificname">
@@ -45,7 +45,6 @@
                                     code="show"/></span>
                             <span id="jshide_${currentspecies.id}" class="jshide smigolink display${currentspecies.display}"><spring:message
                                     code="hide"/></span>
-                            <a href="${pageContext.request.contextPath}/update-species?id=${currentspecies.id}"><spring:message code="edit"/></a>
                         </td>
                     </sec:authorize>
 

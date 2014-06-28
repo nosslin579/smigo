@@ -9,7 +9,7 @@
 <spring:message code="general.select" var="mselect"/>
 
 <div id="ruleform" class="smigoframe largecenteredsmigoframe">
-    <spring:message var="hostTranslation" code="${msg:species(host)}"/>
+    <spring:message var="hostTranslation" code="${msg:species(host.getId())}"/>
     <div class="smigoframeheader"><spring:message code="rule.addto" arguments="${hostTranslation}"/></div>
     <div class="smigoframecontent">
         <form:form method="post" action="addrule" commandName="ruleFormModel" enctype="multipart/form-data">

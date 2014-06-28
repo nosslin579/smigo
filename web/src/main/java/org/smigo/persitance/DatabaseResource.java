@@ -1,10 +1,13 @@
 package org.smigo.persitance;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import kga.Family;
 import kga.PlantData;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.JspMessageFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.config.HostEnvironmentInfo;
 import org.smigo.entities.Message;
@@ -12,6 +15,7 @@ import org.smigo.entities.PlantDb;
 import org.smigo.entities.User;
 import org.smigo.factories.RuleFactory;
 import org.smigo.formbean.RuleFormModel;
+import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.security.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -95,12 +99,12 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public int addSpecies(SpeciesView speciesView) {
-        log.info("Adding " + speciesView + " for user:" + speciesView.getCreator().getUsername());
+    public int addSpecies(SpeciesFormBean speciesView, int creatorId) {
+        log.info("Adding " + speciesView + " for user:" + creatorId);
         Connection con = null;
         PreparedStatement insertSpecies = null;
-        PreparedStatement setSpeciesIconFileName = null;
         ResultSet rs = null;
+        int newSpeciesId;
         try {
             con = getDatasource().getConnection();
             insertSpecies = con.prepareStatement("INSERT INTO species(name,item,annual,family,displaybydefault,creator,iconfilename) VALUES (?,?,?,?,?,?,?)",
@@ -110,22 +114,22 @@ public class DatabaseResource implements Serializable {
             insertSpecies.setBoolean(3, speciesView.isAnnual());
             insertSpecies.setInt(4, speciesView.getFamily().getId());
             insertSpecies.setBoolean(5, false);
-            insertSpecies.setInt(6, speciesView.getCreator().getId());
+            insertSpecies.setInt(6, creatorId);
             insertSpecies.setString(7, "defaulticon.png");
             insertSpecies.execute();
             rs = insertSpecies.getGeneratedKeys();
             rs.next();
-            speciesView.setId(rs.getInt(1));
+            newSpeciesId = rs.getInt(1);
         } catch (Exception e) {
             log.error("Could not insert " + speciesView, e);
             throw new RuntimeException(e);
         } finally {
             close(con, insertSpecies, rs);
-            close(con, setSpeciesIconFileName);
         }
 
-        updateUserSettingsForSpecies(speciesView, speciesView.getCreator());
-        return speciesView.getId();
+        setSpeciesVisibility(newSpeciesId, creatorId, true);
+        setTranslation(creatorId, JspMessageFunctions.species(newSpeciesId), speciesView.getVernacularName());
+        return newSpeciesId;
     }
 
     public void updateSpeciesIcon(int speciesId, String iconFileName, CommonsMultipartFile icon) {
@@ -144,30 +148,6 @@ public class DatabaseResource implements Serializable {
         } finally {
             close(con, setSpeciesIconFileName);
         }
-    }
-
-    public void updateUserSettingsForSpecies(SpeciesView speciesView, User user) {
-        log.info("Updating user setting species:" + speciesView + " user:" + user);
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO usersettingforspecies (species,user,name,translation) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE name=?,translation=?");
-            ps.setInt(1, speciesView.getId());
-            ps.setInt(2, user.getId());
-            ps.setString(3, speciesView.getScientificName());
-            ps.setString(4, speciesView.getTranslation());
-            ps.setString(5, speciesView.getScientificName());
-            ps.setString(6, speciesView.getTranslation());
-            ps.executeUpdate();
-        } catch (Exception e) {
-            log.error("Could not update usersettings for species " + speciesView, e);
-            throw new RuntimeException(e);
-        } finally {
-            close(con, ps);
-        }
-        // updating visibility
-        setSpeciesVisibility(speciesView.getId(), user, true);
     }
 
     public Map<Integer, Family> getFamilies() {
@@ -218,7 +198,7 @@ public class DatabaseResource implements Serializable {
             deleteRules.execute();
 
         } catch (SQLException e) {
-            log.error("Error deleting species with id:" + speciesId + " and user:" + user, e);
+            throw new RuntimeException("Error deleting species with id:" + speciesId + " and user:" + user, e);
         } finally {
             close(con, deleteRules);
             close(con, deleteUserSetting);
@@ -285,7 +265,8 @@ public class DatabaseResource implements Serializable {
         return ret;
     }
 
-    public void setSpeciesVisibility(Integer speciesId, User user, Boolean visible) {
+
+    public void setSpeciesVisibility(int speciesId, int userId, Boolean visible) {
         if (visible == null)
             return;
         Connection con = null;
@@ -294,7 +275,7 @@ public class DatabaseResource implements Serializable {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("INSERT INTO usersettingforspecies (species,user,display) VALUES (?,?,?) ON DUPLICATE KEY UPDATE display=?");
             ps.setInt(1, speciesId);
-            ps.setInt(2, user.getId());
+            ps.setInt(2, userId);
             ps.setBoolean(3, visible);
             ps.setBoolean(4, visible);
             ps.execute();
@@ -725,10 +706,59 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public String getMessage(String name, String code) {
-        if (code.equals("species27")) {
-            return "korv";
+    public String getTranslation(int userId, String messageCode) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("SELECT value FROM translation WHERE user=? AND code=?");
+            statement.setInt(1, userId);
+            statement.setString(2, messageCode);
+            resultSet = statement.executeQuery();
+            return resultSet.first() ? resultSet.getString("value") : null;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error retrieving message code. userid:" + userId + " code:" + messageCode, e);
+        } finally {
+            close(con, statement, resultSet);
         }
-        return null;
+    }
+
+    public Table<Integer, String, String> getTranslation() {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("SELECT user,code,value FROM translation");
+            resultSet = statement.executeQuery();
+            Table<Integer, String, String> ret = HashBasedTable.create();
+            while (resultSet.next()) {
+                ret.put(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3));
+            }
+            return ret;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error retrieving table of message code.", e);
+        } finally {
+            close(con, statement, resultSet);
+        }
+    }
+
+    public void setTranslation(int userId, String messageCode, String value) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("INSERT INTO translation (code, user, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = ?;");
+            statement.setString(1, messageCode);
+            statement.setInt(2, userId);
+            statement.setString(3, value);
+            statement.setString(4, value);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error retrieving message code. userid:" + userId + " code:" + messageCode, e);
+        } finally {
+            close(con, statement);
+        }
     }
 }

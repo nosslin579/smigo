@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.entities.User;
 import org.smigo.formbean.RuleFormModel;
+import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.smigo.propertyeditors.FamilyPropertyEditor;
@@ -15,6 +16,7 @@ import org.smigo.propertyeditors.RuleTypePropertyEditor;
 import org.smigo.propertyeditors.SpeciesPropertyEditor;
 import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -40,6 +42,8 @@ public class SpeciesController implements Serializable {
     private UserSession userSession;
     @Autowired
     private SpeciesHandler speciesHandler;
+    @Autowired
+    private MessageSource messageSource;
 
     public SpeciesController() {
         log.debug("Creating new SpeciesController");
@@ -71,31 +75,24 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/deletespecies/{id}")
     public String deleteSpecies(@PathVariable Integer id, Model model) {
-        SpeciesView speciesToDelete = userSession.getSpecies(id);
         databaseresource.deleteSpecies(userSession.getUser(), id);
         userSession.reloadSpecies();
-        model.addAttribute("message", "general.deleted");
-        model.addAttribute("argument1", speciesToDelete.getTranslation());
-        return "message.jsp";
+        model.addAttribute("speciesId", id);
+        return "species-deleted.jsp";
     }
 
     @RequestMapping(value = {"/update-species", "/add-species"}, method = RequestMethod.GET)
-    public ModelAndView getSpeciesForm(@RequestParam(value = "id", required = false) Integer id) {
-        ModelAndView mav = new ModelAndView("speciesform.jsp");
-        SpeciesView s = id == null ? new SpeciesView() : userSession.getSpecies(id);
-        mav.addObject("species", s);
-        return mav;
+    public String getSpeciesForm() {
+        return "speciesform.jsp";
     }
 
-    @RequestMapping(value = "/update-species", method = RequestMethod.POST)
-    public String handleSpeciesForm(@Valid SpeciesView speciesView, BindingResult result) {
-        log.debug("Handle speciesform " + speciesView);
+    @RequestMapping(value = "/add-species", method = RequestMethod.POST)
+    public String handleSpeciesForm(@Valid SpeciesFormBean speciesFormBean, BindingResult result) {
         if (result.hasErrors()) {
             return "speciesform.jsp";
         }
-        int id = speciesHandler.updateSpecies(speciesView);
+        int id = speciesHandler.addSpecies(speciesFormBean);
         return "redirect:/species/" + id;
-
     }
 
     @RequestMapping("/display")
@@ -105,7 +102,7 @@ public class SpeciesController implements Serializable {
                       @RequestParam(required = false) Boolean display) {
         log.debug("Display " + speciesId + "," + display);
         User user = userSession.getUser();
-        databaseresource.setSpeciesVisibility(speciesId, user, display == null ? !userSession.getSpecies(speciesId).isDisplay() : display);
+        databaseresource.setSpeciesVisibility(speciesId, user.getId(), display == null ? !userSession.getSpecies(speciesId).isDisplay() : display);
         userSession.reloadSpecies();
         userSession.reloadGarden();
         return "";

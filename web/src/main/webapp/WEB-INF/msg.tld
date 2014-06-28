@@ -11,7 +11,7 @@
     <function>
         <name>species</name>
         <function-class>org.smigo.JspMessageFunctions</function-class>
-        <function-signature>java.lang.String species(org.smigo.SpeciesView)</function-signature>
+        <function-signature>java.lang.String species(int)</function-signature>
     </function>
 
 
