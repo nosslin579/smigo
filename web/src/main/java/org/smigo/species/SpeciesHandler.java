@@ -1,5 +1,6 @@
 package org.smigo.species;
 
+import org.smigo.CurrentUser;
 import org.smigo.SpeciesView;
 import org.smigo.entities.User;
 import org.smigo.formbean.SpeciesFormBean;
@@ -17,11 +18,12 @@ public class SpeciesHandler {
     @Autowired
     private DatabaseResource databaseresource;
     @Autowired
+    private CurrentUser currentUser;
+    @Autowired
     private UserSession userSession;
 
     public int addSpecies(SpeciesFormBean speciesView) {
-        User user = userSession.getUser();
-        int id = databaseresource.addSpecies(speciesView, user.getId());
+        int id = databaseresource.addSpecies(speciesView, currentUser.getId());
         userSession.reloadSpecies();
         return id;
     }

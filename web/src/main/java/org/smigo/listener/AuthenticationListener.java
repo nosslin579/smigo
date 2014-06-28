@@ -2,7 +2,9 @@ package org.smigo.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.CurrentUser;
 import org.smigo.handler.UserHandler;
+import org.smigo.persitance.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -19,14 +21,16 @@ public class AuthenticationListener implements AuthenticationSuccessHandler, Log
   private final Logger log = LoggerFactory.getLogger(getClass());
 
   @Autowired
-  private UserHandler userHandler;
+  private UserSession userSession;
+
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
     log.info("Login successful, user: " + authentication.getName());
-    userHandler.reloadUser(authentication.getName());
-    response.sendRedirect(request.getContextPath() + "/garden");
+      userSession.reloadSpecies();
+      userSession.reloadGarden();
+      response.sendRedirect(request.getContextPath() + "/garden");
   }
 
   @Override

@@ -4,7 +4,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.entities.User;
+import org.smigo.CurrentUser;
 import org.smigo.formbean.AddYearFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
@@ -40,6 +40,8 @@ public class GardenController implements Serializable {
   private DatabaseResource databaseResource;
   @Autowired
   private UserSession userSession;
+  @Autowired
+  private CurrentUser currentUser;
   @Autowired
   private MessageSource messageSource;
 
@@ -89,7 +91,7 @@ public class GardenController implements Serializable {
     userSession.updateGarden(PlantConverter.convert(jsonstringyearandplants));
 	  String loginFirst = messageSource.getMessage("account.pleaseloginfirst", null, locale);
 	  String ok = messageSource.getMessage("ok", null, locale);
-	  return userSession.getUser().getId() == 0 ? loginFirst : ok;
+	  return currentUser.isAuthenticated() ? ok : loginFirst;
   }
 
   /**
@@ -146,8 +148,7 @@ public class GardenController implements Serializable {
   public String handleDeleteYearForm(ModelMap model, @RequestParam("deleteyear") Integer deleteyear) {
     log.debug("Delete year " + deleteyear);
     try {
-      User user = userSession.getUser();
-      databaseResource.deleteYear(user, deleteyear);
+      databaseResource.deleteYear(currentUser.getId(), deleteyear);
       userSession.reloadGarden();
       return "redirect:garden";
     } catch (Exception e) {

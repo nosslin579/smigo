@@ -5,6 +5,7 @@ import kga.Family;
 import kga.rules.RuleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.CurrentUser;
 import org.smigo.SpeciesView;
 import org.smigo.entities.User;
 import org.smigo.formbean.RuleFormModel;
@@ -43,7 +44,7 @@ public class SpeciesController implements Serializable {
     @Autowired
     private SpeciesHandler speciesHandler;
     @Autowired
-    private MessageSource messageSource;
+    private CurrentUser currentUser;
 
     public SpeciesController() {
         log.debug("Creating new SpeciesController");
@@ -75,7 +76,7 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/deletespecies/{id}")
     public String deleteSpecies(@PathVariable Integer id, Model model) {
-        databaseresource.deleteSpecies(userSession.getUser(), id);
+        databaseresource.deleteSpecies(currentUser.getId(), id);
         userSession.reloadSpecies();
         model.addAttribute("speciesId", id);
         return "species-deleted.jsp";
@@ -101,8 +102,7 @@ public class SpeciesController implements Serializable {
     String setDisplay(@RequestParam Integer speciesId,
                       @RequestParam(required = false) Boolean display) {
         log.debug("Display " + speciesId + "," + display);
-        User user = userSession.getUser();
-        databaseresource.setSpeciesVisibility(speciesId, user.getId(), display == null ? !userSession.getSpecies(speciesId).isDisplay() : display);
+        databaseresource.setSpeciesVisibility(speciesId, currentUser.getId(), display == null ? !userSession.getSpecies(speciesId).isDisplay() : display);
         userSession.reloadSpecies();
         userSession.reloadGarden();
         return "";
@@ -113,11 +113,10 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     String setDisplay(@RequestParam Integer ruleId) {
         log.debug("Deleting rule:" + ruleId);
-        User user = userSession.getUser();
         if (userSession.getRule(ruleId).getCreatorId() == 0)
-            databaseresource.setRulesVisibility(ruleId, user, false);
+            databaseresource.setRulesVisibility(ruleId, currentUser.getId(), false);
         else
-            databaseresource.deleteRule(ruleId, user);
+            databaseresource.deleteRule(ruleId, currentUser.getId());
         userSession.reloadSpecies();
         userSession.reloadGarden();
         return "";
@@ -136,7 +135,7 @@ public class SpeciesController implements Serializable {
             model.addAttribute("host", userSession.getSpecies(rule.getHost()));
             return "ruleform.jsp";
         }
-        databaseresource.addRule(rule, userSession.getUser());
+        databaseresource.addRule(rule, currentUser.getId());
         userSession.reloadSpecies();
         userSession.reloadGarden();
         return "redirect:/species/" + rule.getHost();

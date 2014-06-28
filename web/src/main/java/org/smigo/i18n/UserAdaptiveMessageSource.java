@@ -2,6 +2,7 @@ package org.smigo.i18n;
 
 import com.google.common.collect.Table;
 import org.slf4j.LoggerFactory;
+import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
     @Autowired
     private DatabaseResource databaseResource;
     @Autowired
-    private UserSession userSession;
+    private HttpServletRequest request;
 
     private Table<Integer, String, String> translationTable;
 
@@ -39,11 +40,14 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
 
     @Override
     protected String getMessageInternal(String code, Object[] args, Locale locale) {
-        int userId = userSession.getUser().getId();
+/*        final User userPrincipal = (User) request.getUserPrincipal();
+        if (userPrincipal != null) {
+        int userId = userPrincipal.getId();
         final String message = translationTable.get(userId, code);
         if (message != null) {
             return message;
         }
+        } */
         return super.getMessageInternal(code, args, locale);
     }
 }

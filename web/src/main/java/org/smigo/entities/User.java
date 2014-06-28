@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.smigo.constraints.Matches;
 import org.smigo.constraints.Username;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.validation.constraints.AssertTrue;
@@ -24,205 +25,190 @@ import java.util.Locale;
  * @author Christian Nilsson
  */
 @Matches(field = "password", verifyField = "passwordagain")
-public class User {
+public class User implements UserDetails {
 
-  private static final Logger log = LoggerFactory.getLogger(User.class);
+    private static final Logger log = LoggerFactory.getLogger(User.class);
 
-  private int id;
+    private int id = 0;
 
-  @SafeHtml(whitelistType = WhiteListType.NONE)
-  private String displayname = null;
+    @SafeHtml(whitelistType = WhiteListType.NONE)
+    private String displayname = "";
 
-  @Email
-  private String email = null;
+    @Email
+    private String email = "";
 
-  @Username
-  @Size(min = 5, max = 40)
-  @Pattern(regexp = "\\w*")
-  private String username = null;
+    @Username
+    @Size(min = 5, max = 40)
+    @Pattern(regexp = "\\w*")
+    private String username = "";
 
-  @NotNull
-  @Size(min = 6, max = 56)
-  private String password = null;
+    @NotNull
+    @Size(min = 6, max = 56)
+    private String password = "";
 
-  private String passwordagain = null;
+    private String passwordagain = "";
 
-  private boolean publicGarden = true;
+    private boolean publicGarden = true;
 
-  @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
-  private String about;
+    @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
+    private String about = "";
 
-  private Locale locale;
+    private Locale locale = Locale.ENGLISH;
 
-  private Date registrationDate;
+    private Date registrationDate;
 
-  // system fields
-  private String authority;
+    // system fields
+    private String authority;
 
-  @AssertTrue
-  private boolean termsofservice;
+    @AssertTrue
+    private boolean termsofservice;
 
-  public User() {
-  }
+    public User() {
+    }
 
-  /**
-   * Default constructor
-   */
-  public User(int id, String username, String displayname, String email, boolean publicGarden,
-              String about, Locale locale, Date registrationDate, String password) {
-    this.id = id;
-    this.displayname = displayname;
-    this.password = password;
-    this.username = username;
-    this.email = email;
-    this.publicGarden = publicGarden;
-    this.about = about;
-    this.locale = locale;
-    this.registrationDate = registrationDate;
-    log.debug("Create user instance " + this.toString());
-  }
 
-  /**
-   * Constructor for getting user
-   */
-  public User(int id, String username, String displayname, String email, boolean publicGarden,
-              String about, Locale locale, Date registrationDate) {
-    this(id, username, displayname, email, publicGarden, about, locale, registrationDate, "");
-  }
+    public User(int id, String username, String password, String displayname, String email, boolean publicGarden, String about, Locale locale, Date registrationDate) {
+        this.id = id;
+        this.displayname = displayname;
+        this.password = password;
+        this.username = username;
+        this.email = email;
+        this.publicGarden = publicGarden;
+        this.about = about;
+        this.locale = locale;
+        this.registrationDate = registrationDate;
+        log.debug("Create user instance " + this.toString());
+    }
 
-  /**
-   * Constructor for adding user
-   */
-  public User(String username, String displayname, String email, boolean publicGarden,
-              String about, Locale locale) {
-    this(0, username, displayname, email, publicGarden, about, locale, null);
-  }
+    @Override
+    public String toString() {
+        return "User {" + id + "," + username + "," + email + "," + displayname + "," + ", " + publicGarden + ", " + ", " + about + ", "
+                + authority + ", " + registrationDate + ", " + locale + "}";
+    }
 
-  /**
-   * Constructor for updating public User(String displayname, String email,
-   * boolean publicGarden, String location, String about, String locale) {
-   * this(null, displayname, email, publicGarden, location, about, locale, 0);
-   * }
-   */
+    public String getDisplayname() {
+        return displayname;
+    }
 
-  public String getHashedPassword() {
-    return BCrypt.hashpw(password, BCrypt.gensalt());
-  }
+    public void setDisplayname(String firstname) {
+        this.displayname = firstname;
+    }
 
-  @Override
-  public String toString() {
-    return "User {" + id + "," + username + "," + email + "," + displayname + ","  + ", " + publicGarden + ", " + ", " + about + ", "
-             + authority + ", " + registrationDate + ", " + locale + "}";
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public String getDisplayname() {
-    return displayname;
-  }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-  public void setDisplayname(String firstname) {
-    this.displayname = firstname;
-  }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public boolean isPublicGarden() {
-    return publicGarden;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setPublicGarden(boolean publicGarden) {
-    this.publicGarden = publicGarden;
-  }
+    public boolean isPublicGarden() {
+        return publicGarden;
+    }
 
-  public String getPasswordagain() {
-    return passwordagain;
-  }
+    public void setPublicGarden(boolean publicGarden) {
+        this.publicGarden = publicGarden;
+    }
 
-  public void setPasswordagain(String passwordagain) {
-    this.passwordagain = passwordagain;
-  }
+    public String getPasswordagain() {
+        return passwordagain;
+    }
 
-  public String getAuthority() {
-    return authority;
-  }
+    public void setPasswordagain(String passwordagain) {
+        this.passwordagain = passwordagain;
+    }
 
-  public void setAuthority(String authority) {
-    this.authority = authority;
-  }
+    public String getAuthority() {
+        return authority;
+    }
 
-  public GrantedAuthority[] getAuthorities() {
-    GrantedAuthority[] ret = {new GrantedAuthorityImpl(authority)};
-    return ret;
-  }
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
 
-  public Date getRegistrationDate() {
-    return registrationDate;
-  }
+    public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
+        return java.util.Collections.singleton(new SimpleGrantedAuthority("user"));
+    }
 
-  public void setRegistrationDate(Date registerDate) {
-    this.registrationDate = registerDate;
-  }
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
 
-  public String getAbout() {
-    return about;
-  }
+    public void setRegistrationDate(Date registerDate) {
+        this.registrationDate = registerDate;
+    }
 
-  public void setAbout(String about) {
-    this.about = about;
-  }
+    public String getAbout() {
+        return about;
+    }
 
-  public Locale getLocale() {
-    return locale;
-  }
+    public void setAbout(String about) {
+        this.about = about;
+    }
 
-  public void setLocale(Locale locale) {
-    this.locale = locale;
-  }
+    public Locale getLocale() {
+        return locale;
+    }
 
-  /**
-   * @return the id
-   */
-  public int getId() {
-    return id;
-  }
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
-  /**
-   * @param id the id to set
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
-  public boolean isTermsofservice() {
-    return termsofservice;
-  }
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public void setTermsofservice(boolean termsofservice) {
-    this.termsofservice = termsofservice;
-  }
+    public boolean isTermsofservice() {
+        return termsofservice;
+    }
 
-  public boolean isAnonymous() {
-    return id == 0 || "".equals(username);
-  }
+    public void setTermsofservice(boolean termsofservice) {
+        this.termsofservice = termsofservice;
+    }
 }

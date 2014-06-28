@@ -5,12 +5,15 @@ import kga.Garden;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.CurrentUser;
 import org.smigo.SpeciesView;
 import org.smigo.entities.PlantDb;
 import org.smigo.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -28,25 +31,18 @@ public class UserSessionImpl implements UserSession {
     private HttpServletRequest request;
     @Autowired
     private SpeciesComparator speciesComparator;
+    @Autowired
+    private CurrentUser currentUser;
 
 
     private Map<Integer, SpeciesView> species;
-    private User user;
     private long signupStart = 0;
     private Garden garden;
 
-
-    @PreDestroy
-    public void preDestroy() {
-//    log.debug("Predestroy for user:" + user == null ? "null" : user.getUsername());
-    }
-
     @PostConstruct
     public void postConstruct() {
-//    log.debug("PostConstruct for user:" + user == null ? "null" : user.getUsername());
         log.debug("Creating new userSession. Id:" + request.getRequestedSessionId());
-        user = new User("", "", "", false, "", request.getLocale());
-        species = databaseResource.getSpecies(user);
+        species = databaseResource.getSpecies(new User());
         garden = new Garden(species, null);
     }
 
@@ -83,16 +79,6 @@ public class UserSessionImpl implements UserSession {
     }
 
     @Override
-    public User getUser() {
-        return user;
-    }
-
-    @Override
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
     public void registerSignupStart() {
         this.signupStart = System.nanoTime();
     }
@@ -118,24 +104,19 @@ public class UserSessionImpl implements UserSession {
         for (PlantDb p : plants) {
             garden.addOrGetSquare(p.getYear(), p.getX(), p.getY()).addSpecies(species.get(p.getSpeciesId()));
         }
-        if (user.getId() != 0) {
-            databaseResource.updateGarden(user, plants);
+        if (currentUser.isAuthenticated()) {
+            databaseResource.updateGarden(currentUser.getUser(), plants);
         }
     }
 
     @Override
     public void reloadGarden() {
-        garden = new Garden(species, databaseResource.getPlants(user));
+        garden = new Garden(species, databaseResource.getPlants(currentUser.getUser()));
     }
 
     @Override
     public void reloadSpecies() {
-        species = databaseResource.getSpecies(user);
-    }
-
-    @Override
-    public String toString() {
-        return "Session{" + species + "," + user + "," + garden + "}";
+        species = databaseResource.getSpecies(currentUser.getUser());
     }
 
     @Override

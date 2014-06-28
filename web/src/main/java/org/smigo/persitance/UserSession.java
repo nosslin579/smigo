@@ -6,6 +6,8 @@ import kga.Family;
 import kga.Garden;
 import org.smigo.SpeciesView;
 import kga.rules.Rule;
+import org.springframework.context.ApplicationListener;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,11 +25,7 @@ public interface UserSession extends Serializable {
 
   Map<Integer, Family> getFamilies();
 
-  User getUser();
-
-  void setUser(User user);
-
-  void registerSignupStart();
+    void registerSignupStart();
 
   long getSignupTime();
 

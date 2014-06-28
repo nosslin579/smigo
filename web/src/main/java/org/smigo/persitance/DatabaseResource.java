@@ -18,7 +18,10 @@ import org.smigo.formbean.RuleFormModel;
 import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.security.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -173,7 +176,7 @@ public class DatabaseResource implements Serializable {
         return familiesCache;
     }
 
-    public void deleteSpecies(User user, int speciesId) {
+    public void deleteSpecies(int userId, int speciesId) {
         Connection con = null;
         PreparedStatement deleteSpecies = null;
         PreparedStatement deleteUserSetting = null;
@@ -184,21 +187,21 @@ public class DatabaseResource implements Serializable {
 
             deleteSpecies = con.prepareStatement("DELETE FROM species WHERE species_id=? AND creator=? AND creator IS NOT null");
             deleteSpecies.setInt(1, speciesId);
-            deleteSpecies.setInt(2, user.getId());
+            deleteSpecies.setInt(2, userId);
             deleteSpecies.execute();
 
             deleteUserSetting = con.prepareStatement("DELETE FROM usersettingforspecies WHERE species=? AND user=?");
             deleteUserSetting.setInt(1, speciesId);
-            deleteUserSetting.setInt(2, user.getId());
+            deleteUserSetting.setInt(2, userId);
             deleteUserSetting.execute();
 
             deleteRules = con.prepareStatement("DELETE FROM rules WHERE host=? AND creator=?");
             deleteRules.setInt(1, speciesId);
-            deleteRules.setInt(2, user.getId());
+            deleteRules.setInt(2, userId);
             deleteRules.execute();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting species with id:" + speciesId + " and user:" + user, e);
+            throw new RuntimeException("Error deleting species with id:" + speciesId + " and user:" + userId, e);
         } finally {
             close(con, deleteRules);
             close(con, deleteUserSetting);
@@ -207,6 +210,7 @@ public class DatabaseResource implements Serializable {
     }
 
     public Map<Integer, SpeciesView> getSpecies(User user) {
+        final int userId = user.getId();
         // Getting species
         HashMap<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>(200);
         Connection con = null;
@@ -218,8 +222,8 @@ public class DatabaseResource implements Serializable {
             con = getDatasource().getConnection();
             speciesPS = con
                     .prepareStatement("SELECT species_id,item,annual,creator,species.name, translation,coalesce(usersettingforspecies.name,species.name) AS scientificname,coalesce(usersettingforspecies.display,species.displaybydefault) AS display,families.name AS familyname,families.id AS familyid, coalesce(usersettingforspecies.iconfilename,species.iconfilename) AS iconname FROM species LEFT JOIN usersettingforspecies ON species.species_id=usersettingforspecies.species AND usersettingforspecies.user=? LEFT JOIN families ON species.family=families.id WHERE (creator IS NULL OR creator = ?)");
-            speciesPS.setInt(1, user.getId());
-            speciesPS.setInt(2, user.getId());
+            speciesPS.setInt(1, userId);
+            speciesPS.setInt(2, userId);
             speciesRS = speciesPS.executeQuery();
             while (speciesRS.next()) {
                 SpeciesView speciesView = new SpeciesView(speciesRS.getInt("species_id"),
@@ -228,7 +232,7 @@ public class DatabaseResource implements Serializable {
                         new Family(speciesRS.getString("familyname"), speciesRS.getInt("familyid")));
                 speciesView.setDisplay(speciesRS.getBoolean("display"));
                 speciesView.setIconFileName(speciesRS.getString("iconname"));
-                if (speciesRS.getInt("creator") == user.getId())
+                if (speciesRS.getInt("creator") == userId)
                     speciesView.setCreator(user);
                 ret.put(speciesView.getId(), speciesView);
             }
@@ -236,8 +240,8 @@ public class DatabaseResource implements Serializable {
             // Adding rules
             rulePS = con
                     .prepareStatement("SELECT rule_id, type, host, causer,gap,creator,causerfamily,coalesce(display,displaybydefault) AS display FROM rules LEFT JOIN usersettingforrules ON rules.rule_id = usersettingforrules.rule AND usersettingforrules.user = ? WHERE (creator IS NULL OR creator = ?)");
-            rulePS.setInt(1, user.getId());
-            rulePS.setInt(2, user.getId());
+            rulePS.setInt(1, userId);
+            rulePS.setInt(2, userId);
             ruleRS = rulePS.executeQuery();
             while (ruleRS.next()) {
                 SpeciesView host = ret.get(ruleRS.getInt("host"));
@@ -287,14 +291,14 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void setRulesVisibility(Integer ruleId, User user, boolean visible) {
+    public void setRulesVisibility(Integer ruleId, int userId, boolean visible) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("INSERT INTO usersettingforrules (rule,user,display) VALUES (?,?,?) ON DUPLICATE KEY UPDATE display=?");
             ps.setInt(1, ruleId);
-            ps.setInt(2, user.getId());
+            ps.setInt(2, userId);
             ps.setBoolean(3, visible);
             ps.setBoolean(4, visible);
             ps.execute();
@@ -306,10 +310,8 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void addRule(RuleFormModel rule, User user) {
-        log.info("Adding " + rule + " for user:" + user);
-        if (user.isAnonymous())
-            throw new RuntimeException("Can not add rule when user is anonymous");
+    public void addRule(RuleFormModel rule, int userId) {
+        log.info("Adding " + rule + " for user:" + userId);
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -320,7 +322,7 @@ public class DatabaseResource implements Serializable {
             ps.setInt(2, rule.getHost());
             ps.setInt(3, rule.getCauser());
             ps.setInt(4, rule.getGap());
-            ps.setInt(5, user.getId());
+            ps.setInt(5, userId);
             ps.setInt(6, rule.getCauserfamily() == null ? 0 : rule.getCauserfamily().getId());
             ps.execute();
         } catch (Exception e) {
@@ -406,19 +408,19 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void deleteYear(User user, Integer deleteyear) {
-        log.debug("Deleting year " + deleteyear + " for user: " + user);
+    public void deleteYear(int userId, Integer deleteyear) {
+        log.debug("Deleting year " + deleteyear + " for user: " + userId);
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("DELETE FROM plants WHERE fkuserid=? AND year=?");
-            ps.setInt(1, user.getId());
+            ps.setInt(1, userId);
             ps.setInt(2, deleteyear);
             ps.execute();
         } catch (SQLException e) {
-            log.error("Cant delete year:" + deleteyear + " from user:" + user, e);
-            throw new RuntimeException("Cant delete year:" + deleteyear + " from user:" + user, e);
+            log.error("Cant delete year:" + deleteyear + " from user:" + userId, e);
+            throw new RuntimeException("Cant delete year:" + deleteyear + " from user:" + userId, e);
         } finally {
             close(con, ps);
         }
@@ -432,19 +434,17 @@ public class DatabaseResource implements Serializable {
             ps = con.prepareStatement("INSERT INTO "
                     + "users(username,password,enabled,authority,email,displayname,regtime,about,locale,decidetime) "
                     + "VALUES (?,?,?,?,?,?,?,?,?,?)");
-            if (getUser(user.getUsername(), null) == null) {
-                ps.setString(1, user.getUsername());
-                ps.setString(2, user.getHashedPassword());
-                ps.setBoolean(3, true);
-                ps.setString(4, "user");
-                ps.setString(5, user.getEmail());
-                ps.setString(6, user.getDisplayname());
-                ps.setLong(7, signupTime);
-                ps.setString(8, user.getAbout());
-                ps.setString(9, user.getLocale().toString());
-                ps.setLong(10, decideTime);
-                ps.execute();
-            }
+            ps.setString(1, user.getUsername());
+            ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            ps.setBoolean(3, true);
+            ps.setString(4, "user");
+            ps.setString(5, user.getEmail());
+            ps.setString(6, user.getDisplayname());
+            ps.setLong(7, signupTime);
+            ps.setString(8, user.getAbout());
+            ps.setString(9, user.getLocale().toString());
+            ps.setLong(10, decideTime);
+            ps.execute();
         } catch (Exception e) {
             log.error("Could not add user to database.", e);
             throw e;
@@ -476,9 +476,8 @@ public class DatabaseResource implements Serializable {
 
     public User getUser(String userName, Locale locale) {
         if (userName == null || userName.isEmpty())
-            return new User("", "", "", false, "", locale);
-        User ret = getUser(userName);
-        return ret;
+            return new User();
+        return getUser(userName);
     }
 
     public User getUser(int userId) {
@@ -503,31 +502,34 @@ public class DatabaseResource implements Serializable {
     }
 
     public User getUser(String username) {
+        Assert.notNull(username);
         log.debug("Getting user from database " + username);
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = getDatasource().getConnection();
-            if (username != null) {
-                ps = con.prepareStatement("SELECT * FROM users WHERE username=?");
-                ps.setString(1, username);
-            }
+            ps = con.prepareStatement("SELECT * FROM users WHERE username=?");
+            ps.setString(1, username);
             rs = ps.executeQuery();
-            User ret = null;
-            if (rs.next())
-                ret = new User(rs.getInt("user_id"), rs.getString("username"),
-                        rs.getString("displayname"), rs.getString("email"),
-                        rs.getBoolean("publicgarden"), rs.getString("about"),
+            if (rs.next()) {
+                return new User(rs.getInt("user_id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("displayname"),
+                        rs.getString("email"),
+                        rs.getBoolean("publicgarden"),
+                        rs.getString("about"),
                         StringUtils.parseLocaleString(rs.getString("locale")),
                         rs.getTimestamp("createdate"));
-            return ret;
+            }
         } catch (Exception e) {
             log.error("Could not get user from database. Username: " + username, e);
             throw new RuntimeException(e);
         } finally {
             close(con, ps, rs);
         }
+        throw new UsernameNotFoundException("User not found:" + username);
     }
 
     public void deleteUser(String username) throws SQLException {
@@ -650,17 +652,18 @@ public class DatabaseResource implements Serializable {
 
     }
 
-    public void updatePassword(User user) {
+    public void updatePassword(int userId, String password) {
+        final String hashpw = BCrypt.hashpw(password, BCrypt.gensalt());
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("UPDATE users SET password=? WHERE user_id=?");
-            ps.setString(1, user.getHashedPassword());
-            ps.setInt(2, user.getId());
+            ps.setString(1, hashpw);
+            ps.setInt(2, userId);
             ps.execute();
         } catch (Exception e) {
-            log.error("Could not update password for user " + user, e);
+            log.error("Could not update password for user " + userId, e);
             throw new RuntimeException("Password not updated", e);
         } finally {
             close(con, ps);
@@ -689,7 +692,7 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void deleteRule(Integer ruleId, User user) {
+    public void deleteRule(Integer ruleId, int userId) {
         Connection con = null;
         PreparedStatement deleteRule = null;
         try {
@@ -697,10 +700,10 @@ public class DatabaseResource implements Serializable {
             deleteRule = con
                     .prepareStatement("DELETE FROM rules WHERE rule_id=? AND creator=? AND creator != 0");
             deleteRule.setInt(1, ruleId);
-            deleteRule.setInt(2, user.getId());
+            deleteRule.setInt(2, userId);
             deleteRule.execute();
         } catch (SQLException e) {
-            log.error("Error deleting rule with id:" + ruleId + " and user:" + user, e);
+            log.error("Error deleting rule with id:" + ruleId + " and user:" + userId, e);
         } finally {
             close(con, deleteRule);
         }
@@ -734,7 +737,7 @@ public class DatabaseResource implements Serializable {
             resultSet = statement.executeQuery();
             Table<Integer, String, String> ret = HashBasedTable.create();
             while (resultSet.next()) {
-                ret.put(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3));
+                ret.put(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3));
             }
             return ret;
         } catch (SQLException e) {

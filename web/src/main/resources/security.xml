@@ -48,11 +48,9 @@
     </http>
 
 
-    <authentication-manager>
-        <authentication-provider>
+    <authentication-manager erase-credentials="true">
+        <authentication-provider user-service-ref="customUserDetailsService">
             <password-encoder ref="passwordEncoder"/>
-            <jdbc-user-service data-source-ref="dataSource"
-                               authorities-by-username-query="select username,authority from users where username=?"/>
         </authentication-provider>
     </authentication-manager>
 

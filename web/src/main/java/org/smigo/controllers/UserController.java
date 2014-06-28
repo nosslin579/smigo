@@ -2,6 +2,7 @@ package org.smigo.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.CurrentUser;
 import org.smigo.entities.PlantDb;
 import org.smigo.entities.User;
 import org.smigo.formbean.PasswordFormBean;
@@ -44,6 +45,8 @@ public class UserController {
   private UserSession userSession;
   @Autowired
   private UserHandler userHandler;
+    @Autowired
+    private CurrentUser currentUser;
 
   public UserController() {
     log.debug("Creating new UserController");
@@ -52,13 +55,6 @@ public class UserController {
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.registerCustomEditor(Locale.class, new LocaleEditor());
-  }
-
-  @ModelAttribute("mauser")
-  public User addUserToView() {
-    User ret = userSession.getUser();
-    log.debug("Adding user via modelattribute " + ret);
-    return ret;
   }
 
   @ModelAttribute("availableLocales")
@@ -75,13 +71,11 @@ public class UserController {
   @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
   public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result) {
     try {
-      User user = userSession.getUser();
-      if (!databaseresource.validatePassword(user, passwordFormBean.getOldPassword()))
+      if (!databaseresource.validatePassword(currentUser.getUser(), passwordFormBean.getOldPassword()))
         result.addError(new FieldError("passwordFormBean", "oldPassword", "invalid"));
       if (result.hasErrors())
         return "passwordform.jsp";
-      user.setPassword(passwordFormBean.getNewPassword());
-      databaseresource.updatePassword(user);
+      databaseresource.updatePassword(currentUser.getId(), passwordFormBean.getNewPassword());
       return "redirect:/user/";
     } catch (Exception e) {
       result.addError(new ObjectError("unknownerror", e.getMessage()));
@@ -92,7 +86,7 @@ public class UserController {
   @RequestMapping(value = {"/cuuser", "/signup", "/edituser"}, method = RequestMethod.GET)
   public String getUserForm(ModelMap modelMap) {
     userSession.registerSignupStart();
-    modelMap.addAttribute("user", userSession.getUser());
+    modelMap.addAttribute("user", new User());
     return "userform.jsp";
   }
 
@@ -150,7 +144,7 @@ public class UserController {
 
   @RequestMapping(value = "/user", method = RequestMethod.GET)
   public String getUser(Model model, Principal principal) {
-    User u = userSession.getUser();
+    User u = currentUser.getUser();
     model.addAttribute("showall", true);
     model.addAttribute("user", u);
     return "userinfo.jsp";
