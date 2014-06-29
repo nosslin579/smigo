@@ -38,6 +38,7 @@ public class UserSessionImpl implements UserSession {
     private Map<Integer, SpeciesView> species;
     private long signupStart = 0;
     private Garden garden;
+    private Map<String, String> translation = new HashMap<String, String>();
 
     @PostConstruct
     public void postConstruct() {
@@ -126,5 +127,10 @@ public class UserSessionImpl implements UserSession {
                 if (r.getId() == ruleId)
                     return r;
         return null;
+    }
+
+    @Override
+    public Map<String, String> getTranslation() {
+        return translation;
     }
 }

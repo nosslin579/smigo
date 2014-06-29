@@ -38,4 +38,6 @@ public interface UserSession extends Serializable {
   void reloadSpecies();
 
 	Rule getRule(int ruleId);
+
+    Map<String,String> getTranslation();
 }

@@ -12,7 +12,7 @@ public class SpeciesFormBean {
     private String scientificName;
     @NotNull
     private Family family;
-    private boolean annual;
+    private boolean annual = true;
 
     public String getVernacularName() {
         return vernacularName;

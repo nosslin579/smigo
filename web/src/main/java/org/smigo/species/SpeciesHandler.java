@@ -1,8 +1,7 @@
 package org.smigo.species;
 
 import org.smigo.CurrentUser;
-import org.smigo.SpeciesView;
-import org.smigo.entities.User;
+import org.smigo.JspMessageFunctions;
 import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
@@ -22,9 +21,10 @@ public class SpeciesHandler {
     @Autowired
     private UserSession userSession;
 
-    public int addSpecies(SpeciesFormBean speciesView) {
-        int id = databaseresource.addSpecies(speciesView, currentUser.getId());
+    public int addSpecies(SpeciesFormBean speciesFormBean) {
+        int id = databaseresource.addSpecies(speciesFormBean, currentUser.getId());
         userSession.reloadSpecies();
+        userSession.getTranslation().put(JspMessageFunctions.species(id), speciesFormBean.getVernacularName());
         return id;
     }
 

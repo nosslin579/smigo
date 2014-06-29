@@ -85,6 +85,7 @@ public class SeleniumTest {
         d.findElement(By.id("add-species-link")).click();
         d.findElement(By.name("vernacularName")).sendKeys(SPECIES_NAME);
         d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
+        d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
         new Select(d.findElement(By.name("family"))).selectByIndex(2);
         d.findElement(By.id("submit-speciesform-button")).click();
 
@@ -93,7 +94,7 @@ public class SeleniumTest {
         d.findElement(By.xpath("//div[contains(text(), '" + SPECIES_NAME + "')]")).click();
         d.findElement(By.id("origo")).click();
 
-        //add concrete
+        //put concrete anywhere in grid
         d.findElement(By.xpath("//div[contains(text(), '" + PERENNIAL_NAME + "')]")).click();
         d.findElement(By.className("jsgridcell")).click();
         d.findElement(By.id("savebutton")).click();
