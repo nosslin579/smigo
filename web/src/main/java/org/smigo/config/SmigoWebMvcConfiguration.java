@@ -2,6 +2,7 @@ package org.smigo.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.listener.VisitLogger;
 import org.smigo.propertyeditors.CustomPropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
@@ -12,10 +13,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
@@ -34,6 +32,17 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //    registry.addResourceHandler("/messages/**").addResourceLocations("/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(visitLogger());
+    }
+
+
+    @Bean
+    public VisitLogger visitLogger() {
+        return new VisitLogger();
     }
 
     @Bean

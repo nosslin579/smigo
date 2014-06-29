@@ -5,7 +5,7 @@ package kga.errors;
  *
  * @author Christian Nilsson
  */
-public class GardenException extends Exception {
+public class GardenException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
   private String messageKey;

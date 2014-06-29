@@ -80,11 +80,10 @@ public class Garden implements Iterable<SquareIterator> {
      * @param newYear the year to be added
      * @throws GardenException
      */
-    public void addYear(int newYear) throws GardenException {
+    public void addYear(int newYear) {
         SortedSet<Integer> years = getYears();
         if (years.contains(newYear))
-            throw new GardenException("Cant add year since year " + newYear + " already exists",
-                    "AddYear.YearAlreadyExists");
+            throw new GardenException("Cant add year since year " + newYear + " already exists", "AddYear.YearAlreadyExists");
         copyPermanentSquares(years.last(), newYear);
         if (getPlants(newYear).isEmpty())
             throw new GardenException("No plants added ", "AddYear.NoItemsOrPerennials");

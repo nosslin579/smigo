@@ -13,6 +13,7 @@ import org.smigo.entities.User;
 import org.smigo.factories.RuleFactory;
 import org.smigo.formbean.RuleFormModel;
 import org.smigo.formbean.SpeciesFormBean;
+import org.smigo.listener.VisitLogger;
 import org.smigo.security.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +27,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.security.Principal;
@@ -63,7 +63,7 @@ public class DatabaseResource implements Serializable {
         } finally {
             try {
                 destination.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
             }
         }
     }
@@ -82,18 +82,21 @@ public class DatabaseResource implements Serializable {
                 rs.close();
             }
         } catch (Exception ex) {
+            log.warn("Could not close resultset",ex);
         } finally {
             try {
                 if (stmt != null) {
                     stmt.close();
                 }
             } catch (Exception ex) {
+                log.warn("Could not close statment",ex);
             } finally {
                 try {
                     if (connection != null) {
                         connection.close();
                     }
                 } catch (Exception ex) {
+                    log.warn("Could not close connection",ex);
                 }
             }
         }
@@ -120,9 +123,8 @@ public class DatabaseResource implements Serializable {
             rs = insertSpecies.getGeneratedKeys();
             rs.next();
             newSpeciesId = rs.getInt(1);
-        } catch (Exception e) {
-            log.error("Could not insert " + speciesFormBean, e);
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not insert " + speciesFormBean, e);
         } finally {
             close(con, insertSpecies, rs);
         }
@@ -144,7 +146,7 @@ public class DatabaseResource implements Serializable {
             setSpeciesIconFileName.setInt(2, speciesId);
             setSpeciesIconFileName.executeUpdate();
         } catch (SQLException e) {
-            log.error("Could not update species icon " + speciesId, e);
+            throw new RuntimeException("Could not update species icon " + speciesId, e);
         } finally {
             close(con, setSpeciesIconFileName);
         }
@@ -163,10 +165,8 @@ public class DatabaseResource implements Serializable {
             rs = ps.executeQuery();
             while (rs.next())
                 familiesCache.put(rs.getInt(1), new Family(rs.getString(2), rs.getInt(1)));
-            // } catch (Exception e) {
-            // log.error("Couldnt get families from database", e);
         } catch (SQLException e) {
-            log.error("Error getting families ", e);
+            throw new RuntimeException("Error getting families ", e);
         } finally {
             close(con, ps, rs);
         }
@@ -252,8 +252,7 @@ public class DatabaseResource implements Serializable {
                     host.addRule(rule);
             }
         } catch (SQLException e) {
-            log.error("Could not get all species from database.", e);
-            throw new RuntimeException("Error getting species. " + e.getMessage(), e);
+            throw new RuntimeException("Error getting species. ", e);
         } finally {
             close(con, speciesPS, speciesRS);
             close(con, rulePS, ruleRS);
@@ -281,7 +280,6 @@ public class DatabaseResource implements Serializable {
             ps.setBoolean(4, visible);
             ps.execute();
         } catch (SQLException e) {
-            log.error("Could not insert/update species visibility", e);
             throw new RuntimeException("Could not insert/update species visibility", e);
         } finally {
             close(con, ps);
@@ -300,7 +298,6 @@ public class DatabaseResource implements Serializable {
             ps.setBoolean(4, visible);
             ps.execute();
         } catch (SQLException e) {
-            log.error("Could not update rule visibility", e);
             throw new RuntimeException("Could not update rule visibility", e);
         } finally {
             close(con, ps);
@@ -322,9 +319,8 @@ public class DatabaseResource implements Serializable {
             ps.setInt(5, userId);
             ps.setInt(6, rule.getCauserfamily() == null ? 0 : rule.getCauserfamily().getId());
             ps.execute();
-        } catch (Exception e) {
-            log.error("Could not insert " + rule, e);
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not insert " + rule, e);
         } finally {
             close(con, ps, rs);
         }
@@ -346,8 +342,7 @@ public class DatabaseResource implements Serializable {
                 ret.add(new PlantDb(rs.getInt("species"), rs.getInt("year"), rs.getInt("x"), rs
                         .getInt("y")));
             log.debug("Returning " + ret.size() + " plants for user " + user.getId());
-        } catch (Exception e) {
-            log.error("Could not get garden from database, " + user, e);
+        } catch (SQLException e) {
             throw new RuntimeException("Could not get plants " + user, e);
         } finally {
             close(con, ps, rs);
@@ -396,9 +391,8 @@ public class DatabaseResource implements Serializable {
             insert = con.prepareStatement(insertSqlString.toString());
             delete.execute();
             insert.execute();
-        } catch (Exception e) {
-            log.error("Could not update plants database.", e);
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not update plants database.", e);
         } finally {
             close(con, delete);
             close(con, insert);
@@ -416,14 +410,13 @@ public class DatabaseResource implements Serializable {
             ps.setInt(2, deleteyear);
             ps.execute();
         } catch (SQLException e) {
-            log.error("Cant delete year:" + deleteyear + " from user:" + userId, e);
             throw new RuntimeException("Cant delete year:" + deleteyear + " from user:" + userId, e);
         } finally {
             close(con, ps);
         }
     }
 
-    public void addUser(User user, long signupTime, long decideTime) throws Exception {
+    public void addUser(User user, long signupTime, long decideTime) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -442,9 +435,8 @@ public class DatabaseResource implements Serializable {
             ps.setString(9, user.getLocale().toString());
             ps.setLong(10, decideTime);
             ps.execute();
-        } catch (Exception e) {
-            log.error("Could not add user to database.", e);
-            throw e;
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not add user to database.", e);
         } finally {
             close(con, ps);
         }
@@ -463,18 +455,11 @@ public class DatabaseResource implements Serializable {
             updateUser.setString(4, user.getLocale().toString());
             updateUser.setInt(5, user.getId());
             updateUser.execute();
-        } catch (Exception e) {
-            log.error("Could not update user: " + user, e);
+        } catch (SQLException e) {
             throw new RuntimeException("Could not update userdetails", e);
         } finally {
             close(con, updateUser);
         }
-    }
-
-    public User getUser(String userName, Locale locale) {
-        if (userName == null || userName.isEmpty())
-            return new User();
-        return getUser(userName);
     }
 
     public User getUser(int userId) {
@@ -489,9 +474,8 @@ public class DatabaseResource implements Serializable {
             rs = ps.executeQuery();
             if (rs.next())
                 username = rs.getString("username");
-        } catch (Exception e) {
-            log.error("Could not get user from database. Username: " + username, e);
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not get user from database. UserId: " + userId, e);
         } finally {
             close(con, ps, rs);
         }
@@ -520,9 +504,8 @@ public class DatabaseResource implements Serializable {
                         StringUtils.parseLocaleString(rs.getString("locale")),
                         rs.getTimestamp("createdate"));
             }
-        } catch (Exception e) {
-            log.error("Could not get user from database. Username: " + username, e);
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not get user from database. Username: " + username, e);
         } finally {
             close(con, ps, rs);
         }
@@ -542,7 +525,7 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void logVisit(HttpServletRequest req, String note) {
+    public void logVisit(HttpServletRequest req) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -565,10 +548,10 @@ public class DatabaseResource implements Serializable {
             ps.setString(12, req.getRequestedSessionId());
             ps.setString(13, req.getMethod());
             ps.setString(14, req.getHeader("x-forwarded-for"));
-            ps.setString(15, note);
+            ps.setString(15, String.valueOf(req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)));
             ps.execute();
-        } catch (Exception e) {
-            log.error("Could not insert logvisit into database.", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not insert logvisit into database.", e);
         } finally {
             close(con, ps);
         }
@@ -640,7 +623,7 @@ public class DatabaseResource implements Serializable {
                 ps.setString(1, i + ".png");
                 ps.setInt(2, i);
                 ps.execute();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 log.debug("Not updating " + i + " reason " + e.getMessage());
             } finally {
                 close(con, ps);
@@ -659,9 +642,8 @@ public class DatabaseResource implements Serializable {
             ps.setString(1, hashpw);
             ps.setInt(2, userId);
             ps.execute();
-        } catch (Exception e) {
-            log.error("Could not update password for user " + userId, e);
-            throw new RuntimeException("Password not updated", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Password not updated" + userId, e);
         } finally {
             close(con, ps);
         }
@@ -681,9 +663,8 @@ public class DatabaseResource implements Serializable {
             if (rs.next())
                 encodedPassword = rs.getString("password");
             return new BCryptPasswordEncoder().matches(plaintextPassword, encodedPassword);
-        } catch (Exception e) {
-            log.error("Could not validate password for user " + user, e);
-            throw new RuntimeException("Could not validate password", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not validate password. Userid:" + user.getId(), e);
         } finally {
             close(con, ps, rs);
         }
@@ -700,7 +681,7 @@ public class DatabaseResource implements Serializable {
             deleteRule.setInt(2, userId);
             deleteRule.execute();
         } catch (SQLException e) {
-            log.error("Error deleting rule with id:" + ruleId + " and user:" + userId, e);
+            throw new RuntimeException("Error deleting rule with id:" + ruleId + " and user:" + userId, e);
         } finally {
             close(con, deleteRule);
         }
@@ -718,7 +699,7 @@ public class DatabaseResource implements Serializable {
             statement.setString(4, value);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new IllegalStateException("Sql error, userid:" + userId + ", speciesId" + speciesId, e);
+            throw new RuntimeException("Sql error, userid:" + userId + ", speciesId" + speciesId, e);
         } finally {
             close(con, statement);
         }
@@ -739,7 +720,7 @@ public class DatabaseResource implements Serializable {
             }
             return ret;
         } catch (SQLException e) {
-            throw new IllegalStateException("Error retrieving table of message code. Userid:" + userId, e);
+            throw new RuntimeException("Error retrieving table of message code. Userid:" + userId, e);
         } finally {
             close(con, statement, resultSet);
         }

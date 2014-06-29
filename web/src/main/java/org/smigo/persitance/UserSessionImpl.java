@@ -28,8 +28,6 @@ public class UserSessionImpl implements UserSession {
     @Autowired
     private DatabaseResource databaseResource;
     @Autowired
-    private HttpServletRequest request;
-    @Autowired
     private SpeciesComparator speciesComparator;
     @Autowired
     private CurrentUser currentUser;
@@ -42,7 +40,6 @@ public class UserSessionImpl implements UserSession {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("Creating new userSession. Id:" + request.getRequestedSessionId());
         species = databaseResource.getSpecies(new User());
         garden = new Garden(species, null);
     }
