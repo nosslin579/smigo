@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
@@ -69,8 +68,7 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = "/savegarden", produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public String saveGarden(@RequestBody List<PlantDataBean> plants, Locale locale)
-            throws IOException {
+    public String saveGarden(@RequestBody List<PlantDataBean> plants, Locale locale) {
         log.debug("Savegarden. Plants:" + plants.size());
         speciesHandler.updateGarden(plants);
         String loginFirst = messageSource.getMessage("account.pleaseloginfirst", null, locale);
