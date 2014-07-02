@@ -118,16 +118,6 @@ public class SeleniumTest {
         Assert.assertTrue(d.getPageSource().contains(DISPLAY_NAME));
         Assert.assertTrue(d.getPageSource().contains(ABOUT));
 
-        //edit account details
-        d.findElement(By.id("edit-account-details-link")).click();
-        d.findElement(By.name("displayname")).sendKeys(ADD);
-        d.findElement(By.name("about")).sendKeys(ADD);
-        d.findElement(By.id("submit-userform-button")).click();
-
-        Assert.assertTrue(d.getPageSource().contains(EMAIL));
-        Assert.assertTrue(d.getPageSource().contains(DISPLAY_NAME + ADD));
-        Assert.assertTrue(d.getPageSource().contains(ABOUT + ADD));
-
         //change password
         d.findElement(By.id("edit-password-link")).click();
         d.findElement(By.name("oldPassword")).sendKeys(PASSWORD);
@@ -142,7 +132,10 @@ public class SeleniumTest {
         d.findElement(By.name("j_username")).sendKeys(USERNAME);
         d.findElement(By.name("j_password")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-loginform-form")).click();
+        log.info("Url after login:" + d.getCurrentUrl());
         Assert.assertEquals(d.getCurrentUrl(), "http://localhost:8080/web/garden");
 
+        int numberOfPlantsAfterSessionRefresh = d.findElements(By.className("speciesimage")).size();
+        Assert.assertEquals(numberOfPlantsAfterSessionRefresh, 1);
     }
 }
