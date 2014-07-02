@@ -57,8 +57,7 @@ public class Garden implements Iterable<SquareIterator> {
      * Creating a new empty garden
      */
     public Garden() {
-        this(null, null);
-        log.info("Creating new garden");
+        this(new HashMap<Integer, Species>(), new ArrayList<PlantData>());
     }
 
     public List<GardenObserver> getObservers() {

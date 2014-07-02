@@ -1,8 +1,6 @@
 package org.smigo.species;
 
-import kga.Family;
-import kga.Garden;
-import kga.PlantData;
+import kga.*;
 import kga.rules.Rule;
 import org.smigo.CurrentUser;
 import org.smigo.JspMessageFunctions;
@@ -13,7 +11,6 @@ import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.SpeciesComparator;
 import org.smigo.persitance.UserSession;
-import org.smigo.service.PlantConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -61,7 +58,7 @@ public class SpeciesHandler {
         return null;
     }
 
-    public void updateGarden(List<PlantDataBean> plants) {
+    public void updateGarden(List<? extends PlantData> plants) {
         int year = plants.get(0).getYear();
         if (currentUser.isAuthenticated()) {
             databaseResource.deleteYear(currentUser.getUser().getId(), year);
@@ -110,7 +107,11 @@ public class SpeciesHandler {
     public void addYear(int year) {
         Garden g = getGarden();
         g.addYear(year);
-        updateGarden(PlantConverter.convert(g.getSquaresFor(year)));
+        List<PlantData> plants = new ArrayList<PlantData>();
+        for (Square s : g.getSquaresFor(year)) {
+            plants.addAll(s.getPlants());
+        }
+        updateGarden(plants);
     }
 
     public Garden getGarden() {

@@ -48,7 +48,7 @@
     </http>
 
 
-    <authentication-manager erase-credentials="true">
+    <authentication-manager alias="authenticationManager" erase-credentials="true">
         <authentication-provider user-service-ref="customUserDetailsService">
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>

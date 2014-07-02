@@ -350,14 +350,14 @@ public class DatabaseResource implements Serializable {
     }
 
 
-    public void saveGarden(User user, List<PlantDataBean> plants) {
+    public void saveGarden(User user, List<? extends PlantData> plants) {
         if (plants == null || plants.isEmpty())
             throw new RuntimeException("No plants to update");
 
         int userId = user.getId();
 
         StringBuilder insertSqlString = new StringBuilder("INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
-        for (PlantDataBean pl : plants) {
+        for (PlantData pl : plants) {
             insertSqlString.append("('").append(userId).append("',")
                     .append(pl.getSpeciesId()).append(",")
                     .append(pl.getYear()).append(",")
@@ -516,10 +516,9 @@ public class DatabaseResource implements Serializable {
                         rs.getString("password"),
                         rs.getString("displayname"),
                         rs.getString("email"),
-                        rs.getBoolean("publicgarden"),
                         rs.getString("about"),
-                        StringUtils.parseLocaleString(rs.getString("locale")),
-                        rs.getTimestamp("createdate"));
+                        StringUtils.parseLocaleString(rs.getString("locale"))
+                );
             }
             return null;
         } catch (SQLException e) {

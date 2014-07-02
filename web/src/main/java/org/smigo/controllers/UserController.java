@@ -19,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cuuser", method = RequestMethod.POST)
-    public String handleUserForm(@Valid User user, BindingResult result, HttpSession session) {
+    public String handleUserForm(@Valid User user, BindingResult result, HttpServletRequest request, HttpSession session) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername());
@@ -89,9 +90,8 @@ public class UserController {
         }
         // create user
         if (user.getId() == 0) {
-            long decideTime = System.currentTimeMillis() - session.getCreationTime();
-            userHandler.createUser(user,decideTime);
-            return "redirect:login";
+            userHandler.createUser(user, request);
+            return "redirect:/garden";
         } else {// update user
             userHandler.updateUser(user);
             return "redirect:user/";

@@ -10,7 +10,6 @@ import org.smigo.constraints.Username;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
@@ -19,11 +18,6 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Jpa entity and validator for user
- *
- * @author Christian Nilsson
- */
 @Matches(field = "password", verifyField = "passwordagain")
 public class User implements UserDetails {
 
@@ -48,17 +42,10 @@ public class User implements UserDetails {
 
     private String passwordagain = "";
 
-    private boolean publicGarden = true;
-
     @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
     private String about = "";
 
     private Locale locale = Locale.ENGLISH;
-
-    private Date registrationDate;
-
-    // system fields
-    private String authority;
 
     @AssertTrue
     private boolean termsofservice;
@@ -67,23 +54,25 @@ public class User implements UserDetails {
     }
 
 
-    public User(int id, String username, String password, String displayname, String email, boolean publicGarden, String about, Locale locale, Date registrationDate) {
+    public User(int id, String username, String password, String displayname, String email, String about, Locale locale) {
         this.id = id;
         this.displayname = displayname;
         this.password = password;
         this.username = username;
         this.email = email;
-        this.publicGarden = publicGarden;
         this.about = about;
         this.locale = locale;
-        this.registrationDate = registrationDate;
         log.debug("Create user instance " + this.toString());
     }
 
     @Override
     public String toString() {
-        return "User {" + id + "," + username + "," + email + "," + displayname + "," + ", " + publicGarden + ", " + ", " + about + ", "
-                + authority + ", " + registrationDate + ", " + locale + "}";
+        return "User{" +
+                "id=" + id +
+                ", displayname='" + displayname + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                '}';
     }
 
     public String getDisplayname() {
@@ -138,14 +127,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public boolean isPublicGarden() {
-        return publicGarden;
-    }
-
-    public void setPublicGarden(boolean publicGarden) {
-        this.publicGarden = publicGarden;
-    }
-
     public String getPasswordagain() {
         return passwordagain;
     }
@@ -154,24 +135,8 @@ public class User implements UserDetails {
         this.passwordagain = passwordagain;
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
     public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
         return java.util.Collections.singleton(new SimpleGrantedAuthority("user"));
-    }
-
-    public Date getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Date registerDate) {
-        this.registrationDate = registerDate;
     }
 
     public String getAbout() {
@@ -190,16 +155,10 @@ public class User implements UserDetails {
         this.locale = locale;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }

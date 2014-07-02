@@ -35,10 +35,6 @@
                 <td><spring:message code="about"/></td>
                 <td>${user.about}</td>
             </tr>
-            <tr>
-                <td><spring:message code="registrationDate"/></td>
-                <td><fmt:formatDate type="date" value="${user.registrationDate}"/></td>
-            </tr>
 
         </table>
         <c:if test="${showall}">

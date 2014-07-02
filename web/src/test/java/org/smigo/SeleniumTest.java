@@ -71,11 +71,6 @@ public class SeleniumTest {
         Thread.sleep(500);//todo this is a workaround for a bug
         d.findElement(By.id("submit-userform-button")).click();
 
-        //login
-        d.findElement(By.name("j_username")).sendKeys(USERNAME);
-        d.findElement(By.name("j_password")).sendKeys(PASSWORD);
-        d.findElement(By.id("submit-loginform-form")).click();
-
         String src = d.findElement(By.cssSelector("#origo .speciesimage")).getAttribute("src");
         Assert.assertEquals(src, "http://localhost:8080/pic/28.png");
 
@@ -110,7 +105,6 @@ public class SeleniumTest {
 
         int numberOfPlantsNextYear = d.findElements(By.className("speciesimage")).size();
         Assert.assertEquals(numberOfPlantsNextYear, 1);
-
 
         //go to account details
         d.findElement(By.id("account-details-link")).click();
