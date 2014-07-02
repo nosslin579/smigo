@@ -2,7 +2,6 @@ package org.smigo.constraints;
 
 import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -50,12 +49,7 @@ public @interface Username {
             if (username.equals("asdf1234567890")) {
                 return true;
             }
-            try {
-                databaseresource.getUser(username);
-            } catch (UsernameNotFoundException e) {
-                return true;
-            }
-            return false;
+            return databaseresource.getUser(username) == null;
         }
 
     }

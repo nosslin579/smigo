@@ -136,22 +136,20 @@ $(function () {
 function save() {
     $('#savebutton').unbind("click");
     $('#userdialog').text('<spring:message code="general.saving"/>');
-    var jsonPlants = new Array();
-    jsonPlants.push({year:${year}});
+    var jsonPlants = [];
     $('.speciesimage').each(function (index, speciesImage) {
         var speciesId = parseInt($(speciesImage).speciesid());
         var coord = $(speciesImage).parents('.jsgridcell').coordinates();
-        jsonPlants.push({a: speciesId, x: +coord.x, y: +coord.y});
+        jsonPlants.push({speciesId: speciesId, x: +coord.x, y: +coord.y, year: ${year}});
     });
 
-    var jsonPlantsStringified = JSON.stringify(jsonPlants);
     smigolog("Sending json", jsonPlants);
     $.ajax({
         url: '${pageContext.request.contextPath}/savegarden',
         dataType: 'html',
-//contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(jsonPlants),
         type: 'POST',
-        data: ({jsonstringyearandplants: jsonPlantsStringified}),
+        contentType:  'application/json; charset=utf-8',
         cache: false,
         ifModified: true,
         success: function (data) {
@@ -160,7 +158,7 @@ function save() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             $('#userdialog').text('Error');
-            smigolog("ajax error> jqXHR=" + jqXHR + " textStatus=" + textStatus + " errorThrown=" + errorThrown);
+            smigolog("ajax error> jqXHR=" + jqXHR + " textStatus=" + textStatus + " errorThrown=" + errorThrown,jqXHR);
         },
         complete: function (jqXHR, textStatus) {
             $('#savebutton').on("click", save);

@@ -15,7 +15,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private DatabaseResource databaseResource;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return databaseResource.getUser(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        final User user = databaseResource.getUser(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found:" + username);
+        }
+        return user;
     }
 }

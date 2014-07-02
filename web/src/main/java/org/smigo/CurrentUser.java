@@ -2,6 +2,7 @@ package org.smigo;
 
 import org.smigo.entities.User;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,8 @@ import java.util.Locale;
 public class CurrentUser {
 
     public boolean isAuthenticated() {
-        return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     public Integer getId() {

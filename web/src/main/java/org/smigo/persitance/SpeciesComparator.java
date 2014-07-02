@@ -23,15 +23,10 @@ public class SpeciesComparator implements java.util.Comparator<org.smigo.Species
     private HttpServletRequest request;
     @Autowired
     private LocaleResolver resolver;
-    private Locale locale;
-
-    @PostConstruct
-    public void init() {
-        locale = resolver.resolveLocale(request);
-    }
 
     @Override
     public int compare(SpeciesView o1, SpeciesView o2) {
+        Locale locale = resolver.resolveLocale(request);
         if (o1.isItem() != o2.isItem())
             return o1.isItem() ? 1 : -1;
         String translationKey1 = o1.getTranslationKey();

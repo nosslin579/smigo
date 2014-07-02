@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.CurrentUser;
 import org.smigo.SpeciesView;
-import org.smigo.entities.User;
 import org.smigo.formbean.RuleFormModel;
 import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.persitance.DatabaseResource;
@@ -17,7 +16,6 @@ import org.smigo.propertyeditors.RuleTypePropertyEditor;
 import org.smigo.propertyeditors.SpeciesPropertyEditor;
 import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -40,8 +38,6 @@ public class SpeciesController implements Serializable {
     @Autowired
     private DatabaseResource databaseresource;
     @Autowired
-    private UserSession userSession;
-    @Autowired
     private SpeciesHandler speciesHandler;
     @Autowired
     private CurrentUser currentUser;
@@ -59,9 +55,9 @@ public class SpeciesController implements Serializable {
 
     @ModelAttribute
     public void populateModel(Model model) {
-        model.addAttribute("families", Collections.sort(userSession.getFamilies()));
+        model.addAttribute("families", Collections.sort(speciesHandler.getFamilies()));
         model.addAttribute("ruleTypes", RuleType.values());
-        model.addAttribute("listofallspecies", userSession.getAllSpecies());
+        model.addAttribute("listofallspecies", speciesHandler.getAllSpecies());
     }
 
     @RequestMapping(value = "/listspecies")
@@ -71,13 +67,12 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/species/{id}")
     public ModelAndView getSpecies(@PathVariable Integer id) {
-        return new ModelAndView("speciesinfo.jsp", "species", userSession.getSpecies(id));
+        return new ModelAndView("speciesinfo.jsp", "species", speciesHandler.getSpecies(id));
     }
 
     @RequestMapping(value = "/deletespecies/{id}")
     public String deleteSpecies(@PathVariable Integer id, Model model) {
         databaseresource.deleteSpecies(currentUser.getId(), id);
-        userSession.reloadSpecies();
         model.addAttribute("speciesId", id);
         return "species-deleted.jsp";
     }
@@ -97,47 +92,38 @@ public class SpeciesController implements Serializable {
     }
 
     @RequestMapping("/display")
-    public
     @ResponseBody
-    String setDisplay(@RequestParam Integer speciesId,
-                      @RequestParam(required = false) Boolean display) {
+    public String setDisplay(@RequestParam Integer speciesId, @RequestParam(required = false) Boolean display) {
         log.debug("Display " + speciesId + "," + display);
-        databaseresource.setSpeciesVisibility(speciesId, currentUser.getId(), display == null ? !userSession.getSpecies(speciesId).isDisplay() : display);
-        userSession.reloadSpecies();
-        userSession.reloadGarden();
+        databaseresource.setSpeciesVisibility(speciesId, currentUser.getId(), display == null ? !speciesHandler.getSpecies(speciesId).isDisplay() : display);
         return "";
     }
 
     @RequestMapping("/deleterule")
-    public
     @ResponseBody
-    String setDisplay(@RequestParam Integer ruleId) {
+    public String setDisplay(@RequestParam Integer ruleId) {
         log.debug("Deleting rule:" + ruleId);
-        if (userSession.getRule(ruleId).getCreatorId() == 0)
+        if (speciesHandler.getRule(ruleId).getCreatorId() == 0)
             databaseresource.setRulesVisibility(ruleId, currentUser.getId(), false);
         else
             databaseresource.deleteRule(ruleId, currentUser.getId());
-        userSession.reloadSpecies();
-        userSession.reloadGarden();
         return "";
     }
 
     @RequestMapping(value = {"/addrule"}, method = RequestMethod.GET)
     public String getRuleForm(@RequestParam Integer species, ModelMap model) {
         model.addAttribute("ruleFormModel", new RuleFormModel());
-        model.addAttribute("host", userSession.getSpecies(species));
+        model.addAttribute("host", speciesHandler.getSpecies(species));
         return "ruleform.jsp";
     }
 
     @RequestMapping(value = "/addrule", method = RequestMethod.POST)
     public String handleRuleForm(@Valid RuleFormModel rule, BindingResult result, ModelMap model) {
         if (result.hasErrors()) {
-            model.addAttribute("host", userSession.getSpecies(rule.getHost()));
+            model.addAttribute("host", speciesHandler.getSpecies(rule.getHost()));
             return "ruleform.jsp";
         }
         databaseresource.addRule(rule, currentUser.getId());
-        userSession.reloadSpecies();
-        userSession.reloadGarden();
         return "redirect:/species/" + rule.getHost();
     }
 }

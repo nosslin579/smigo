@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.entities.PlantDb;
+import org.smigo.entities.PlantDataBean;
 import kga.Plant;
 import kga.Square;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,23 +32,23 @@ public class PlantConverter {
   private PlantConverter() {
   }
 
-  public static List<PlantDb> convert(String jsonPlants) throws JsonParseException,
+  public static List<PlantDataBean> convert(String jsonPlants) throws JsonParseException,
                                                                   JsonMappingException, IOException {
     List<Map<String, Integer>> jsonPlantList = mapper.readValue(jsonPlants, ArrayList.class);
     int year = jsonPlantList.get(0).get("year");
     jsonPlantList.remove(0);
-    List<PlantDb> ret = new ArrayList<PlantDb>();
+    List<PlantDataBean> ret = new ArrayList<PlantDataBean>();
     for (Map<String, Integer> pl : jsonPlantList) {
       int id = pl.get("a");
       int x = pl.get("x");
       int y = pl.get("y");
-      ret.add(new PlantDb(id, year, x, y));
+      ret.add(new PlantDataBean(id, year, x, y));
     }
     return ret;
   }
 
-  public static List<PlantDb> convert(MultipartFile file) throws IOException {
-    List<PlantDb> ret = new ArrayList<PlantDb>();
+  public static List<PlantDataBean> convert(MultipartFile file) throws IOException {
+    List<PlantDataBean> ret = new ArrayList<PlantDataBean>();
     DataInputStream in = new DataInputStream(new BufferedInputStream(file.getInputStream()));
     int year = 0, gridx = 0, gridy = 0, field;
     try {
@@ -72,7 +72,7 @@ public class PlantConverter {
           if (species == 117 || species == 119)
             species = 116;
 
-          ret.add(new PlantDb(species, year, gridx, gridy));
+          ret.add(new PlantDataBean(species, year, gridx, gridy));
         }
       }
     } catch (EOFException e) {
@@ -83,11 +83,11 @@ public class PlantConverter {
     return ret;
   }
 
-  public static List<PlantDb> convert(Collection<Square> squares) {
-    List<PlantDb> ret = new ArrayList<PlantDb>();
+  public static List<PlantDataBean> convert(Collection<Square> squares) {
+    List<PlantDataBean> ret = new ArrayList<PlantDataBean>();
     for (Square s : squares) {
       for (Plant p : s.getPlants()) {
-        ret.add(new PlantDb(p.getSpecies().getId(), s.getYear(), s.getX(), s.getY()));
+        ret.add(new PlantDataBean(p.getSpecies().getId(), s.getYear(), s.getX(), s.getY()));
       }
     }
     return ret;

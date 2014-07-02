@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
+import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -31,9 +32,6 @@ public class AuthenticationListener implements AuthenticationSuccessHandler, Log
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         log.info("Login successful, user: " + authentication.getName());
-        userSession.reloadSpecies();
-        userSession.reloadGarden();
-
         final User principal = (User) authentication.getPrincipal();
         final Map<String, String> translation = databaseResource.getTranslation(principal.getId());
         userSession.getTranslation().putAll(translation);

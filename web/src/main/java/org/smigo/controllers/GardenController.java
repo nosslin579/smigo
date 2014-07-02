@@ -4,10 +4,11 @@ import kga.Garden;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.CurrentUser;
+import org.smigo.entities.PlantDataBean;
 import org.smigo.formbean.AddYearFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
-import org.smigo.service.PlantConverter;
+import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.SortedSet;
 
@@ -40,6 +42,8 @@ public class GardenController implements Serializable {
     private CurrentUser currentUser;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private SpeciesHandler speciesHandler;
 
     public GardenController() {
         log.debug("Creating new GardenController");
@@ -47,28 +51,28 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden() {
-        SortedSet<Integer> years = userSession.getGarden().getYears();
+        SortedSet<Integer> years = speciesHandler.getGarden().getYears();
         int current = Calendar.getInstance().get(Calendar.YEAR);
         return "forward:/garden/" + (years.isEmpty() ? current : years.last());
     }
 
     @RequestMapping(value = "/garden/{year}")
     public String getGarden(@PathVariable Integer year, Model model) {
-        Garden g = userSession.getGarden();
+        Garden g = speciesHandler.getGarden();
         log.debug("Displaying garden: " + year + ", squares:" + g.getAllSquares().size() + ", bounds:" + g.getBoundsFor(year));
         model.addAttribute("year", year);
         model.addAttribute("kgagarden", g);
-        model.addAttribute("specieslist", userSession.getVisibleSpecies());
-        model.addAttribute("speciesJson", userSession.getVisibleSpecies());
+        model.addAttribute("specieslist", speciesHandler.getVisibleSpecies());
+        model.addAttribute("speciesJson", speciesHandler.getVisibleSpecies());
         return "garden.jsp";
     }
 
     @RequestMapping(value = "/savegarden", produces = "text/plain;charset=UTF-8")
     @ResponseBody
-    public String saveGarden(@RequestParam(required = false) String jsonstringyearandplants, Locale locale)
+    public String saveGarden(@RequestBody List<PlantDataBean> plants, Locale locale)
             throws IOException {
-        log.debug("Savegarden " + jsonstringyearandplants);
-        userSession.updateGarden(PlantConverter.convert(jsonstringyearandplants));
+        log.debug("Savegarden. Plants:" + plants.size());
+        speciesHandler.updateGarden(plants);
         String loginFirst = messageSource.getMessage("account.pleaseloginfirst", null, locale);
         String ok = messageSource.getMessage("ok", null, locale);
         return currentUser.isAuthenticated() ? ok : loginFirst;
@@ -82,15 +86,13 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = "/addyear", method = RequestMethod.POST)
     public String handleAddYearForm(@Valid AddYearFormBean addYearFormBean, BindingResult result) {
-        log.debug("Adding year " + addYearFormBean.getYear());
+        final Integer year = addYearFormBean.getYear();
+        log.debug("Adding year " + year);
         if (result.hasErrors()) {
             return "addyearform.jsp";
         }
-        int newYear = addYearFormBean.getYear();
-        Garden g = userSession.getGarden();
-        g.addYear(newYear);
-        userSession.updateGarden(PlantConverter.convert(g.getSquaresFor(newYear)));
-        return "redirect:garden/" + newYear;
+        speciesHandler.addYear(year);
+        return "redirect:garden/" + year;
     }
 
     @RequestMapping(value = "/deleteyear", method = RequestMethod.GET)
@@ -102,7 +104,6 @@ public class GardenController implements Serializable {
     public String handleDeleteYearForm(@RequestParam("deleteyear") Integer deleteyear) {
         log.debug("Delete year " + deleteyear);
         databaseResource.deleteYear(currentUser.getId(), deleteyear);
-        userSession.reloadGarden();
         return "redirect:garden";
     }
 

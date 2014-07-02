@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.config.HostEnvironmentInfo;
 import org.smigo.entities.Message;
-import org.smigo.entities.PlantDb;
+import org.smigo.entities.PlantDataBean;
 import org.smigo.entities.User;
 import org.smigo.factories.RuleFactory;
 import org.smigo.formbean.RuleFormModel;
@@ -16,7 +16,6 @@ import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.listener.VisitLogger;
 import org.smigo.security.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -82,21 +81,21 @@ public class DatabaseResource implements Serializable {
                 rs.close();
             }
         } catch (Exception ex) {
-            log.warn("Could not close resultset",ex);
+            log.warn("Could not close resultset", ex);
         } finally {
             try {
                 if (stmt != null) {
                     stmt.close();
                 }
             } catch (Exception ex) {
-                log.warn("Could not close statment",ex);
+                log.warn("Could not close statment", ex);
             } finally {
                 try {
                     if (connection != null) {
                         connection.close();
                     }
                 } catch (Exception ex) {
-                    log.warn("Could not close connection",ex);
+                    log.warn("Could not close connection", ex);
                 }
             }
         }
@@ -339,7 +338,7 @@ public class DatabaseResource implements Serializable {
             ps.setInt(1, user.getId());
             rs = ps.executeQuery();
             while (rs.next())
-                ret.add(new PlantDb(rs.getInt("species"), rs.getInt("year"), rs.getInt("x"), rs
+                ret.add(new PlantDataBean(rs.getInt("species"), rs.getInt("year"), rs.getInt("x"), rs
                         .getInt("y")));
             log.debug("Returning " + ret.size() + " plants for user " + user.getId());
         } catch (SQLException e) {
@@ -350,34 +349,54 @@ public class DatabaseResource implements Serializable {
         return ret;
     }
 
-    /**
-     * Updates plants to database. First deletes users plants from database and
-     * then adds plants.
-     *
-     * @param plants
-     * @throws Exception
-     */
-    public void updateGarden(User user, List<PlantDb> plants) {
+
+    public void saveGarden(User user, List<PlantDataBean> plants) {
         if (plants == null || plants.isEmpty())
             throw new RuntimeException("No plants to update");
 
         int userId = user.getId();
 
+        StringBuilder insertSqlString = new StringBuilder("INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
+        for (PlantDataBean pl : plants) {
+            insertSqlString.append("('").append(userId).append("',")
+                    .append(pl.getSpeciesId()).append(",")
+                    .append(pl.getYear()).append(",")
+                    .append(pl.getX()).append(",")
+                    .append(pl.getY()).append("),");
+        }
+        insertSqlString.setCharAt(insertSqlString.length() - 1, ';');
+
+        Connection con = null;
+        PreparedStatement insert = null;
+        try {
+            con = getDatasource().getConnection();
+            insert = con.prepareStatement(insertSqlString.toString());
+            insert.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not save plants database.", e);
+        } finally {
+            close(con, insert);
+        }
+    }
+
+    public void updateGarden(int userId, List<PlantData> plants) {
+        if (plants == null || plants.isEmpty())
+            throw new RuntimeException("No plants to update");
         Set<Integer> yearsToUpdate = new HashSet<Integer>();
-        for (PlantDb p : plants)
+        for (PlantData p : plants)
             yearsToUpdate.add(p.getYear());
 
-        log.debug("Updating plants for user: " + user + " plants.size() " + plants.size());
+        log.debug("Updating plants for user: " + userId + " plants.size() " + plants.size());
 
-        StringBuffer deleteSqlString = new StringBuffer("DELETE FROM plants WHERE fkuserid='"
+        StringBuilder deleteSqlString = new StringBuilder("DELETE FROM plants WHERE fkuserid='"
                 + userId + "'");
         for (Integer y : yearsToUpdate)
-            deleteSqlString.append(" AND year=" + y);
+            deleteSqlString.append(" AND year=").append(y);
         deleteSqlString.append(';');
 
-        StringBuffer insertSqlString = new StringBuffer(
+        StringBuilder insertSqlString = new StringBuilder(
                 "INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
-        for (PlantDb pl : plants)
+        for (PlantData pl : plants)
             insertSqlString.append("('" + userId + "'," + pl.getSpeciesId() + ","
                     + pl.getYear() + "," + pl.getX() + "," + pl.getY() + "),");
         insertSqlString.setCharAt(insertSqlString.length() - 1, ';');
@@ -421,9 +440,7 @@ public class DatabaseResource implements Serializable {
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO "
-                    + "users(username,password,enabled,authority,email,displayname,regtime,about,locale,decidetime) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?)");
+            ps = con.prepareStatement("INSERT INTO users(username,password,enabled,authority,email,displayname,regtime,about,locale,decidetime) VALUES (?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, user.getUsername());
             ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
             ps.setBoolean(3, true);
@@ -504,12 +521,12 @@ public class DatabaseResource implements Serializable {
                         StringUtils.parseLocaleString(rs.getString("locale")),
                         rs.getTimestamp("createdate"));
             }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException("Could not get user from database. Username: " + username, e);
         } finally {
             close(con, ps, rs);
         }
-        throw new UsernameNotFoundException("User not found:" + username);
     }
 
     public void deleteUser(String username) throws SQLException {
@@ -548,7 +565,7 @@ public class DatabaseResource implements Serializable {
             ps.setString(12, req.getRequestedSessionId());
             ps.setString(13, req.getMethod());
             ps.setString(14, req.getHeader("x-forwarded-for"));
-            ps.setString(15, String.valueOf(req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)));
+            ps.setString(15, (String)req.getAttribute(VisitLogger.NOTE_ATTRIBUTE));
             ps.execute();
         } catch (SQLException e) {
             throw new RuntimeException("Could not insert logvisit into database.", e);

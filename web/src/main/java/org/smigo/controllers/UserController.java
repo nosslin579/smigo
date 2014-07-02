@@ -3,14 +3,12 @@ package org.smigo.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.CurrentUser;
-import org.smigo.entities.PlantDb;
 import org.smigo.entities.User;
 import org.smigo.formbean.PasswordFormBean;
 import org.smigo.handler.UserHandler;
 import org.smigo.i18n.Translation;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
-import org.smigo.service.PlantConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.stereotype.Controller;
@@ -21,11 +19,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -94,13 +90,7 @@ public class UserController {
         // create user
         if (user.getId() == 0) {
             long decideTime = System.currentTimeMillis() - session.getCreationTime();
-            long signupTime = userSession.getSignupTime();
-            databaseresource.addUser(user, signupTime, decideTime);
-
-            List<PlantDb> plants = PlantConverter.convert(userSession.getGarden().getAllSquares());
-            if (!plants.isEmpty()) {
-                databaseresource.updateGarden(databaseresource.getUser(user.getUsername()), plants);
-            }
+            userHandler.createUser(user,decideTime);
             return "redirect:login";
         } else {// update user
             userHandler.updateUser(user);
