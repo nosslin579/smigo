@@ -741,4 +741,20 @@ public class DatabaseResource implements Serializable {
             close(con, statement, resultSet);
         }
     }
+
+    public void removeRememberMeToken(Integer userId) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("DELETE FROM persistent_logins WHERE username = (SELECT username FROM users WHERE user_id = ?)");
+            statement.setInt(1, userId);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error removing remember me token. Userid:" + userId, e);
+        } finally {
+            close(con, statement);
+        }
+
+    }
 }

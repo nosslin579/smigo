@@ -10,6 +10,7 @@ import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,6 @@ public class GardenController implements Serializable {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private DatabaseResource databaseResource;
-    @Autowired
-    private UserSession userSession;
     @Autowired
     private CurrentUser currentUser;
     @Autowired

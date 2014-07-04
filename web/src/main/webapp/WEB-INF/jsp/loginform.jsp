@@ -15,18 +15,22 @@
             </div>
         </c:if>
 
-        <form name="f" action="<c:url value='/j_spring_security_check'/>" method="POST">
+        <form name="f" action="<c:url value="/j_spring_security_check"/>" method="POST">
+            <input type="hidden" name="_spring_security_remember_me" value="true"/>
             <table>
                 <tr>
                     <td><spring:message code="username"/>:</td>
-                    <td><input type='text' name='j_username'/></td>
+                    <td><input type="text" name="j_username"/></td>
                 </tr>
                 <tr>
                     <td><spring:message code="password"/>:</td>
-                    <td><input type='password' name='j_password'></td>
+                    <td><input type="password" name="j_password"/></td>
                 </tr>
                 <tr>
-                    <td colspan='2'><input id="submit-loginform-form" value="<spring:message code="account.login"/>" type="submit"></td>
+                    <td colspan="2">
+                        <spring:message code="account.login" var="loginMsg"/>
+                        <input id="submit-loginform-form" value="${loginMsg}" type="submit">
+                    </td>
                 </tr>
             </table>
         </form>

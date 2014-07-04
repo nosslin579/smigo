@@ -70,7 +70,7 @@ public class UserController {
             result.addError(new FieldError("passwordFormBean", "oldPassword", "invalid"));
         if (result.hasErrors())
             return "passwordform.jsp";
-        databaseresource.updatePassword(currentUser.getId(), passwordFormBean.getNewPassword());
+        userHandler.updatePassword(currentUser.getId(), passwordFormBean.getNewPassword());
         return "redirect:/user/";
     }
 

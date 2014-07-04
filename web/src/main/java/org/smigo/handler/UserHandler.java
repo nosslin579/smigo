@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,5 +50,10 @@ public class UserHandler {
         Authentication authenticatedUser = authenticationManager.authenticate(token);
 
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+    }
+
+    public void updatePassword(Integer userId, String newPassword) {
+        databaseResource.updatePassword(userId, newPassword);
+        databaseResource.removeRememberMeToken(userId);
     }
 }
