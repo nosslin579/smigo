@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-public class AuthenticationListener implements AuthenticationSuccessHandler, LogoutSuccessHandler {
+public class AuthenticationListener implements AuthenticationSuccessHandler{
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -38,13 +38,4 @@ public class AuthenticationListener implements AuthenticationSuccessHandler, Log
 
         response.sendRedirect(request.getContextPath() + "/garden");
     }
-
-    @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-                                Authentication authentication) throws IOException, ServletException {
-        log.info("Logout successful, user: " + authentication.getName());
-        request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath() + "/hastalavista");
-    }
-
 }

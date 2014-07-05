@@ -123,8 +123,8 @@ public class SeleniumTest {
 
         //login again
         d.findElement(By.id("login-link")).click();
-        d.findElement(By.name("j_username")).sendKeys(USERNAME);
-        d.findElement(By.name("j_password")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.name("username")).sendKeys(USERNAME);
+        d.findElement(By.name("password")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-loginform-form")).click();
         log.info("Url after login:" + d.getCurrentUrl());
         Assert.assertEquals(d.getCurrentUrl(), "http://localhost:8080/web/garden");

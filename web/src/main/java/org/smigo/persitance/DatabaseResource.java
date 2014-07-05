@@ -648,18 +648,18 @@ public class DatabaseResource implements Serializable {
 
     }
 
-    public void updatePassword(int userId, String password) {
+    public void updatePassword(String username, String password) {
         final String hashpw = BCrypt.hashpw(password, BCrypt.gensalt());
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
-            ps = con.prepareStatement("UPDATE users SET password=? WHERE user_id=?");
+            ps = con.prepareStatement("UPDATE users SET password=? WHERE username=?");
             ps.setString(1, hashpw);
-            ps.setInt(2, userId);
+            ps.setString(2, username);
             ps.execute();
         } catch (SQLException e) {
-            throw new RuntimeException("Password not updated" + userId, e);
+            throw new RuntimeException("Password not updated. Username:" + username, e);
         } finally {
             close(con, ps);
         }
@@ -740,21 +740,5 @@ public class DatabaseResource implements Serializable {
         } finally {
             close(con, statement, resultSet);
         }
-    }
-
-    public void removeRememberMeToken(Integer userId) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        try {
-            con = getDatasource().getConnection();
-            statement = con.prepareStatement("DELETE FROM persistent_logins WHERE username = (SELECT username FROM users WHERE user_id = ?)");
-            statement.setInt(1, userId);
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error removing remember me token. Userid:" + userId, e);
-        } finally {
-            close(con, statement);
-        }
-
     }
 }

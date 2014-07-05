@@ -38,7 +38,7 @@
     <sec:authorize access="isAuthenticated()">
         <a id="account-details-link" class="smigolink" href="${pageContext.request.contextPath}/user"><sec:authentication
                 property="principal.username"/></a>
-        <a id="logout-link" class="smigolink" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message
+        <a id="logout-link" class="smigolink" href="${pageContext.request.contextPath}/logout"><spring:message
                 code="account.logout"/></a>
     </sec:authorize>
 

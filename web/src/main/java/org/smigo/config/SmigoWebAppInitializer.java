@@ -2,6 +2,7 @@ package org.smigo.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -18,12 +19,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-public class SmigoWebAppInitializer implements WebApplicationInitializer {
+public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitializer {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    protected void beforeSpringSecurityFilterChain(ServletContext servletContext) {
+        super.beforeSpringSecurityFilterChain(servletContext);
         log.info("Starting servlet context" +
                 ", contextName: " + servletContext.getServletContextName() +
                 ", contextPath:" + servletContext.getContextPath() +
@@ -40,7 +42,7 @@ public class SmigoWebAppInitializer implements WebApplicationInitializer {
             InitialContext initialContext = new InitialContext();
             profile = (String) initialContext.lookup("java:comp/env/profile");
         } catch (NamingException e) {
-            throw new ServletException("Could not find profile", e);
+            throw new RuntimeException("Could not find profile", e);
         }
 
         WebApplicationContext context = new AnnotationConfigWebApplicationContext() {{

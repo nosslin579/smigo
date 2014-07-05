@@ -5,12 +5,12 @@ import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Component
+@Lazy
 public class UserHandler {
 
     @Autowired
@@ -26,6 +27,8 @@ public class UserHandler {
     private DatabaseResource databaseResource;
     @Autowired
     protected AuthenticationManager authenticationManager;
+    @Autowired
+    private PersistentTokenRepository tokenRepository;
 
     public void updateUser(User user) {
         databaseResource.updateUserDetails(user);
@@ -52,8 +55,8 @@ public class UserHandler {
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
     }
 
-    public void updatePassword(Integer userId, String newPassword) {
-        databaseResource.updatePassword(userId, newPassword);
-        databaseResource.removeRememberMeToken(userId);
+    public void updatePassword(String username, String newPassword) {
+        databaseResource.updatePassword(username, newPassword);
+        tokenRepository.removeUserTokens(username);
     }
 }
