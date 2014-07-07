@@ -19,8 +19,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Locale;
@@ -66,8 +64,6 @@ public class UserController {
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
     public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result) {
-        if (!databaseresource.validatePassword(currentUser.getUser(), passwordFormBean.getOldPassword()))
-            result.addError(new FieldError("passwordFormBean", "oldPassword", "invalid"));
         if (result.hasErrors())
             return "passwordform.jsp";
         userHandler.updatePassword(currentUser.getUser().getUsername(), passwordFormBean.getNewPassword());
@@ -82,7 +78,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cuuser", method = RequestMethod.POST)
-    public String handleUserForm(@Valid User user, BindingResult result, HttpServletRequest request, HttpSession session) {
+    public String handleUserForm(@Valid User user, BindingResult result) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername());
@@ -90,7 +86,8 @@ public class UserController {
         }
         // create user
         if (user.getId() == 0) {
-            userHandler.createUser(user, request);
+            userHandler.createUser(user);
+            userHandler.authenticateUser(user.getUsername(), user.getPasswordagain());
             return "redirect:/garden";
         } else {// update user
             userHandler.updateUser(user);
@@ -98,13 +95,9 @@ public class UserController {
         }
     }
 
-    /**
-     * Returns user details. Almost like facebooks my wall.
-     */
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)
     public String getUser(@PathVariable Integer userid, Model model, Principal principal) {
-        User u = null;
-        u = databaseresource.getUser(userid);
+        User u = databaseresource.getUser(userid);
         u.setEmail("");
         u.setUsername("");
         model.addAttribute("showall", false);
@@ -120,40 +113,8 @@ public class UserController {
         return "userinfo.jsp";
     }
 
-    /**
-     * Returns login form.
-     *
-     * @return
-     */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "loginform.jsp";
     }
-
-    /**
-     * Authenticate automatically. Not implemented yet
-     */
-    // private void authenticateUserAndSetSession(User user, HttpServletRequest
-    // request)
-    // {
-    // UsernamePasswordAuthenticationToken token = new
-    // UsernamePasswordAuthenticationToken(
-    // user.getUsername(), user.getPassword());
-    //
-    // // generate session if one doesn't exist
-    // request.getSession();
-    //
-    // token.setDetails(new WebAuthenticationDetails(request));
-    // Authentication authenticatedUser =
-    // authenticationManager.authenticate(token);
-    // SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-    // }
-    //
-    // protected void autoLogin(HttpServletRequest request, User user){
-    // UsernamePasswordAuthenticationToken authentication = new
-    // UsernamePasswordAuthenticationToken(user.getUsername(),
-    // user.getPassword(), user.getAuthorities());
-    // SecurityContextHolder.getContext().setAuthentication(authentication);
-    // }
-
 }

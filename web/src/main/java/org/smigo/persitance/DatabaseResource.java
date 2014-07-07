@@ -14,9 +14,7 @@ import org.smigo.factories.RuleFactory;
 import org.smigo.formbean.RuleFormModel;
 import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.listener.VisitLogger;
-import org.smigo.security.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -442,7 +440,7 @@ public class DatabaseResource implements Serializable {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("INSERT INTO users(username,password,enabled,authority,email,displayname,regtime,about,locale,decidetime) VALUES (?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, user.getUsername());
-            ps.setString(2, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            ps.setString(2, user.getPassword());
             ps.setBoolean(3, true);
             ps.setString(4, "user");
             ps.setString(5, user.getEmail());
@@ -498,6 +496,44 @@ public class DatabaseResource implements Serializable {
         }
         return getUser(username);
     }
+
+    public User getUserByOpenId(String identityUrl) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("SELECT username FROM users JOIN openid ON openid.user_id = users.user_id WHERE openid.identity_url = ?");
+            statement.setString(1, identityUrl);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return getUser(resultSet.getString(1));
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving openid. URL:" + identityUrl, e);
+        } finally {
+            close(con, statement, resultSet);
+        }
+    }
+
+    public void addOpenid(int userId, String identityUrl) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = getDatasource().getConnection();
+            ps = con.prepareStatement("INSERT INTO openid(user_id,identity_url) VALUES (?,?)");
+            ps.setInt(1, userId);
+            ps.setString(2, identityUrl);
+            ps.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not add user to database.", e);
+        } finally {
+            close(con, ps);
+        }
+    }
+
 
     public User getUser(String username) {
         Assert.notNull(username);
@@ -564,7 +600,7 @@ public class DatabaseResource implements Serializable {
             ps.setString(12, req.getRequestedSessionId());
             ps.setString(13, req.getMethod());
             ps.setString(14, req.getHeader("x-forwarded-for"));
-            ps.setString(15, (String)req.getAttribute(VisitLogger.NOTE_ATTRIBUTE));
+            ps.setString(15, (String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE));
             ps.execute();
         } catch (SQLException e) {
             throw new RuntimeException("Could not insert logvisit into database.", e);
@@ -648,14 +684,13 @@ public class DatabaseResource implements Serializable {
 
     }
 
-    public void updatePassword(String username, String password) {
-        final String hashpw = BCrypt.hashpw(password, BCrypt.gensalt());
+    public void updatePassword(String username, String encodedPassword) {
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("UPDATE users SET password=? WHERE username=?");
-            ps.setString(1, hashpw);
+            ps.setString(1, encodedPassword);
             ps.setString(2, username);
             ps.execute();
         } catch (SQLException e) {
@@ -666,21 +701,21 @@ public class DatabaseResource implements Serializable {
 
     }
 
-    public boolean validatePassword(User user, String plaintextPassword) {
+    public String getPassword(int userId) {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("SELECT password FROM users WHERE user_id=?");
-            ps.setInt(1, user.getId());
+            ps.setInt(1, userId);
             rs = ps.executeQuery();
-            String encodedPassword = null;
-            if (rs.next())
-                encodedPassword = rs.getString("password");
-            return new BCryptPasswordEncoder().matches(plaintextPassword, encodedPassword);
+            if (rs.next()){
+                return rs.getString("password");
+            }
+            throw new RuntimeException("Could retrieve password. Userid:" + userId);
         } catch (SQLException e) {
-            throw new RuntimeException("Could not validate password. Userid:" + user.getId(), e);
+            throw new RuntimeException("Could retrieve password. Userid:" + userId, e);
         } finally {
             close(con, ps, rs);
         }

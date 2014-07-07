@@ -34,7 +34,31 @@
                 </tr>
             </table>
         </form>
+        <hr/>
+        <form action="/web/login-openid" id=”googleOpenId” method="post">
+            <input id="openid_identifier" name="openid_identifier" type="hidden"
+                   value="https://www.google.com/accounts/o8/id"/>
+            <input type="hidden" name="remember-me" value="true">
+            <input type="submit" value="Google Login" onClick="submit('googleOpenId')"/>
+        </form>
+        <hr/>
+        <form action="/web/login-openid" method="POST">
+            <table>
+                <tr>
+                    <td>Identity:</td>
+                    <td><input type="text" size="30" name="openid_identifier"/></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="remember-me"></td>
+                    <td>Remember me on this computer.</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input name="submit" type="submit" value="Login"/></td>
+                </tr>
+            </table>
+        </form>
     </div>
 </div>
+
 
 <jsp:include page="footer.jsp"/>

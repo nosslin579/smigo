@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
@@ -22,11 +23,15 @@ import java.util.List;
 public class UserHandler {
 
     @Autowired
+    private HttpServletRequest request;
+    @Autowired
     private UserSession userSession;
     @Autowired
     private DatabaseResource databaseResource;
     @Autowired
     protected AuthenticationManager authenticationManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private PersistentTokenRepository tokenRepository;
 
@@ -34,9 +39,20 @@ public class UserHandler {
         databaseResource.updateUserDetails(user);
     }
 
-    public void createUser(User user, HttpServletRequest request) {
+    public void createUser(User user, String identityUrl) {
+        createUser(user);
+        final User createadUser = databaseResource.getUser(user.getUsername());
+        databaseResource.addOpenid(createadUser.getId(), identityUrl);
+
+    }
+
+    public void createUser(User user) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
         long signupTime = userSession.getSignupTime();
+        final String rawPassword = user.getPassword();
+        if (!rawPassword.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(rawPassword));
+        }
         databaseResource.addUser(user, signupTime, decideTime);
 
         //save plants
@@ -45,9 +61,11 @@ public class UserHandler {
             final User user1 = databaseResource.getUser(user.getUsername());
             databaseResource.updateGarden(user1.getId(), plants);
         }
+    }
 
+    public void authenticateUser(String username, String password) {
         //set authentication
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
 
         token.setDetails(new WebAuthenticationDetails(request));
         Authentication authenticatedUser = authenticationManager.authenticate(token);
@@ -56,7 +74,9 @@ public class UserHandler {
     }
 
     public void updatePassword(String username, String newPassword) {
-        databaseResource.updatePassword(username, newPassword);
+        final String encodedPassword = passwordEncoder.encode(newPassword);
+        databaseResource.updatePassword(username, encodedPassword);
         tokenRepository.removeUserTokens(username);
     }
+
 }
