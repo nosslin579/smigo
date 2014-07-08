@@ -8,40 +8,54 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.entities.User;
+import org.smigo.persitance.DatabaseResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Test(groups = "selenium")
-public class SeleniumTest {
-
-    public static final String USERNAME = "selenium" + System.currentTimeMillis();
-    public static final String EMAIL = USERNAME + "@smigo.org";
-    public static final String PASSWORD = "password";
-    public static final String DISPLAY_NAME = "Seleniumsson";
-    public static final String ABOUT = "Eco friendly garden";
-    public static final String ADD = "1";
-    private static final String NEW_PASSWORD = "drowssap";
-    public static final String SPECIES_NAME = "Frango";
-    public static final String SCIENTIFIC_NAME = "Frangus Saladus";
-    private static final String PERENNIAL_NAME = "Sand";
-    public static final int NUMBER_OF_SPECIES = 83;
+@ContextConfiguration(classes = {TestConfiguration.class})
+public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private static final String PASSWORD = "password";
+    private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
+    private static final String NEW_PASSWORD = "password1";
+    private static final String SPECIES_NAME = "Frango";
+    private static final String SCIENTIFIC_NAME = "Frangus Saladus";
+    private static final String ITEM_NAME = "Sand";
+    private static final int NUMBER_OF_SPECIES = 83;
+
+    @Autowired
+    private DatabaseResource databaseResource;
 
     private WebDriver d;
     private WebDriverWait w;
 
-    @BeforeTest
+    @BeforeClass
     public void init() {
         d = new FirefoxDriver();
         d.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        d.manage().deleteCookieNamed("jsessionid");
         w = new WebDriverWait(d, 10);
+    }
+
+    @BeforeMethod
+    public void goHome() {
+        d.manage().deleteCookieNamed("JSESSIONID");
+        d.manage().deleteCookieNamed("remember-me");
+        d.get("http://localhost:8080/web");
     }
 
     @AfterClass
@@ -49,31 +63,61 @@ public class SeleniumTest {
         d.quit();
     }
 
+    private String addUser() {
+        final User user = new User();
+        user.setUsername("selenium" + System.currentTimeMillis());
+        user.setPassword(HASHPW);
+        user.setLocale(Locale.ENGLISH);
+        databaseResource.addUser(user, 0, 0);
+        return user.getUsername();
+    }
+
+    private void login(String username, String password) {
+        d.findElement(By.id("login-link")).click();
+        d.findElement(By.name("username")).sendKeys(username);
+        d.findElement(By.name("password")).sendKeys(password);
+        d.findElement(By.id("submit-loginform-form")).click();
+    }
+
     @Test
     public void testRegister() throws Exception {
-        log.debug("Running test qwer");
-        d.get("http://localhost:8080/web");
+        final String realName = "Seleniumsson";
+        final String username = "selenium" + System.currentTimeMillis();
+        final String email = username + "@smigo.org";
+        final String about = "Eco friendly garden";
 
         //add tomato
-        d.findElement(By.id("jslistspeciesid_44")).click();
         d.findElement(By.id("origo")).click();
         d.findElement(By.id("savebutton")).click();
 
         //sign up
         d.findElement(By.id("signup-link")).click();
-        d.findElement(By.name("username")).sendKeys(USERNAME);
+        d.findElement(By.name("username")).sendKeys(username);
         d.findElement(By.name("password")).sendKeys(PASSWORD);
         d.findElement(By.name("passwordagain")).sendKeys(PASSWORD);
-        d.findElement(By.name("email")).sendKeys(EMAIL);
-        d.findElement(By.name("displayname")).sendKeys(DISPLAY_NAME);
-        d.findElement(By.name("about")).sendKeys(ABOUT);
+        d.findElement(By.name("email")).sendKeys(email);
+        d.findElement(By.name("displayname")).sendKeys(realName);
+        d.findElement(By.name("about")).sendKeys(about);
         d.findElement(By.name("termsofservice")).click();
-        Thread.sleep(500);//todo this is a workaround for a bug
         d.findElement(By.id("submit-userform-button")).click();
 
         String src = d.findElement(By.cssSelector("#origo .speciesimage")).getAttribute("src");
         Assert.assertEquals(src, "http://localhost:8080/pic/28.png");
 
+/*
+        d.manage().deleteCookieNamed("JSESSIONID");
+
+        d.findElement(By.id("account-details-link")).click();
+        Assert.assertTrue(d.getPageSource().contains(email));
+        Assert.assertTrue(d.getPageSource().contains(realName));
+        Assert.assertTrue(d.getPageSource().contains(about));
+*/
+
+    }
+
+    public void addSpeciesTest() {
+        final String username = addUser();
+        login(username, PASSWORD);
         //add species
         d.findElement(By.id("plants-menu-item")).click();
         Assert.assertEquals(d.findElements(By.className("speciesrow")).size(), NUMBER_OF_SPECIES);
@@ -88,29 +132,39 @@ public class SeleniumTest {
         d.findElement(By.id("garden-menu-item")).click();
         d.findElement(By.xpath("//div[contains(text(), '" + SPECIES_NAME + "')]")).click();
         d.findElement(By.id("origo")).click();
-
-        //put concrete anywhere in grid
-        d.findElement(By.xpath("//div[contains(text(), '" + PERENNIAL_NAME + "')]")).click();
-        d.findElement(By.className("jsgridcell")).click();
         d.findElement(By.id("savebutton")).click();
         w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Ok"));
 
-        int numberOfPlantsThisYear = d.findElements(By.className("speciesimage")).size();
-        Assert.assertEquals(numberOfPlantsThisYear, 3);
+        d.navigate().refresh();
+        Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
+    }
+
+    public void addYearTest() {
+        final String username = addUser();
+        login(username, PASSWORD);
+
+        //put carrot in grid
+        d.findElement(By.id("origo")).click();
+        //put item anywhere in grid
+        d.findElement(By.xpath("//div[contains(text(), '" + ITEM_NAME + "')]")).click();
+        d.findElement(By.className("jsgridcell")).click();
+        d.findElement(By.id("savebutton")).click();
+        w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Ok"));
 
         //add year
         d.findElement(By.id("add-year-link")).click();
         d.findElement(By.name("year")).sendKeys(Calendar.getInstance().get(Calendar.YEAR) + 1 + "");
         d.findElement(By.id("addYearFormBean")).submit();
 
-        int numberOfPlantsNextYear = d.findElements(By.className("speciesimage")).size();
-        Assert.assertEquals(numberOfPlantsNextYear, 1);
+        Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
+    }
+
+    public void testChangePassword() {
+        final String username = addUser();
+        login(username, PASSWORD);
 
         //go to account details
         d.findElement(By.id("account-details-link")).click();
-        Assert.assertTrue(d.getPageSource().contains(EMAIL));
-        Assert.assertTrue(d.getPageSource().contains(DISPLAY_NAME));
-        Assert.assertTrue(d.getPageSource().contains(ABOUT));
 
         //change password
         d.findElement(By.id("edit-password-link")).click();
@@ -122,14 +176,9 @@ public class SeleniumTest {
 
 
         //login again
-        d.findElement(By.id("login-link")).click();
-        d.findElement(By.name("username")).sendKeys(USERNAME);
-        d.findElement(By.name("password")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.id("submit-loginform-form")).click();
+        login(username, NEW_PASSWORD);
         log.info("Url after login:" + d.getCurrentUrl());
         Assert.assertEquals(d.getCurrentUrl(), "http://localhost:8080/web/garden");
-
-        int numberOfPlantsAfterSessionRefresh = d.findElements(By.className("speciesimage")).size();
-        Assert.assertEquals(numberOfPlantsAfterSessionRefresh, 1);
+        Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 }

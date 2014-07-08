@@ -6,7 +6,6 @@ import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
-import org.smigo.config.HostEnvironmentInfo;
 import org.smigo.entities.Message;
 import org.smigo.entities.PlantDataBean;
 import org.smigo.entities.User;
@@ -44,8 +43,6 @@ public class DatabaseResource implements Serializable {
 
     @Autowired
     private DataSource datasource;
-    @Autowired
-    private HostEnvironmentInfo hostEnvironmentInfo;
 
     private void writeImageToFile(String fileName, MultipartFile source) {
         log.debug("Writing image " + fileName);
@@ -131,13 +128,14 @@ public class DatabaseResource implements Serializable {
         return newSpeciesId;
     }
 
+    @Deprecated
     public void updateSpeciesIcon(int speciesId, String iconFileName, CommonsMultipartFile icon) {
         Connection con = null;
         PreparedStatement setSpeciesIconFileName = null;
         try {
             con = getDatasource().getConnection();
             log.debug("Updating iconfilename in species");
-            writeImageToFile(hostEnvironmentInfo.getPlantPicDirectory() + iconFileName, icon);
+//            writeImageToFile(hostEnvironmentInfo.getPlantPicDirectory() + iconFileName, icon);
             setSpeciesIconFileName = con.prepareStatement("UPDATE species SET iconfilename = ? WHERE species_id = ?");
             setSpeciesIconFileName.setString(1, iconFileName);
             setSpeciesIconFileName.setInt(2, speciesId);
@@ -710,7 +708,7 @@ public class DatabaseResource implements Serializable {
             ps = con.prepareStatement("SELECT password FROM users WHERE user_id=?");
             ps.setInt(1, userId);
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 return rs.getString("password");
             }
             throw new RuntimeException("Could retrieve password. Userid:" + userId);
