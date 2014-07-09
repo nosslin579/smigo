@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.CurrentUser;
 import org.smigo.entities.User;
 import org.smigo.formbean.PasswordFormBean;
+import org.smigo.formbean.ResetFormBean;
 import org.smigo.handler.UserHandler;
 import org.smigo.i18n.Translation;
 import org.smigo.persitance.DatabaseResource;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +58,8 @@ public class UserController {
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
     public String getChangePasswordForm(ModelMap modelMap) {
-        modelMap.addAttribute("passwordFormBean", new PasswordFormBean());
+        modelMap.addAttribute(new PasswordFormBean());
+        modelMap.addAttribute("requireCurrentPassword", true);
         return "passwordform.jsp";
     }
 
@@ -117,4 +118,29 @@ public class UserController {
     public String login() {
         return "loginform.jsp";
     }
+
+    @RequestMapping(value = "/reset-password", method = RequestMethod.GET)
+    public String getReset(Model model) {
+        model.addAttribute(new ResetFormBean());
+        return "resetpasswordform.jsp";
+    }
+
+    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+    public String handleReset(@Valid ResetFormBean resetFormBean, BindingResult result) {
+        if (result.hasErrors()) {
+            return "resetpasswordform.jsp";
+        }
+        userHandler.sendResetPasswordEmail(resetFormBean.getEmail());
+        return "resetpasswordform.jsp";
+    }
+
+    @RequestMapping(value = "/login-reset/{loginKey}", method = RequestMethod.GET)
+    public String handleReset(@PathVariable String loginKey, Model model) {
+        userHandler.authenticateUser(loginKey);
+        model.addAttribute(new PasswordFormBean());
+        model.addAttribute("requireCurrentPassword", false);
+        return "passwordform.jsp";
+    }
+
+
 }

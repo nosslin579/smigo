@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(classes = {TestConfiguration.class})
 public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
+    public static final String EMAIL_PROVIDER = "@mailinator.com";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static final String PASSWORD = "password";
@@ -65,11 +66,13 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private String addUser() {
         final User user = new User();
-        user.setUsername("selenium" + System.currentTimeMillis());
+        final String username = "selenium" + System.currentTimeMillis();
+        user.setUsername(username);
         user.setPassword(HASHPW);
         user.setLocale(Locale.ENGLISH);
+        user.setEmail(username + EMAIL_PROVIDER);
         databaseResource.addUser(user, 0, 0);
-        return user.getUsername();
+        return username;
     }
 
     private void login(String username, String password) {
@@ -80,10 +83,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void testRegister() throws Exception {
+    public void register() throws Exception {
         final String realName = "Seleniumsson";
         final String username = "selenium" + System.currentTimeMillis();
-        final String email = username + "@smigo.org";
+        final String email = username + EMAIL_PROVIDER;
         final String about = "Eco friendly garden";
 
         //add tomato
@@ -115,7 +118,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    public void addSpeciesTest() {
+    public void addSpecies() {
         final String username = addUser();
         login(username, PASSWORD);
         //add species
@@ -123,7 +126,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("speciesrow")).size(), NUMBER_OF_SPECIES);
         d.findElement(By.id("add-species-link")).click();
         d.findElement(By.name("vernacularName")).sendKeys(SPECIES_NAME);
-        d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
         d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
         new Select(d.findElement(By.name("family"))).selectByIndex(2);
         d.findElement(By.id("submit-speciesform-button")).click();
@@ -139,7 +141,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
     }
 
-    public void addYearTest() {
+    public void addYear() {
         final String username = addUser();
         login(username, PASSWORD);
 
@@ -159,7 +161,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
     }
 
-    public void testChangePassword() {
+    public void changePassword() {
         final String username = addUser();
         login(username, PASSWORD);
 
@@ -180,5 +182,33 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         log.info("Url after login:" + d.getCurrentUrl());
         Assert.assertEquals(d.getCurrentUrl(), "http://localhost:8080/web/garden");
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
+    }
+
+    @Test
+    public void resetPassword() {
+        final String username = addUser();
+        final String email = username + EMAIL_PROVIDER;
+
+        //Reset
+        d.get("http://localhost:8080/web/reset-password");
+        d.findElement(By.name("email")).sendKeys(email);
+        d.findElement(By.tagName("form")).submit();
+
+        //Check email
+        d.get("http://mailinator.com/inbox.jsp?to=" + username);
+        d.findElements(By.className("subject")).get(1).click();
+        final String link = d.switchTo().frame(1).findElement(By.className("mailview")).findElement(By.tagName("a")).getText();
+        d.get(link);
+
+        //Set new password
+        d.findElement(By.name("newPassword")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.name("newPasswordAgain")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.tagName("form")).submit();
+
+        //Logout and login
+        d.findElement(By.id("logout-link")).click();
+        login(username, NEW_PASSWORD);
+        Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
+
     }
 }

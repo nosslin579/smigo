@@ -516,6 +516,28 @@ public class DatabaseResource implements Serializable {
         }
     }
 
+    public User getUserByEmail(String email) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            con = getDatasource().getConnection();
+            statement = con.prepareStatement("SELECT username FROM users WHERE email = ?");
+            statement.setString(1, email);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return getUser(resultSet.getString(1));
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error. Email:" + email, e);
+        } finally {
+            close(con, statement, resultSet);
+        }
+    }
+
+
     public void addOpenid(int userId, String identityUrl) {
         Connection con = null;
         PreparedStatement ps = null;

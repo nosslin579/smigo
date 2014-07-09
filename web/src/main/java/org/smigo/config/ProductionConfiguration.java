@@ -46,4 +46,16 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
         return new UserAdaptiveMessageSource(-1);
     }
 
+    @Bean
+    public Props props() {
+        return new Props() {
+            @Override
+            public String getResetUrl() {
+                return "http://smigo.org/login-reset/";
+            }
+        };
+    }
+
+
+
 }

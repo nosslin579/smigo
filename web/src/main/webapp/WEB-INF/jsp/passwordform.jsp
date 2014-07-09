@@ -8,14 +8,21 @@
 <div id="help" class="smigoframe largecenteredsmigoframe">
     <div class="smigoframeheader"><spring:message code="changepassword"/></div>
     <div class="smigoframecontent">
-        <form:form method="post" action="${pageContext.request.contextPath}/changepassword" modelAttribute="passwordFormBean">
+        <form:form method="post" action="${pageContext.request.contextPath}/changepassword"
+                   modelAttribute="passwordFormBean">
             <form:errors path="*" cssClass="errorblock" element="div"/>
             <table>
-                <tr>
-                    <td><form:label path="oldPassword"><spring:message code="account.currentpassword"/></form:label></td>
-                    <td><form:password path="oldPassword"/></td>
-                    <td><form:errors path="oldPassword" cssClass="error"/></td>
-                </tr>
+                <c:if test="${!requireCurrentPassword}">
+                    <input name="oldPassword" type="hidden" value=""/>
+                </c:if>
+                <c:if test="${requireCurrentPassword}">
+                    <tr>
+                        <td><form:label path="oldPassword"><spring:message
+                                code="account.currentpassword"/></form:label></td>
+                        <td><form:password path="oldPassword"/></td>
+                        <td><form:errors path="oldPassword" cssClass="error"/></td>
+                    </tr>
+                </c:if>
                 <tr>
                     <td><form:label path="newPassword"><spring:message code="password"/></form:label></td>
                     <td><form:password path="newPassword"/></td>

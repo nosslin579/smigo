@@ -1,11 +1,14 @@
 package org.smigo.handler;
 
 import kga.PlantData;
+import org.smigo.config.Props;
 import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,7 +19,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Lazy
@@ -33,7 +38,13 @@ public class UserHandler {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private MailSender javaMailSender;
+    @Autowired
     private PersistentTokenRepository tokenRepository;
+    @Autowired
+    private Props props;
+
+    private Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
 
     public void updateUser(User user) {
         databaseResource.updateUserDetails(user);
@@ -79,4 +90,35 @@ public class UserHandler {
         tokenRepository.removeUserTokens(username);
     }
 
+    public void sendResetPasswordEmail(String email) {
+        final String id = UUID.randomUUID().toString();
+        resetMap.put(id, email);
+
+        final TimerTask removeTask = new TimerTask() {
+            @Override
+            public void run() {
+                resetMap.remove(id);
+            }
+        };
+
+        new Timer().schedule(removeTask, TimeUnit.MINUTES.toMillis(15));
+
+        final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("Smigo reset password");
+        simpleMailMessage.setText("Click link to reset password. " + props.getResetUrl() + id);
+        javaMailSender.send(simpleMailMessage);
+    }
+
+    public void authenticateUser(String loginKey) {
+        final String email = resetMap.get(loginKey);
+        resetMap.remove(loginKey);
+        final User user = databaseResource.getUserByEmail(email);
+        final String rawTempPassword = UUID.randomUUID().toString();
+        final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
+        //TODO: Replace ugly hack for authenticating user with proper implementation.
+        databaseResource.updatePassword(user.getUsername(), encodedTempPassword);
+        authenticateUser(user.getUsername(), rawTempPassword);
+        databaseResource.updatePassword(user.getUsername(), "");
+    }
 }

@@ -9,12 +9,16 @@ import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
@@ -78,4 +82,19 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         return customEditorConfigurer;
     }
 
+    @Bean
+    public JavaMailSender javaMailSender() {
+        final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setUsername("smigo.org@gmail.com");
+        javaMailSender.setPassword("lstN09LLrZZx");
+        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setPort(587);
+        javaMailSender.setProtocol("smtp");
+        javaMailSender.setJavaMailProperties(new Properties() {
+            {
+                setProperty("mail.smtp.starttls.enable", "true");
+            }
+        });
+        return javaMailSender;
+    }
 }

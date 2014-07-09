@@ -7,7 +7,6 @@ import org.smigo.i18n.UserAdaptiveMessageSource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import javax.sql.DataSource;
 
@@ -46,5 +45,15 @@ public class DevelopmentConfiguration {
         return new UserAdaptiveMessageSource(1);
     }
 
+
+    @Bean
+    public Props props() {
+        return new Props() {
+            @Override
+            public String getResetUrl() {
+                return "http://localhost:8080/web/login-reset/";
+            }
+        };
+    }
 
 }

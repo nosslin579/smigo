@@ -101,6 +101,7 @@
                 <artifactId>jsoup</artifactId>
                 <version>1.7.3</version>
             </dependency>
+            <!--spring security-->
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
@@ -126,6 +127,18 @@
                 <artifactId>spring-security-openid</artifactId>
                 <version>${org.springframework.security.version}</version>
             </dependency>
+            <!--mail-->
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-mail</artifactId>
+                <version>3.0.3.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4.7</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-mapper-asl</artifactId>
