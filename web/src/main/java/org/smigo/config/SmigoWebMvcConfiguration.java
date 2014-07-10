@@ -1,5 +1,6 @@
 package org.smigo.config;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.listener.VisitLogger;
@@ -96,5 +97,10 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
             }
         });
         return javaMailSender;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

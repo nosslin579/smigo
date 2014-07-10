@@ -15,8 +15,6 @@ import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.listener.VisitLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -431,29 +429,6 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void addUser(User user, long signupTime, long decideTime) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO users(username,password,enabled,authority,email,displayname,regtime,about,locale,decidetime) VALUES (?,?,?,?,?,?,?,?,?,?)");
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ps.setBoolean(3, true);
-            ps.setString(4, "user");
-            ps.setString(5, user.getEmail());
-            ps.setString(6, user.getDisplayname());
-            ps.setLong(7, signupTime);
-            ps.setString(8, user.getAbout());
-            ps.setString(9, user.getLocale().toString());
-            ps.setLong(10, decideTime);
-            ps.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not add user to database.", e);
-        } finally {
-            close(con, ps);
-        }
-    }
 
     public void updateUserDetails(User user) {
         log.debug("Update user " + user);
@@ -461,7 +436,7 @@ public class DatabaseResource implements Serializable {
         PreparedStatement updateUser = null;
         try {
             con = getDatasource().getConnection();
-            updateUser = con.prepareStatement("UPDATE users SET displayname=?, email=?, about=?, locale=? WHERE user_id=?");
+            updateUser = con.prepareStatement("UPDATE users SET displayname=?, email=?, about=?, locale=? WHERE id=?");
             updateUser.setString(1, user.getDisplayname());
             updateUser.setString(2, user.getEmail());
             updateUser.setString(3, user.getAbout());
@@ -475,127 +450,6 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public User getUser(int userId) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        String username = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT username FROM users WHERE user_id=?");
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next())
-                username = rs.getString("username");
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not get user from database. UserId: " + userId, e);
-        } finally {
-            close(con, ps, rs);
-        }
-        return getUser(username);
-    }
-
-    public User getUserByOpenId(String identityUrl) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            con = getDatasource().getConnection();
-            statement = con.prepareStatement("SELECT username FROM users JOIN openid ON openid.user_id = users.user_id WHERE openid.identity_url = ?");
-            statement.setString(1, identityUrl);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return getUser(resultSet.getString(1));
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving openid. URL:" + identityUrl, e);
-        } finally {
-            close(con, statement, resultSet);
-        }
-    }
-
-    public User getUserByEmail(String email) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            con = getDatasource().getConnection();
-            statement = con.prepareStatement("SELECT username FROM users WHERE email = ?");
-            statement.setString(1, email);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return getUser(resultSet.getString(1));
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error. Email:" + email, e);
-        } finally {
-            close(con, statement, resultSet);
-        }
-    }
-
-
-    public void addOpenid(int userId, String identityUrl) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO openid(user_id,identity_url) VALUES (?,?)");
-            ps.setInt(1, userId);
-            ps.setString(2, identityUrl);
-            ps.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not add user to database.", e);
-        } finally {
-            close(con, ps);
-        }
-    }
-
-
-    public User getUser(String username) {
-        Assert.notNull(username);
-        log.debug("Getting user from database " + username);
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT * FROM users WHERE username=?");
-            ps.setString(1, username);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return new User(rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("displayname"),
-                        rs.getString("email"),
-                        rs.getString("about"),
-                        StringUtils.parseLocaleString(rs.getString("locale"))
-                );
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not get user from database. Username: " + username, e);
-        } finally {
-            close(con, ps, rs);
-        }
-    }
-
-    public void deleteUser(String username) throws SQLException {
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("DELETE FROM users WHERE username=?");
-            ps.setString(1, username);
-            ps.execute();
-        } finally {
-            close(con, ps);
-        }
-    }
 
     public void logVisit(HttpServletRequest req) {
         Connection con = null;
@@ -719,26 +573,6 @@ public class DatabaseResource implements Serializable {
             close(con, ps);
         }
 
-    }
-
-    public String getPassword(int userId) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT password FROM users WHERE user_id=?");
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("password");
-            }
-            throw new RuntimeException("Could retrieve password. Userid:" + userId);
-        } catch (SQLException e) {
-            throw new RuntimeException("Could retrieve password. Userid:" + userId, e);
-        } finally {
-            close(con, ps, rs);
-        }
     }
 
     public void deleteRule(Integer ruleId, int userId) {

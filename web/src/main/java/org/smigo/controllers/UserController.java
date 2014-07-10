@@ -98,7 +98,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)
     public String getUser(@PathVariable Integer userid, Model model, Principal principal) {
-        User u = databaseresource.getUser(userid);
+        User u = new User();
         u.setEmail("");
         u.setUsername("");
         model.addAttribute("showall", false);

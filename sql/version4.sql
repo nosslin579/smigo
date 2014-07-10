@@ -4,6 +4,18 @@ MODIFY COLUMN note varchar (255);
 ALTER TABLE users
 DROP COLUMN registrationdate;
 
+ALTER TABLE users
+DROP COLUMN authority;
+
+ALTER TABLE users
+DROP COLUMN publicgarden;
+
+ALTER TABLE users
+DROP COLUMN location;
+
+ALTER TABLE users
+CHANGE user_id id INT NOT NULL AUTO_INCREMENT;
+
 CREATE TABLE persistent_logins (
   username  VARCHAR(64) NOT NULL,
   series    VARCHAR(64) NOT NULL,

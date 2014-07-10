@@ -1,6 +1,6 @@
 package org.smigo.constraints;
 
-import org.smigo.persitance.DatabaseResource;
+import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Constraint;
@@ -31,16 +31,10 @@ public @interface Username {
 
     Class<? extends Payload>[] payload() default {};
 
-    // CaseMode value();
-
     class UsernameValidator implements ConstraintValidator<Username, String> {
 
         @Autowired
-        private DatabaseResource databaseresource;
-
-        public void setDatabaseResource(DatabaseResource databaseresource) {
-            this.databaseresource = databaseresource;
-        }
+        private UserDao userDao;
 
         public void initialize(Username constraintAnnotation) {
         }
@@ -49,7 +43,7 @@ public @interface Username {
             if (username.equals("asdf1234567890")) {
                 return true;
             }
-            return databaseresource.getUser(username) == null;
+            return userDao.getUsersByUsername(username).isEmpty();
         }
 
     }

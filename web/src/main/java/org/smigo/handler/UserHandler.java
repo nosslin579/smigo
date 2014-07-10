@@ -5,6 +5,7 @@ import org.smigo.config.Props;
 import org.smigo.entities.User;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.persitance.UserSession;
+import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.mail.MailSender;
@@ -42,6 +43,8 @@ public class UserHandler {
     @Autowired
     private PersistentTokenRepository tokenRepository;
     @Autowired
+    private UserDao userDao;
+    @Autowired
     private Props props;
 
     private Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
@@ -52,9 +55,7 @@ public class UserHandler {
 
     public void createUser(User user, String identityUrl) {
         createUser(user);
-        final User createadUser = databaseResource.getUser(user.getUsername());
-        databaseResource.addOpenid(createadUser.getId(), identityUrl);
-
+        userDao.addOpenId(user.getId(), identityUrl);
     }
 
     public void createUser(User user) {
@@ -64,13 +65,12 @@ public class UserHandler {
         if (!rawPassword.isEmpty()) {
             user.setPassword(passwordEncoder.encode(rawPassword));
         }
-        databaseResource.addUser(user, signupTime, decideTime);
+        userDao.addUser(user, signupTime, decideTime);
 
         //save plants
         List<PlantData> plants = userSession.getPlants();
         if (!plants.isEmpty()) {
-            final User user1 = databaseResource.getUser(user.getUsername());
-            databaseResource.updateGarden(user1.getId(), plants);
+            databaseResource.updateGarden(user.getId(), plants);
         }
     }
 
@@ -113,7 +113,7 @@ public class UserHandler {
     public void authenticateUser(String loginKey) {
         final String email = resetMap.get(loginKey);
         resetMap.remove(loginKey);
-        final User user = databaseResource.getUserByEmail(email);
+        final User user = userDao.getUserByEmail(email);
         final String rawTempPassword = UUID.randomUUID().toString();
         final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
         //TODO: Replace ugly hack for authenticating user with proper implementation.

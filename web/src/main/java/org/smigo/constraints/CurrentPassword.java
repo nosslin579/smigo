@@ -1,7 +1,7 @@
 package org.smigo.constraints;
 
 import org.smigo.CurrentUser;
-import org.smigo.persitance.DatabaseResource;
+import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,7 +32,7 @@ public @interface CurrentPassword {
     class CurrentPasswordValidator implements ConstraintValidator<CurrentPassword, String> {
 
         @Autowired
-        private DatabaseResource databaseresource;
+        private UserDao userDao;
         @Autowired
         private CurrentUser currentUser;
         @Autowired
@@ -43,7 +43,7 @@ public @interface CurrentPassword {
         }
 
         public boolean isValid(String rawPassword, ConstraintValidatorContext constraintContext) {
-            final String password = databaseresource.getPassword(currentUser.getId());
+            final String password = userDao.getUserById(currentUser.getId()).getPassword();
             //user who signed up via openid has empty string as password
             if (password.isEmpty()) {
                 return rawPassword.isEmpty();

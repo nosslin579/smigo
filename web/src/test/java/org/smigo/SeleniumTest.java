@@ -2,6 +2,7 @@ package org.smigo;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -9,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.entities.User;
-import org.smigo.persitance.DatabaseResource;
+import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +42,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final int NUMBER_OF_SPECIES = 83;
 
     @Autowired
-    private DatabaseResource databaseResource;
+    private UserDao userDao;
 
     private WebDriver d;
     private WebDriverWait w;
@@ -71,7 +73,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         user.setPassword(HASHPW);
         user.setLocale(Locale.ENGLISH);
         user.setEmail(username + EMAIL_PROVIDER);
-        databaseResource.addUser(user, 0, 0);
+        userDao.addUser(user, 0, 0);
         return username;
     }
 
@@ -92,6 +94,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //add tomato
         d.findElement(By.id("origo")).click();
         d.findElement(By.id("savebutton")).click();
+//        w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Please login first"));
 
         //sign up
         d.findElement(By.id("signup-link")).click();
@@ -104,8 +107,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("termsofservice")).click();
         d.findElement(By.id("submit-userform-button")).click();
 
-        String src = d.findElement(By.cssSelector("#origo .speciesimage")).getAttribute("src");
-        Assert.assertEquals(src, "http://localhost:8080/pic/28.png");
+        List<WebElement> src = d.findElements(By.cssSelector("#origo .speciesimage"));
+        Assert.assertEquals(src.size(), 1);
+        Assert.assertEquals(src.get(0).getAttribute("src"), "http://localhost:8080/pic/28.png");
 
 /*
         d.manage().deleteCookieNamed("JSESSIONID");
