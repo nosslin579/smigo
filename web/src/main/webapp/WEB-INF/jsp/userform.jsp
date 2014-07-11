@@ -45,9 +45,9 @@
 
                 <tr>
                     <c:if test="${user.id == 0}">
-                        <td><form:label path="passwordagain"><spring:message code="passwordagain"/></form:label></td>
-                        <td><form:password path="passwordagain"/></td>
-                        <td><form:errors path="passwordagain"/></td>
+                        <td><label for="passwordagain"><spring:message code="passwordagain"/></label></td>
+                        <td><input id="passwordagain" type="password"/></td>
+                        <td></td>
                     </c:if>
                     <c:if test="${user.id != 0}">
                         <td><input name="passwordagain" value="asdf1234567890" type="hidden"/></td>

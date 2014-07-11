@@ -87,8 +87,9 @@ public class UserController {
         }
         // create user
         if (user.getId() == 0) {
+            final String password = user.getPassword();
             userHandler.createUser(user);
-            userHandler.authenticateUser(user.getUsername(), user.getPasswordagain());
+            userHandler.authenticateUser(user.getUsername(), password);
             return "redirect:/garden";
         } else {// update user
             userHandler.updateUser(user);

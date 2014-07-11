@@ -29,9 +29,9 @@
                     <td><form:errors path="newPassword" cssClass="error"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="newPasswordAgain"><spring:message code="passwordagain"/></form:label></td>
-                    <td><form:password path="newPasswordAgain"/></td>
-                    <td><form:errors path="newPasswordAgain"/></td>
+                    <td><label for="passwordagain"><spring:message code="passwordagain"/></label></td>
+                    <td><input id="passwordagain" type="password"/></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="2">

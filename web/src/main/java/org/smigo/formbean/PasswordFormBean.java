@@ -1,17 +1,22 @@
 package org.smigo.formbean;
 
 import org.smigo.constraints.CurrentPassword;
-import org.smigo.constraints.Matches;
+import org.smigo.constraints.NewPassword;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-@Matches(field = "newPassword", verifyField = "newPasswordAgain")
 public class PasswordFormBean {
     @CurrentPassword
     private String oldPassword;
+
+    @NewPassword
     private String newPassword;
-    private String newPasswordAgain;
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 
     public String getOldPassword() {
         return oldPassword;
@@ -21,21 +26,4 @@ public class PasswordFormBean {
         this.oldPassword = oldPassword;
     }
 
-    @NotNull
-    @Size(min = 6, max = 56)
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getNewPasswordAgain() {
-        return newPasswordAgain;
-    }
-
-    public void setNewPasswordAgain(String newPasswordAgain) {
-        this.newPasswordAgain = newPasswordAgain;
-    }
 }

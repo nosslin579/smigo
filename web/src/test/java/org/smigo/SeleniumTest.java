@@ -100,7 +100,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("signup-link")).click();
         d.findElement(By.name("username")).sendKeys(username);
         d.findElement(By.name("password")).sendKeys(PASSWORD);
-        d.findElement(By.name("passwordagain")).sendKeys(PASSWORD);
+        d.findElement(By.id("passwordagain")).sendKeys(PASSWORD);
         d.findElement(By.name("email")).sendKeys(email);
         d.findElement(By.name("displayname")).sendKeys(realName);
         d.findElement(By.name("about")).sendKeys(about);
@@ -176,7 +176,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("edit-password-link")).click();
         d.findElement(By.name("oldPassword")).sendKeys(PASSWORD);
         d.findElement(By.name("newPassword")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.name("newPasswordAgain")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.id("passwordagain")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-password-button")).click();
         d.findElement(By.id("logout-link")).click();
 
@@ -206,7 +206,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         //Set new password
         d.findElement(By.name("newPassword")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.name("newPasswordAgain")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.id("passwordagain")).sendKeys(NEW_PASSWORD);
         d.findElement(By.tagName("form")).submit();
 
         //Logout and login

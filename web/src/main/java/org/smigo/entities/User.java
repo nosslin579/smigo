@@ -5,20 +5,17 @@ import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.constraints.Matches;
+import org.smigo.constraints.NewPassword;
 import org.smigo.constraints.Username;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Date;
 import java.util.Locale;
 
-@Matches(field = "password", verifyField = "passwordagain")
 public class User implements UserDetails {
 
     private static final Logger log = LoggerFactory.getLogger(User.class);
@@ -36,11 +33,8 @@ public class User implements UserDetails {
     @Pattern(regexp = "\\w*")
     private String username = "";
 
-    @NotNull
-    @Size(min = 6, max = 56)
+    @NewPassword
     private String password = "";
-
-    private String passwordagain = "";
 
     @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
     private String about = "";
@@ -125,14 +119,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPasswordagain() {
-        return passwordagain;
-    }
-
-    public void setPasswordagain(String passwordagain) {
-        this.passwordagain = passwordagain;
     }
 
     public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
