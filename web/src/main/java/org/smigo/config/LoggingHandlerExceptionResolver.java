@@ -2,7 +2,6 @@ package org.smigo.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.listener.VisitLogger;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;

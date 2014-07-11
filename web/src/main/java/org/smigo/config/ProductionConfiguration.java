@@ -3,16 +3,17 @@ package org.smigo.config;
 import com.jolbox.bonecp.BoneCPDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.i18n.UserAdaptiveMessageSource;
+import org.smigo.user.UserAdaptiveMessageSource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ProdProfile
+@Profile(EnvironmentProfile.PRODUCTION)
 public class ProductionConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -55,7 +56,6 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
             }
         };
     }
-
 
 
 }

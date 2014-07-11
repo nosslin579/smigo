@@ -1,7 +1,5 @@
 package org.smigo.user;
 
-import org.smigo.entities.User;
-
 import java.util.List;
 
 public interface UserDao {

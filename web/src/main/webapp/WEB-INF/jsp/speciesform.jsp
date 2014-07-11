@@ -13,7 +13,7 @@
 <div id="speciesform" class="smigoframe largecenteredsmigoframe">
     <div class="smigoframeheader"><spring:message code="addspecies"/></div>
     <div class="smigoframecontent">
-        <jsp:useBean id="speciesFormBean" class="org.smigo.formbean.SpeciesFormBean" scope="request"/>
+        <jsp:useBean id="speciesFormBean" class="org.smigo.species.SpeciesFormBean" scope="request"/>
         <form:form method="post" action="add-species" commandName="speciesFormBean">
             <form:errors path="*" cssClass="errorblock" element="div"/>
             <table id="speciesformtable">

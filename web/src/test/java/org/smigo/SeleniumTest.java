@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.entities.User;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -30,9 +30,9 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(classes = {TestConfiguration.class})
 public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
-    public static final String EMAIL_PROVIDER = "@mailinator.com";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    private static final String EMAIL_PROVIDER = "@mailinator.com";
     private static final String PASSWORD = "password";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
@@ -84,7 +84,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("submit-loginform-form")).click();
     }
 
-    @Test
     public void register() throws Exception {
         final String realName = "Seleniumsson";
         final String username = "selenium" + System.currentTimeMillis();
@@ -188,7 +187,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 
-    @Test
     public void resetPassword() {
         final String username = addUser();
         final String email = username + EMAIL_PROVIDER;

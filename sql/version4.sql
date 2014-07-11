@@ -1,5 +1,5 @@
 ALTER TABLE visitlog
-MODIFY COLUMN note varchar (255);
+MODIFY COLUMN note VARCHAR(255);
 
 ALTER TABLE users
 DROP COLUMN registrationdate;
@@ -30,3 +30,5 @@ CREATE TABLE openid (
   user_id      INT          NOT NULL,
   PRIMARY KEY (id)
 );
+
+DROP TABLE messages;

@@ -25,7 +25,7 @@ import kga.Family;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.entities.User;
+import org.smigo.user.User;
 
 import java.util.HashSet;
 

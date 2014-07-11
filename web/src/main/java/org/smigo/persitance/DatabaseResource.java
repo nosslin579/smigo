@@ -6,13 +6,12 @@ import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
-import org.smigo.entities.Message;
+import org.smigo.config.VisitLogger;
 import org.smigo.entities.PlantDataBean;
-import org.smigo.entities.User;
 import org.smigo.factories.RuleFactory;
-import org.smigo.formbean.RuleFormModel;
-import org.smigo.formbean.SpeciesFormBean;
-import org.smigo.listener.VisitLogger;
+import org.smigo.species.RuleFormModel;
+import org.smigo.species.SpeciesFormBean;
+import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -502,37 +501,6 @@ public class DatabaseResource implements Serializable {
         } finally {
             close(con, ps);
         }
-    }
-
-    /**
-     * Returns messages.
-     *
-     * @param column   which column e.g. smigowall,species
-     * @param location id of location e.g. species address or rule id
-     * @return
-     * @throws SQLException
-     */
-    public List<Message> getMessages(String column, int location) throws SQLException {
-        List<Message> ret = new ArrayList<Message>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT message,poster,postdate,postdate2 FROM messages WHERE "
-                    + column + " = ?");
-            ps.setInt(1, location);
-            if (ps.execute()) {
-                rs = ps.getResultSet();
-                while (rs.next())
-                    ret.add(new Message(rs.getString("message"), column, location, rs
-                            .getInt("poster"), rs.getTimestamp("postdate")));
-                return ret;
-            }
-        } finally {
-            close(con, ps);
-        }
-        throw new IllegalStateException("No ResultSet object returned");
     }
 
     /**

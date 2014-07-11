@@ -3,14 +3,10 @@ package org.smigo.config;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.listener.VisitLogger;
-import org.smigo.propertyeditors.CustomPropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -75,16 +71,17 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-    @Bean
-    public CustomEditorConfigurer getCustomEditorConfigurer() {
-        log.debug("getCustomEditorConfigurer");
-        CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
-        customEditorConfigurer.setPropertyEditorRegistrars(new PropertyEditorRegistrar[]{new CustomPropertyEditorRegistrar()});
-        return customEditorConfigurer;
-    }
+//    @Bean
+//    public CustomEditorConfigurer getCustomEditorConfigurer() {
+//        log.debug("getCustomEditorConfigurer");
+//        CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
+//        customEditorConfigurer.setPropertyEditorRegistrars(new PropertyEditorRegistrar[]{new CustomPropertyEditorRegistrar()});
+//        return customEditorConfigurer;
+//    }
 
     @Bean
-    public JavaMailSender javaMailSender() {
+    public MailSender javaMailSender() {
+        log.debug("javaMailSender");
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setUsername("smigo.org@gmail.com");
         javaMailSender.setPassword("lstN09LLrZZx");

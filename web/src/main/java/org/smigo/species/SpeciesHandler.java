@@ -1,16 +1,16 @@
 package org.smigo.species;
 
-import kga.*;
+import kga.Family;
+import kga.Garden;
+import kga.PlantData;
+import kga.Square;
 import kga.rules.Rule;
-import org.smigo.CurrentUser;
 import org.smigo.JspMessageFunctions;
 import org.smigo.SpeciesView;
-import org.smigo.entities.PlantDataBean;
-import org.smigo.entities.User;
-import org.smigo.formbean.SpeciesFormBean;
 import org.smigo.persitance.DatabaseResource;
-import org.smigo.persitance.SpeciesComparator;
-import org.smigo.persitance.UserSession;
+import org.smigo.user.CurrentUser;
+import org.smigo.user.User;
+import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;

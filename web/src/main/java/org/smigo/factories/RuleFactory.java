@@ -6,7 +6,7 @@ import kga.errors.RuleException;
 import kga.rules.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.entities.User;
+import org.smigo.user.User;
 
 public class RuleFactory {
     private static final Logger log = LoggerFactory.getLogger(RuleFactory.class);
