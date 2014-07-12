@@ -39,7 +39,7 @@ public @interface ValidRule {
 
     public class RuleValidator implements ConstraintValidator<ValidRule, RuleFormModel> {
         private static final Logger log = LoggerFactory.getLogger(RuleValidator.class);
-        RuleFactory ruleFactory = new RuleFactory();
+        final RuleFactory ruleFactory = new RuleFactory();
 
         @Autowired
         private SpeciesHandler speciesHandler;

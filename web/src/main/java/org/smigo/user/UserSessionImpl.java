@@ -17,7 +17,7 @@ import java.util.Map;
 public class UserSessionImpl implements UserSession {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private long signupStart = 0;
-    private Map<String, String> translation = new HashMap<String, String>();
+    private final Map<String, String> translation = new HashMap<String, String>();
     private List<PlantData> plants = new ArrayList<PlantData>();
 
     @Override

@@ -59,15 +59,15 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public DataSource getDatasource() {
+    DataSource getDatasource() {
         return datasource;
     }
 
-    protected void close(Connection connection, Statement stmt) {
+    void close(Connection connection, Statement stmt) {
         close(connection, stmt, null);
     }
 
-    protected void close(Connection connection, Statement stmt, ResultSet rs) {
+    void close(Connection connection, Statement stmt, ResultSet rs) {
         try {
             if (rs != null) {
                 rs.close();
@@ -300,7 +300,6 @@ public class DatabaseResource implements Serializable {
         log.info("Adding " + rule + " for user:" + userId);
         Connection con = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("INSERT INTO rules(type, host, causer, gap, creator, causerfamily) VALUES (?,?,?,?,?,?)");
@@ -314,7 +313,7 @@ public class DatabaseResource implements Serializable {
         } catch (SQLException e) {
             throw new RuntimeException("Could not insert " + rule, e);
         } finally {
-            close(con, ps, rs);
+            close(con, ps);
         }
     }
 
@@ -456,7 +455,7 @@ public class DatabaseResource implements Serializable {
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("INSERT INTO visitlog (username,requestedurl,locale,locales, localeport,servername,validsessionid,sessionexists,sessionidfromurl,sessionidfromcookie,useragent,sessionid,method,xforwardedfor,note) VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?, ?,?,?)");
-            StringBuffer locales = new StringBuffer();
+            StringBuilder locales = new StringBuilder();
             for (Enumeration<Locale> l = req.getLocales(); l.hasMoreElements(); )
                 locales.append(l.nextElement().toString() + " ");
             ps.setString(1, req.getRemoteUser());
@@ -560,7 +559,7 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public void setTranslation(int userId, int speciesId, String value) {
+    void setTranslation(int userId, int speciesId, String value) {
         Connection con = null;
         PreparedStatement statement = null;
         try {

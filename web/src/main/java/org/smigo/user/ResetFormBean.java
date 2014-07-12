@@ -2,7 +2,7 @@ package org.smigo.user;
 
 import org.hibernate.validator.constraints.Email;
 
-public class ResetFormBean {
+class ResetFormBean {
 
     @Email
     private String email;

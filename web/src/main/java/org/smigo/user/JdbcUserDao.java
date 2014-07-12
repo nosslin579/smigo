@@ -14,11 +14,11 @@ import java.util.Map;
 
 @Repository
 public class JdbcUserDao implements UserDao {
-    public static final String SELECT = "SELECT * FROM users WHERE %s=?";
+    private static final String SELECT = "SELECT * FROM users WHERE %s=?";
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
-    private BeanPropertyRowMapper<User> mapper = BeanPropertyRowMapper.newInstance(User.class);
+    private final BeanPropertyRowMapper<User> mapper = BeanPropertyRowMapper.newInstance(User.class);
 
     @Autowired
     public ObjectMapper objectMapper;

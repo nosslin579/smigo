@@ -1,6 +1,6 @@
 package org.smigo.user;
 
-public class PasswordFormBean {
+class PasswordFormBean {
     @CurrentPassword
     private String oldPassword;
 

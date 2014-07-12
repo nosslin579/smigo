@@ -5,7 +5,7 @@ import kga.rules.RuleType;
 
 import java.beans.PropertyEditorSupport;
 
-public class RuleTypePropertyEditor extends PropertyEditorSupport {
+class RuleTypePropertyEditor extends PropertyEditorSupport {
 
     public RuleTypePropertyEditor() {
     }

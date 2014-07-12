@@ -17,7 +17,7 @@ public enum Translation {
     UK(Locale.UK),
     SPANISH(new Locale("es")),
     CZECH(new Locale("cs"));
-    private Locale locale;
+    private final Locale locale;
 
     Translation(Locale locale) {
         this.locale = locale;

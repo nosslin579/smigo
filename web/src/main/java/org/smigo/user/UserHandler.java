@@ -42,7 +42,7 @@ public class UserHandler {
     @Autowired
     private Props props;
 
-    private Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
+    private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
 
     public void updateUser(User user) {
         databaseResource.updateUserDetails(user);
