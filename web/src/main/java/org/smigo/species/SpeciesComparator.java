@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 @Component
-@Scope(value = "prototype")
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.INTERFACES)
 @Lazy
 public class SpeciesComparator implements java.util.Comparator<org.smigo.SpeciesView> {
 

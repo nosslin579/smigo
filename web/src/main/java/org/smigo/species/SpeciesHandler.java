@@ -28,7 +28,7 @@ public class SpeciesHandler {
     @Autowired
     private UserSession userSession;
     @Autowired
-    private SpeciesComparator speciesComparator;
+    private Comparator<org.smigo.SpeciesView> speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
         int id = databaseResource.addSpecies(speciesFormBean, user.getId());
