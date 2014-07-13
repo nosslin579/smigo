@@ -8,7 +8,7 @@ import kga.rules.Rule;
 import org.smigo.JspMessageFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.persitance.DatabaseResource;
-import org.smigo.user.CurrentUser;
+import org.smigo.user.User;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,14 +24,14 @@ public class SpeciesHandler {
     @Autowired
     private DatabaseResource databaseResource;
     @Autowired
-    private CurrentUser currentUser;
+    private User user;
     @Autowired
     private UserSession userSession;
     @Autowired
     private SpeciesComparator speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
-        int id = databaseResource.addSpecies(speciesFormBean, currentUser.getId());
+        int id = databaseResource.addSpecies(speciesFormBean, user.getId());
         userSession.getTranslation().put(JspMessageFunctions.species(id), speciesFormBean.getVernacularName());
         return id;
     }
@@ -59,9 +59,9 @@ public class SpeciesHandler {
 
     public void updateGarden(List<? extends PlantData> plants) {
         int year = plants.get(0).getYear();
-        if (currentUser.isAuthenticated()) {
-            databaseResource.deleteYear(currentUser.getId(), year);
-            databaseResource.saveGarden(currentUser.getId(), plants);
+        if (user.isAuthenticated()) {
+            databaseResource.deleteYear(user.getId(), year);
+            databaseResource.saveGarden(user.getId(), plants);
         } else {
             final List<PlantData> userSessionPlants = userSession.getPlants();
             for (Iterator<PlantData> iterator = userSessionPlants.iterator(); iterator.hasNext(); ) {
@@ -85,7 +85,7 @@ public class SpeciesHandler {
     }
 
     private Map<Integer, SpeciesView> getSpecies() {
-        return databaseResource.getSpecies(currentUser.getId());
+        return databaseResource.getSpecies(user.getId());
     }
 
     public List<SpeciesView> getAllSpecies() {
@@ -117,8 +117,8 @@ public class SpeciesHandler {
     }
 
     private List<PlantData> getPlants() {
-        if (currentUser.isAuthenticated()) {
-            return databaseResource.getPlants(currentUser.getId());
+        if (user.isAuthenticated()) {
+            return databaseResource.getPlants(user.getId());
         } else {
             return userSession.getPlants();
         }

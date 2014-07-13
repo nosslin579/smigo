@@ -28,7 +28,7 @@ class AuthenticationListener implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         log.info("Login successful, user: " + authentication.getName());
-        final CurrentUser principal = (CurrentUser) authentication.getPrincipal();
+        final User principal = (User) authentication.getPrincipal();
         final Map<String, String> translation = databaseResource.getTranslation(principal.getId());
         userSession.getTranslation().putAll(translation);
 

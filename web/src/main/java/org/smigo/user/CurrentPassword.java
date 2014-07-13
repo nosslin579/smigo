@@ -32,7 +32,7 @@ public @interface CurrentPassword {
         @Autowired
         private UserDao userDao;
         @Autowired
-        private CurrentUser currentUser;
+        private User user;
         @Autowired
         private PasswordEncoder passwordEncoder;
 
@@ -41,7 +41,7 @@ public @interface CurrentPassword {
         }
 
         public boolean isValid(String rawPassword, ConstraintValidatorContext constraintContext) {
-            final String password = userDao.getUserById(currentUser.getId()).getPassword();
+            final String password = userDao.getUserById(user.getId()).getPassword();
             //user who signed up via openid has empty string as password
             if (password.isEmpty()) {
                 return rawPassword.isEmpty();

@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Locale;
 
-public interface CurrentUser extends UserDetails {
+public interface User extends UserDetails {
     int getId();
 
     String getUsername();

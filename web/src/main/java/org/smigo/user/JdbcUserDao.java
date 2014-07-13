@@ -31,7 +31,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int addUser(CurrentUser user, String encodedPassword, long signupTime, long decideTime) {
+    public int addUser(User user, String encodedPassword, long signupTime, long decideTime) {
         final Map map = objectMapper.convertValue(user, Map.class);
         map.put("regtime", signupTime);
         map.put("decidetime", decideTime);
@@ -49,31 +49,31 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public CurrentUser getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
     }
 
     @Override
-    public List<? extends CurrentUser> getUsersByUsername(String username) {
+    public List<? extends User> getUsersByUsername(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.query(sql, new Object[]{username}, mapper);
     }
 
     @Override
-    public CurrentUser getUserById(int id) {
+    public User getUserById(int id) {
         final String sql = String.format(SELECT, "id");
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
     }
 
     @Override
-    public CurrentUser getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         final String sql = String.format(SELECT, "email");
         return jdbcTemplate.queryForObject(sql, new Object[]{email}, mapper);
     }
 
     @Override
-    public CurrentUser getUserByOpenId(String identityUrl) {
+    public User getUserByOpenId(String identityUrl) {
         final String sql = "SELECT * FROM users JOIN openid ON openid.user_id = users.user_id WHERE openid.identity_url = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{identityUrl}, mapper);
     }

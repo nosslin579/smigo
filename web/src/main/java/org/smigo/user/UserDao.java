@@ -3,17 +3,17 @@ package org.smigo.user;
 import java.util.List;
 
 public interface UserDao {
-    int addUser(CurrentUser user, String encodedPassword, long signupTime, long decideTime);
+    int addUser(User user, String encodedPassword, long signupTime, long decideTime);
 
     void addOpenId(int userId, String identityUrl);
 
-    CurrentUser getUserByUsername(String username);
+    User getUserByUsername(String username);
 
-    List<? extends CurrentUser> getUsersByUsername(String username);
+    List<? extends User> getUsersByUsername(String username);
 
-    CurrentUser getUserById(int id);
+    User getUserById(int id);
 
-    CurrentUser getUserByEmail(String email);
+    User getUserByEmail(String email);
 
-    CurrentUser getUserByOpenId(String identityUrl);
+    User getUserByOpenId(String identityUrl);
 }

@@ -8,7 +8,7 @@ import org.smigo.entities.PlantDataBean;
 import org.smigo.formbean.AddYearFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.species.SpeciesHandler;
-import org.smigo.user.CurrentUser;
+import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -36,7 +36,7 @@ public class GardenController implements Serializable {
     @Autowired
     private DatabaseResource databaseResource;
     @Autowired
-    private CurrentUser currentUser;
+    private User user;
     @Autowired
     private MessageSource messageSource;
     @Autowired
@@ -72,7 +72,7 @@ public class GardenController implements Serializable {
         speciesHandler.updateGarden(plants);
         String loginFirst = messageSource.getMessage("account.pleaseloginfirst", null, locale);
         String ok = messageSource.getMessage("ok", null, locale);
-        return currentUser.isAuthenticated() ? ok : loginFirst;
+        return user.isAuthenticated() ? ok : loginFirst;
     }
 
     @RequestMapping(value = "/addyear", method = RequestMethod.GET)
@@ -100,7 +100,7 @@ public class GardenController implements Serializable {
     @RequestMapping(value = "/deleteyear", method = RequestMethod.POST)
     public String handleDeleteYearForm(@RequestParam("deleteyear") Integer deleteyear) {
         log.debug("Delete year " + deleteyear);
-        databaseResource.deleteYear(currentUser.getId(), deleteyear);
+        databaseResource.deleteYear(user.getId(), deleteyear);
         return "redirect:garden";
     }
 

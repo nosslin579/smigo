@@ -23,7 +23,7 @@ public class UserSetLocaleResolver implements LocaleResolver {
     private static final Logger log = LoggerFactory.getLogger(UserSetLocaleResolver.class);
 
     @Autowired
-    private CurrentUser user;
+    private User user;
     @Autowired
     ApplicationContext applicationContext;
 

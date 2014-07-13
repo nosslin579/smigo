@@ -17,7 +17,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Locale;
 
-public class UserBean implements UserDetails, CurrentUser {
+public class UserBean implements UserDetails, User {
 
     private static final Logger log = LoggerFactory.getLogger(UserBean.class);
 

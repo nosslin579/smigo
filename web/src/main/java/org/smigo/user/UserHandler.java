@@ -44,16 +44,16 @@ public class UserHandler {
 
     private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
 
-    public void updateUser(CurrentUser user) {
+    public void updateUser(User user) {
         databaseResource.updateUserDetails(user);
     }
 
-    public void createUser(CurrentUser user, String identityUrl) {
+    public void createUser(User user, String identityUrl) {
         final int userId = createUser(user);
         userDao.addOpenId(userId, identityUrl);
     }
 
-    public int createUser(CurrentUser user) {
+    public int createUser(User user) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
         long signupTime = userSession.getSignupTime();
         final String rawPassword = user.getPassword();
@@ -107,7 +107,7 @@ public class UserHandler {
     public void authenticateUser(String loginKey) {
         final String email = resetMap.get(loginKey);
         resetMap.remove(loginKey);
-        final CurrentUser user = userDao.getUserByEmail(email);
+        final User user = userDao.getUserByEmail(email);
         final String rawTempPassword = UUID.randomUUID().toString();
         final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
         //TODO: Replace ugly hack for authenticating user with proper implementation.

@@ -31,7 +31,7 @@ public class UserController {
     @Autowired
     private UserHandler userHandler;
     @Autowired
-    private CurrentUser currentUser;
+    private User user;
 
     public UserController() {
         log.debug("Creating new UserController");
@@ -58,7 +58,7 @@ public class UserController {
     public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result) {
         if (result.hasErrors())
             return "passwordform.jsp";
-        userHandler.updatePassword(currentUser.getUsername(), passwordFormBean.getNewPassword());
+        userHandler.updatePassword(user.getUsername(), passwordFormBean.getNewPassword());
         return "redirect:/user/";
     }
 

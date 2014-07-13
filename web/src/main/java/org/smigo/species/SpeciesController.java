@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.persitance.DatabaseResource;
-import org.smigo.user.CurrentUser;
+import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +34,7 @@ public class SpeciesController implements Serializable {
     @Autowired
     private SpeciesHandler speciesHandler;
     @Autowired
-    private CurrentUser currentUser;
+    private User user;
 
     public SpeciesController() {
         log.debug("Creating new SpeciesController");
@@ -68,7 +68,7 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/deletespecies/{id}")
     public String deleteSpecies(@PathVariable Integer id, Model model) {
-        databaseresource.deleteSpecies(currentUser.getId(), id);
+        databaseresource.deleteSpecies(user.getId(), id);
         model.addAttribute("speciesId", id);
         return "species-deleted.jsp";
     }
@@ -91,7 +91,7 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     public String setDisplay(@RequestParam Integer speciesId, @RequestParam(required = false) Boolean display) {
         log.debug("Display " + speciesId + "," + display);
-        databaseresource.setSpeciesVisibility(speciesId, currentUser.getId(), display == null ? !speciesHandler.getSpecies(speciesId).isDisplay() : display);
+        databaseresource.setSpeciesVisibility(speciesId, user.getId(), display == null ? !speciesHandler.getSpecies(speciesId).isDisplay() : display);
         return "";
     }
 
@@ -100,9 +100,9 @@ public class SpeciesController implements Serializable {
     public String setDisplay(@RequestParam Integer ruleId) {
         log.debug("Deleting rule:" + ruleId);
         if (speciesHandler.getRule(ruleId).getCreatorId() == 0)
-            databaseresource.setRulesVisibility(ruleId, currentUser.getId(), false);
+            databaseresource.setRulesVisibility(ruleId, user.getId(), false);
         else
-            databaseresource.deleteRule(ruleId, currentUser.getId());
+            databaseresource.deleteRule(ruleId, user.getId());
         return "";
     }
 
@@ -119,7 +119,7 @@ public class SpeciesController implements Serializable {
             model.addAttribute("host", speciesHandler.getSpecies(rule.getHost()));
             return "ruleform.jsp";
         }
-        databaseresource.addRule(rule, currentUser.getId());
+        databaseresource.addRule(rule, user.getId());
         return "redirect:/species/" + rule.getHost();
     }
 }

@@ -11,7 +11,7 @@ import org.smigo.entities.PlantDataBean;
 import org.smigo.factories.RuleFactory;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
-import org.smigo.user.CurrentUser;
+import org.smigo.user.User;
 import org.smigo.user.UserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -424,7 +424,7 @@ public class DatabaseResource implements Serializable {
     }
 
 
-    public void updateUserDetails(CurrentUser user) {
+    public void updateUserDetails(User user) {
         log.debug("Update user " + user);
         Connection con = null;
         PreparedStatement updateUser = null;

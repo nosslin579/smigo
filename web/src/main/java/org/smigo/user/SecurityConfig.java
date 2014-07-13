@@ -108,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @org.springframework.context.annotation.Scope(value = "prototype", proxyMode = ScopedProxyMode.INTERFACES)
-    public UserBean userBean() {
+    public User user() {
         final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserBean) {
             return (UserBean) principal;
