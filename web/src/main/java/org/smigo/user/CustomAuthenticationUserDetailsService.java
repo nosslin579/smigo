@@ -21,10 +21,10 @@ class CustomAuthenticationUserDetailsService implements AuthenticationUserDetail
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
         final String identityUrl = token.getIdentityUrl();
-        final User user = userDao.getUserByOpenId(identityUrl);
+        final CurrentUser user = userDao.getUserByOpenId(identityUrl);
         if (user == null) {
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "Created user from openid");
-            final User newUser = new User();
+            final UserBean newUser = new UserBean();
             newUser.setUsername("user" + System.nanoTime());
             newUser.setLocale(request.getLocale());
             userHandler.createUser(newUser, identityUrl);

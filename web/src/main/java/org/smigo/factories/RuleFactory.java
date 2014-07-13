@@ -6,13 +6,12 @@ import kga.errors.RuleException;
 import kga.rules.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.User;
 
 public class RuleFactory {
     private static final Logger log = LoggerFactory.getLogger(RuleFactory.class);
 
     public Rule createRule(int ruleId, int type, Species host, Species causer, int gap,
-                           boolean display, int creatorId, Family family, User user) {
+                           boolean display, int creatorId, Family family) {
         Rule ret = null;
         try {
             if (RuleType.goodcompanion.getId() == type)

@@ -8,7 +8,7 @@
 <div id="userform" class="smigoframe largecenteredsmigoframe">
     <div class="smigoframeheader"><spring:message code="signup"/></div>
     <div class="smigoframecontent">
-        <form:form method="post" action="${pageContext.request.contextPath}/cuuser" modelAttribute="user">
+        <form:form method="post" action="${pageContext.request.contextPath}/cuuser" modelAttribute="userBean">
             <form:errors path="*" cssClass="errorblock" element="div"/>
             <table>
                 <tr>
@@ -17,39 +17,39 @@
                     <th char="validationfield"></th>
                 </tr>
                 <tr>
-                    <td><input name="id" value="${user.id}" type="hidden"/></td>
+                    <td><input name="id" value="${userBean.id}" type="hidden"/></td>
                 </tr>
 
                 <tr>
-                    <c:if test="${user.id == 0}">
+                    <c:if test="${userBean.id == 0}">
                         <td><form:label path="username"><spring:message code="username"/></form:label></td>
                         <td><form:input path="username"/></td>
                         <td><form:errors path="username" cssClass="error"/></td>
                     </c:if>
-                    <c:if test="${user.id != 0}">
+                    <c:if test="${userBean.id != 0}">
                         <td><input name="username" value="asdf1234567890" type="hidden"/></td>
                     </c:if>
                 </tr>
 
                 <tr>
-                    <c:if test="${user.id == 0}">
+                    <c:if test="${userBean.id == 0}">
                         <td><form:label path="password"><spring:message code="password"/></form:label></td>
                         <td><form:password path="password"/></td>
                         <td><form:errors path="password" cssClass="error"/></td>
                     </c:if>
-                    <c:if test="${user.id != 0}">
+                    <c:if test="${userBean.id != 0}">
                         <td><input name="password" value="asdf1234567890" type="hidden"/></td>
                     </c:if>
                 </tr>
 
 
                 <tr>
-                    <c:if test="${user.id == 0}">
+                    <c:if test="${userBean.id == 0}">
                         <td><label for="passwordagain"><spring:message code="passwordagain"/></label></td>
                         <td><input id="passwordagain" type="password"/></td>
                         <td></td>
                     </c:if>
-                    <c:if test="${user.id != 0}">
+                    <c:if test="${userBean.id != 0}">
                         <td><input name="passwordagain" value="asdf1234567890" type="hidden"/></td>
                     </c:if>
                 </tr>
@@ -86,13 +86,13 @@
 
 
                 <tr>
-                    <c:if test="${user.id == 0}">
+                    <c:if test="${userBean.id == 0}">
                         <td><form:label path="termsofservice"><a href=/tos.html><spring:message
                                 code="termsofservice"/></a></form:label></td>
                         <td><form:checkbox path="termsofservice"/><spring:message code="general.iagree"/></td>
                         <td><form:errors path="termsofservice"/></td>
                     </c:if>
-                    <c:if test="${user.id != 0}">
+                    <c:if test="${userBean.id != 0}">
                         <td><input name="termsofservice" value="true" type="hidden"/></td>
                     </c:if>
                 </tr>

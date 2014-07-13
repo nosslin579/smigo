@@ -11,7 +11,8 @@ import org.smigo.entities.PlantDataBean;
 import org.smigo.factories.RuleFactory;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
-import org.smigo.user.User;
+import org.smigo.user.CurrentUser;
+import org.smigo.user.UserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -198,8 +199,7 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public Map<Integer, SpeciesView> getSpecies(User user) {
-        final int userId = user.getId();
+    public Map<Integer, SpeciesView> getSpecies(int userId) {
         // Getting species
         HashMap<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>(200);
         Connection con = null;
@@ -222,7 +222,7 @@ public class DatabaseResource implements Serializable {
                 speciesView.setDisplay(speciesRS.getBoolean("display"));
                 speciesView.setIconFileName(speciesRS.getString("iconname"));
                 if (speciesRS.getInt("creator") == userId)
-                    speciesView.setCreator(user);
+                    speciesView.setCreator(new UserBean());
                 ret.put(speciesView.getId(), speciesView);
             }
 
@@ -239,7 +239,7 @@ public class DatabaseResource implements Serializable {
 
                 Rule rule = ruleFactory.createRule(ruleRS.getInt("rule_id"),
                         ruleRS.getInt("type"), host, causer, ruleRS.getInt("gap"),
-                        ruleRS.getBoolean("display"), ruleRS.getInt("creator"), family, user);
+                        ruleRS.getBoolean("display"), ruleRS.getInt("creator"), family);
                 if (rule != null && rule.isDisplay())
                     host.addRule(rule);
             }
@@ -317,24 +317,22 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public List<PlantData> getPlants(User user) {
+    public List<PlantData> getPlants(int userId) {
         List<PlantData> ret = new ArrayList<PlantData>(1000);
-        if (user.getId() == 0)
-            return ret;
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             con = getDatasource().getConnection();
             ps = con.prepareStatement("SELECT * FROM plants WHERE fkuserid=?");
-            ps.setInt(1, user.getId());
+            ps.setInt(1, userId);
             rs = ps.executeQuery();
             while (rs.next())
                 ret.add(new PlantDataBean(rs.getInt("species"), rs.getInt("year"), rs.getInt("x"), rs
                         .getInt("y")));
-            log.debug("Returning " + ret.size() + " plants for user " + user.getId());
+            log.debug("Returning " + ret.size() + " plants for user " + userId);
         } catch (SQLException e) {
-            throw new RuntimeException("Could not get plants " + user, e);
+            throw new RuntimeException("Could not get plants " + userId, e);
         } finally {
             close(con, ps, rs);
         }
@@ -342,11 +340,9 @@ public class DatabaseResource implements Serializable {
     }
 
 
-    public void saveGarden(User user, List<? extends PlantData> plants) {
+    public void saveGarden(int userId, List<? extends PlantData> plants) {
         if (plants == null || plants.isEmpty())
             throw new RuntimeException("No plants to update");
-
-        int userId = user.getId();
 
         StringBuilder insertSqlString = new StringBuilder("INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
         for (PlantData pl : plants) {
@@ -428,7 +424,7 @@ public class DatabaseResource implements Serializable {
     }
 
 
-    public void updateUserDetails(User user) {
+    public void updateUserDetails(CurrentUser user) {
         log.debug("Update user " + user);
         Connection con = null;
         PreparedStatement updateUser = null;

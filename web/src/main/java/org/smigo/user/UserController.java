@@ -2,9 +2,9 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,8 +26,6 @@ import java.util.Map;
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    @Autowired
-    private DatabaseResource databaseresource;
     @Autowired
     private UserSession userSession;
     @Autowired
@@ -60,19 +58,19 @@ public class UserController {
     public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result) {
         if (result.hasErrors())
             return "passwordform.jsp";
-        userHandler.updatePassword(currentUser.getUser().getUsername(), passwordFormBean.getNewPassword());
+        userHandler.updatePassword(currentUser.getUsername(), passwordFormBean.getNewPassword());
         return "redirect:/user/";
     }
 
     @RequestMapping(value = {"/cuuser", "/signup", "/edituser"}, method = RequestMethod.GET)
     public String getUserForm(ModelMap modelMap) {
         userSession.registerSignupStart();
-        modelMap.addAttribute("user", new User());
+        modelMap.addAttribute(new UserBean());
         return "userform.jsp";
     }
 
     @RequestMapping(value = "/cuuser", method = RequestMethod.POST)
-    public String handleUserForm(@Valid User user, BindingResult result) {
+    public String handleUserForm(@Valid UserBean user, BindingResult result) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername());
@@ -92,7 +90,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)
     public String getUser(@PathVariable Integer userid, Model model, Principal principal) {
-        User u = new User();
+        UserBean u = new UserBean();
         u.setEmail("");
         u.setUsername("");
         model.addAttribute("showall", false);
@@ -101,10 +99,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public String getUser(Model model, Principal principal) {
-        User u = currentUser.getUser();
+    public String getUser(Model model, @AuthenticationPrincipal UserBean principal) {
         model.addAttribute("showall", true);
-        model.addAttribute("user", u);
+        model.addAttribute("user", principal);
         return "userinfo.jsp";
     }
 

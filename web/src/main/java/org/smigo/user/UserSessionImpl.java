@@ -41,4 +41,9 @@ public class UserSessionImpl implements UserSession {
     public List<PlantData> getPlants() {
         return plants;
     }
+
+    @Override
+    public String toString() {
+        return "UserSessionImpl";
+    }
 }

@@ -5,8 +5,11 @@ import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.AssertTrue;
@@ -14,9 +17,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Locale;
 
-public class User implements UserDetails {
+public class UserBean implements UserDetails, CurrentUser {
 
-    private static final Logger log = LoggerFactory.getLogger(User.class);
+    private static final Logger log = LoggerFactory.getLogger(UserBean.class);
 
     private int id = 0;
 
@@ -42,11 +45,11 @@ public class User implements UserDetails {
     @AssertTrue
     private boolean termsofservice;
 
-    public User() {
+    public UserBean() {
     }
 
 
-    public User(int id, String username, String password, String displayname, String email, String about, Locale locale) {
+    public UserBean(int id, String username, String password, String displayname, String email, String about, Locale locale) {
         this.id = id;
         this.displayname = displayname;
         this.password = password;
@@ -75,8 +78,13 @@ public class User implements UserDetails {
         this.displayname = firstname;
     }
 
+    @Override
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -99,10 +107,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    @Override
     public String getEmail() {
         return email;
     }
@@ -111,6 +116,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -131,6 +137,7 @@ public class User implements UserDetails {
         this.about = about;
     }
 
+    @Override
     public Locale getLocale() {
         return locale;
     }
@@ -139,6 +146,7 @@ public class User implements UserDetails {
         this.locale = locale;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -153,5 +161,11 @@ public class User implements UserDetails {
 
     public void setTermsofservice(boolean termsofservice) {
         this.termsofservice = termsofservice;
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
     }
 }

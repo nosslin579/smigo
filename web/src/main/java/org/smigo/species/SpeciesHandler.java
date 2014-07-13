@@ -9,7 +9,6 @@ import org.smigo.JspMessageFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.user.CurrentUser;
-import org.smigo.user.User;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -61,8 +60,8 @@ public class SpeciesHandler {
     public void updateGarden(List<? extends PlantData> plants) {
         int year = plants.get(0).getYear();
         if (currentUser.isAuthenticated()) {
-            databaseResource.deleteYear(currentUser.getUser().getId(), year);
-            databaseResource.saveGarden(currentUser.getUser(), plants);
+            databaseResource.deleteYear(currentUser.getId(), year);
+            databaseResource.saveGarden(currentUser.getId(), plants);
         } else {
             final List<PlantData> userSessionPlants = userSession.getPlants();
             for (Iterator<PlantData> iterator = userSessionPlants.iterator(); iterator.hasNext(); ) {
@@ -86,8 +85,7 @@ public class SpeciesHandler {
     }
 
     private Map<Integer, SpeciesView> getSpecies() {
-        final User user = currentUser.isAuthenticated() ? currentUser.getUser() : new User();
-        return databaseResource.getSpecies(user);
+        return databaseResource.getSpecies(currentUser.getId());
     }
 
     public List<SpeciesView> getAllSpecies() {
@@ -120,7 +118,7 @@ public class SpeciesHandler {
 
     private List<PlantData> getPlants() {
         if (currentUser.isAuthenticated()) {
-            return databaseResource.getPlants(currentUser.getUser());
+            return databaseResource.getPlants(currentUser.getId());
         } else {
             return userSession.getPlants();
         }

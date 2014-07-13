@@ -25,7 +25,7 @@ import kga.Family;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.User;
+import org.smigo.user.CurrentUser;
 
 import java.util.HashSet;
 
@@ -40,7 +40,7 @@ public class SpeciesView extends kga.Species {
 
     private String scientificName;
     private boolean display;
-    private User creator;
+    private CurrentUser creator;
     private String iconFileName;
 
     public SpeciesView() {
@@ -72,11 +72,11 @@ public class SpeciesView extends kga.Species {
         this.display = display;
     }
 
-    public User getCreator() {
+    public CurrentUser getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(CurrentUser creator) {
         this.creator = creator;
     }
 

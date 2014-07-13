@@ -18,7 +18,7 @@ public class JdbcUserDao implements UserDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
-    private final BeanPropertyRowMapper<User> mapper = BeanPropertyRowMapper.newInstance(User.class);
+    private final BeanPropertyRowMapper<UserBean> mapper = BeanPropertyRowMapper.newInstance(UserBean.class);
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -31,12 +31,13 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public void addUser(User user, long signupTime, long decideTime) {
+    public int addUser(CurrentUser user, String encodedPassword, long signupTime, long decideTime) {
         final Map map = objectMapper.convertValue(user, Map.class);
         map.put("regtime", signupTime);
         map.put("decidetime", decideTime);
+        map.put("password", encodedPassword);
         Number newId = insert.executeAndReturnKey(map);
-        user.setId(newId.intValue());
+        return newId.intValue();
     }
 
     @Override
@@ -48,31 +49,31 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public CurrentUser getUserByUsername(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
     }
 
     @Override
-    public List<User> getUsersByUsername(String username) {
+    public List<? extends CurrentUser> getUsersByUsername(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.query(sql, new Object[]{username}, mapper);
     }
 
     @Override
-    public User getUserById(int id) {
+    public CurrentUser getUserById(int id) {
         final String sql = String.format(SELECT, "id");
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public CurrentUser getUserByEmail(String email) {
         final String sql = String.format(SELECT, "email");
         return jdbcTemplate.queryForObject(sql, new Object[]{email}, mapper);
     }
 
     @Override
-    public User getUserByOpenId(String identityUrl) {
+    public CurrentUser getUserByOpenId(String identityUrl) {
         final String sql = "SELECT * FROM users JOIN openid ON openid.user_id = users.user_id WHERE openid.identity_url = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{identityUrl}, mapper);
     }

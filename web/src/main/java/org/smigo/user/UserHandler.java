@@ -44,29 +44,28 @@ public class UserHandler {
 
     private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
 
-    public void updateUser(User user) {
+    public void updateUser(CurrentUser user) {
         databaseResource.updateUserDetails(user);
     }
 
-    public void createUser(User user, String identityUrl) {
-        createUser(user);
-        userDao.addOpenId(user.getId(), identityUrl);
+    public void createUser(CurrentUser user, String identityUrl) {
+        final int userId = createUser(user);
+        userDao.addOpenId(userId, identityUrl);
     }
 
-    public void createUser(User user) {
+    public int createUser(CurrentUser user) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
         long signupTime = userSession.getSignupTime();
         final String rawPassword = user.getPassword();
-        if (!rawPassword.isEmpty()) {
-            user.setPassword(passwordEncoder.encode(rawPassword));
-        }
-        userDao.addUser(user, signupTime, decideTime);
+        final String encoded = rawPassword.isEmpty() ? "" : passwordEncoder.encode(rawPassword);
+        final int userId = userDao.addUser(user, encoded, signupTime, decideTime);
 
         //save plants
         List<PlantData> plants = userSession.getPlants();
         if (!plants.isEmpty()) {
-            databaseResource.updateGarden(user.getId(), plants);
+            databaseResource.updateGarden(userId, plants);
         }
+        return userId;
     }
 
     public void authenticateUser(String username, String password) {
@@ -108,7 +107,7 @@ public class UserHandler {
     public void authenticateUser(String loginKey) {
         final String email = resetMap.get(loginKey);
         resetMap.remove(loginKey);
-        final User user = userDao.getUserByEmail(email);
+        final CurrentUser user = userDao.getUserByEmail(email);
         final String rawTempPassword = UUID.randomUUID().toString();
         final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
         //TODO: Replace ugly hack for authenticating user with proper implementation.
