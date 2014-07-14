@@ -211,6 +211,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("logout-link")).click();
         login(username, NEW_PASSWORD);
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
+    }
 
+    public void loginOpenId() {
+        d.get("http://localhost:8080/web/login");
+        d.findElement(By.id("googleOpenId")).submit();
+        d.findElement(By.id("Email")).sendKeys("smigo.org@gmail.com");
+        d.findElement(By.id("Passwd")).sendKeys("lstN09LLrZZx");
+        d.findElement(By.id("signIn")).click();
+        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 }

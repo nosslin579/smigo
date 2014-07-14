@@ -16,7 +16,7 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.error("Error during request. Handler:" + handler, ex);
+        log.error("Error during request. (Inside Spring MVC) Handler:" + handler, ex);
         final String note = "Exception:" + ex.getMessage();
         final String noteLengthChecked = note.length() > 255 ? note.substring(0, 255) : note;
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteLengthChecked);

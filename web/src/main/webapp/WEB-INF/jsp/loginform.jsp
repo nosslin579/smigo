@@ -35,8 +35,8 @@
             </table>
         </form>
         <hr/>
-        <form action="/web/login-openid" id=”googleOpenId” method="post">
-            <input id="openid_identifier" name="openid_identifier" type="hidden"
+        <form action="/web/login-openid" id="googleOpenId" method="post">
+        <input id="openid_identifier" name="openid_identifier" type="hidden"
                    value="https://www.google.com/accounts/o8/id"/>
             <input type="hidden" name="remember-me" value="true">
             <input type="submit" value="Google Login" onClick="submit('googleOpenId')"/>

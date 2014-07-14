@@ -74,8 +74,9 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserByOpenId(String identityUrl) {
-        final String sql = "SELECT * FROM users JOIN openid ON openid.user_id = users.user_id WHERE openid.identity_url = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{identityUrl}, mapper);
+        final String sql = "SELECT * FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
+        final List<UserBean> query = jdbcTemplate.query(sql, new Object[]{identityUrl}, mapper);
+        return query.isEmpty() ? null : query.get(0);
     }
 
 }

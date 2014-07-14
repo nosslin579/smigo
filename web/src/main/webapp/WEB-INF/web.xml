@@ -12,4 +12,8 @@
             <trim-directive-whitespaces>true</trim-directive-whitespaces>
         </jsp-property-group>
     </jsp-config>
+
+    <error-page>
+        <location>/error</location>
+    </error-page>
 </web-app>
