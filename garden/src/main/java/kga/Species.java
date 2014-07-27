@@ -129,10 +129,6 @@ public class Species {
         this.item = item;
     }
 
-    public String getTranslation() {
-        return "na";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

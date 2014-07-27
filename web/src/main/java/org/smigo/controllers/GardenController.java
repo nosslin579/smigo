@@ -1,5 +1,6 @@
 package org.smigo.controllers;
 
+import kga.Family;
 import kga.Garden;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,8 @@ import org.smigo.formbean.AddYearFormBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.User;
+import org.smigo.user.UserAdaptiveMessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,10 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.SortedSet;
 
 /**
  * Controller that handles Garden specific type of requests.
@@ -38,7 +38,7 @@ public class GardenController implements Serializable {
     @Autowired
     private User user;
     @Autowired
-    private MessageSource messageSource;
+    private UserAdaptiveMessageSource messageSource;
     @Autowired
     private SpeciesHandler speciesHandler;
 
@@ -47,10 +47,14 @@ public class GardenController implements Serializable {
     }
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
-    public String getGarden() {
-        SortedSet<Integer> years = speciesHandler.getGarden().getYears();
-        int current = Calendar.getInstance().get(Calendar.YEAR);
-        return "forward:/garden/" + (years.isEmpty() ? current : years.last());
+    public String getGarden(Model model, Locale locale) {
+        final List<SpeciesView> ret = new ArrayList<SpeciesView>();
+        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family("Frngium", 1)));
+        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family("Brazzicum", 2)));
+        ret.add(new SpeciesView(3, "Brassica Capitata1", false, true, new Family("Brazzicum1", 2)));
+        model.addAttribute("species", ret);
+        model.addAttribute("messages", messageSource.getAllMessages(locale));
+        return "ng.jsp";
     }
 
     @RequestMapping(value = "/garden/{year}")

@@ -1,5 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/functions" %>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 
 <jsp:include page="header.jsp"/>

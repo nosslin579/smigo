@@ -5,7 +5,7 @@ import kga.Garden;
 import kga.PlantData;
 import kga.Square;
 import kga.rules.Rule;
-import org.smigo.JspMessageFunctions;
+import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.user.User;
@@ -32,7 +32,7 @@ public class SpeciesHandler {
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
         int id = databaseResource.addSpecies(speciesFormBean, user.getId());
-        userSession.getTranslation().put(JspMessageFunctions.species(id), speciesFormBean.getVernacularName());
+        userSession.getTranslation().put(JspFunctions.speciesMessageKey(id), speciesFormBean.getVernacularName());
         return id;
     }
 

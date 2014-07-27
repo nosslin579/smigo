@@ -60,10 +60,6 @@ public class SpeciesView extends kga.Species {
         this.scientificName = scientificName;
     }
 
-    public String getTranslation() {
-        throw new UnsupportedOperationException("Remove when done");
-    }
-
     public boolean isDisplay() {
         return display;
     }
@@ -90,6 +86,10 @@ public class SpeciesView extends kga.Species {
 
     public String getIconFileName() {
         return iconFileName;
+    }
+
+    public String getMessageKey() {
+        return JspFunctions.speciesMessageKey(getId());
     }
 
 }

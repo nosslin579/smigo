@@ -6,12 +6,17 @@
         version="2.1">
 
     <tlib-version>1.0</tlib-version>
-    <short-name>msg</short-name>
-    <uri>http://smigo.org/jsp/msg</uri>
+    <short-name>f</short-name>
+    <uri>http://smigo.org/jsp/functions</uri>
     <function>
         <name>species</name>
-        <function-class>org.smigo.JspMessageFunctions</function-class>
-        <function-signature>java.lang.String species(int)</function-signature>
+        <function-class>org.smigo.JspFunctions</function-class>
+        <function-signature>java.lang.String speciesMessageKey(int)</function-signature>
+    </function>
+    <function>
+        <name>toJson</name>
+        <function-class>org.smigo.JspFunctions</function-class>
+        <function-signature>java.lang.String toJson(java.lang.Object)</function-signature>
     </function>
 
 

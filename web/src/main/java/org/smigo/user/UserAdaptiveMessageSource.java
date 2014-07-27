@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import java.util.Locale;
+import java.util.Properties;
 
 public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSource implements MessageSource {
 
@@ -30,5 +31,11 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
             return message;
         }
         return super.getMessageInternal(code, args, locale);
+    }
+
+    public Properties getAllMessages(Locale locale) {
+        clearCacheIncludingAncestors();
+        PropertiesHolder propertiesHolder = getMergedProperties(locale);
+        return propertiesHolder.getProperties();
     }
 }

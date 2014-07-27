@@ -61,7 +61,16 @@ public class SpeciesController implements Serializable {
         return new ModelAndView("specieslist.jsp");
     }
 
-    @RequestMapping(value = "/species/{id}")
+    @RequestMapping(value = "/species", produces = "application/json")
+    @ResponseBody
+    public List<SpeciesView> getSpecies() {
+        final List<SpeciesView> ret = new ArrayList<SpeciesView>();
+        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family("Frngium", 1)));
+        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family("Brazzicum", 2)));
+        return ret;
+    }
+
+    @RequestMapping(value = "/species1/{id}")
     public ModelAndView getSpecies(@PathVariable Integer id) {
         return new ModelAndView("speciesinfo.jsp", "species", speciesHandler.getSpecies(id));
     }

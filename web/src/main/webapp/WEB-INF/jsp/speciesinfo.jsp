@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="msg" uri="http://smigo.org/jsp/msg" %>
+<%@ taglib prefix="msg" uri="http://smigo.org/jsp/functions" %>
 
 <jsp:include page="header.jsp"/>
 
