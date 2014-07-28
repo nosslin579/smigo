@@ -23,9 +23,9 @@
 package kga.rules;
 
 import kga.Hint;
-import kga.errors.RuleException;
 import kga.Species;
 import kga.Square;
+import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when a species is planted at the same spot within a
@@ -34,74 +34,56 @@ import kga.Square;
  * @author Christian Nilsson
  */
 public class PerennialRepetitionRule extends Rule {
-  /**
-   * Years between the plant is planted at the same location. Gap is usually 4
-   * years.
-   */
-  private int gap = 4;
+    /**
+     * Years between the plant is planted at the same location. Gap is usually 4 years.
+     */
+    private int gap = 4;
 
-  /**
-   * How many years a perennial can be cultivated at the same spot. For
-   * annuals this equals 0.
-   */
-  private int allowedRepetitions = 0;
+    /**
+     * How many years a perennial can be cultivated at the same spot. For annuals this equals 0.
+     */
+    private int allowedRepetitions = 0;
+    private Species host;
 
-  public PerennialRepetitionRule(Species host, int gap,
-                                 int allowedRepetitions) throws RuleException {
-    super(host);
-    if (gap <= allowedRepetitions)
-      throw new RuleException("Gap must be greater than allowed repetitions");
-    this.gap = gap;
-    this.allowedRepetitions = allowedRepetitions;
-  }
+    public PerennialRepetitionRule(Species host, int gap, int allowedRepetitions) {
+        this.host = host;
+        if (gap <= allowedRepetitions)
+            throw new RuleException("Gap must be greater than allowed repetitions");
+        this.gap = gap;
+        this.allowedRepetitions = allowedRepetitions;
+    }
 
-  public int getGap() {
-    return gap;
-  }
+    public int getGap() {
+        return gap;
+    }
 
-  public int getAllowedRepetitions() {
-    return allowedRepetitions;
-  }
+    public int getAllowedRepetitions() {
+        return allowedRepetitions;
+    }
 
-  // public RepetitionRule(Effect effect) {
-  // this(effect, 4);
-  // }
+    @Override
+    public Hint getHint(Square square) {
+        // Getting squares way back
+        for (Square s : square.getPreviousSurroundingSquares(gap + allowedRepetitions, Rule.CLOSEST_NEIGHBOURS))
+            // Checking if squares contain host but not the squares within the allowed repetitions
+            if ((square.getYear() - allowedRepetitions) > s.getYear() && s.containsSpecies(host.getId())) {
+                return new Hint(s, square, getMessageKey(), host);
+            }
+        return null;
+    }
 
-  @Override
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
+    @Override
+    public String toString() {
+        return super.toString() + " years back: " + gap;
+    }
 
-    // log.info("Searching for " + getHost()) + " in " + ;
-    // Getting squares way back
-    for (Square s : square.getPreviousSquares(gap + allowedRepetitions))
-      // Checking if squares contain host but not the squares within the
-      // allowed repetitions
-      if ((square.getYear() - allowedRepetitions) > s.getYear()
-            && s.containsSpecies(getHost())) {
-        return new Hint(this, s, square, getHintTranslationKey(), getHost());
-      }
-    for (Square s : square.getPreviousSurroundingSquares(gap + allowedRepetitions,
-                                                          Rule.CLOSEST_NEIGHBOURS))
-      if ((square.getYear() - allowedRepetitions) > s.getYear()
-            && s.containsSpecies(getHost())) {
-        return new Hint(this, s, square, "speciesrepetitionnearby", getHost());
-      }
-    return null;
-  }
+    public String getMessageKey() {
+        return "hint.speciesrepetition";
+    }
 
-  @Override
-  public String toString() {
-    return super.toString() + " years back: " + gap;
-  }
-
-  public String getHintTranslationKey() {
-    return "hint.speciesrepetition";
-  }
-
-  @Override
-  public RuleType getRuleType() {
-    throw new RuntimeException("Not implemented yet");
-  }
+    @Override
+    public RuleType getRuleType() {
+        throw new RuntimeException("Not implemented yet");
+    }
 
 }

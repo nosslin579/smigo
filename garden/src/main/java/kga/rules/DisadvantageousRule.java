@@ -35,52 +35,35 @@ import kga.errors.RuleException;
  */
 
 public class DisadvantageousRule extends Rule {
-  private Species foe;
+    private Species foe;
 
-  public DisadvantageousRule(Species host, Species foe) throws RuleException {
-    super(host);
-    if (foe == null)
-      throw new RuleException("Foe may not be null");
-    this.foe = foe;
-  }
-
-  @Override
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
-    for (Square s : square.getSurroundingSquares()) {
-      if (s.containsSpecies(foe))
-        return new Hint(this, s, square, getHintTranslationKey(), foe);
+    public DisadvantageousRule(Species foe) {
+        if (foe == null)
+            throw new RuleException("Foe may not be null");
+        this.foe = foe;
     }
-    return null;
-  }
 
-  @Override
-  public String toString() {
-    return super.toString() + " species: " + foe;
-  }
-
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof DisadvantageousRule && super.equals(obj)) {
-      DisadvantageousRule r = (DisadvantageousRule) obj;
-      return this.getRuleType().ordinal() == r.getRuleType().ordinal() && this.getFoe().getId() == r.getFoe().getId();
+    @Override
+    public Hint getHint(Square square) {
+        for (Square s : square.getSurroundingSquares()) {
+            if (s.containsSpecies(foe.getId()))
+                return new Hint(s, square, getMessageKey(), foe);
+        }
+        return null;
     }
-    return false;
-  }
 
-  public Species getFoe() {
-    return foe;
-  }
+    @Override
+    public String toString() {
+        return super.toString() + " species: " + foe;
+    }
 
-  public String getHintTranslationKey() {
-    return "hint.badcompanion";
-  }
+    public String getMessageKey() {
+        return "hint.badcompanion";
+    }
 
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.badcompanion;
-  }
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.badcompanion;
+    }
 
 }

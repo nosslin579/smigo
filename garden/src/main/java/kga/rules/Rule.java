@@ -22,12 +22,8 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.errors.RuleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kga.Species;
-import kga.Square;
 
 /**
  * Rules are applied to species. Rules is the way to tell the system how a
@@ -37,125 +33,49 @@ import kga.Square;
  * @author Christian Nilsson
  */
 
-public abstract class Rule implements Comparable<Rule> {
-  private static final Logger log = LoggerFactory.getLogger(Rule.class);
+public abstract class Rule implements IRule {
+    private static final Logger log = LoggerFactory.getLogger(Rule.class);
 
-  public static final int ONE_YEAR_BACK = 1;
-  public static final int CLOSEST_NEIGHBOURS = 1;
+    public static final int ONE_YEAR_BACK = 1;
+    public static final int CLOSEST_NEIGHBOURS = 1;
 
-  public static final Class<?>[] COMPANION_PLANTING_RULES = {BeneficialRule.class,
-                                                              DisadvantageousRule.class};
+    public static final Class<?>[] COMPANION_PLANTING_RULES = {
+            BeneficialRule.class,
+            DisadvantageousRule.class
+    };
 
-  public static final Class<?>[] CROP_ROTATION_RULES = {BadCropRotationRule.class,
-                                                         FamilyRepetitionRule.class, GoodCropRotationRule.class, PerennialRepetitionRule.class,
-                                                         RepetitionRule.class};
+    public static final Class<?>[] CROP_ROTATION_RULES = {
+            BadCropRotationRule.class,
+            FamilyRepetitionRule.class,
+            GoodCropRotationRule.class,
+            PerennialRepetitionRule.class,
+            RepetitionRule.class
+    };
 
-  /**
-   * The species that this rule applies to.
-   */
-  private Species host;
+    private int id;
 
-  private boolean display = true;
+    private int creatorId;
 
-  private int id;
-
-  private String info;
-
-  private Object[] textParams;
-
-  private int creatorId;
-
-  public Rule(Species host) throws RuleException {
-    if (host == null)
-      throw new RuleException("Host may not be null");
-    this.host = host;
-    textParams = new Object[0];
-  }
-
-  /**
-   * Return the hint for this rule if the warning rule type is violated or the
-   * advice rule type is followed. Else it will return null
-   *
-   * @param s the square that the species is located at
-   * @return a hint or null
-   */
-  public abstract Hint getHint(Square s);
-
-  public String toString() {
-    return getClass().getSimpleName() + " host: " + host;
-  }
-
-  /**
-   * Returns the species that this rule applies to.
-   *
-   * @return a species
-   */
-  public Species getHost() {
-    return host;
-  }
-
-  public boolean isDisplay() {
-    return display;
-  }
-
-  public void setDisplay(boolean display) {
-    this.display = display;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public String getInfo() {
-    return info;
-  }
-
-  public void setInfo(String info) {
-    this.info = info;
-  }
-
-  public int getCreatorId() {
-    return creatorId;
-  }
-
-  public void setCreatorId(int creatorId) {
-    this.creatorId = creatorId;
-  }
-
-  public abstract String getHintTranslationKey();
-
-  public Object[] getHintTranslationParams() {
-    return textParams;
-  }
-
-  public void setTextParams(Object[] textParams) {
-    this.textParams = textParams;
-  }
-
-  public abstract RuleType getRuleType();
-
-  @Override
-  public int compareTo(Rule o) {
-    return getInfo().compareTo(o.getInfo());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Rule) {
-      Rule r = (Rule) obj;
-      return r.getRuleType().ordinal() == this.getRuleType().ordinal() && r.getHost().equals(this.getHost());
+    @Override
+    public int getId() {
+        return id;
     }
-    return false;
-  }
 
-  @Override
-  public int hashCode() {
-    return getRuleType().getId();
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public int getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(int creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    @Override
+    public int hashCode() {
+        return getRuleType().getId();
+    }
 
 }

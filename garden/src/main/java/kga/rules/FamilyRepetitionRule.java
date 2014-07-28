@@ -22,51 +22,51 @@
 
 package kga.rules;
 
+import kga.Family;
 import kga.Hint;
-import kga.errors.RuleException;
-import kga.Species;
 import kga.Square;
 
-public class FamilyRepetitionRule extends Rule {
-  private int yearsBackInTime;
+public class FamilyRepetitionRule implements IRule {
+    private Family family;
+    private int yearsBackInTime;
 
-  public FamilyRepetitionRule(Species host, int yearsBackInTime) throws RuleException {
-    super(host);
-    this.yearsBackInTime = yearsBackInTime;
-  }
+    public FamilyRepetitionRule(Family family, int yearsBackInTime) {
+        this.family = family;
+        this.yearsBackInTime = yearsBackInTime;
+    }
 
-  @Override
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
-    for (Square s : square.getPreviousSquares(yearsBackInTime))
-      if (s.containsFamily(getHost().getFamily())) {
-        return new Hint(this, s, square, getHintTranslationKey(), s.getSpecies(getHost().getFamily()));
-      }
-    for (Square s : square.getPreviousSurroundingSquares(yearsBackInTime, 1))
-      if (s.containsFamily(getHost().getFamily())) {
-        return new Hint(this, s, square, "repetitionfamilynearby", s.getSpecies(getHost()
-                                                                                  .getFamily()));
-      }
-    return null;
-  }
+    @Override
+    public Hint getHint(Square square) {
+        for (Square s : square.getPreviousSurroundingSquares(yearsBackInTime, 1))
+            if (s.containsFamily(family)) {
+                final String[] messageKeyArguments = {String.valueOf(yearsBackInTime), family.getMessageKey()};
+                return new Hint(s, square, getMessageKey(), messageKeyArguments, s.getSpecies(family));
+            }
+        return null;
+    }
 
-  public int getYearsBackInTime() {
-    return yearsBackInTime;
-  }
+    @Override
+    public int getId() {
+        return 0;
+    }
 
-  @Override
-  public String toString() {
-    return super.toString() + " yearsback: " + yearsBackInTime;
-  }
+    public int getYearsBackInTime() {
+        return yearsBackInTime;
+    }
 
-  public String getHintTranslationKey() {
-    return "hint.repetitionfamily";
-  }
+    @Override
+    public String toString() {
+        return super.toString() + " yearsback: " + yearsBackInTime;
+    }
 
-  @Override
-  public RuleType getRuleType() {
-    throw new RuntimeException("Not implemented yet");
-  }
+    @Override
+    public RuleType getRuleType() {
+        throw new RuntimeException("Not implemented yet");
+    }
+
+    @Override
+    public String getMessageKey() {
+        return "hint.repetitionfamily";
+    }
 
 }

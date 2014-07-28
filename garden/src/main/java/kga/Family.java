@@ -28,62 +28,62 @@ package kga;
  * @author Christian Nilsson
  */
 public class Family implements Comparable<Family> {
-  // private static java.util.logging.Logger log =
-  // java.util.logging.Logger.getLogger(Garden.class
-  // .getName());
-  /**
-   * The scientific name in latin
-   */
-  private String name;
-  /**
-   * The id is the unique identifier, a number between 7200 and 7299.
-   */
-  private final int id;
+    // private static java.util.logging.Logger log =
+    // java.util.logging.Logger.getLogger(Garden.class
+    // .getName());
+    /**
+     * The scientific name in latin
+     */
+    private String name;
+    /**
+     * The id is the unique identifier, a number between 7200 and 7299.
+     */
+    private final int id;
 
-  /**
-   * Creates a new family.
-   *
-   * @param id the unique identifier
-   */
-  public Family(String name, int id) {
-    this.id = id;
-    this.name = name;
-  }
+    /**
+     * Creates a new family.
+     *
+     * @param id the unique identifier
+     */
+    public Family(String name, int id) {
+        this.id = id;
+        this.name = name;
+    }
 
-  public int getId() {
-    return id;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public String getName() {
-    if (name == null)
-      return "null";
-    return name;
-  }
+    public String getName() {
+        if (name == null)
+            return "null";
+        return name;
+    }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Family)
-      return ((Family) obj).getId() == id;
-    return false;
-  }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Family)
+            return ((Family) obj).getId() == id;
+        return false;
+    }
 
-  @Override
-  public int hashCode() {
-    return id;
-  }
+    @Override
+    public int hashCode() {
+        return id;
+    }
 
-  public String getTranslationKey() {
-    return "family" + id;
+    public String getMessageKey() {
+        return "family" + id;
 
-  }
+    }
 
-  @Override
-  public String toString() {
-    return "Family {" + id + "," + name + "}";
-  }
+    @Override
+    public String toString() {
+        return "Family {" + id + "," + name + "}";
+    }
 
-  @Override
-  public int compareTo(Family f) {
-    return name.compareTo(f.name);
-  }
+    @Override
+    public int compareTo(Family f) {
+        return name.compareTo(f.name);
+    }
 }

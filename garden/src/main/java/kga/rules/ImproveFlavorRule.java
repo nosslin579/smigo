@@ -23,7 +23,6 @@
 package kga.rules;
 
 import kga.Species;
-import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when planting a beneficial plant next to each other.
@@ -35,18 +34,18 @@ import kga.errors.RuleException;
 public class ImproveFlavorRule extends AbstractBeneficialRule {
 
 
-  public ImproveFlavorRule(Species host, Species friend) throws RuleException {
-    super(host, friend);
-  }
+    public ImproveFlavorRule(Species friend) {
+        super(friend);
+    }
 
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.improvesflavor;
-  }
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.improvesflavor;
+    }
 
-  @Override
-  public String getHintTranslationKey() {
-    return "hint.improvesflavor";
-  }
+    @Override
+    public String getMessageKey() {
+        return "hint.improvesflavor";
+    }
 
 }

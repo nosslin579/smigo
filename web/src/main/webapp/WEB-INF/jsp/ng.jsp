@@ -1,7 +1,7 @@
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="msg" uri="http://smigo.org/jsp/functions" %>
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="f" uri="http://smigo.org/jsp/functions" %>
 
 <jsp:include page="header.jsp"/>
 
@@ -12,32 +12,30 @@
 <div ng-app="speciesModule">
     <div ng-view></div>
 
-    <script type="text/ng-template" id="species.html">
+    <script type="text/ng-template" id="garden">
         <div ng-repeat="s in species">
             <a href="" ng-click="selectAction(s)">{{s.scientificName}} {{s | translate}}</a>
         </div>
+        <a href="" ng-click="refresh()">Refresh</a>
     </script>
 </div>
 
-<script>
+<script type="application/javascript">
     var app = angular.module('speciesModule', ['ngRoute']);
 
     app.config(function ($routeProvider) {
         $routeProvider.
-                when('/', {
-                    templateUrl: 'species.html',
-                    controller: 'SpeciesController'
-                }).
                 otherwise({
-                    redirectTo: '/'
+                    templateUrl: 'garden',
+                    controller: 'GardenController'
                 });
     });
 
     app.filter('translate', function () {
-        var msg = <c:out escapeXml="false" value="${msg:toJson(messages)}" />;
-        smigolog('msg', msg);
+        var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
+//        smigolog('msg', msg);
         return function (messageObject) {
-            smigolog('translating', messageObject);
+//            smigolog('translating', messageObject);
             if (messageObject.messageKey) {
                 return msg[messageObject.messageKey];
             }
@@ -45,18 +43,24 @@
         };
     });
 
-    app.controller('SpeciesController', function ($scope, $http) {
+    app.controller('GardenController', function ($scope, $http) {
         $scope.selectAction = function (species) {
             smigolog('currentSpecies set to', species);
             $scope.currentSpecies = species;
         };
 
-        $scope.species = ${msg:toJson(species)};
+        $scope.species = ${f:toJson(species)};
 
-//        $http.get('species').success(function (response) {
-//            smigolog(response);
-//            $scope.species = response;
-//        });
+        $scope.refresh = function () {
+            smigolog("refresh");
+            $http.get('species').success(function (response) {
+                $scope.species = response;
+                smigolog($scope.species);
+            });
+        };
+
+        <%--$scope.plants = ${f:toJson(plants)}--%>
+
     });
 
 

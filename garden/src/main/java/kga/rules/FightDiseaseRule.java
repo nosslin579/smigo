@@ -23,10 +23,9 @@
 package kga.rules;
 
 
-import kga.errors.RuleException;
+import kga.Species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kga.Species;
 
 /**
  * This rule gives a hint when planting a beneficial plant next to each other.
@@ -36,20 +35,20 @@ import kga.Species;
  */
 
 public class FightDiseaseRule extends AbstractBeneficialRule {
-  private static final Logger log = LoggerFactory.getLogger(ImproveFlavorRule.class);
+    private static final Logger log = LoggerFactory.getLogger(ImproveFlavorRule.class);
 
 
-  public FightDiseaseRule(Species host, Species friend) throws RuleException {
-    super(host, friend);
-  }
+    public FightDiseaseRule(Species friend) {
+        super(friend);
+    }
 
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.fightdisease;
-  }
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.fightdisease;
+    }
 
-  @Override
-  public String getHintTranslationKey() {
-    return "hint.fightdisease";
-  }
+    @Override
+    public String getMessageKey() {
+        return "hint.fightdisease";
+    }
 }

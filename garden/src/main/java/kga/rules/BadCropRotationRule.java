@@ -22,11 +22,10 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.errors.RuleException;
 import kga.Family;
-import kga.Species;
+import kga.Hint;
 import kga.Square;
+import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when garden is planned with incorrect crop rotation.
@@ -36,49 +35,41 @@ import kga.Square;
  */
 
 public class BadCropRotationRule extends Rule {
-  private Family family;
+    private Family family;
 
-  public BadCropRotationRule(Species host, Family family) throws RuleException {
-    super(host);
-    if (family == null)
-      throw new RuleException("Family may not be null");
-    this.family = family;
-  }
-
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
-    for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
-      if (s.containsFamily(family))
-        return new Hint(this, s, square, getHintTranslationKey(), s.getSpecies(family));
-    return null;
-  }
-
-  public Family getFamily() {
-    return family;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString() + " family: " + family.getName();
-  }
-
-  public String getHintTranslationKey() {
-    return "hint.badcroprotation";
-  }
-
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.badcroprotation;
-  }
-
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof BadCropRotationRule && super.equals(obj)) {
-      BadCropRotationRule r = (BadCropRotationRule) obj;
-      return this.getRuleType().ordinal() == r.getRuleType().ordinal() && this.getFamily().getId() == r.getFamily().getId();
+    public BadCropRotationRule(Family family) {
+        if (family == null)
+            throw new RuleException("Family may not be null");
+        this.family = family;
     }
-    return false;
-  }
+
+    public Hint getHint(Square square) {
+        for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
+            if (s.containsFamily(family))
+                return new Hint(s, square, getMessageKey(), s.getSpecies(family));
+        return null;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " family: " + family.getName();
+    }
+
+    @Override
+    public String getMessageKey() {
+        return "hint.badcroprotation";
+    }
+
+    public String[] getMessageKeyArguments() {
+        return new String[]{family.getMessageKey()};
+    }
+
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.badcroprotation;
+    }
 }

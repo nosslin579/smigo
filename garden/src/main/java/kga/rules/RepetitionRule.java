@@ -23,9 +23,9 @@
 package kga.rules;
 
 import kga.Hint;
-import kga.errors.RuleException;
 import kga.Species;
 import kga.Square;
+import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when a species is planted at the same spot within a
@@ -34,66 +34,55 @@ import kga.Square;
  * @author Christian Nilsson
  */
 public class RepetitionRule extends Rule {
-  /**
-   * Years between the plant is planted at the same location. Gap is usually 4
-   * years.
-   */
-  private int gap = 4;
+    /**
+     * Years between the plant is planted at the same location. Gap is usually 4
+     * years.
+     */
+    private int gap = 4;
+    private Species host;
 
-  public RepetitionRule(Species host, int gap) throws RuleException {
-    super(host);
-    if (gap <= 0)
-      throw new RuleException("Gap must be greater than 0");
-    this.gap = gap;
-  }
-
-  public int getGap() {
-    return gap;
-  }
-
-  // public RepetitionRule(Effect effect) {
-  // this(effect, 4);
-  // }
-
-  @Override
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
-    // log.info("Searching for " + getHost()) + " in " + ;
-    // Getting squares way back
-    for (Square s : square.getPreviousSquares(gap))
-      // Checking if squares contain host
-      if (s.containsSpecies(getHost())) {
-        return new Hint(this, s, square, getHintTranslationKey(), getHost());
-      }
-    for (Square s : square.getPreviousSurroundingSquares(gap, Rule.CLOSEST_NEIGHBOURS))
-      if (s.containsSpecies(getHost())) {
-        return new Hint(this, s, square, "speciesrepetitionnearby", getHost());
-      }
-    return null;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString() + " years back: " + gap;
-  }
-
-  public String getHintTranslationKey() {
-    return "hint.speciesrepetition";
-  }
-
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.speciesrepetition;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof RepetitionRule && super.equals(obj)) {
-      RepetitionRule r = (RepetitionRule) obj;
-      return this.getGap() == r.getGap();
+    public RepetitionRule(Species host, int gap) {
+        if (gap <= 0)
+            throw new RuleException("Gap must be greater than 0");
+        this.host = host;
+        this.gap = gap;
     }
-    return false;
 
-  }
+    public int getGap() {
+        return gap;
+    }
+
+    @Override
+    public Hint getHint(Square square) {
+        for (Square s : square.getPreviousSurroundingSquares(gap, Rule.CLOSEST_NEIGHBOURS)) {
+            if (s.containsSpecies(host.getId())) {
+                return new Hint(s, square, getMessageKey(), host);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " years back: " + gap;
+    }
+
+    public String getMessageKey() {
+        return "hint.speciesrepetition";
+    }
+
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.speciesrepetition;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof RepetitionRule && super.equals(obj)) {
+            RepetitionRule r = (RepetitionRule) obj;
+            return this.getGap() == r.getGap();
+        }
+        return false;
+
+    }
 }

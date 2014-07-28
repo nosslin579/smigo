@@ -22,7 +22,6 @@
 
 package kga.rules;
 
-import kga.errors.RuleException;
 import kga.Species;
 
 /**
@@ -35,18 +34,18 @@ import kga.Species;
 public class PestRepellentRule extends AbstractBeneficialRule {
 
 
-  public PestRepellentRule(Species host, Species friend) throws RuleException {
-    super(host, friend);
-  }
+    public PestRepellentRule(Species friend) {
+        super(friend);
+    }
 
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.repelpest;
-  }
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.repelpest;
+    }
 
-  @Override
-  public String getHintTranslationKey() {
-    return "hint.repelpest";
-  }
+    @Override
+    public String getMessageKey() {
+        return "hint.repelpest";
+    }
 
 }

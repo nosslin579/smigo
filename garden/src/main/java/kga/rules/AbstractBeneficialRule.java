@@ -23,9 +23,9 @@
 package kga.rules;
 
 import kga.Hint;
-import kga.errors.RuleException;
 import kga.Species;
 import kga.Square;
+import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when planting a beneficial plant next to each other.
@@ -35,43 +35,26 @@ import kga.Square;
  */
 
 public abstract class AbstractBeneficialRule extends Rule {
-  private Species friend;
+    private Species friend;
 
-  public AbstractBeneficialRule(Species host, Species friend) throws RuleException {
-    super(host);
-    if (friend == null)
-      throw new RuleException("Friend may not be null");
-    this.friend = friend;
-  }
-
-  public Hint getHint(Square target) {
-    if (!isDisplay())
-      return null;
-    for (Square s : target.getSurroundingSquares()) {
-      if (s.containsSpecies(friend))
-        return new Hint(this, s, target, getHintTranslationKey(), friend);
+    public AbstractBeneficialRule(Species friend) {
+        if (friend == null)
+            throw new RuleException("Friend may not be null");
+        this.friend = friend;
     }
-    return null;
-  }
 
-  @Override
-  public String toString() {
-    return super.toString() + " " + friend;
-  }
-
-  public Species getFriend() {
-    return friend;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof AbstractBeneficialRule) {
-      AbstractBeneficialRule r = (AbstractBeneficialRule) obj;
-      return this.getRuleType().ordinal() == r.getRuleType().ordinal() &&
-               this.getFriend().getId() == r.getFriend().getId() &&
-               this.getHost().getId() == r.getHost().getId();
+    public Hint getHint(Square target) {
+        for (Square s : target.getSurroundingSquares()) {
+            if (s.containsSpecies(friend.getId())) {
+                final String[] messageKeyArguments = {friend.getMessageKey()};
+                return new Hint(s, target, getMessageKey(), messageKeyArguments, friend);
+            }
+        }
+        return null;
     }
-    return false;
-  }
 
+    @Override
+    public String toString() {
+        return super.toString() + " " + friend;
+    }
 }

@@ -24,10 +24,13 @@ package kga;
 
 import kga.errors.RuleException;
 import kga.rules.Rule;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This represent a species, not the physical plant.
@@ -63,13 +66,11 @@ public class Species {
     public final Collection<Rule> getRules(Class<?>... ruleTypes) {
         if (ruleTypes == null || ruleTypes.length == 0)
             return rules;
-        Collection<Rule> rulesToSort = new HashSet<Rule>(rules.size());
+        Collection<Rule> ret = new HashSet<Rule>(rules.size());
         for (Rule r : rules)
             for (Class<?> t : ruleTypes)
                 if (t.isInstance(r))
-                    rulesToSort.add(r);
-        List<Rule> ret = new ArrayList<Rule>(rulesToSort);
-        Collections.sort(ret);
+                    ret.add(r);
         return ret;
     }
 
@@ -77,18 +78,19 @@ public class Species {
         return rules;
     }
 
+    @JsonIgnore
     public Collection<Rule> getCropRotationRules() {
         return getRules(Rule.CROP_ROTATION_RULES);
     }
 
+    @JsonIgnore
     public Collection<Rule> getCompanionPlantingRules() {
         return getRules(Rule.COMPANION_PLANTING_RULES);
     }
 
     public Rule addRule(Rule r) {
-        if (r == null) throw new RuleException("Rule may not be null");
-        if (r.getHost() != this)
-            throw new RuleException("Host must equals this. This:" + id + " Host:" + r.getHost().getId());
+        if (r == null)
+            throw new RuleException("Rule may not be null");
         rules.add(r);
         return r;
     }
@@ -143,5 +145,9 @@ public class Species {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    public String getMessageKey() {
+        return "species" + id;
     }
 }

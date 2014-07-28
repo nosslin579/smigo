@@ -22,7 +22,6 @@
 
 package kga.rules;
 
-import kga.errors.RuleException;
 import kga.Species;
 
 /**
@@ -35,8 +34,8 @@ import kga.Species;
 public class BeneficialRule extends AbstractBeneficialRule {
 
 
-  public BeneficialRule(Species host, Species friend) throws RuleException {
-    super(host, friend);
+    public BeneficialRule(Species friend) {
+        super(friend);
   }
 
   @Override
@@ -45,7 +44,7 @@ public class BeneficialRule extends AbstractBeneficialRule {
   }
 
   @Override
-  public String getHintTranslationKey() {
+  public String getMessageKey() {
     return "hint.goodcompanion";
   }
 

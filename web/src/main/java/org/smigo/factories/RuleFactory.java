@@ -15,25 +15,23 @@ public class RuleFactory {
         Rule ret = null;
         try {
             if (RuleType.goodcompanion.getId() == type)
-                ret = new BeneficialRule(host, causer);
+                ret = new BeneficialRule(causer);
             else if (RuleType.badcompanion.getId() == type)
-                ret = new DisadvantageousRule(host, causer);
+                ret = new DisadvantageousRule(causer);
             else if (RuleType.fightdisease.getId() == type)
-                ret = new FightDiseaseRule(host, causer);
+                ret = new FightDiseaseRule(causer);
             else if (RuleType.repelpest.getId() == type)
-                ret = new PestRepellentRule(host, causer);
+                ret = new PestRepellentRule(causer);
             else if (RuleType.improvesflavor.getId() == type)
-                ret = new ImproveFlavorRule(host, causer);
+                ret = new ImproveFlavorRule(causer);
             else if (RuleType.goodcroprotation.getId() == type)
-                ret = new GoodCropRotationRule(host, family);
+                ret = new GoodCropRotationRule(family);
             else if (RuleType.badcroprotation.getId() == type)
-                ret = new BadCropRotationRule(host, family);
+                ret = new BadCropRotationRule(family);
             else if (RuleType.speciesrepetition.getId() == type)
                 ret = new RepetitionRule(host, gap);
             else
                 throw new RuntimeException("No such type of rule:" + type);
-            ret.setInfo("messageSource.getMessage(ret.getHintTranslationKey(), ret.getHintTranslationParams(), \"-\", user.getLocale())");
-            ret.setDisplay(display);
             ret.setId(ruleId);
             ret.setCreatorId(creatorId);
         } catch (RuleException e) {

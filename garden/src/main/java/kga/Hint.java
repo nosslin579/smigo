@@ -22,8 +22,6 @@
 
 package kga;
 
-import kga.rules.Rule;
-
 /**
  * If you break a warning type rule or follow a benefit type rule you will get a
  * hint. The hint tells the user if she is doing right or wrong.
@@ -31,87 +29,47 @@ import kga.rules.Rule;
  * @author Christian Nilsson
  */
 public class Hint {
-  /**
-   * The square which tells where the cause is.
-   */
-  private Square source;
-  /**
-   * The rule that this hint is based upon.
-   */
-  private Rule rule;
-  /**
-   * The square that gets affected.
-   */
-  private Square target;
-  /**
-   * The hint in words.
-   */
-  private String text;
+    private Square source;
+    private Square target;
+    private String messageKey;
 
-  /**
-   * The species that is the reason this hint exists.
-   */
-  private Species causer;
+    private String[] messageKeyArguments;
+    /**
+     * The species that is the reason this hint exists.
+     */
+    private Species causer;
 
-  /**
-   * Creates a new hint with a single source.
-   *
-   * @param rule   he rule that this hint is based upon.
-   * @param source the square where the cause is
-   * @param target the square that is affected
-   */
-  public Hint(Rule rule, Square source, Square target, String text, Species causer) {
-    this.rule = rule;
-    this.source = source;
-    this.target = target;
-    this.text = text;
-    this.causer = causer;
-  }
+    public Hint(Square source, Square target, String messageKey, String[] messageKeyArguments, Species causer) {
+        this.source = source;
+        this.target = target;
+        this.messageKey = messageKey;
+        this.messageKeyArguments = messageKeyArguments;
+        this.causer = causer;
+    }
 
-  /**
-   * Returns the species that this hint is applies to
-   *
-   * @return the source
-   */
-  public Square getSource() {
-    return source;
-  }
+    public Hint(Square source, Square target, String messageKey, Species causer) {
+        this(source, target, messageKey, new String[]{}, causer);
+    }
 
-  /**
-   * Returns the square that is affected.
-   *
-   * @return the target
-   */
-  public Square getTarget() {
-    return target;
-  }
+    public Square getSource() {
+        return source;
+    }
 
-  /**
-   * Returns the rule.
-   *
-   * @return the rule
-   */
-  public Rule getRule() {
-    return rule;
-  }
+    public Square getTarget() {
+        return target;
+    }
 
-  @Override
-  public String toString() {
-    return "[hint at " + target + rule + "]";
-  }
+    @Override
+    public String toString() {
+        return "[hint at " + target + "]";
+    }
 
-  /**
-   * Returns the hint in a word that can be translated.
-   */
-  public String getText() {
-    return text;
-  }
+    public String getMessageKey() {
+        return messageKey;
+    }
 
-  /**
-   * Returns the species that is the reason this hint exists.
-   */
-  public Species getCauser() {
-    return causer;
-  }
+    public Species getCauser() {
+        return causer;
+    }
 
 }

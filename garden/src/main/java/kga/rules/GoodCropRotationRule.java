@@ -22,11 +22,10 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.Species;
-import kga.errors.RuleException;
 import kga.Family;
+import kga.Hint;
 import kga.Square;
+import kga.errors.RuleException;
 
 /**
  * This rule gives a hint when rotating crops correct. For instance cabbage
@@ -37,50 +36,38 @@ import kga.Square;
 
 public class GoodCropRotationRule extends Rule {
 
-  private Family family;
+    private Family family;
 
-  public GoodCropRotationRule(Species host, Family family) throws RuleException {
-    super(host);
-    if (family == null)
-      throw new RuleException("Family may not be null");
-    this.family = family;
-  }
-
-  @Override
-  public Hint getHint(Square square) {
-    if (!isDisplay())
-      return null;
-
-    for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
-      if (s.containsFamily(family))
-        return new Hint(this, s, square, getHintTranslationKey(), s.getSpecies(family));
-    return null;
-  }
-
-  public Family getFamily() {
-    return family;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString() + " family: " + family.getName();
-  }
-
-  public String getHintTranslationKey() {
-    return "hint.goodcroprotation";
-  }
-
-  @Override
-  public RuleType getRuleType() {
-    return RuleType.goodcroprotation;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof GoodCropRotationRule && super.equals(obj)) {
-      GoodCropRotationRule r = (GoodCropRotationRule) obj;
-      return this.getRuleType().ordinal() == r.getRuleType().ordinal() && this.getFamily().getId() == r.getFamily().getId();
+    public GoodCropRotationRule(Family family) {
+        if (family == null)
+            throw new RuleException("Family may not be null");
+        this.family = family;
     }
-    return false;
-  }
+
+    @Override
+    public Hint getHint(Square square) {
+        for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
+            if (s.containsFamily(family))
+                return new Hint(s, square, getMessageKey(), s.getSpecies(family));
+        return null;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " family: " + family.getName();
+    }
+
+    public String getMessageKey() {
+        return "hint.goodcroprotation";
+    }
+
+    @Override
+    public RuleType getRuleType() {
+        return RuleType.goodcroprotation;
+    }
+
 }
