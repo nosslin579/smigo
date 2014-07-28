@@ -33,7 +33,7 @@ import kga.errors.RuleException;
  *
  * @author Christian Nilsson
  */
-public class PerennialRepetitionRule extends Rule {
+public class PerennialRepetitionRule extends AbstractRule {
     /**
      * Years between the plant is planted at the same location. Gap is usually 4 years.
      */
@@ -46,6 +46,7 @@ public class PerennialRepetitionRule extends Rule {
     private Species host;
 
     public PerennialRepetitionRule(Species host, int gap, int allowedRepetitions) {
+        super(0, null, null);
         this.host = host;
         if (gap <= allowedRepetitions)
             throw new RuleException("Gap must be greater than allowed repetitions");
@@ -77,9 +78,9 @@ public class PerennialRepetitionRule extends Rule {
         return super.toString() + " years back: " + gap;
     }
 
-    public String getMessageKey() {
-        return "hint.speciesrepetition";
-    }
+//    public String getMessageKey() {
+//        return "hint.speciesrepetition";
+//    }
 
     @Override
     public RuleType getRuleType() {

@@ -28,21 +28,25 @@ import kga.Square;
 import kga.errors.RuleException;
 
 /**
- * This rule gives a hint when garden is planned with incorrect crop rotation.
- * For instance legumes after cabbage.
+ * This rule gives a hint when rotating crops correct. For instance cabbage
+ * after legumes.
  *
  * @author Christian Nilsson
  */
 
-public class BadCropRotationRule extends Rule {
+public class CropRotationRule extends AbstractRule {
+
     private Family family;
 
-    public BadCropRotationRule(Family family) {
+    public CropRotationRule(int ruleId, RuleType ruleType, Family family, String hintMessageKey) {
+        super(ruleId, ruleType, hintMessageKey);
         if (family == null)
             throw new RuleException("Family may not be null");
         this.family = family;
+
     }
 
+    @Override
     public Hint getHint(Square square) {
         for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
             if (s.containsFamily(family))
@@ -54,22 +58,4 @@ public class BadCropRotationRule extends Rule {
         return family;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " family: " + family.getName();
-    }
-
-    @Override
-    public String getMessageKey() {
-        return "hint.badcroprotation";
-    }
-
-    public String[] getMessageKeyArguments() {
-        return new String[]{family.getMessageKey()};
-    }
-
-    @Override
-    public RuleType getRuleType() {
-        return RuleType.badcroprotation;
-    }
 }

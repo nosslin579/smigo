@@ -33,7 +33,7 @@ import kga.errors.RuleException;
  *
  * @author Christian Nilsson
  */
-public class RepetitionRule extends Rule {
+public class RepetitionRule extends AbstractRule {
     /**
      * Years between the plant is planted at the same location. Gap is usually 4
      * years.
@@ -41,7 +41,8 @@ public class RepetitionRule extends Rule {
     private int gap = 4;
     private Species host;
 
-    public RepetitionRule(Species host, int gap) {
+    public RepetitionRule(int ruleId, RuleType ruleType, int gap, Species host, String hintMessageKey) {
+        super(ruleId, ruleType, hintMessageKey);
         if (gap <= 0)
             throw new RuleException("Gap must be greater than 0");
         this.host = host;
@@ -56,19 +57,11 @@ public class RepetitionRule extends Rule {
     public Hint getHint(Square square) {
         for (Square s : square.getPreviousSurroundingSquares(gap, Rule.CLOSEST_NEIGHBOURS)) {
             if (s.containsSpecies(host.getId())) {
-                return new Hint(s, square, getMessageKey(), host);
+                final String[] messageKeyArguments = {String.valueOf(gap)};
+                return new Hint(s, square, getHintMessageKey(), messageKeyArguments, host);
             }
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + " years back: " + gap;
-    }
-
-    public String getMessageKey() {
-        return "hint.speciesrepetition";
     }
 
     @Override

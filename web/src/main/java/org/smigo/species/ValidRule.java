@@ -58,7 +58,7 @@ public @interface ValidRule {
                 }
                 Species host = speciesHandler.getSpecies(rule.getHost());
                 Species causer = speciesHandler.getSpecies(rule.getCauser());
-                Rule newRule = ruleFactory.createRule(-1, rule.getType().getId(), host, causer, rule.getGap(), true, 0, rule.getCauserfamily());
+                Rule newRule = ruleFactory.createRule(-1, rule.getType().getId(), host, causer, rule.getGap(), rule.getCauserfamily());
                 if (newRule == null) {
                     context.buildConstraintViolationWithTemplate("No species/family/gap for rule").addConstraintViolation();
                     return false;

@@ -32,7 +32,6 @@ public class Hint {
     private Square source;
     private Square target;
     private String messageKey;
-
     private String[] messageKeyArguments;
     /**
      * The species that is the reason this hint exists.
@@ -72,4 +71,7 @@ public class Hint {
         return causer;
     }
 
+    public String[] getMessageKeyArguments() {
+        return messageKeyArguments;
+    }
 }

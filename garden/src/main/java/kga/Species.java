@@ -24,7 +24,6 @@ package kga;
 
 import kga.errors.RuleException;
 import kga.rules.Rule;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,16 +75,6 @@ public class Species {
 
     public final Collection<Rule> getRules() {
         return rules;
-    }
-
-    @JsonIgnore
-    public Collection<Rule> getCropRotationRules() {
-        return getRules(Rule.CROP_ROTATION_RULES);
-    }
-
-    @JsonIgnore
-    public Collection<Rule> getCompanionPlantingRules() {
-        return getRules(Rule.COMPANION_PLANTING_RULES);
     }
 
     public Rule addRule(Rule r) {

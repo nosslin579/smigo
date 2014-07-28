@@ -26,7 +26,7 @@ import kga.Family;
 import kga.Hint;
 import kga.Square;
 
-public class FamilyRepetitionRule implements IRule {
+public class FamilyRepetitionRule {
     private Family family;
     private int yearsBackInTime;
 
@@ -35,7 +35,6 @@ public class FamilyRepetitionRule implements IRule {
         this.yearsBackInTime = yearsBackInTime;
     }
 
-    @Override
     public Hint getHint(Square square) {
         for (Square s : square.getPreviousSurroundingSquares(yearsBackInTime, 1))
             if (s.containsFamily(family)) {
@@ -45,7 +44,6 @@ public class FamilyRepetitionRule implements IRule {
         return null;
     }
 
-    @Override
     public int getId() {
         return 0;
     }
@@ -59,12 +57,10 @@ public class FamilyRepetitionRule implements IRule {
         return super.toString() + " yearsback: " + yearsBackInTime;
     }
 
-    @Override
     public RuleType getRuleType() {
         throw new RuntimeException("Not implemented yet");
     }
 
-    @Override
     public String getMessageKey() {
         return "hint.repetitionfamily";
     }

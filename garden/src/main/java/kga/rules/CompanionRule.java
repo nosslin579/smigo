@@ -34,12 +34,14 @@ import kga.errors.RuleException;
  * @author Christian Nilsson
  */
 
-public abstract class AbstractBeneficialRule extends Rule {
+public class CompanionRule extends AbstractRule implements Rule {
     private Species friend;
 
-    public AbstractBeneficialRule(Species friend) {
-        if (friend == null)
-            throw new RuleException("Friend may not be null");
+    public CompanionRule(int id, RuleType ruleType, Species friend, String hintMessageKey) {
+        super(id, ruleType, hintMessageKey);
+        if (friend == null) {
+            throw new RuleException("Friend can not be null, id:" + id);
+        }
         this.friend = friend;
     }
 
@@ -47,14 +49,10 @@ public abstract class AbstractBeneficialRule extends Rule {
         for (Square s : target.getSurroundingSquares()) {
             if (s.containsSpecies(friend.getId())) {
                 final String[] messageKeyArguments = {friend.getMessageKey()};
-                return new Hint(s, target, getMessageKey(), messageKeyArguments, friend);
+                return new Hint(s, target, getHintMessageKey(), messageKeyArguments, friend);
             }
         }
         return null;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " " + friend;
-    }
 }

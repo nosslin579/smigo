@@ -66,26 +66,6 @@ public class Plant implements PlantData {
 
     }
 
-    @JsonIgnore
-    public List<Hint> getCompanionPlantingHints() {
-        List<Hint> hints = new ArrayList<Hint>();
-        for (Rule r : species.getRules(Rule.COMPANION_PLANTING_RULES))
-            hints.add(r.getHint(square));
-        // removing all null elements
-        hints.removeAll(Collections.singleton(null));
-        return hints;
-    }
-
-    @JsonIgnore
-    public List<Hint> getCropRotationHints() {
-        List<Hint> hints = new ArrayList<Hint>();
-        for (Rule r : species.getRules(Rule.CROP_ROTATION_RULES))
-            hints.add(r.getHint(square));
-        // removing all null elements
-        hints.removeAll(Collections.singleton(null));
-        return hints;
-    }
-
     @Override
     public int getSpeciesId() {
         return species.getId();

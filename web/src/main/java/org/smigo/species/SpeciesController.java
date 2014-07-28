@@ -104,17 +104,6 @@ public class SpeciesController implements Serializable {
         return "";
     }
 
-    @RequestMapping("/deleterule")
-    @ResponseBody
-    public String setDisplay(@RequestParam Integer ruleId) {
-        log.debug("Deleting rule:" + ruleId);
-        if (speciesHandler.getRule(ruleId).getCreatorId() == 0)
-            databaseresource.setRulesVisibility(ruleId, user.getId(), false);
-        else
-            databaseresource.deleteRule(ruleId, user.getId());
-        return "";
-    }
-
     @RequestMapping(value = {"/addrule"}, method = RequestMethod.GET)
     public String getRuleForm(@RequestParam Integer species, ModelMap model) {
         model.addAttribute("ruleFormModel", new RuleFormModel());

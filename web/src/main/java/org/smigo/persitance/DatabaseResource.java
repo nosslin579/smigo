@@ -239,7 +239,7 @@ public class DatabaseResource implements Serializable {
 
                 Rule rule = ruleFactory.createRule(ruleRS.getInt("rule_id"),
                         ruleRS.getInt("type"), host, causer, ruleRS.getInt("gap"),
-                        ruleRS.getBoolean("display"), ruleRS.getInt("creator"), family);
+                        family);
                 host.addRule(rule);
             }
         } catch (SQLException e) {
