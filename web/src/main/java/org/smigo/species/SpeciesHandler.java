@@ -30,6 +30,8 @@ public class SpeciesHandler {
     @Autowired
     private SpeciesDao speciesDao;
     @Autowired
+    private PlantDao plantDao;
+    @Autowired
     private Comparator<org.smigo.SpeciesView> speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
@@ -121,7 +123,7 @@ public class SpeciesHandler {
 
     private List<PlantData> getPlants() {
         if (user.isAuthenticated()) {
-            return databaseResource.getPlants(user.getId());
+            return plantDao.getPlants(user.getId());
         } else {
             return userSession.getPlants();
         }

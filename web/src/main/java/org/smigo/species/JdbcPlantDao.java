@@ -26,6 +26,7 @@ public class JdbcPlantDao implements PlantDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Override
     public List<PlantData> getPlants(int userId) {
         final String sql = String.format(SELECT);
         return jdbcTemplate.query(sql, new Object[]{userId}, new RowMapper<PlantData>() {

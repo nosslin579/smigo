@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.config.VisitLogger;
-import org.smigo.entities.PlantDataBean;
 import org.smigo.factories.RuleFactory;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
@@ -315,28 +314,6 @@ public class DatabaseResource implements Serializable {
         } finally {
             close(con, ps);
         }
-    }
-
-    public List<PlantData> getPlants(int userId) {
-        List<PlantData> ret = new ArrayList<PlantData>(1000);
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT * FROM plants WHERE fkuserid=?");
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            while (rs.next())
-                ret.add(new PlantDataBean(rs.getInt("species"), rs.getInt("year"), rs.getInt("x"), rs
-                        .getInt("y")));
-            log.debug("Returning " + ret.size() + " plants for user " + userId);
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not get plants " + userId, e);
-        } finally {
-            close(con, ps, rs);
-        }
-        return ret;
     }
 
 
