@@ -1,11 +1,7 @@
 package org.smigo.species;
 
-import kga.Species;
-import kga.rules.Rule;
-import kga.rules.RuleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.factories.RuleFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Constraint;
@@ -38,8 +34,7 @@ public @interface ValidRule {
     Class<? extends Payload>[] payload() default {};
 
     public class RuleValidator implements ConstraintValidator<ValidRule, RuleFormModel> {
-        private static final Logger log = LoggerFactory.getLogger(RuleValidator.class);
-        final RuleFactory ruleFactory = new RuleFactory();
+        private static final Logger log = LoggerFactory.getLogger(ValidRule.class);
 
         @Autowired
         private SpeciesHandler speciesHandler;
@@ -50,7 +45,7 @@ public @interface ValidRule {
         }
 
         public boolean isValid(RuleFormModel rule, ConstraintValidatorContext context) {
-            context.disableDefaultConstraintViolation();
+/*            context.disableDefaultConstraintViolation();
             try {
                 if (rule.getHost() == -1 || rule.getType() == null) {
                     context.buildConstraintViolationWithTemplate("No ruletype selected").addConstraintViolation();
@@ -79,7 +74,7 @@ public @interface ValidRule {
             } catch (Exception e) {
                 log.error("Validating rule failed", e);
                 return false;
-            }
+            }*/
             return true;
         }
 

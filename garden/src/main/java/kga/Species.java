@@ -139,4 +139,8 @@ public class Species {
     public String getMessageKey() {
         return "species" + id;
     }
+
+    public static Species create(int id) {
+        return new Species(id, new HashSet<Rule>(), null, true, false);
+    }
 }

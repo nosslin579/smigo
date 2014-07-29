@@ -1,17 +1,12 @@
 package org.smigo.persitance;
 
-import kga.Family;
 import kga.PlantData;
-import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.SpeciesView;
 import org.smigo.config.VisitLogger;
-import org.smigo.factories.RuleFactory;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
 import org.smigo.user.User;
-import org.smigo.user.UserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,9 +29,6 @@ import java.util.*;
 @Component("databaseResource")
 public class DatabaseResource implements Serializable {
     private final Logger log = LoggerFactory.getLogger(DatabaseResource.class);
-    private Map<Integer, Family> familiesCache = null;
-    // private List<Locale> local1es = new ArrayList<Locale>(160);
-    private RuleFactory ruleFactory = new RuleFactory();
 
     @Autowired
     private DataSource datasource;
@@ -144,27 +136,6 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-    public Map<Integer, Family> getFamilies() {
-        if (familiesCache != null)
-            return familiesCache;
-        familiesCache = new HashMap<Integer, Family>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("SELECT id, name FROM families");
-            rs = ps.executeQuery();
-            while (rs.next())
-                familiesCache.put(rs.getInt(1), new Family(rs.getString(2), rs.getInt(1)));
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting families ", e);
-        } finally {
-            close(con, ps, rs);
-        }
-        return familiesCache;
-    }
-
     public void deleteSpecies(int userId, int speciesId) {
         Connection con = null;
         PreparedStatement deleteSpecies = null;
@@ -196,64 +167,6 @@ public class DatabaseResource implements Serializable {
             close(con, deleteUserSetting);
             close(con, deleteSpecies);
         }
-    }
-
-    @Deprecated
-    public Map<Integer, SpeciesView> getSpecies(int userId) {
-        // Getting species
-        HashMap<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>(200);
-        Connection con = null;
-        PreparedStatement speciesPS = null;
-        ResultSet speciesRS = null;
-        PreparedStatement rulePS = null;
-        ResultSet ruleRS = null;
-        try {
-            con = getDatasource().getConnection();
-            speciesPS = con
-                    .prepareStatement("SELECT species_id,item,annual,creator,species.name, translation,coalesce(usersettingforspecies.name,species.name) AS scientificname,coalesce(usersettingforspecies.display,species.displaybydefault) AS display,families.name AS familyname,families.id AS familyid, coalesce(usersettingforspecies.iconfilename,species.iconfilename) AS iconname FROM species LEFT JOIN usersettingforspecies ON species.species_id=usersettingforspecies.species AND usersettingforspecies.user=? LEFT JOIN families ON species.family=families.id WHERE (creator IS NULL OR creator = ?)");
-            speciesPS.setInt(1, userId);
-            speciesPS.setInt(2, userId);
-            speciesRS = speciesPS.executeQuery();
-            while (speciesRS.next()) {
-                SpeciesView speciesView = new SpeciesView(speciesRS.getInt("species_id"),
-                        speciesRS.getString("scientificname"),
-                        speciesRS.getBoolean("item"), speciesRS.getBoolean("annual"),
-                        new Family(speciesRS.getString("familyname"), speciesRS.getInt("familyid")));
-                speciesView.setDisplay(speciesRS.getBoolean("display"));
-                speciesView.setIconFileName(speciesRS.getString("iconname"));
-                if (speciesRS.getInt("creator") == userId)
-                    speciesView.setCreator(new UserBean());
-                ret.put(speciesView.getId(), speciesView);
-            }
-
-            // Adding rules
-            rulePS = con
-                    .prepareStatement("SELECT rule_id, type, host, causer,gap,creator,causerfamily,coalesce(display,displaybydefault) AS display FROM rules LEFT JOIN usersettingforrules ON rules.rule_id = usersettingforrules.rule AND usersettingforrules.user = ? WHERE (creator IS NULL OR creator = ?)");
-            rulePS.setInt(1, userId);
-            rulePS.setInt(2, userId);
-            ruleRS = rulePS.executeQuery();
-            while (ruleRS.next()) {
-                SpeciesView host = ret.get(ruleRS.getInt("host"));
-                SpeciesView causer = ret.get(ruleRS.getInt("causer"));
-                Family family = new Family("asdf", 1);//getFamilies().get(ruleRS.getInt("causerfamily"));
-
-                Rule rule = ruleFactory.createRule(ruleRS.getInt("rule_id"),
-                        ruleRS.getInt("type"), host, causer, ruleRS.getInt("gap"),
-                        family);
-                host.addRule(rule);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error getting species. ", e);
-        } finally {
-            close(con, speciesPS, speciesRS);
-            close(con, rulePS, ruleRS);
-        }
-
-        int i = 0;
-        for (SpeciesView s : ret.values())
-            i += s.getRules().size();
-        log.debug("Returning " + ret.values().size() + " species with total " + i + " rules");
-        return ret;
     }
 
 
