@@ -199,6 +199,7 @@ public class DatabaseResource implements Serializable {
         }
     }
 
+    @Deprecated
     public Map<Integer, SpeciesView> getSpecies(int userId) {
         // Getting species
         HashMap<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>(200);

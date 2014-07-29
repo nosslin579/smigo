@@ -28,6 +28,8 @@ public class SpeciesHandler {
     @Autowired
     private UserSession userSession;
     @Autowired
+    private SpeciesDao speciesDao;
+    @Autowired
     private Comparator<org.smigo.SpeciesView> speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
@@ -50,7 +52,7 @@ public class SpeciesHandler {
     }
 
     public Rule getRule(int ruleId) {
-        for (SpeciesView s : getSpecies().values())
+        for (SpeciesView s : speciesDao.getSpecies())
             for (Rule r : s.getRules())
                 if (r.getId() == ruleId)
                     return r;
@@ -75,21 +77,22 @@ public class SpeciesHandler {
     }
 
     public List<SpeciesView> getVisibleSpecies() {
-        final Map<Integer, SpeciesView> species = getSpecies();
-        List<SpeciesView> ret = new ArrayList<SpeciesView>();
-        for (SpeciesView s : species.values())
-            if (s.isDisplay())
-                ret.add(s);
+        final List<SpeciesView> ret = speciesDao.getSpecies();
         Collections.sort(ret, speciesComparator);
         return ret;
     }
 
     private Map<Integer, SpeciesView> getSpecies() {
-        return databaseResource.getSpecies(user.getId());
+        Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
+        for (SpeciesView s : speciesDao.getSpecies()) {
+            ret.put(s.getId(), s);
+
+        }
+        return ret;
     }
 
     public List<SpeciesView> getAllSpecies() {
-        List<SpeciesView> ret = new ArrayList<SpeciesView>(getSpecies().values());
+        List<SpeciesView> ret = new ArrayList<SpeciesView>(speciesDao.getSpecies());
         Collections.sort(ret, speciesComparator);
         return ret;
     }
