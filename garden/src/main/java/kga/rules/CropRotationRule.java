@@ -24,6 +24,7 @@ package kga.rules;
 
 import kga.Family;
 import kga.Hint;
+import kga.Species;
 import kga.Square;
 import kga.errors.RuleException;
 
@@ -38,8 +39,8 @@ public class CropRotationRule extends AbstractRule {
 
     private Family family;
 
-    public CropRotationRule(int ruleId, RuleType ruleType, Family family, String hintMessageKey) {
-        super(ruleId, ruleType, hintMessageKey);
+    public CropRotationRule(int ruleId, Species host, RuleType ruleType, Family family, String hintMessageKey) {
+        super(ruleId, host, ruleType, hintMessageKey);
         if (family == null)
             throw new RuleException("Family may not be null");
         this.family = family;

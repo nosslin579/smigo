@@ -31,7 +31,7 @@ public class JdbcFamilyDao implements FamilyDao {
         return jdbcTemplate.query(sql, new RowMapper<Family>() {
             @Override
             public Family mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Family(rs.getString("name"), rs.getInt("id"));
+                return new Family(rs.getInt("id"), rs.getString("name"));
             }
         });
     }

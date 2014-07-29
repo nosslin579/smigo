@@ -28,7 +28,7 @@ class FamilyPropertyEditor extends PropertyEditorSupport {
 //		log.debug("Converting " + text + " to Family");
         if (StringUtils.hasText(text)) {
             Integer id = Integer.valueOf(text);
-            setValue(id == 0 ? null : new Family("", id));
+            setValue(id == 0 ? null : new Family(id, ""));
         } else {
             throw new IllegalArgumentException("Cannot convert text '" + text + "', into a family");
         }

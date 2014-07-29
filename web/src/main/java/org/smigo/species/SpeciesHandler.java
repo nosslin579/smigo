@@ -32,6 +32,8 @@ public class SpeciesHandler {
     @Autowired
     private PlantDao plantDao;
     @Autowired
+    private RuleDao ruleDao;
+    @Autowired
     private FamilyDao familyDao;
     @Autowired
     private Comparator<org.smigo.SpeciesView> speciesComparator;
@@ -80,29 +82,24 @@ public class SpeciesHandler {
         }
     }
 
-    public List<SpeciesView> getVisibleSpecies() {
-        final List<SpeciesView> ret = speciesDao.getSpecies();
-        Collections.sort(ret, speciesComparator);
-        return ret;
-    }
-
-    private Map<Integer, SpeciesView> getSpecies() {
+    public Map<Integer, SpeciesView> getSpeciesMap() {
         Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
         for (SpeciesView s : speciesDao.getSpecies()) {
             ret.put(s.getId(), s);
-
+        }
+        final List<Rule> rules = ruleDao.getRules();
+        for (Rule r : rules) {
+            ret.get(r.getHost().getId()).addRule(r);
         }
         return ret;
     }
 
-    public List<SpeciesView> getAllSpecies() {
-        List<SpeciesView> ret = new ArrayList<SpeciesView>(speciesDao.getSpecies());
-        Collections.sort(ret, speciesComparator);
-        return ret;
+    public Collection<SpeciesView> getSpecies() {
+        return getSpeciesMap().values();
     }
 
     public SpeciesView getSpecies(Integer id) {
-        return getSpecies().get(id);
+        return getSpeciesMap().get(id);
     }
 
     public List<Family> getFamilies() {
@@ -120,7 +117,7 @@ public class SpeciesHandler {
     }
 
     public Garden getGarden() {
-        return new Garden(getSpecies(), getPlants());
+        return new Garden(getSpeciesMap(), getPlants());
     }
 
     private List<PlantData> getPlants() {

@@ -28,24 +28,19 @@ package kga;
  * @author Christian Nilsson
  */
 public class Family implements Comparable<Family> {
-    // private static java.util.logging.Logger log =
-    // java.util.logging.Logger.getLogger(Garden.class
-    // .getName());
+
+    private final int id;
     /**
      * The scientific name in latin
      */
     private String name;
-    /**
-     * The id is the unique identifier, a number between 7200 and 7299.
-     */
-    private final int id;
 
     /**
      * Creates a new family.
      *
      * @param id the unique identifier
      */
-    public Family(String name, int id) {
+    public Family(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -55,16 +50,12 @@ public class Family implements Comparable<Family> {
     }
 
     public String getName() {
-        if (name == null)
-            return "null";
         return name;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Family)
-            return ((Family) obj).getId() == id;
-        return false;
+        return obj instanceof Family && ((Family) obj).getId() == id;
     }
 
     @Override

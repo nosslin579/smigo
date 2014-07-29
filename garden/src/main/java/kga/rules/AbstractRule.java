@@ -1,5 +1,6 @@
 package kga.rules;
 
+import kga.Species;
 import kga.errors.RuleException;
 
 public abstract class AbstractRule implements Rule {
@@ -7,12 +8,14 @@ public abstract class AbstractRule implements Rule {
     private int id;
     private RuleType ruleType;
     private String hintMessageKey;
+    private Species host;
 
-    protected AbstractRule(int id, RuleType ruleType, String hintMessageKey) {
-        if (id == 0 || ruleType == null || hintMessageKey == null) {
+    protected AbstractRule(int id, Species host, RuleType ruleType, String hintMessageKey) {
+        if (id == 0 || host == null || ruleType == null || hintMessageKey == null) {
             throw new RuleException("Illegal values on rule, id:" + id);
         }
         this.id = id;
+        this.host = host;
         this.ruleType = ruleType;
         this.hintMessageKey = hintMessageKey;
     }
@@ -31,6 +34,11 @@ public abstract class AbstractRule implements Rule {
     @Override
     public String getMessageKey() {
         return ruleType.getMessageKey();
+    }
+
+    @Override
+    public Species getHost() {
+        return host;
     }
 
     @Override

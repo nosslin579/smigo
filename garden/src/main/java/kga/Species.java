@@ -78,8 +78,8 @@ public class Species {
     }
 
     public Rule addRule(Rule r) {
-        if (r == null)
-            throw new RuleException("Rule may not be null");
+        if (r == null || r.getHost().getId() != getId())
+            throw new RuleException("Illegal rule: " + r);
         rules.add(r);
         return r;
     }

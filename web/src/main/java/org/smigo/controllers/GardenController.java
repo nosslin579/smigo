@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,9 +50,9 @@ public class GardenController implements Serializable {
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale) {
         final List<SpeciesView> ret = new ArrayList<SpeciesView>();
-        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family("Frngium", 1)));
-        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family("Brazzicum", 2)));
-        ret.add(new SpeciesView(3, "Brassica Capitata1", false, true, new Family("Brazzicum1", 2)));
+        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family(1, "Frngium")));
+        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family(2, "Brazzicum")));
+        ret.add(new SpeciesView(3, "Brassica Capitata1", false, true, new Family(2, "Brazzicum1")));
         model.addAttribute("species", ret);
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
@@ -63,7 +64,7 @@ public class GardenController implements Serializable {
         log.debug("Displaying garden: " + year + ", squares:" + g.getAllSquares().size() + ", bounds:" + g.getBoundsFor(year));
         model.addAttribute("year", year);
         model.addAttribute("kgagarden", g);
-        final List<SpeciesView> visibleSpecies = speciesHandler.getVisibleSpecies();
+        final Collection<SpeciesView> visibleSpecies = speciesHandler.getSpecies();
         model.addAttribute("specieslist", visibleSpecies);
         model.addAttribute("speciesJson", visibleSpecies);
         return "garden.jsp";

@@ -53,7 +53,7 @@ public class SpeciesController implements Serializable {
         java.util.Collections.sort(ret);
         model.addAttribute("families", ret);
         model.addAttribute("ruleTypes", RuleType.values());
-        model.addAttribute("listofallspecies", speciesHandler.getAllSpecies());
+        model.addAttribute("listofallspecies", speciesHandler.getSpecies());
     }
 
     @RequestMapping(value = "/listspecies")
@@ -65,8 +65,8 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     public List<SpeciesView> getSpecies() {
         final List<SpeciesView> ret = new ArrayList<SpeciesView>();
-        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family("Frngium", 1)));
-        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family("Brazzicum", 2)));
+        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family(1, "Frngium")));
+        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family(2, "Brazzicum")));
         return ret;
     }
 

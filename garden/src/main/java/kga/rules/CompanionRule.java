@@ -37,8 +37,8 @@ import kga.errors.RuleException;
 public class CompanionRule extends AbstractRule implements Rule {
     private Species friend;
 
-    public CompanionRule(int id, RuleType ruleType, Species friend, String hintMessageKey) {
-        super(id, ruleType, hintMessageKey);
+    public CompanionRule(int id, Species host, RuleType ruleType, Species friend, String hintMessageKey) {
+        super(id, host, ruleType, hintMessageKey);
         if (friend == null) {
             throw new RuleException("Friend can not be null, id:" + id);
         }

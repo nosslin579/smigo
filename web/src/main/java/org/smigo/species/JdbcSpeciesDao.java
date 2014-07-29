@@ -1,7 +1,6 @@
 package org.smigo.species;
 
 import kga.Family;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.smigo.SpeciesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,11 +14,8 @@ import java.util.List;
 
 @Repository
 public class JdbcSpeciesDao implements SpeciesDao {
-    private static final String SELECT = "SELECT * FROM species";
+    private static final String SELECT = "SELECT * FROM species JOIN families ON families.id = species.family";
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -32,16 +28,15 @@ public class JdbcSpeciesDao implements SpeciesDao {
         return jdbcTemplate.query(sql, new Object[]{}, new RowMapper<SpeciesView>() {
             @Override
             public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
-                SpeciesView speciesView = new SpeciesView(
+                SpeciesView ret = new SpeciesView(
                         rs.getInt("species_id"),
-                        rs.getString("scientificname"),
+                        rs.getString("species.name"),
                         rs.getBoolean("item"),
                         rs.getBoolean("annual"),
-                        new Family("someFamily", rs.getInt("familyid")));
+                        new Family(rs.getInt("families.id"), rs.getString("families.name")));
 
-                speciesView.setIconFileName(rs.getString("iconname"));
-
-                return speciesView;
+                ret.setIconFileName(rs.getString("iconname"));
+                return ret;
             }
         });
     }

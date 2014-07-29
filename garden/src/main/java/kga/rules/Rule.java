@@ -1,6 +1,7 @@
 package kga.rules;
 
 import kga.Hint;
+import kga.Species;
 import kga.Square;
 
 public interface Rule {
@@ -21,4 +22,6 @@ public interface Rule {
     RuleType getRuleType();
 
     String getMessageKey();
+
+    Species getHost();
 }

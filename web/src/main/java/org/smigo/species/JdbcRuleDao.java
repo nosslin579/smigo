@@ -3,7 +3,6 @@ package org.smigo.species;
 import kga.Family;
 import kga.Species;
 import kga.rules.*;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,11 +15,8 @@ import java.util.List;
 
 @Repository
 public class JdbcRuleDao implements RuleDao {
-    private static final String SELECT = "SELECT * FROM rules";
+    private static final String SELECT = "SELECT * FROM rules LEFT JOIN families ON families.id = rules.causerfamily";
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -38,24 +34,24 @@ public class JdbcRuleDao implements RuleDao {
                 int gap = rs.getInt("gap");
                 Species causer = Species.create(rs.getInt("causer"));
                 Species host = Species.create(rs.getInt("host"));
-                Family family = new Family("", rs.getInt("causerfamily"));
+                Family family = new Family(rs.getInt("causerfamily"), rs.getString("families.name"));
 
                 if (RuleType.goodcompanion.getId() == type)
-                    return new CompanionRule(ruleId, RuleType.goodcompanion, causer, "hint.goodcompanion");
+                    return new CompanionRule(ruleId, host, RuleType.goodcompanion, causer, "hint.goodcompanion");
                 else if (RuleType.badcompanion.getId() == type)
-                    return new CompanionRule(ruleId, RuleType.badcompanion, causer, "hint.badcompanion");
+                    return new CompanionRule(ruleId, host, RuleType.badcompanion, causer, "hint.badcompanion");
                 else if (RuleType.fightdisease.getId() == type)
-                    return new CompanionRule(ruleId, RuleType.fightdisease, causer, "hint.fightdisease");
+                    return new CompanionRule(ruleId, host, RuleType.fightdisease, causer, "hint.fightdisease");
                 else if (RuleType.repelpest.getId() == type)
-                    return new CompanionRule(ruleId, RuleType.repelpest, causer, "hint.repelpest");
+                    return new CompanionRule(ruleId, host, RuleType.repelpest, causer, "hint.repelpest");
                 else if (RuleType.improvesflavor.getId() == type)
-                    return new CompanionRule(ruleId, RuleType.improvesflavor, causer, "hint.improvesflavor");
+                    return new CompanionRule(ruleId, host, RuleType.improvesflavor, causer, "hint.improvesflavor");
                 else if (RuleType.goodcroprotation.getId() == type)
-                    return new CropRotationRule(ruleId, RuleType.goodcroprotation, family, "hint.goodcroprotation");
+                    return new CropRotationRule(ruleId, host, RuleType.goodcroprotation, family, "hint.goodcroprotation");
                 else if (RuleType.badcroprotation.getId() == type)
-                    return new CropRotationRule(ruleId, RuleType.badcroprotation, family, "hint.badcroprotation");
+                    return new CropRotationRule(ruleId, host, RuleType.badcroprotation, family, "hint.badcroprotation");
                 else if (RuleType.speciesrepetition.getId() == type)
-                    return new RepetitionRule(ruleId, RuleType.speciesrepetition, gap, host, "hint.speciesrepetition");
+                    return new RepetitionRule(ruleId, host, RuleType.speciesrepetition, gap, "hint.speciesrepetition");
 
                 throw new RuntimeException("No such type of rule:" + type);
             }

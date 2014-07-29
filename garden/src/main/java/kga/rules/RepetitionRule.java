@@ -39,13 +39,11 @@ public class RepetitionRule extends AbstractRule {
      * years.
      */
     private int gap = 4;
-    private Species host;
 
-    public RepetitionRule(int ruleId, RuleType ruleType, int gap, Species host, String hintMessageKey) {
-        super(ruleId, ruleType, hintMessageKey);
+    public RepetitionRule(int ruleId, Species host, RuleType ruleType, int gap, String hintMessageKey) {
+        super(ruleId, host, ruleType, hintMessageKey);
         if (gap <= 0)
             throw new RuleException("Gap must be greater than 0");
-        this.host = host;
         this.gap = gap;
     }
 
@@ -56,9 +54,9 @@ public class RepetitionRule extends AbstractRule {
     @Override
     public Hint getHint(Square square) {
         for (Square s : square.getPreviousSurroundingSquares(gap, Rule.CLOSEST_NEIGHBOURS)) {
-            if (s.containsSpecies(host.getId())) {
+            if (s.containsSpecies(getHost().getId())) {
                 final String[] messageKeyArguments = {String.valueOf(gap)};
-                return new Hint(s, square, getHintMessageKey(), messageKeyArguments, host);
+                return new Hint(s, square, getHintMessageKey(), messageKeyArguments, getHost());
             }
         }
         return null;
