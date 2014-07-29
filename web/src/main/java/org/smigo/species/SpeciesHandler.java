@@ -32,6 +32,8 @@ public class SpeciesHandler {
     @Autowired
     private PlantDao plantDao;
     @Autowired
+    private FamilyDao familyDao;
+    @Autowired
     private Comparator<org.smigo.SpeciesView> speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
@@ -103,8 +105,8 @@ public class SpeciesHandler {
         return getSpecies().get(id);
     }
 
-    public Map<Integer, Family> getFamilies() {
-        return databaseResource.getFamilies();
+    public List<Family> getFamilies() {
+        return familyDao.getFamilies();
     }
 
     public void addYear(int year) {

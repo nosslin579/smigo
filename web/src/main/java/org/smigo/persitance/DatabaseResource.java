@@ -235,7 +235,7 @@ public class DatabaseResource implements Serializable {
             while (ruleRS.next()) {
                 SpeciesView host = ret.get(ruleRS.getInt("host"));
                 SpeciesView causer = ret.get(ruleRS.getInt("causer"));
-                Family family = getFamilies().get(ruleRS.getInt("causerfamily"));
+                Family family = new Family("asdf", 1);//getFamilies().get(ruleRS.getInt("causerfamily"));
 
                 Rule rule = ruleFactory.createRule(ruleRS.getInt("rule_id"),
                         ruleRS.getInt("type"), host, causer, ruleRS.getInt("gap"),

@@ -49,7 +49,7 @@ public class SpeciesController implements Serializable {
 
     @ModelAttribute
     public void populateModel(Model model) {
-        List<Family> ret = new ArrayList<Family>(speciesHandler.getFamilies().values());
+        List<Family> ret = new ArrayList<Family>(speciesHandler.getFamilies());
         java.util.Collections.sort(ret);
         model.addAttribute("families", ret);
         model.addAttribute("ruleTypes", RuleType.values());
