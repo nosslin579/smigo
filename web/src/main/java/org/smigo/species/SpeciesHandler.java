@@ -1,9 +1,6 @@
 package org.smigo.species;
 
-import kga.Family;
-import kga.Garden;
-import kga.PlantData;
-import kga.Square;
+import kga.*;
 import kga.rules.Rule;
 import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
@@ -87,9 +84,12 @@ public class SpeciesHandler {
         for (SpeciesView s : speciesDao.getSpecies()) {
             ret.put(s.getId(), s);
         }
+        //Add rules to species
         final List<Rule> rules = ruleDao.getRules();
         for (Rule r : rules) {
-            ret.get(r.getHost().getId()).addRule(r);
+            int hostId = r.getHost().getId();
+            Species s = ret.get(hostId);
+            s.addRule(r);
         }
         return ret;
     }

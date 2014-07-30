@@ -53,7 +53,7 @@ public class GardenController implements Serializable {
         ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family(1, "Frngium")));
         ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family(2, "Brazzicum")));
         ret.add(new SpeciesView(3, "Brassica Capitata1", false, true, new Family(2, "Brazzicum1")));
-        model.addAttribute("species", ret);
+        model.addAttribute("species", speciesHandler.getSpeciesMap());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }

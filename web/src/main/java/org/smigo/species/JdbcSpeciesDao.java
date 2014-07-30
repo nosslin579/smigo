@@ -35,7 +35,7 @@ public class JdbcSpeciesDao implements SpeciesDao {
                         rs.getBoolean("annual"),
                         new Family(rs.getInt("families.id"), rs.getString("families.name")));
 
-                ret.setIconFileName(rs.getString("iconname"));
+                ret.setIconFileName(rs.getString("iconfilename"));
                 return ret;
             }
         });
