@@ -1,5 +1,8 @@
 package kga.rules;
 
+import kga.Garden;
+import kga.Hint;
+import kga.Plant;
 import kga.Species;
 import kga.errors.RuleException;
 
@@ -39,6 +42,11 @@ public abstract class AbstractRule implements Rule {
     @Override
     public Species getHost() {
         return host;
+    }
+
+    @Override
+    public Hint getHint(Plant plant, Garden garden) {
+        return null;
     }
 
     @Override

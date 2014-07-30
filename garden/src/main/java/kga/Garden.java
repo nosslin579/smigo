@@ -33,8 +33,6 @@ import java.util.*;
  * @author Christian Nilsson
  */
 public class Garden implements Iterable<SquareIterator> {
-    private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(Garden.class
-            .getName());
 
     /**
      * The squares in the garden.
@@ -250,4 +248,76 @@ public class Garden implements Iterable<SquareIterator> {
         return false;
     }
 
+    /**
+     * Returns the eight nearest neighbors plus itself.
+     *
+     * @param location
+     * @return the eight nearest neighbors plus itself
+     */
+    public Collection<Square> getSurroundingSquares(Location location) {
+        return getSurroundingSquares(location, 1);
+    }
+
+    /**
+     * Returns neighboring squares plus itself.
+     *
+     * @param location
+     * @param radius   the radius (radius = 1 gives 9 squares, radius = 2 gives 25
+     *                 squares)
+     * @return neighboring squares plus itself
+     */
+    public Collection<Square> getSurroundingSquares(Location location, int radius) {
+        Collection<Square> surrounding = new HashSet<Square>();
+        for (Square s : getAllSquares()) {
+            int xDiff = Math.abs(location.getX() - s.getX());
+            int yDiff = Math.abs(location.getY() - s.getY());
+            if (s.getYear() == location.getYear() && xDiff <= radius && yDiff <= radius)
+                surrounding.add(s);
+        }
+        return surrounding;
+    }
+
+    /**
+     * Returns previous squares at same location.
+     *
+     * @param location
+     * @param yearsBack years back in time.
+     * @return previous squares at same location
+     */
+    public Collection<Square> getPreviousSquares(Location location, int yearsBack) {
+        Collection<Square> previous = new HashSet<Square>();
+        int earliestYear = location.getYear() - yearsBack;
+        for (Square s : getAllSquares()) {
+            if (s.getYear() < location.getYear() && s.getYear() >= earliestYear
+                    && s.getX() == location.getX() && s.getY() == location.getY()) {
+                previous.add(s);
+            }
+        }
+        return previous;
+    }
+
+    /**
+     * Returns neighboring squares and theirs previous squares.
+     */
+    public Collection<Square> getPreviousSurroundingSquares(Location location, int yearsBack, int radius) {
+        Collection<Square> ret = new HashSet<Square>();
+        int earliestYear = location.getYear() - yearsBack;
+        for (Square s : getAllSquares()) {
+            int xDiff = Math.abs(location.getX() - s.getX());
+            int yDiff = Math.abs(location.getY() - s.getY());
+            if (s.getYear() < location.getYear() && s.getYear() > earliestYear && xDiff <= radius && yDiff <= radius)
+                ret.add(s);
+        }
+        return ret;
+    }
+
+    public List<Hint> getHints() {
+        List<Hint> ret = new ArrayList<Hint>();
+        for (Square square : squares.values()) {
+            for (Plant plant : square.getPlants()) {
+                ret.addAll(plant.getHints(this));
+            }
+        }
+        return ret;
+    }
 }

@@ -22,9 +22,7 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.Species;
-import kga.Square;
+import kga.*;
 import kga.errors.RuleException;
 
 /**
@@ -45,11 +43,11 @@ public class PerennialRepetitionRule extends AbstractRule {
     private int allowedRepetitions = 0;
     private Species host;
 
-    public PerennialRepetitionRule(Species host, int gap, int allowedRepetitions) {
-        super(0, null, null, null);
-        this.host = host;
+    public PerennialRepetitionRule(int id, Species host, String hintMessageKey, int gap, int allowedRepetitions) {
+        super(id, host, RuleType.speciesrepetition, hintMessageKey);
         if (gap <= allowedRepetitions)
             throw new RuleException("Gap must be greater than allowed repetitions");
+        this.host = host;
         this.gap = gap;
         this.allowedRepetitions = allowedRepetitions;
     }
@@ -63,13 +61,16 @@ public class PerennialRepetitionRule extends AbstractRule {
     }
 
     @Override
-    public Hint getHint(Square square) {
+    public Hint getHint(Plant affected, Garden g) {
         // Getting squares way back
-        for (Square s : square.getPreviousSurroundingSquares(gap + allowedRepetitions, Rule.CLOSEST_NEIGHBOURS))
-            // Checking if squares contain host but not the squares within the allowed repetitions
-            if ((square.getYear() - allowedRepetitions) > s.getYear() && s.containsSpecies(host.getId())) {
-                return new Hint(s, square, getMessageKey(), host);
+        for (Square s : g.getPreviousSurroundingSquares(affected, gap + allowedRepetitions, Rule.CLOSEST_NEIGHBOURS)) {
+            for (Plant causing : s.getPlants()) {
+                // Checking if squares contain host but not the squares within the allowed repetitions
+                if ((s.getYear() - allowedRepetitions) > s.getYear() && affected.getSpecies().getId() == host.getId()) {
+                    return Hint.createHint(affected, causing, getHintMessageKey(), null);
+                }
             }
+        }
         return null;
     }
 
@@ -77,10 +78,6 @@ public class PerennialRepetitionRule extends AbstractRule {
     public String toString() {
         return super.toString() + " years back: " + gap;
     }
-
-//    public String getMessageKey() {
-//        return "hint.speciesrepetition";
-//    }
 
     @Override
     public RuleType getRuleType() {

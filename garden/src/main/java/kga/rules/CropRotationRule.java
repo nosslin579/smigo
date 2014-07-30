@@ -22,10 +22,7 @@
 
 package kga.rules;
 
-import kga.Family;
-import kga.Hint;
-import kga.Species;
-import kga.Square;
+import kga.*;
 import kga.errors.RuleException;
 
 /**
@@ -48,11 +45,16 @@ public class CropRotationRule extends AbstractRule {
     }
 
     @Override
-    public Hint getHint(Square square) {
-        for (Square s : square.getPreviousSquares(Rule.ONE_YEAR_BACK))
-            if (s.containsFamily(family))
-                return new Hint(s, square, getMessageKey(), s.getSpecies(family));
+    public Hint getHint(Plant affected, Garden garden) {
+        for (Square s : garden.getPreviousSquares(affected, Rule.ONE_YEAR_BACK)) {
+            for (Plant causing : s.getPlants()) {
+                if (causing.getSpecies().getFamily().getId() == family.getId()) {
+                    return Hint.createHint(affected, causing, getMessageKey(), null);
+                }
+            }
+        }
         return null;
+
     }
 
     public Family getFamily() {

@@ -29,49 +29,40 @@ package kga;
  * @author Christian Nilsson
  */
 public class Hint {
-    private Square source;
-    private Square target;
+    private Plant affectedPlant;
+    private Plant causingPlant;
     private String messageKey;
     private String[] messageKeyArguments;
-    /**
-     * The species that is the reason this hint exists.
-     */
-    private Species causer;
 
-    public Hint(Square source, Square target, String messageKey, String[] messageKeyArguments, Species causer) {
-        this.source = source;
-        this.target = target;
+    public Hint(Plant affectedPlant, Plant causingPlant, String messageKey, String[] messageKeyArguments) {
+        this.affectedPlant = affectedPlant;
+        this.causingPlant = causingPlant;
         this.messageKey = messageKey;
         this.messageKeyArguments = messageKeyArguments;
-        this.causer = causer;
     }
 
-    public Hint(Square source, Square target, String messageKey, Species causer) {
-        this(source, target, messageKey, new String[]{}, causer);
+    public Plant getAffectedPlant() {
+        return affectedPlant;
     }
 
-    public Square getSource() {
-        return source;
-    }
-
-    public Square getTarget() {
-        return target;
+    public Plant getCausingPlant() {
+        return causingPlant;
     }
 
     @Override
     public String toString() {
-        return "[hint at " + target + "]";
+        return "[hint at " + causingPlant + "]";
     }
 
     public String getMessageKey() {
         return messageKey;
     }
 
-    public Species getCauser() {
-        return causer;
-    }
-
     public String[] getMessageKeyArguments() {
         return messageKeyArguments;
+    }
+
+    public static Hint createHint(Plant affected, Plant causing, String hintMessageKey, String[] messageKeyArguments) {
+        return new Hint(affected, causing, hintMessageKey, messageKeyArguments);
     }
 }

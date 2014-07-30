@@ -120,7 +120,7 @@ public class SpeciesHandler {
         return new Garden(getSpeciesMap(), getPlants());
     }
 
-    private List<PlantData> getPlants() {
+    public List<PlantData> getPlants() {
         if (user.isAuthenticated()) {
             return plantDao.getPlants(user.getId());
         } else {
@@ -128,4 +128,7 @@ public class SpeciesHandler {
         }
     }
 
+    public List<Hint> getHints() {
+        return getGarden().getHints();
+    }
 }

@@ -22,9 +22,7 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.Species;
-import kga.Square;
+import kga.*;
 import kga.errors.RuleException;
 
 /**
@@ -52,11 +50,13 @@ public class RepetitionRule extends AbstractRule {
     }
 
     @Override
-    public Hint getHint(Square square) {
-        for (Square s : square.getPreviousSurroundingSquares(gap, Rule.CLOSEST_NEIGHBOURS)) {
-            if (s.containsSpecies(getHost().getId())) {
-                final String[] messageKeyArguments = {String.valueOf(gap)};
-                return new Hint(s, square, getHintMessageKey(), messageKeyArguments, getHost());
+    public Hint getHint(Plant affected, Garden garden) {
+        for (Square s : garden.getPreviousSurroundingSquares(affected, gap, Rule.CLOSEST_NEIGHBOURS)) {
+            for (Plant causing : s.getPlants()) {
+                if (causing.getSpecies().getId() == getHost().getId()) {
+                    final String[] messageKeyArguments = {getHost().getMessageKey(), String.valueOf(gap)};
+                    return Hint.createHint(affected, causing, getHintMessageKey(), messageKeyArguments);
+                }
             }
         }
         return null;

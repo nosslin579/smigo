@@ -22,34 +22,34 @@
 
 package kga.rules;
 
-import kga.Hint;
-import kga.Species;
-import kga.Square;
+import kga.*;
 import kga.errors.RuleException;
 
 /**
- * This rule gives a hint when planting a beneficial plant next to each other.
- * For instance onion next to carrot.
+ * This rule gives a hint when planting a two plant next to each other. Good or bad.
  *
  * @author Christian Nilsson
  */
 
 public class CompanionRule extends AbstractRule implements Rule {
-    private Species friend;
+    private Species companion;
 
-    public CompanionRule(int id, Species host, RuleType ruleType, Species friend, String hintMessageKey) {
+    public CompanionRule(int id, Species host, RuleType ruleType, Species companion, String hintMessageKey) {
         super(id, host, ruleType, hintMessageKey);
-        if (friend == null) {
+        if (companion == null) {
             throw new RuleException("Friend can not be null, id:" + id);
         }
-        this.friend = friend;
+        this.companion = companion;
     }
 
-    public Hint getHint(Square target) {
-        for (Square s : target.getSurroundingSquares()) {
-            if (s.containsSpecies(friend.getId())) {
-                final String[] messageKeyArguments = {friend.getMessageKey()};
-                return new Hint(s, target, getHintMessageKey(), messageKeyArguments, friend);
+    @Override
+    public Hint getHint(Plant affected, Garden garden) {
+        for (Square s : garden.getSurroundingSquares(affected)) {
+            for (Plant causing : s.getPlants()) {
+                if (causing.getSpecies().getId() == companion.getId()) {
+                    final String[] messageKeyArguments = {getHost().getMessageKey(), companion.getMessageKey()};
+                    return Hint.createHint(affected, causing, getHintMessageKey(), messageKeyArguments);
+                }
             }
         }
         return null;

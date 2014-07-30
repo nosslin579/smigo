@@ -1,7 +1,6 @@
 package kga;
 
 import kga.rules.Rule;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,12 +12,12 @@ import java.util.List;
  * @author Christian Nilsson
  */
 public class Plant implements PlantData {
-    private Species species;
-    private Square square;
+    private final YearXY location;
+    private final Species species;
 
     public Plant(Species species, Square square) {
-        this.square = square;
         this.species = species;
+        this.location = new YearXY(square.getYear(), square.getX(), square.getY());
     }
 
     /**
@@ -29,37 +28,15 @@ public class Plant implements PlantData {
     }
 
     /**
-     * Returns the square this plant resides in
-     */
-    @JsonIgnore
-    public Square getSquare() {
-        return square;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Plant) {
-            Plant comp = (Plant) obj;
-            return (comp.getSpecies().equals(species) && comp.getSquare().equals(square));
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return ((37 + species.getId()) + 37) * square.hashCode();
-    }
-
-    /**
      * Returns the hints for this plant. The collection does not contain any
      * null elements.
      *
      * @return the hints for this square
      */
-    public List<Hint> getHints() {
+    public List<Hint> getHints(Garden garden) {
         List<Hint> hints = new ArrayList<Hint>();
         for (Rule r : species.getRules())
-            hints.add(r.getHint(square));
+            hints.add(r.getHint(this, garden));
         // removing all null elements
         hints.removeAll(Collections.singleton(null));
         return hints;
@@ -73,16 +50,16 @@ public class Plant implements PlantData {
 
     @Override
     public int getX() {
-        return square.getX();
+        return location.getX();
     }
 
     @Override
     public int getY() {
-        return square.getY();
+        return location.getY();
     }
 
     @Override
     public int getYear() {
-        return square.getYear();
+        return location.getYear();
     }
 }

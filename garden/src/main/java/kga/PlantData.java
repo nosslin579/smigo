@@ -1,6 +1,6 @@
 package kga;
 
-public interface PlantData {
+public interface PlantData extends Location {
     int getSpeciesId();
 
     int getX();

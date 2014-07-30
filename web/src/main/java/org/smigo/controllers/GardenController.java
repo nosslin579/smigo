@@ -1,6 +1,5 @@
 package org.smigo.controllers;
 
-import kga.Family;
 import kga.Garden;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -49,11 +47,9 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale) {
-        final List<SpeciesView> ret = new ArrayList<SpeciesView>();
-        ret.add(new SpeciesView(1, "Frangus Saladus", false, true, new Family(1, "Frngium")));
-        ret.add(new SpeciesView(2, "Brassica Capitata", false, true, new Family(2, "Brazzicum")));
-        ret.add(new SpeciesView(3, "Brassica Capitata1", false, true, new Family(2, "Brazzicum1")));
         model.addAttribute("species", speciesHandler.getSpeciesMap());
+        model.addAttribute("plants", speciesHandler.getPlants());
+        model.addAttribute("hints", speciesHandler.getHints());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }
