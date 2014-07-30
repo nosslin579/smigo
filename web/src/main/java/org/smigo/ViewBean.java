@@ -1,6 +1,5 @@
 package org.smigo;
 
-import kga.Garden;
 import kga.Square;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ public class ViewBean {
     private UserSession userSession;
 
     public Collection<Square> getSquares() {
-        return Collections.singletonList(new Square(2002, 3, 3, new Garden()));
+        return Collections.singletonList(new Square(2002, 3, 3));
 //    return userSession.getGarden().getSquares().values();
     }
 }

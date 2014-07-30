@@ -39,13 +39,11 @@ public class Square implements Comparable<Square> {
     private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(Garden.class.getName());
     private int year, x, y;
     private List<Plant> plants;
-    private Garden garden;
 
     /**
      * Constructs a new Square.
      */
-    public Square(int year, int x, int y, List<Species> species, Garden garden) {
-        this.garden = garden;
+    public Square(int year, int x, int y, List<Species> species) {
         this.year = year;
         this.x = x;
         this.y = y;
@@ -57,118 +55,40 @@ public class Square implements Comparable<Square> {
     /**
      * Constructs a new empty Square
      */
-    public Square(int year, int x, int y, Garden garden) {
-        this(year, x, y, new ArrayList<Species>(4), garden);
+    public Square(int year, int x, int y) {
+        this(year, x, y, new ArrayList<Species>(4));
     }
 
     /**
      * Constructs a new Square.
      */
     public Square(int year, int x, int y, Species species, Garden garden) {
-        this(year, x, y, garden);
+        this(year, x, y);
         this.addSpecies(species);
     }
 
-    /**
-     * Adds a species if there is no item and specified species is already
-     * present. Calls squareChanged().
-     *
-     * @return true if added
-     */
     public boolean addSpecies(Species s) {
-        if (containsItem() || containsSpecies(s))
+        if (containsItem() || containsSpecies(s.getId()))
             return false;
         plants.add(new Plant(s, this));
-        squareChanged();
         return true;
     }
 
-    /**
-     * Adds a species if there is no item and specified species is already
-     * present. Calls squareChanged().
-     *
-     * @param s
-     *            the species
-     * @return true if added
-     */
-  /*
-   * public void addSpecies(Integer address) {
-	 * addSpecies(SpeciesResource.getSpecies(address)); }
-	 */
-
-    /**
-     * Removes species. Calls squareChanged().
-     *
-     * @param s the species
-     */
     public void removeSpecies(Species s) {
-        if (s != null && containsSpecies(s)) {
+        if (s != null && containsSpecies(s.getId())) {
             this.plants.remove(new Plant(s, this));
             this.plants.remove(null);
-            log.fine("Remove species " + s + " at grid " + x + ":" + y);
+            log.fine("Removed species " + s + " at grid " + x + ":" + y);
         } else {
             removeSpecies();
             // log.info("Remove at grid " + grid);
         }
-
-        squareChanged();
     }
 
-    /**
-     * This method is called when a species is added or removed. It notifies
-     * garden observer.squareChanged that this square has changed and also
-     * notifies garden observer.hintschanged to itself and its nearest neighbor.
-     */
-    public void squareChanged() {
-        for (GardenObserver o : garden.getObservers())
-            o.squareChanged(this);
-
-        // Updates hints for this year and all years beyond
-        for (Square h : garden.getAllSquares()) {
-            if (h.getYear() < getYear())
-                continue;
-            int xDiff = Math.abs(getX() - h.getX());
-            int yDiff = Math.abs(getY() - h.getY());
-            if (xDiff > 1 || yDiff > 1)
-                continue;
-            for (GardenObserver o : garden.getObservers())
-                o.hintsChanged(h);
-        }
-    }
-
-    /**
-     * Removes all species in this square and calls squareChanged().
-     */
     public void removeSpecies() {
         plants = new ArrayList<Plant>();
-        squareChanged();
     }
 
-    @Override
-    public int hashCode() {
-        return (((year + 37) + 37) * x + 37) * y;
-    }
-
-    /**
-     * Checks if squares is at same year and location. This method is not necessary,
-     * instead you can compare instances (square1 == square2).
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Square) {
-            Square s = (Square) obj;
-            return (this.year == s.year && this.x == s.getX() && this.y == s.getY());
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Checks square year.
-     *
-     * @param year the year
-     * @return true if same year
-     */
     public boolean isYear(int year) {
         return this.year == year;
     }
@@ -185,16 +105,6 @@ public class Square implements Comparable<Square> {
         return year;
     }
 
-    /**
-     * Check if square contains specified species
-     *
-     * @param s the species
-     * @return true if it contains species
-     */
-    public boolean containsSpecies(Species s) {
-        return plants.contains(new Plant(s, this));
-    }
-
     public boolean containsSpecies(int speciesId) {
         for (Plant plant : plants) {
             if (plant.getSpecies().getId() == speciesId) {
@@ -204,12 +114,6 @@ public class Square implements Comparable<Square> {
         return false;
     }
 
-    /**
-     * Checks if any species in this square belongs to specified family
-     *
-     * @param family the family
-     * @return
-     */
     public boolean containsFamily(Family family) {
         for (Plant p : plants) {
             if (p.getSpecies().getFamily().equals(family)) {
@@ -217,11 +121,6 @@ public class Square implements Comparable<Square> {
             }
         }
         return false;
-    }
-
-    @JsonIgnore
-    public int getSize() {
-        return plants.size();
     }
 
     @JsonIgnore
@@ -246,12 +145,9 @@ public class Square implements Comparable<Square> {
 
     @Override
     public String toString() {
-        return "Square year:" + year + " x:" + x + " y:" + y + " species:" + getSize();
+        return "Square year:" + year + " x:" + x + " y:" + y + " species:" + plants.size();
     }
 
-    /**
-     * @return all rules for all species in this square in one Collection
-     */
     @JsonIgnore
     public Collection<Rule> getRules() {
         Set<Rule> rules = new HashSet<Rule>();
@@ -260,18 +156,6 @@ public class Square implements Comparable<Square> {
         return rules;
     }
 
-    @JsonIgnore
-    public Collection<Rule> getVisibleRules() {
-        Set<Rule> rules = new HashSet<Rule>();
-        for (Plant p : plants)
-            for (Rule r : p.getSpecies().getRules())
-                rules.add(r);
-        return rules;
-    }
-
-    /**
-     * @return all species that are perennials or items
-     */
     @JsonIgnore
     public List<Species> getPerennialSpecies() {
         List<Species> perennialSpecies = new ArrayList<Species>();
@@ -296,12 +180,6 @@ public class Square implements Comparable<Square> {
         return 0;
     }
 
-    /**
-     * Returns the first occurrence of species that belongs to family
-     *
-     * @param family the family
-     * @return the first occurrence of species that belongs to family
-     */
     public Species getSpecies(Family family) {
         for (Plant p : plants)
             if (p.getSpecies().getFamily().equals(family))

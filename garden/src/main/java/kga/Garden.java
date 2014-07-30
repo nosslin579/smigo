@@ -26,19 +26,9 @@ import kga.errors.GardenException;
 
 import java.util.*;
 
-/**
- * The core class. Garden is responsible for adding/removing squares. This class
- * represent the garden were all squares are.
- *
- * @author Christian Nilsson
- */
 public class Garden implements Iterable<SquareIterator> {
 
-    /**
-     * The squares in the garden.
-     */
     private Map<YearXY, Square> squares;
-    private List<GardenObserver> observers = new ArrayList<GardenObserver>();
     private int id;
 
     public Garden(Map<Integer, ? extends Species> species, List<PlantData> plants) {
@@ -51,31 +41,13 @@ public class Garden implements Iterable<SquareIterator> {
         }
     }
 
-    /**
-     * Creating a new empty garden
-     */
     public Garden() {
         this(new HashMap<Integer, Species>(), new ArrayList<PlantData>());
-    }
-
-    public List<GardenObserver> getObservers() {
-        return observers;
-    }
-
-    public void addObserver(GardenObserver observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(GardenObserver observer) {
-        observers.add(observer);
     }
 
     /**
      * Add new year to garden. Copies items and perennials from latest year to
      * the new year.
-     *
-     * @param newYear the year to be added
-     * @throws GardenException
      */
     public void addYear(int newYear) {
         SortedSet<Integer> years = getYears();
@@ -112,7 +84,7 @@ public class Garden implements Iterable<SquareIterator> {
         Collection<Square> copyOfSquares = new ArrayList<Square>(squares.values());
         for (Square s : copyOfSquares)
             if (s.isYear(fromYear)) {
-                Square copy = new Square(toYear, s.getX(), s.getY(), s.getPerennialSpecies(), this);
+                Square copy = new Square(toYear, s.getX(), s.getY(), s.getPerennialSpecies());
                 if (!copy.getPlants().isEmpty())
                     squares.put(s.getYearXY(), copy);
             }
@@ -147,7 +119,7 @@ public class Garden implements Iterable<SquareIterator> {
         // if square already exist return that one
         if (newSquare != null)
             return newSquare;
-        newSquare = new Square(year, x, y, this);
+        newSquare = new Square(year, x, y);
         squares.put(newSquare.getYearXY(), newSquare);
         return newSquare;
     }

@@ -50,6 +50,8 @@
         };
 
         $scope.species = ${f:toJson(species)};
+        $scope.plants = ${f:toJson(plants)};
+        $scope.hints = ${f:toJson(hints)};
 
         $scope.refresh = function () {
             smigolog("refresh");

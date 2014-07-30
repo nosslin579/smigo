@@ -12,12 +12,12 @@ import java.util.List;
  * @author Christian Nilsson
  */
 public class Plant implements PlantData {
-    private final YearXY location;
+    private final Square square;
     private final Species species;
 
     public Plant(Species species, Square square) {
         this.species = species;
-        this.location = new YearXY(square.getYear(), square.getX(), square.getY());
+        this.square = square;
     }
 
     /**
@@ -50,16 +50,16 @@ public class Plant implements PlantData {
 
     @Override
     public int getX() {
-        return location.getX();
+        return square.getX();
     }
 
     @Override
     public int getY() {
-        return location.getY();
+        return square.getY();
     }
 
     @Override
     public int getYear() {
-        return location.getYear();
+        return square.getYear();
     }
 }
