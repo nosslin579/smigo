@@ -11,6 +11,7 @@ function smigoerror(str, obj) {
     console.log(str, obj);
 }
 
+/*
 (function ($) {
   $.fn.hasScrollBar = function () {
     return this.get(0).scrollHeight > this.height();
@@ -32,4 +33,4 @@ function smigoerror(str, obj) {
 //		smigolog('Comparing width' + $this.width() + ' ' + $this.parent().get(0).width());
     return this;
   }
-})(jQuery);
+})(jQuery);*/

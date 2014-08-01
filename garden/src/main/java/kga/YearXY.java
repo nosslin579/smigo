@@ -16,6 +16,11 @@ public class YearXY implements Location, Comparable<YearXY> {
     }
 
     @Override
+    public String toString() {
+        return "y" + year + "x" + x + "y" + y;
+    }
+
+    @Override
     public int hashCode() {
         return (((year + 37) + 37) * x + 37) * y;
     }

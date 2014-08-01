@@ -22,6 +22,8 @@
 
 package kga;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import kga.errors.GardenException;
 
 import java.util.*;
@@ -29,7 +31,6 @@ import java.util.*;
 public class Garden implements Iterable<SquareIterator> {
 
     private Map<YearXY, Square> squares;
-    private int id;
 
     public Garden(Map<Integer, ? extends Species> species, List<PlantData> plants) {
         squares = new HashMap<YearXY, Square>();
@@ -131,10 +132,6 @@ public class Garden implements Iterable<SquareIterator> {
         return squares.get(new YearXY(year, x, y));
     }
 
-    public Collection<Square> getAllSquares() {
-        return squares.values();
-    }
-
     /**
      * Returns all squares for specified year.
      *
@@ -188,16 +185,12 @@ public class Garden implements Iterable<SquareIterator> {
         return ret;
     }
 
-    public Map<YearXY, Square> getSquares() {
-        return squares;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Map<Integer, Collection<Square>> getSquares() {
+        Multimap<Integer, Square> ret = ArrayListMultimap.create();
+        for (Square square : squares.values()) {
+            ret.put(square.getYear(), square);
+        }
+        return ret.asMap();
     }
 
     @Override
@@ -210,7 +203,7 @@ public class Garden implements Iterable<SquareIterator> {
     }
 
     public boolean hasSpecies(int id) {
-        for (Square s : getAllSquares()) {
+        for (Square s : squares.values()) {
             for (Plant p : s.getPlants()) {
                 if (p.getSpecies().getId() == id) {
                     return true;
@@ -240,7 +233,7 @@ public class Garden implements Iterable<SquareIterator> {
      */
     public Collection<Square> getSurroundingSquares(Location location, int radius) {
         Collection<Square> surrounding = new HashSet<Square>();
-        for (Square s : getAllSquares()) {
+        for (Square s : squares.values()) {
             int xDiff = Math.abs(location.getX() - s.getX());
             int yDiff = Math.abs(location.getY() - s.getY());
             if (s.getYear() == location.getYear() && xDiff <= radius && yDiff <= radius)
@@ -259,7 +252,7 @@ public class Garden implements Iterable<SquareIterator> {
     public Collection<Square> getPreviousSquares(Location location, int yearsBack) {
         Collection<Square> previous = new HashSet<Square>();
         int earliestYear = location.getYear() - yearsBack;
-        for (Square s : getAllSquares()) {
+        for (Square s : squares.values()) {
             if (s.getYear() < location.getYear() && s.getYear() >= earliestYear
                     && s.getX() == location.getX() && s.getY() == location.getY()) {
                 previous.add(s);
@@ -274,7 +267,7 @@ public class Garden implements Iterable<SquareIterator> {
     public Collection<Square> getPreviousSurroundingSquares(Location location, int yearsBack, int radius) {
         Collection<Square> ret = new HashSet<Square>();
         int earliestYear = location.getYear() - yearsBack;
-        for (Square s : getAllSquares()) {
+        for (Square s : squares.values()) {
             int xDiff = Math.abs(location.getX() - s.getX());
             int yDiff = Math.abs(location.getY() - s.getY());
             if (s.getYear() < location.getYear() && s.getYear() > earliestYear && xDiff <= radius && yDiff <= radius)

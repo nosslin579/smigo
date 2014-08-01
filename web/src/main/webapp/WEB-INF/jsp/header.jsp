@@ -15,7 +15,7 @@
     <%--<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />--%>
     <link rel="stylesheet" type="text/css" href="/static/css/structure.css">
     <link rel="stylesheet" type="text/css" href="/static/css/firstlady.css">
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+    <%--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>--%>
     <script type="text/javascript" src="/static/js/common.js"></script>
 </head>
 

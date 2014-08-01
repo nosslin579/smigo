@@ -48,7 +48,7 @@ public class GardenController implements Serializable {
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale) {
         model.addAttribute("species", speciesHandler.getSpeciesMap());
-        model.addAttribute("plants", speciesHandler.getPlants());
+        model.addAttribute("garden", speciesHandler.getGarden());
         model.addAttribute("hints", speciesHandler.getHints());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
@@ -57,7 +57,7 @@ public class GardenController implements Serializable {
     @RequestMapping(value = "/garden/{year}")
     public String getGarden(@PathVariable Integer year, Model model) {
         Garden g = speciesHandler.getGarden();
-        log.debug("Displaying garden: " + year + ", squares:" + g.getAllSquares().size() + ", bounds:" + g.getBoundsFor(year));
+//        log.debug("Displaying garden: " + year + ", squares:" + g.getSquares().size() + ", bounds:" + g.getBoundsFor(year));
         model.addAttribute("year", year);
         model.addAttribute("kgagarden", g);
         final Collection<SpeciesView> visibleSpecies = speciesHandler.getSpecies();
