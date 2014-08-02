@@ -56,23 +56,23 @@ table {
 /* ###############the garden grid ##################################*/
 .square {
     background-color: green;
-    width: 3em;
-    height: 3em;
+    width: 48px;
+    height: 48px;
     position: absolute;
 }
 
 #grid {
     position: relative;
     background-color: grey;
-    width: 10040em;
-    height: 10020em;
-    margin-left: -9960em;
-    margin-top: -9980em;
+    width: 100400px;
+    height: 100200px;
+    margin-left: -99600px;
+    margin-top: -99800px;
 }
 
 #peephole {
-    width: 60em;
-    height: 30em;
+    width: 400px;
+    height: 200px;
     overflow: scroll;
     margin: 3em;
 }

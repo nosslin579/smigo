@@ -31,28 +31,30 @@ app.controller('GardenController', function ($scope, $http) {
     };
 
     $scope.addPlant = function (clickEvent) {
-        console.log("addplant", [clickEvent, this]);
-        /*
-         var parentOffset = $(this).parent().offset();
-         $scope.squares.push({
-         x: 5,
-         y: 5,
-         year: $scope.currentYear,
-         plants: [
-         {
-         speciesId: $scope.currentSpecies.id,
-         species: $scope.currentSpecies,
-         x: 5,
-         y: 5,
-         year: $scope.currentYear
-         }
-         ]
-         });
-         */
+        smigolog("addplant", [clickEvent, this]);
+        var plantCoord = {
+            x: Math.floor((clickEvent.offsetX - 100000) / 48),
+            y: Math.floor((clickEvent.offsetY - 100000) / 48)
+        };
+        console.log(plantCoord);
+        $scope.squares.push({
+            x: plantCoord.x,
+            y: plantCoord.y,
+            year: this.currentYear,
+            plants: [
+                {
+                    speciesId: this.currentSpecies.id,
+                    species: this.currentSpecies,
+                    x: plantCoord.x,
+                    y: plantCoord.y,
+                    year: this.currentYear
+                }
+            ]
+        });
     };
 
     $scope.gridSize = function (squares) {
-        var xmax = -9999, ymax = -99999, xmin = 9999, ymin = 9999;
+        var xmax = -4, ymax = -2, xmin = 4, ymin = 2;
         angular.forEach(squares, function (square, index) {
             xmax = Math.max(square.x, xmax);
             ymax = Math.max(square.y, ymax);
@@ -60,18 +62,18 @@ app.controller('GardenController', function ($scope, $http) {
             ymin = Math.min(square.y, ymin);
         });
         return {
-            'margin-top': (-10000 + 3 + Math.abs(ymin) * 3) + 'em',
-            'width': (10000 + 6 + Math.abs(xmax) * 3) + 'em',
-            'height': (10000 + 6 + Math.abs(ymax) * 3) + 'em',
-            'margin-left': (-10000 + 3 + Math.abs(xmin) * 3) + 'em'
+            'margin-top': (-100000 + 48 + Math.abs(ymin) * 48) + 'px',
+            'width': (100000 + 96 + Math.abs(xmax) * 48) + 'px',
+            'height': (100000 + 96 + Math.abs(ymax) * 48) + 'px',
+            'margin-left': (-100000 + 48 + Math.abs(xmin) * 48) + 'px'
         };
     };
 
     $scope.squarePostion = function (square) {
         smigolog('squarePostion', square);
         return {
-            top: square.y * 3 + 10000 + 'em',
-            left: square.x * 3 + 10000 + 'em'
+            top: square.y * 48 + 100000 + 'px',
+            left: square.x * 48 + 100000 + 'px'
         };
     };
 
