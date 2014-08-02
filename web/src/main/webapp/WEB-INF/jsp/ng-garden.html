@@ -1,0 +1,23 @@
+<div id="asdf"></div>
+<div>
+    <a ng-repeat="year in garden.years" href="" ng-click="selectYear(year)">{{year}}</a>
+</div>
+
+<div>
+    <div id="peephole">
+        <div id="grid" ng-click="addPlant($event)" ng-style="gridSize(squares)">
+            <div ng-repeat="s in squares" class="square" ng-style="squarePostion(s)">
+                <div ng-repeat="p in s.plants">
+                    <%--{{p.species.messageKey | translate}}--%>{{'x:'+p.x + ', y:' + p.y}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div ng-repeat="s in species">
+        <a href="" ng-click="selectAction(s)">{{s.scientificName}} {{s | translate}}</a>
+    </div>
+    <a href="" ng-click="refresh()">Refresh</a>
+</div>

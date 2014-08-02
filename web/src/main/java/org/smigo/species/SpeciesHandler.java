@@ -4,6 +4,7 @@ import kga.*;
 import kga.rules.Rule;
 import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
+import org.smigo.entities.PlantDataBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.user.User;
 import org.smigo.user.UserSession;
@@ -121,11 +122,23 @@ public class SpeciesHandler {
     }
 
     public List<PlantData> getPlants() {
-        if (user.isAuthenticated()) {
-            return plantDao.getPlants(user.getId());
-        } else {
-            return userSession.getPlants();
-        }
+        List<PlantData> ret = new ArrayList<PlantData>();
+        ret.add(new PlantDataBean(1, 2001, 0, 0));
+        ret.add(new PlantDataBean(1, 2002, 0, 0));
+        ret.add(new PlantDataBean(1, 2002, 1, 1));
+        ret.add(new PlantDataBean(1, 2002, 2, 2));
+        ret.add(new PlantDataBean(1, 2002, 3, 3));
+        ret.add(new PlantDataBean(1, 2002, 4, 4));
+        ret.add(new PlantDataBean(1, 2002, -1, -1));
+        ret.add(new PlantDataBean(1, 2002, -2, -2));
+        ret.add(new PlantDataBean(1, 2002, -3, -3));
+        ret.add(new PlantDataBean(1, 2002, -4, -4));
+        return ret;
+//        if (user.isAuthenticated()) {
+//            return plantDao.getPlants(user.getId());
+//        } else {
+//            return userSession.getPlants();
+//        }
     }
 
     public List<Hint> getHints() {

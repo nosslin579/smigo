@@ -17,6 +17,11 @@
     <link rel="stylesheet" type="text/css" href="/static/css/firstlady.css">
     <%--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>--%>
     <script type="text/javascript" src="/static/js/common.js"></script>
+    <script type="text/javascript" src="/static/js/angular.js"></script>
+    <script type="text/javascript" src="/static/js/angular-route.js"></script>
+    <%--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js"></script>--%>
+    <%--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>--%>
+
 </head>
 
 <body>

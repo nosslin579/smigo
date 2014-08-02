@@ -53,48 +53,28 @@ table {
     display: none;
 }
 
-/* the garden grid*/
-
-#thegrid .gridrow {
-    white-space: nowrap;
-    font-size: 0;
-}
-
-#thegrid .gridsquarecontainer {
-    display: inline-block;
-    width: 48px;
-    height: 48px;
-}
-
-#thegrid .gridsquarecontainer:hover .gridsquaretooltip {
-    display: block;
-}
-
-#thegrid .gridsquaretooltip {
-    z-index: 100;
-    display: none;
+/* ###############the garden grid ##################################*/
+.square {
+    background-color: green;
+    width: 3em;
+    height: 3em;
     position: absolute;
-    background-color: #fff;
-    overflow: hidden;
 }
 
-#thegrid .gridsquaresquare {
-
+#grid {
+    position: relative;
+    background-color: grey;
+    width: 10040em;
+    height: 10020em;
+    margin-left: -9960em;
+    margin-top: -9980em;
 }
 
-#thegrid .gridsquaretooltipitem {
-    float: left;
-    font-size: 14px;
-}
-
-#thegrid .speciesimage {
-
-}
-
-#thegrid .smallspeciesimage {
-    width: 24px;
-    height: 24px;
-    float: left;
+#peephole {
+    width: 60em;
+    height: 30em;
+    overflow: scroll;
+    margin: 3em;
 }
 
 /*############# selectspecieslist in garden #################*/
