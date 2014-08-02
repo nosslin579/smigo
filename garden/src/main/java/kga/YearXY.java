@@ -9,6 +9,10 @@ package kga;
 public class YearXY implements Location, Comparable<YearXY> {
     private int year, x, y;
 
+    public YearXY(Location location) {
+        this(location.getYear(), location.getX(), location.getY());
+    }
+
     public YearXY(int year, int x, int y) {
         this.year = year;
         this.y = y;

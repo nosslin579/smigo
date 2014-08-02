@@ -1,6 +1,6 @@
 <div id="asdf"></div>
 <div>
-    <a ng-repeat="year in garden.years" href="" ng-click="selectYear(year)">{{year}}</a>
+    <a ng-repeat="(year, squares) in garden.squares" href="" ng-click="selectYear(year)">{{year}}</a>
 </div>
 
 <div>
@@ -9,7 +9,7 @@
             <div style="top:99999px;left:99999px;position: absolute;width: 2px;height: 2px; background-color: #000000"></div>
             <div ng-repeat="s in squares" class="square" ng-style="squarePostion(s)">
                 <div ng-repeat="p in s.plants">
-                    <%--{{p.species.messageKey | translate}}--%>{{'x:'+p.x + ', y:' + p.y}}
+                    <%--{{p.species.messageKey | translate}}--%>{{'x:'+p.location.x + ', y:' + p.location.y}}
                 </div>
             </div>
         </div>

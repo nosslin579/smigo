@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Christian Nilsson
  */
-public class Plant implements PlantData {
+public class Plant {
     private final Square square;
     private final Species species;
 
@@ -43,23 +43,7 @@ public class Plant implements PlantData {
 
     }
 
-    @Override
-    public int getSpeciesId() {
-        return species.getId();
-    }
-
-    @Override
-    public int getX() {
-        return square.getX();
-    }
-
-    @Override
-    public int getY() {
-        return square.getY();
-    }
-
-    @Override
-    public int getYear() {
-        return square.getYear();
+    public Location getLocation() {
+        return square.getLocation();
     }
 }

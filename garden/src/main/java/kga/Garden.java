@@ -28,16 +28,16 @@ import kga.errors.GardenException;
 
 import java.util.*;
 
-public class Garden implements Iterable<SquareIterator> {
+public class Garden {
 
-    private Map<YearXY, Square> squares;
+    private Map<Location, Square> squares;
 
     public Garden(Map<Integer, ? extends Species> species, List<PlantData> plants) {
-        squares = new HashMap<YearXY, Square>();
+        squares = new HashMap<Location, Square>();
         if (plants != null) {
             for (PlantData p : plants) {
                 Species s = species.get(p.getSpeciesId());
-                this.addOrGetSquare(p.getYear(), p.getX(), p.getY()).addSpecies(s);
+                this.addOrGetSquare(p).addSpecies(s);
             }
         }
     }
@@ -51,7 +51,7 @@ public class Garden implements Iterable<SquareIterator> {
      * the new year.
      */
     public void addYear(int newYear) {
-        SortedSet<Integer> years = getYears();
+        SortedSet<Integer> years = new TreeSet<Integer>(getSquares().keySet());
         if (years.contains(newYear))
             throw new GardenException("Cant add year since year " + newYear + " already exists", "AddYear.YearAlreadyExists");
         copyPermanentSquares(years.last(), newYear);
@@ -59,18 +59,14 @@ public class Garden implements Iterable<SquareIterator> {
             throw new GardenException("No plants added ", "AddYear.NoItemsOrPerennials");
     }
 
-    public List<Plant> getPlants(int year) {
-        List<Plant> ret = new ArrayList<Plant>();
+    public List<PlantData> getPlants(int year) {
+        List<PlantData> ret = new ArrayList<PlantData>();
         for (Square s : squares.values())
-            if (s.getYear() == year)
-                ret.addAll(s.getPlants());
-        return ret;
-    }
-
-    public List<Plant> getPlants() {
-        List<Plant> ret = new ArrayList<Plant>();
-        for (Square s : squares.values())
-            ret.addAll(s.getPlants());
+            if (s.isYear(year)) {
+                for (Plant plant : s.getPlants()) {
+                    ret.add(new PlantBean(plant));
+                }
+            }
         return ret;
     }
 
@@ -85,23 +81,10 @@ public class Garden implements Iterable<SquareIterator> {
         Collection<Square> copyOfSquares = new ArrayList<Square>(squares.values());
         for (Square s : copyOfSquares)
             if (s.isYear(fromYear)) {
-                Square copy = new Square(toYear, s.getX(), s.getY(), s.getPerennialSpecies());
+                Square copy = new Square(new YearXY(toYear, s.getLocation().getX(), s.getLocation().getY()), s.getPerennialSpecies());
                 if (!copy.getPlants().isEmpty())
-                    squares.put(s.getYearXY(), copy);
+                    squares.put(s.getLocation(), copy);
             }
-    }
-
-    /**
-     * Returns a sorted set of all the year available in this garden.
-     *
-     * @return a sorted set of all the years
-     */
-    public SortedSet<Integer> getYears() {
-        SortedSet<Integer> years = new TreeSet<Integer>();
-        if (squares != null && squares.size() != 0)
-            for (Square s : squares.values())
-                years.add(s.getYear());
-        return years;
     }
 
     public String toString() {
@@ -114,22 +97,22 @@ public class Garden implements Iterable<SquareIterator> {
      *
      * @return the added or existing square
      */
-    public Square addOrGetSquare(int year, int x, int y) {
+    public Square addOrGetSquare(Location location) {
         // log.info("Add square at " + grid);
-        Square newSquare = getSquare(year, x, y);
+        Square newSquare = getSquare(location);
         // if square already exist return that one
         if (newSquare != null)
             return newSquare;
-        newSquare = new Square(year, x, y);
-        squares.put(newSquare.getYearXY(), newSquare);
+        newSquare = new Square(location);
+        squares.put(newSquare.getLocation(), newSquare);
         return newSquare;
     }
 
     /**
      * Returns square at year and location or null if not present.
      */
-    public Square getSquare(int year, int x, int y) {
-        return squares.get(new YearXY(year, x, y));
+    public Square getSquare(Location location) {
+        return squares.get(location);
     }
 
     /**
@@ -153,7 +136,7 @@ public class Garden implements Iterable<SquareIterator> {
      */
     public void deleteYear(int year) {
         for (Square s : getSquaresFor(year))
-            squares.remove(s.getYearXY());
+            squares.remove(s.getLocation());
     }
 
     public void deleteYears(Set<Integer> years) {
@@ -161,45 +144,12 @@ public class Garden implements Iterable<SquareIterator> {
             deleteYear(y);
     }
 
-    /**
-     * Returns the bounds
-     *
-     * @param year
-     * @return the bounds
-     */
-    public Bounds getBoundsFor(int year) {
-        Collection<Square> squaresAtYear = getSquaresFor(year);
-        squaresAtYear.add(addOrGetSquare(year, 0, 0));
-        if (getPlants(year).isEmpty())
-            return new Bounds(-6, -3, 6, 3);
-        Bounds ret = new Bounds(-2, -2, 2, 2);
-        for (Square s : squaresAtYear) {
-            if (!s.getPlants().isEmpty()) {
-                ret.setMiny(Math.min(s.getY(), ret.getMiny()));
-                ret.setMinx(Math.min(s.getX(), ret.getMinx()));
-                ret.setMaxx(Math.max(s.getX(), ret.getMaxx()));
-                ret.setMaxy(Math.max(s.getY(), ret.getMaxy()));
-            }
-        }
-        ret.increseBounds();
-        return ret;
-    }
-
     public Map<Integer, Collection<Square>> getSquares() {
         Multimap<Integer, Square> ret = ArrayListMultimap.create();
         for (Square square : squares.values()) {
-            ret.put(square.getYear(), square);
+            ret.put(square.getLocation().getYear(), square);
         }
         return ret.asMap();
-    }
-
-    @Override
-    public Iterator<SquareIterator> iterator() {
-        return new YearIterator(this);
-    }
-
-    public Iterator<SquareIterator> getIterator() {
-        return iterator();
     }
 
     public boolean hasSpecies(int id) {
@@ -234,9 +184,9 @@ public class Garden implements Iterable<SquareIterator> {
     public Collection<Square> getSurroundingSquares(Location location, int radius) {
         Collection<Square> surrounding = new HashSet<Square>();
         for (Square s : squares.values()) {
-            int xDiff = Math.abs(location.getX() - s.getX());
-            int yDiff = Math.abs(location.getY() - s.getY());
-            if (s.getYear() == location.getYear() && xDiff <= radius && yDiff <= radius)
+            int xDiff = Math.abs(location.getX() - s.getLocation().getX());
+            int yDiff = Math.abs(location.getY() - s.getLocation().getY());
+            if (s.getLocation().getYear() == location.getYear() && xDiff <= radius && yDiff <= radius)
                 surrounding.add(s);
         }
         return surrounding;
@@ -253,8 +203,8 @@ public class Garden implements Iterable<SquareIterator> {
         Collection<Square> previous = new HashSet<Square>();
         int earliestYear = location.getYear() - yearsBack;
         for (Square s : squares.values()) {
-            if (s.getYear() < location.getYear() && s.getYear() >= earliestYear
-                    && s.getX() == location.getX() && s.getY() == location.getY()) {
+            if (s.getLocation().getYear() < location.getYear() && s.getLocation().getYear() >= earliestYear
+                    && s.getLocation().getX() == location.getX() && s.getLocation().getY() == location.getY()) {
                 previous.add(s);
             }
         }
@@ -268,9 +218,9 @@ public class Garden implements Iterable<SquareIterator> {
         Collection<Square> ret = new HashSet<Square>();
         int earliestYear = location.getYear() - yearsBack;
         for (Square s : squares.values()) {
-            int xDiff = Math.abs(location.getX() - s.getX());
-            int yDiff = Math.abs(location.getY() - s.getY());
-            if (s.getYear() < location.getYear() && s.getYear() > earliestYear && xDiff <= radius && yDiff <= radius)
+            int xDiff = Math.abs(location.getX() - s.getLocation().getX());
+            int yDiff = Math.abs(location.getY() - s.getLocation().getY());
+            if (s.getLocation().getYear() < location.getYear() && s.getLocation().getYear() > earliestYear && xDiff <= radius && yDiff <= radius)
                 ret.add(s);
         }
         return ret;

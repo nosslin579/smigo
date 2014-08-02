@@ -32,22 +32,18 @@ app.controller('GardenController', function ($scope, $http) {
 
     $scope.addPlant = function (clickEvent) {
         smigolog("addplant", [clickEvent, this]);
-        var plantCoord = {
+        var location = {
             x: Math.floor((clickEvent.offsetX - 100000) / 48),
-            y: Math.floor((clickEvent.offsetY - 100000) / 48)
+            y: Math.floor((clickEvent.offsetY - 100000) / 48),
+            year: this.currentYear
         };
-        console.log(plantCoord);
+        console.log(location);
         $scope.squares.push({
-            x: plantCoord.x,
-            y: plantCoord.y,
-            year: this.currentYear,
+            location: location,
             plants: [
                 {
-                    speciesId: this.currentSpecies.id,
                     species: this.currentSpecies,
-                    x: plantCoord.x,
-                    y: plantCoord.y,
-                    year: this.currentYear
+                    location: location
                 }
             ]
         });
@@ -56,10 +52,10 @@ app.controller('GardenController', function ($scope, $http) {
     $scope.gridSize = function (squares) {
         var xmax = -4, ymax = -2, xmin = 4, ymin = 2;
         angular.forEach(squares, function (square, index) {
-            xmax = Math.max(square.x, xmax);
-            ymax = Math.max(square.y, ymax);
-            xmin = Math.min(square.x, xmin);
-            ymin = Math.min(square.y, ymin);
+            xmax = Math.max(square.location.x, xmax);
+            ymax = Math.max(square.location.y, ymax);
+            xmin = Math.min(square.location.x, xmin);
+            ymin = Math.min(square.location.y, ymin);
         });
         return {
             'margin-top': (-100000 + 48 + Math.abs(ymin) * 48) + 'px',
@@ -72,8 +68,8 @@ app.controller('GardenController', function ($scope, $http) {
     $scope.squarePostion = function (square) {
         smigolog('squarePostion', square);
         return {
-            top: square.y * 48 + 100000 + 'px',
-            left: square.x * 48 + 100000 + 'px'
+            top: square.location.y * 48 + 100000 + 'px',
+            left: square.location.x * 48 + 100000 + 'px'
         };
     };
 

@@ -110,11 +110,7 @@ public class SpeciesHandler {
     public void addYear(int year) {
         Garden g = getGarden();
         g.addYear(year);
-        List<PlantData> plants = new ArrayList<PlantData>();
-        for (Square s : g.getSquaresFor(year)) {
-            plants.addAll(s.getPlants());
-        }
-        updateGarden(plants);
+        updateGarden(g.getPlants(year));
     }
 
     public Garden getGarden() {

@@ -44,7 +44,7 @@ public class CompanionRule extends AbstractRule implements Rule {
 
     @Override
     public Hint getHint(Plant affected, Garden garden) {
-        for (Square s : garden.getSurroundingSquares(affected)) {
+        for (Square s : garden.getSurroundingSquares(affected.getLocation())) {
             for (Plant causing : s.getPlants()) {
                 if (causing.getSpecies().getId() == companion.getId()) {
                     final String[] messageKeyArguments = {getHost().getMessageKey(), companion.getMessageKey()};

@@ -1,6 +1,7 @@
 package org.smigo;
 
 import kga.Square;
+import kga.YearXY;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ public class ViewBean {
     private UserSession userSession;
 
     public Collection<Square> getSquares() {
-        return Collections.singletonList(new Square(2002, 3, 3));
+        return Collections.singletonList(new Square(new YearXY(2002, 3, 3)));
 //    return userSession.getGarden().getSquares().values();
     }
 }

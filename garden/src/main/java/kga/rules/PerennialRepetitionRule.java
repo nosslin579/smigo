@@ -63,10 +63,11 @@ public class PerennialRepetitionRule extends AbstractRule {
     @Override
     public Hint getHint(Plant affected, Garden g) {
         // Getting squares way back
-        for (Square s : g.getPreviousSurroundingSquares(affected, gap + allowedRepetitions, Rule.CLOSEST_NEIGHBOURS)) {
+        for (Square s : g.getPreviousSurroundingSquares(affected.getLocation(), gap + allowedRepetitions, Rule.CLOSEST_NEIGHBOURS)) {
             for (Plant causing : s.getPlants()) {
                 // Checking if squares contain host but not the squares within the allowed repetitions
-                if ((s.getYear() - allowedRepetitions) > s.getYear() && affected.getSpecies().getId() == host.getId()) {
+                int year = s.getLocation().getYear();
+                if ((year - allowedRepetitions) > year && affected.getSpecies().getId() == host.getId()) {
                     return Hint.createHint(affected, causing, getHintMessageKey(), null);
                 }
             }

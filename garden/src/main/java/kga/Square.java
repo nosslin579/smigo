@@ -35,36 +35,20 @@ import java.util.*;
  *
  * @author Christian Nilsson
  */
-public class Square implements Comparable<Square> {
+public class Square {
     private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(Garden.class.getName());
-    private int year, x, y;
-    private List<Plant> plants;
+    private final Location location;
+    private List<Plant> plants = new ArrayList<Plant>();
 
-    /**
-     * Constructs a new Square.
-     */
-    public Square(int year, int x, int y, List<Species> species) {
-        this.year = year;
-        this.x = x;
-        this.y = y;
-        plants = new ArrayList<Plant>();
+    public Square(Location location, List<Species> species) {
+        this.location = new YearXY(location);
         for (Species s : species)
             addSpecies(s);
     }
 
-    /**
-     * Constructs a new empty Square
-     */
-    public Square(int year, int x, int y) {
-        this(year, x, y, new ArrayList<Species>(4));
-    }
 
-    /**
-     * Constructs a new Square.
-     */
-    public Square(int year, int x, int y, Species species, Garden garden) {
-        this(year, x, y);
-        this.addSpecies(species);
+    public Square(Location location) {
+        this(location, new ArrayList<Species>());
     }
 
     public boolean addSpecies(Species s) {
@@ -78,10 +62,10 @@ public class Square implements Comparable<Square> {
         if (s != null && containsSpecies(s.getId())) {
             this.plants.remove(new Plant(s, this));
             this.plants.remove(null);
-            log.fine("Removed species " + s + " at grid " + x + ":" + y);
+            log.fine("Removed species " + s + " at " + location);
         } else {
             removeSpecies();
-            // log.info("Remove at grid " + grid);
+            log.info("Remove all speces at " + location);
         }
     }
 
@@ -90,19 +74,7 @@ public class Square implements Comparable<Square> {
     }
 
     public boolean isYear(int year) {
-        return this.year == year;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getYear() {
-        return year;
+        return this.location.getYear() == year;
     }
 
     public boolean containsSpecies(int speciesId) {
@@ -145,7 +117,10 @@ public class Square implements Comparable<Square> {
 
     @Override
     public String toString() {
-        return "Square year:" + year + " x:" + x + " y:" + y + " species:" + plants.size();
+        return "Square{" +
+                "location=" + location +
+                ", plants=" + plants +
+                '}';
     }
 
     @JsonIgnore
@@ -169,17 +144,6 @@ public class Square implements Comparable<Square> {
         return plants;
     }
 
-    @Override
-    public int compareTo(Square o) {
-        if (o.year != year)
-            return o.year - year;
-        if (o.y != y)
-            return o.y - y;
-        if (o.x != x)
-            return o.x - x;
-        return 0;
-    }
-
     public Species getSpecies(Family family) {
         for (Plant p : plants)
             if (p.getSpecies().getFamily().equals(family))
@@ -188,11 +152,10 @@ public class Square implements Comparable<Square> {
     }
 
     public boolean isOrigo() {
-        return x == 0 && y == 0;
+        return location.getX() == 0 && location.getY() == 0;
     }
 
-    public YearXY getYearXY() {
-        return new YearXY(year, x, y);
+    public Location getLocation() {
+        return location;
     }
-
 }
