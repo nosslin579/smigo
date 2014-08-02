@@ -46,7 +46,7 @@ public class CropRotationRule extends AbstractRule {
 
     @Override
     public Hint getHint(Plant affected, Garden garden) {
-        for (Square s : garden.getPreviousSquares(affected, Rule.ONE_YEAR_BACK)) {
+        for (Square s : garden.getPreviousSquares(affected.getLocation(), Rule.ONE_YEAR_BACK)) {
             for (Plant causing : s.getPlants()) {
                 if (causing.getSpecies().getFamily().getId() == family.getId()) {
                     return Hint.createHint(affected, causing, getMessageKey(), null);
