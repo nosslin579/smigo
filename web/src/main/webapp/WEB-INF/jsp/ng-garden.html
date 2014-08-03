@@ -11,7 +11,7 @@
                  ng-click="onSquareClick($event, s)">
                 {{'x'+s.location.x + 'y' + s.location.y}}
                 <div ng-repeat="p in s.plants">
-                    {{p.species.messageKey | translate}}
+                    {{p.species | translate}}
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
 <div>
     <div ng-repeat="s in species">
-        <a href="" ng-click="selectAction(s)">{{s.scientificName}} {{s | translate}}</a>
+        <a href="" ng-click="selectSpecies(s)">{{s.scientificName}} {{s | translate}}</a>
     </div>
     <a href="" ng-click="refresh()">Refresh</a>
 </div>

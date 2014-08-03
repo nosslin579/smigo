@@ -11,6 +11,10 @@ app.config(function ($routeProvider) {
 app.filter('translate', function () {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
     return function (messageObject) {
+        if (!messageObject) {
+            console.error('Can not translate', messageObject);
+            return 'n/a';
+        }
         if (messageObject.messageKey) {
             return msg[messageObject.messageKey];
         }
@@ -18,28 +22,48 @@ app.filter('translate', function () {
     };
 });
 
+app.factory('plantService', function ($http, $scope) {
+    console.log('plantservice')
+    return {
+        save: function () {
+            //todo
+        }
+    };
+});
+
 app.controller('GardenController', function ($scope, $http) {
-    $scope.selectAction = function (species) {
-        console.log('CurrentSquareAction set to add species', species);
-        $scope.currentSquareAction = function (square) {
-            console.log('Adding species', [square, species]);
-            square.plants.push({
-                    species: species,
-                    location: square.location
-                }
-            );
-        };
+    $scope.selectSpecies = function (species) {
+        console.log('Selected species set to', species);
+        $scope.selectedSpecies = species;
     };
 
     $scope.selectYear = function (year) {
-        smigolog('year set to', year);
         $scope.currentYear = year;
         $scope.squares = $scope.garden.squares[year];
+        console.log('year set to', year, [$scope.squares]);
     };
 
     $scope.onSquareClick = function (clickEvent, square) {
-        console.log('onSquareClick', [clickEvent, square]);
-        $scope.currentSquareAction(square);
+        console.log('onSquareClick', [clickEvent, square, $scope.selectedSpecies]);
+        var plant = square.plants[this.selectedSpecies.id];
+        if (clickEvent.shiftKey) {
+            angular.forEach(square.plants, function (plant, key) {
+                plant.remove = true;
+                if (plant.add) {//undo add
+                    delete square.plants[key];
+                }
+            });
+            console.log('Species removed', square);
+        } else if (clickEvent.ctrlKey) {
+            console.log('Copy species');
+        } else {
+            if (!plant) {
+                square.plants[this.selectedSpecies.id] = { species: this.selectedSpecies, location: square.location};
+            }
+            square.plants[this.selectedSpecies.id].add = true;
+            console.log('Species added', square.plants);
+        }
+//        plantService.save();
         clickEvent.stopPropagation();
     };
 
@@ -50,11 +74,11 @@ app.controller('GardenController', function ($scope, $http) {
                 y: Math.floor((clickEvent.offsetY - 100000) / 48),
                 year: this.currentYear
             },
-            plants: []
+            plants: {}
         };
         $scope.squares.push(newSquare);
-        console.log('square added', [newSquare, clickEvent, this]);
-        this.currentSquareAction(newSquare);
+        console.log('Square added', [newSquare, clickEvent, this]);
+        this.onSquareClick(clickEvent, newSquare);
     };
 
     $scope.gridSize = function (squares) {
@@ -83,7 +107,6 @@ app.controller('GardenController', function ($scope, $http) {
 
     $scope.species = <c:out escapeXml="false" value="${f:toJson(species)}"/>;
     $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-
     smigolog("garden", $scope.garden);
 
     $scope.refresh = function () {
@@ -94,5 +117,5 @@ app.controller('GardenController', function ($scope, $http) {
         });
     };
 
-    $scope.selectAction($scope.species["1"]);
+    $scope.selectSpecies($scope.species["1"]);
 });

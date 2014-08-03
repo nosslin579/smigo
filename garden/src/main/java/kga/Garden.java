@@ -63,7 +63,7 @@ public class Garden {
         List<PlantData> ret = new ArrayList<PlantData>();
         for (Square s : squares.values())
             if (s.isYear(year)) {
-                for (Plant plant : s.getPlants()) {
+                for (Plant plant : s.getPlants().values()) {
                     ret.add(new PlantBean(plant));
                 }
             }
@@ -152,17 +152,6 @@ public class Garden {
         return ret.asMap();
     }
 
-    public boolean hasSpecies(int id) {
-        for (Square s : squares.values()) {
-            for (Plant p : s.getPlants()) {
-                if (p.getSpecies().getId() == id) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Returns the eight nearest neighbors plus itself.
      *
@@ -229,7 +218,7 @@ public class Garden {
     public List<Hint> getHints() {
         List<Hint> ret = new ArrayList<Hint>();
         for (Square square : squares.values()) {
-            for (Plant plant : square.getPlants()) {
+            for (Plant plant : square.getPlants().values()) {
                 ret.addAll(plant.getHints(this));
             }
         }

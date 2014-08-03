@@ -38,7 +38,7 @@ import java.util.*;
 public class Square {
     private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(Garden.class.getName());
     private final Location location;
-    private List<Plant> plants = new ArrayList<Plant>();
+    private final Map<Integer, Plant> plantsMap = new HashMap<Integer, Plant>();
 
     public Square(Location location, List<Species> species) {
         this.location = new YearXY(location);
@@ -51,26 +51,12 @@ public class Square {
         this(location, new ArrayList<Species>());
     }
 
-    public boolean addSpecies(Species s) {
-        if (containsItem() || containsSpecies(s.getId()))
-            return false;
-        plants.add(new Plant(s, this));
-        return true;
+    public void addSpecies(Species s) {
+        plantsMap.put(s.getId(), new Plant(s, this));
     }
 
     public void removeSpecies(Species s) {
-        if (s != null && containsSpecies(s.getId())) {
-            this.plants.remove(new Plant(s, this));
-            this.plants.remove(null);
-            log.fine("Removed species " + s + " at " + location);
-        } else {
-            removeSpecies();
-            log.info("Remove all speces at " + location);
-        }
-    }
-
-    public void removeSpecies() {
-        plants = new ArrayList<Plant>();
+        this.plantsMap.remove(s.getId());
     }
 
     public boolean isYear(int year) {
@@ -78,29 +64,7 @@ public class Square {
     }
 
     public boolean containsSpecies(int speciesId) {
-        for (Plant plant : plants) {
-            if (plant.getSpecies().getId() == speciesId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean containsFamily(Family family) {
-        for (Plant p : plants) {
-            if (p.getSpecies().getFamily().equals(family)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @JsonIgnore
-    public Collection<Species> getSpecies() {
-        List<Species> ret = new ArrayList<Species>(plants.size());
-        for (Plant p : plants)
-            ret.add(p.getSpecies());
-        return ret;
+        return plantsMap.containsKey(speciesId);
     }
 
     /**
@@ -109,7 +73,7 @@ public class Square {
      * @return true if contains item
      */
     public boolean containsItem() {
-        for (Plant p : plants)
+        for (Plant p : plantsMap.values())
             if (p.getSpecies().isItem())
                 return true;
         return false;
@@ -119,14 +83,13 @@ public class Square {
     public String toString() {
         return "Square{" +
                 "location=" + location +
-                ", plants=" + plants +
                 '}';
     }
 
     @JsonIgnore
     public Collection<Rule> getRules() {
         Set<Rule> rules = new HashSet<Rule>();
-        for (Plant p : plants)
+        for (Plant p : plantsMap.values())
             rules.addAll(p.getSpecies().getRules());
         return rules;
     }
@@ -134,18 +97,18 @@ public class Square {
     @JsonIgnore
     public List<Species> getPerennialSpecies() {
         List<Species> perennialSpecies = new ArrayList<Species>();
-        for (Plant p : plants)
+        for (Plant p : plantsMap.values())
             if (p.getSpecies().isRecurrent())
                 perennialSpecies.add(p.getSpecies());
         return perennialSpecies;
     }
 
-    public List<Plant> getPlants() {
-        return plants;
+    public Map<Integer, Plant> getPlants() {
+        return plantsMap;
     }
 
     public Species getSpecies(Family family) {
-        for (Plant p : plants)
+        for (Plant p : plantsMap.values())
             if (p.getSpecies().getFamily().equals(family))
                 return p.getSpecies();
         return null;

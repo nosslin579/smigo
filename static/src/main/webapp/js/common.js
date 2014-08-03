@@ -11,6 +11,15 @@ function smigoerror(str, obj) {
     console.log(str, obj);
 }
 
+Array.prototype.remove = function (obj) {
+    var indexOf = this.indexOf(obj);
+    if (indexOf === -1) {
+        return false;
+    }
+    this.splice(indexOf, 1);
+    return true;
+};
+
 /*
 (function ($) {
   $.fn.hasScrollBar = function () {
