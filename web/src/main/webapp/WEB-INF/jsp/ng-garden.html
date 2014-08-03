@@ -5,11 +5,13 @@
 
 <div>
     <div id="peephole">
-        <div id="grid" ng-click="addPlant($event)" ng-style="gridSize(squares)">
+        <div id="grid" ng-click="addSquare($event)" ng-style="gridSize(squares)">
             <div style="top:99999px;left:99999px;position: absolute;width: 2px;height: 2px; background-color: #000000"></div>
-            <div ng-repeat="s in squares" class="square" ng-style="squarePostion(s)">
+            <div ng-repeat="s in squares" class="square" ng-style="squarePostion(s)"
+                 ng-click="onSquareClick($event, s)">
+                {{'x'+s.location.x + 'y' + s.location.y}}
                 <div ng-repeat="p in s.plants">
-                    <%--{{p.species.messageKey | translate}}--%>{{'x:'+p.location.x + ', y:' + p.location.y}}
+                    {{p.species.messageKey | translate}}
                 </div>
             </div>
         </div>

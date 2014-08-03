@@ -20,8 +20,15 @@ app.filter('translate', function () {
 
 app.controller('GardenController', function ($scope, $http) {
     $scope.selectAction = function (species) {
-        smigolog('currentSpecies set to', species);
-        $scope.currentSpecies = species;
+        console.log('CurrentSquareAction set to add species', species);
+        $scope.currentSquareAction = function (square) {
+            console.log('Adding species', [square, species]);
+            square.plants.push({
+                    species: species,
+                    location: square.location
+                }
+            );
+        };
     };
 
     $scope.selectYear = function (year) {
@@ -30,23 +37,24 @@ app.controller('GardenController', function ($scope, $http) {
         $scope.squares = $scope.garden.squares[year];
     };
 
-    $scope.addPlant = function (clickEvent) {
-        smigolog("addplant", [clickEvent, this]);
-        var location = {
-            x: Math.floor((clickEvent.offsetX - 100000) / 48),
-            y: Math.floor((clickEvent.offsetY - 100000) / 48),
-            year: this.currentYear
+    $scope.onSquareClick = function (clickEvent, square) {
+        console.log('onSquareClick', [clickEvent, square]);
+        $scope.currentSquareAction(square);
+        clickEvent.stopPropagation();
+    };
+
+    $scope.addSquare = function (clickEvent) {
+        var newSquare = {
+            location: {
+                x: Math.floor((clickEvent.offsetX - 100000) / 48),
+                y: Math.floor((clickEvent.offsetY - 100000) / 48),
+                year: this.currentYear
+            },
+            plants: []
         };
-        console.log(location);
-        $scope.squares.push({
-            location: location,
-            plants: [
-                {
-                    species: this.currentSpecies,
-                    location: location
-                }
-            ]
-        });
+        $scope.squares.push(newSquare);
+        console.log('square added', [newSquare, clickEvent, this]);
+        this.currentSquareAction(newSquare);
     };
 
     $scope.gridSize = function (squares) {
@@ -66,7 +74,7 @@ app.controller('GardenController', function ($scope, $http) {
     };
 
     $scope.squarePostion = function (square) {
-        smigolog('squarePostion', square);
+//        smigolog('squarePostion', square);
         return {
             top: square.location.y * 48 + 100000 + 'px',
             left: square.location.x * 48 + 100000 + 'px'
