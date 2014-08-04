@@ -1,13 +1,14 @@
 <div id="asdf"></div>
 <div>
     <a ng-repeat="(year, squares) in garden.squares" href="" ng-click="selectYear(year)">{{year}}</a>
+    <!--<a href="" ng-click="addYear(+Object.keys(garden.squares).slice(-1).pop() + 1)">{{'addyear' | translate}}</a>-->
 </div>
 
 <div>
     <div id="peephole">
-        <div id="grid" ng-click="addSquare($event)" ng-style="gridSize(squares)">
+        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
             <div style="top:99999px;left:99999px;position: absolute;width: 2px;height: 2px; background-color: #000000"></div>
-            <div ng-repeat="s in squares" class="square" ng-style="squarePostion(s)"
+            <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)"
                  ng-click="onSquareClick($event, s)">
                 {{'x'+s.location.x + 'y' + s.location.y}}
                 <div ng-repeat="p in s.plants">
