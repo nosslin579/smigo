@@ -6,6 +6,9 @@ import org.smigo.entities.PlantDataBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -17,12 +20,15 @@ import java.util.List;
 public class JdbcPlantDao implements PlantDao {
     private static final String SELECT = "SELECT * FROM plants WHERE fkuserid = ?";
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     public ObjectMapper objectMapper;
 
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -40,5 +46,21 @@ public class JdbcPlantDao implements PlantDao {
                 );
             }
         });
+    }
+
+    @Override
+    public void addPlants(List<PlantDataBean> plants, int userId) {
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
+        namedParameterJdbcTemplate.batchUpdate(
+                "INSERT INTO plants(fkuserid, species, year, x, y) VALUES (" + userId + ", :speciesId, :year, :x, :y)",
+                batch);
+    }
+
+    @Override
+    public void deletePlants(List<PlantDataBean> plants, int userId) {
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
+        namedParameterJdbcTemplate.batchUpdate(
+                "DELETE FROM plants WHERE (fkuserid = " + userId + " AND species = :speciesId AND year = :year AND x = :x AND y = :y)",
+                batch);
     }
 }

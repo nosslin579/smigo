@@ -50,4 +50,27 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean> {
         return 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlantData)) return false;
+
+        PlantData that = (PlantData) o;
+
+        if (speciesId != that.getSpeciesId()) return false;
+        if (x != that.getX()) return false;
+        if (y != that.getY()) return false;
+        if (year != that.getYear()) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + year;
+        result = 31 * result + speciesId;
+        return result;
+    }
 }

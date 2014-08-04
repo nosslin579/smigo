@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.entities.PlantDataBean;
 import org.smigo.formbean.AddYearFormBean;
+import org.smigo.garden.UpdateGardenBean;
 import org.smigo.persitance.DatabaseResource;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.User;
@@ -53,6 +54,14 @@ public class GardenController implements Serializable {
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }
+
+    @RequestMapping(value = "/update-garden", produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String updateGarden(@RequestBody UpdateGardenBean updateGardenBean) {
+        speciesHandler.updateGarden(updateGardenBean);
+        return "aight";
+    }
+
 
     @RequestMapping(value = "/garden/{year}")
     public String getGarden(@PathVariable Integer year, Model model) {

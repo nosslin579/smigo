@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 //Garden
                 .antMatchers("/savegarden/**").permitAll()
+                .antMatchers("/update-garden").permitAll()
                 .antMatchers("/garden/**").permitAll()
                 .antMatchers("/addyear/**").authenticated()
                 .antMatchers("/deleteyear/**").authenticated()
