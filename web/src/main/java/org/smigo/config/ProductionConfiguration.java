@@ -1,6 +1,6 @@
 package org.smigo.config;
 
-import com.jolbox.bonecp.BoneCPDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -20,19 +20,13 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        log.debug("Get BoneCPDataSource from profile prod");
-        BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
-        boneCPDataSource.setDriverClass("com.mysql.jdbc.Driver");
-        boneCPDataSource.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
-        boneCPDataSource.setUsername("nosslin2_dbuser");
-        boneCPDataSource.setPassword("N9WM[ONGP5yv");
-        boneCPDataSource.setIdleConnectionTestPeriodInMinutes(30);
-        boneCPDataSource.setIdleMaxAgeInMinutes(120);
-        boneCPDataSource.setMinConnectionsPerPartition(1);
-        boneCPDataSource.setPartitionCount(3);
-        boneCPDataSource.setAcquireIncrement(1);
-        boneCPDataSource.setStatementsCacheSize(100);
-        return boneCPDataSource;
+        HikariDataSource ds = new HikariDataSource();
+        ds.setMaximumPoolSize(15);
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
+        ds.setUsername("nosslin2_dbuser");
+        ds.setPassword("N9WM[ONGP5yv");
+        return ds;
     }
 
 

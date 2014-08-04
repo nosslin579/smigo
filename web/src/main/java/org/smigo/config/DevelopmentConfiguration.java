@@ -1,6 +1,6 @@
 package org.smigo.config;
 
-import com.jolbox.bonecp.BoneCPDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -19,20 +19,13 @@ public class DevelopmentConfiguration {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        log.debug("Get BoneCPDataSource from profile dev");
-        BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
-        boneCPDataSource.setDriverClass("com.mysql.jdbc.Driver");
-        boneCPDataSource.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_dbtest");
-        boneCPDataSource.setUsername("nosslin2_dbusert");
-        boneCPDataSource.setPassword("To4[n=GGkp2l");
-        boneCPDataSource.setIdleConnectionTestPeriodInMinutes(5);
-        boneCPDataSource.setIdleMaxAgeInMinutes(5);
-        boneCPDataSource.setMinConnectionsPerPartition(1);
-        boneCPDataSource.setPartitionCount(1);
-        boneCPDataSource.setAcquireIncrement(1);
-        boneCPDataSource.setStatementsCacheSize(100);
-        boneCPDataSource.setMaxConnectionsPerPartition(2);
-        return boneCPDataSource;
+        HikariDataSource ds = new HikariDataSource();
+        ds.setMaximumPoolSize(15);
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
+        ds.setUsername("nosslin2_dbusert");
+        ds.setPassword("To4[n=GGkp2l");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_dbtest");
+        return ds;
     }
 
     @Bean
