@@ -128,7 +128,6 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         };
     };
 
-    $scope.species = <c:out escapeXml="false" value="${f:toJson(species)}"/>;
     $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
     console.log('Garden', $scope.garden);
 
@@ -140,5 +139,5 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         });
     };
 
-    $scope.selectSpecies($scope.species["1"]);
+    $scope.selectSpecies($scope.garden.species["1"]);
 });

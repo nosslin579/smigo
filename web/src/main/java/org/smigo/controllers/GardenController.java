@@ -1,9 +1,9 @@
 package org.smigo.controllers;
 
 import kga.Garden;
+import kga.Species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.SpeciesView;
 import org.smigo.entities.PlantDataBean;
 import org.smigo.formbean.AddYearFormBean;
 import org.smigo.garden.UpdateGardenBean;
@@ -48,9 +48,7 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale) {
-        model.addAttribute("species", speciesHandler.getSpeciesMap());
         model.addAttribute("garden", speciesHandler.getGarden());
-        model.addAttribute("hints", speciesHandler.getHints());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }
@@ -69,7 +67,7 @@ public class GardenController implements Serializable {
 //        log.debug("Displaying garden: " + year + ", squares:" + g.getSquares().size() + ", bounds:" + g.getBoundsFor(year));
         model.addAttribute("year", year);
         model.addAttribute("kgagarden", g);
-        final Collection<SpeciesView> visibleSpecies = speciesHandler.getSpecies();
+        final Collection<? extends Species> visibleSpecies = speciesHandler.getGarden().getSpecies().values();
         model.addAttribute("specieslist", visibleSpecies);
         model.addAttribute("speciesJson", visibleSpecies);
         return "garden.jsp";

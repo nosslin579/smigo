@@ -20,7 +20,6 @@ public class TestConfiguration {
     public DataSource getDataSource() {
         log.debug("getDataSource from testconfig");
         HikariDataSource ds = new HikariDataSource();
-        ds.setMaximumPoolSize(15);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_dbtest");
         ds.setUsername("nosslin2_dbusert");

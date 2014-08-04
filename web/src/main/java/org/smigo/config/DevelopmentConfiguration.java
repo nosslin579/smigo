@@ -20,7 +20,6 @@ public class DevelopmentConfiguration {
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
         HikariDataSource ds = new HikariDataSource();
-        ds.setMaximumPoolSize(15);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUsername("nosslin2_dbusert");
         ds.setPassword("To4[n=GGkp2l");

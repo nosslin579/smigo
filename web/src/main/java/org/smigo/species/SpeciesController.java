@@ -53,7 +53,7 @@ public class SpeciesController implements Serializable {
         java.util.Collections.sort(ret);
         model.addAttribute("families", ret);
         model.addAttribute("ruleTypes", RuleType.values());
-        model.addAttribute("listofallspecies", speciesHandler.getSpecies());
+        model.addAttribute("listofallspecies", speciesHandler.getGarden().getSpecies());
     }
 
     @RequestMapping(value = "/listspecies")
@@ -100,7 +100,7 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     public String setDisplay(@RequestParam Integer speciesId, @RequestParam(required = false) Boolean display) {
         log.debug("Display " + speciesId + "," + display);
-        databaseresource.setSpeciesVisibility(speciesId, user.getId(), display == null ? !speciesHandler.getSpecies(speciesId).isDisplay() : display);
+//        databaseresource.setSpeciesVisibility(speciesId, user.getId(), display == null ? !speciesHandler.getSpecies(speciesId).isDisplay() : display);
         return "";
     }
 

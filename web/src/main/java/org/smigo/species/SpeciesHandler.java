@@ -2,6 +2,8 @@ package org.smigo.species;
 
 import kga.*;
 import kga.rules.Rule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.garden.UpdateGardenBean;
@@ -12,10 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class SpeciesHandler {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
@@ -33,8 +39,6 @@ public class SpeciesHandler {
     private RuleDao ruleDao;
     @Autowired
     private FamilyDao familyDao;
-    @Autowired
-    private Comparator<org.smigo.SpeciesView> speciesComparator;
 
     public int addSpecies(SpeciesFormBean speciesFormBean) {
         int id = databaseResource.addSpecies(speciesFormBean, user.getId());
@@ -95,12 +99,8 @@ public class SpeciesHandler {
         return ret;
     }
 
-    public Collection<SpeciesView> getSpecies() {
-        return getSpeciesMap().values();
-    }
-
-    public SpeciesView getSpecies(Integer id) {
-        return getSpeciesMap().get(id);
+    public Species getSpecies(Integer id) {
+        return getGarden().getSpecies().get(id);
     }
 
     public List<Family> getFamilies() {

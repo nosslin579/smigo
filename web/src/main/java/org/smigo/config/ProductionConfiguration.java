@@ -21,7 +21,6 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
         HikariDataSource ds = new HikariDataSource();
-        ds.setMaximumPoolSize(15);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
         ds.setUsername("nosslin2_dbuser");

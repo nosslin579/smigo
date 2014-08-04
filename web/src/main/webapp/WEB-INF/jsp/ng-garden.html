@@ -19,7 +19,7 @@
 </div>
 
 <div>
-    <div ng-repeat="s in species">
+    <div ng-repeat="s in garden.species">
         <a href="" ng-click="selectSpecies(s)">{{s.scientificName}} {{s | translate}}</a>
     </div>
     <a href="" ng-click="refresh()">Refresh</a>

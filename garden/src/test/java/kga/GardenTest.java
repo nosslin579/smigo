@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class GardenTest {
     @Test
     public void addYear() throws Exception {
         g.addYear(2001);
-        List<Square> squaresFor = g.getSquaresFor(2001);
+        Collection<Square> squaresFor = g.getSquares().get(2001);
         Assert.assertEquals(squaresFor.size(), 1);
         Assert.assertEquals(squaresFor.iterator().next().getLocation(), new YearXY(2001, 1, 0));
     }

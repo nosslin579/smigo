@@ -30,10 +30,11 @@ import java.util.*;
 
 public class Garden {
 
-    private Map<Location, Square> squares;
+    private final Map<Integer, ? extends Species> species;
+    private Map<Location, Square> squares = new HashMap<Location, Square>();
 
     public Garden(Map<Integer, ? extends Species> species, List<PlantData> plants) {
-        squares = new HashMap<Location, Square>();
+        this.species = species;
         if (plants != null) {
             for (PlantData p : plants) {
                 Species s = species.get(p.getSpeciesId());
@@ -46,17 +47,16 @@ public class Garden {
         this(new HashMap<Integer, Species>(), new ArrayList<PlantData>());
     }
 
-    /**
-     * Add new year to garden. Copies items and perennials from latest year to
-     * the new year.
-     */
     public void addYear(int newYear) {
         SortedSet<Integer> years = new TreeSet<Integer>(getSquares().keySet());
         if (years.contains(newYear))
             throw new GardenException("Cant add year since year " + newYear + " already exists", "AddYear.YearAlreadyExists");
         copyPermanentSquares(years.last(), newYear);
-        if (getPlants(newYear).isEmpty())
-            throw new GardenException("No plants added ", "AddYear.NoItemsOrPerennials");
+    }
+
+    public void deleteYear(int year) {
+        for (Square s : getSquares().get(year))
+            squares.remove(s.getLocation());
     }
 
     public List<PlantData> getPlants(int year) {
@@ -108,40 +108,8 @@ public class Garden {
         return newSquare;
     }
 
-    /**
-     * Returns square at year and location or null if not present.
-     */
     public Square getSquare(Location location) {
         return squares.get(location);
-    }
-
-    /**
-     * Returns all squares for specified year.
-     *
-     * @param year the year
-     * @return squares for specified year
-     */
-    public List<Square> getSquaresFor(Integer year) {
-        List<Square> squaresForYear = new ArrayList<Square>();
-        for (Square s : squares.values())
-            if (s.isYear(year))
-                squaresForYear.add(s);
-        return squaresForYear;
-    }
-
-    /**
-     * Deletes whole year from garden.
-     *
-     * @param year the year of which squares will be removed
-     */
-    public void deleteYear(int year) {
-        for (Square s : getSquaresFor(year))
-            squares.remove(s.getLocation());
-    }
-
-    public void deleteYears(Set<Integer> years) {
-        for (Integer y : years)
-            deleteYear(y);
     }
 
     public Map<Integer, Collection<Square>> getSquares() {
@@ -154,21 +122,13 @@ public class Garden {
 
     /**
      * Returns the eight nearest neighbors plus itself.
-     *
-     * @param location
-     * @return the eight nearest neighbors plus itself
      */
     public Collection<Square> getSurroundingSquares(Location location) {
         return getSurroundingSquares(location, 1);
     }
 
     /**
-     * Returns neighboring squares plus itself.
-     *
-     * @param location
-     * @param radius   the radius (radius = 1 gives 9 squares, radius = 2 gives 25
-     *                 squares)
-     * @return neighboring squares plus itself
+     * Returns neighboring squares plus itself. The radius (radius = 1 gives 9 squares, radius = 2 gives 25)
      */
     public Collection<Square> getSurroundingSquares(Location location, int radius) {
         Collection<Square> surrounding = new HashSet<Square>();
@@ -183,10 +143,6 @@ public class Garden {
 
     /**
      * Returns previous squares at same location.
-     *
-     * @param location
-     * @param yearsBack years back in time.
-     * @return previous squares at same location
      */
     public Collection<Square> getPreviousSquares(Location location, int yearsBack) {
         Collection<Square> previous = new HashSet<Square>();
@@ -203,7 +159,7 @@ public class Garden {
     /**
      * Returns neighboring squares and theirs previous squares.
      */
-    public Collection<Square> getPreviousSurroundingSquares(Location location, int yearsBack, int radius) {
+    public Collection<Square> getPreviousAndSurroundingSquares(Location location, int yearsBack, int radius) {
         Collection<Square> ret = new HashSet<Square>();
         int earliestYear = location.getYear() - yearsBack;
         for (Square s : squares.values()) {
@@ -223,5 +179,9 @@ public class Garden {
             }
         }
         return ret;
+    }
+
+    public Map<Integer, ? extends Species> getSpecies() {
+        return species;
     }
 }
