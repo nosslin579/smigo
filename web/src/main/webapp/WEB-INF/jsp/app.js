@@ -1,3 +1,4 @@
+"use strict";
 var app = angular.module('speciesModule', ['ngRoute']);
 
 app.config(function ($routeProvider) {
@@ -32,9 +33,9 @@ app.factory('plantService', function ($http) {
 
     return {
         addYear: function (garden, year) {
-            var mostRecentYear = Object.keys(garden.squares).slice(-1).pop();
+            var mostRecentYear = Object.keys(garden.squares).sort().slice(-1).pop();
             var newYearSquareArray = [];
-            var copyFromSquareArray = garden.squares[mostRecentYear]
+            var copyFromSquareArray = garden.squares[mostRecentYear];
 
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plants, function (plant) {
@@ -126,11 +127,11 @@ app.controller('GardenController', function ($scope, $http, plantService) {
 
     $scope.selectYear = function (availableYear) {
         if (!availableYear.exists) {
-            plantService.addYear(this.garden, availableYear.year);
-            $scope.availableYears = plantService.getAvailableYears(this.garden.squares);
+            plantService.addYear($scope.garden, availableYear.year);
+            $scope.availableYears = plantService.getAvailableYears($scope.garden.squares);
         }
         $scope.selectedYear = availableYear.year;
-        console.log('Year set to', availableYear, this.garden);
+        console.log('Year set to', availableYear, $scope.garden);
     };
 
     $scope.onSquareClick = function (clickEvent, square) {
@@ -140,18 +141,18 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         } else if (clickEvent.ctrlKey) {
             console.log('Copy species');
         } else {
-            plantService.addPlant(this.selectedSpecies, square);
+            plantService.addPlant($scope.selectedSpecies, square);
         }
-        plantService.save(this.garden.squares);
+        plantService.save($scope.garden.squares);
         clickEvent.stopPropagation();
     };
 
     $scope.onGridClick = function (clickEvent) {
         var x = Math.floor((clickEvent.offsetX - 100000) / 48);
         var y = Math.floor((clickEvent.offsetY - 100000) / 48);
-        var addedSquare = plantService.addSquare(this.garden, this.selectedYear, x, y);
-        plantService.addPlant(this.selectedSpecies, addedSquare);
-        plantService.save(this.garden.squares);
+        var addedSquare = plantService.addSquare($scope.garden, $scope.selectedYear, x, y);
+        plantService.addPlant($scope.selectedSpecies, addedSquare);
+        plantService.save($scope.garden.squares);
         clickEvent.stopPropagation();
     };
 
