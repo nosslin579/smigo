@@ -31,6 +31,38 @@ app.factory('plantService', function ($http) {
     }
 
     return {
+        addYear: function (garden, year) {
+            var mostRecentYear = Object.keys(garden.squares).slice(-1).pop();
+            var newYearSquareArray = [];
+            var copyFromSquareArray = garden.squares[mostRecentYear]
+
+            angular.forEach(copyFromSquareArray, function (square) {
+                angular.forEach(square.plants, function (plant) {
+                    if (!plant.species.annual) {
+                        var newLocation = {year: year, x: plant.location.x, y: plant.location.y};
+                        var newSquare = {location: newLocation, plants: {}};
+                        newSquare.plants[plant.species.id] = {species: plant.species, location: newLocation, add: true};
+                        newYearSquareArray.push(newSquare);
+                    }
+                });
+            });
+
+            garden.squares[year] = newYearSquareArray;
+            console.log('Year added:' + year, garden.squares);
+        },
+        getAvailableYears: function (squares) {
+            var sortedYearsArray = Object.keys(squares).sort();
+            var firstYear = +sortedYearsArray[0];
+            var lastYear = +sortedYearsArray[sortedYearsArray.length - 1];
+            var ret = [];
+            ret.push({year: firstYear - 1, exists: false});
+            for (var i = firstYear; i <= lastYear; i++) {
+                ret.push({year: i, exists: sortedYearsArray.indexOf(i.toString()) !== -1});
+            }
+            ret.push({year: lastYear + 1, exists: false});
+            console.log('AvailableYears', ret);
+            return ret;
+        },
         addSquare: function (garden, year, x, y) {
             var newSquare = {
                 location: {
@@ -54,13 +86,11 @@ app.factory('plantService', function ($http) {
             console.log('Species removed', square);
         },
         addPlant: function (species, square) {
-
             if (!square.plants[species.id]) {
                 square.plants[species.id] = { species: species, location: square.location};
             }
             square.plants[species.id].add = true;
             console.log('Species added', square.plants);
-
         },
         save: function (yearMap) {
             var update = { addList: [], removeList: [] };
@@ -72,7 +102,7 @@ app.factory('plantService', function ($http) {
                             delete plant.add;
                             delete plant.remove;
                         } else if (plant.remove && !plant.add) {
-                            update.removeList.push(new PlantData(plant))
+                            update.removeList.push(new PlantData(plant));
                             delete square.plants[plant.species.id];
                         }
                     });
@@ -85,14 +115,22 @@ app.factory('plantService', function ($http) {
 });
 
 app.controller('GardenController', function ($scope, $http, plantService) {
+    $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+
     $scope.selectSpecies = function (species) {
         console.log('Selected species set to', species);
         $scope.selectedSpecies = species;
     };
 
-    $scope.selectYear = function (year) {
-        $scope.selectedYear = year;
-        console.log('year set to', year, $scope.garden);
+    $scope.availableYears = plantService.getAvailableYears($scope.garden.squares);
+
+    $scope.selectYear = function (availableYear) {
+        if (!availableYear.exists) {
+            plantService.addYear(this.garden, availableYear.year);
+            $scope.availableYears = plantService.getAvailableYears(this.garden.squares);
+        }
+        $scope.selectedYear = availableYear.year;
+        console.log('Year set to', availableYear, this.garden);
     };
 
     $scope.onSquareClick = function (clickEvent, square) {
@@ -113,6 +151,7 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         var y = Math.floor((clickEvent.offsetY - 100000) / 48);
         var addedSquare = plantService.addSquare(this.garden, this.selectedYear, x, y);
         plantService.addPlant(this.selectedSpecies, addedSquare);
+        plantService.save(this.garden.squares);
         clickEvent.stopPropagation();
     };
 
@@ -139,26 +178,6 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         };
     };
 
-    $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-
-    /*    $scope.addYear = function (year) {
-     console.log('Add year' + year);
-     var mostRecentYear = Object.keys($scope.garden.squares).slice(-1).pop();
-     angular.forEach($scope.garden.squares[mostRecentYear], function (square) {
-     angular.forEach(square.plants, function (plant) {
-     if (!plant.species.annual) {
-
-     plantService.add(plant.species, )
-     }
-     });
-     });
-
-     $http.get('species').success(function (response) {
-     $scope.species = response;
-     smigolog($scope.species);
-     });
-     };*/
-
     $scope.selectSpecies($scope.garden.species["1"]);
-    $scope.selectYear(Object.keys($scope.garden.squares).slice(-1).pop());
+    $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
 });

@@ -1,7 +1,7 @@
 <div id="asdf"></div>
 <div>
-    <a ng-repeat="(year, squares) in garden.squares" href="" ng-click="selectYear(year)">{{year}}</a>
-    <!--<a href="" ng-click="addYear(+Object.keys(garden.squares).slice(-1).pop() + 1)">{{'addyear' | translate}}</a>-->
+    <a ng-repeat="availableYear in availableYears" href="" ng-class="" ng-click="selectYear(availableYear)">{{availableYear.exists
+        ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}</a>
 </div>
 
 <div>
