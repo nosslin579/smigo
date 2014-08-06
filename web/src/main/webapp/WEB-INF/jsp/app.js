@@ -157,18 +157,19 @@ app.controller('GardenController', function ($scope, $http, plantService) {
     };
 
     $scope.getGridSizeCss = function (squares) {
-        var xmax = -4, ymax = -2, xmin = 4, ymin = 2;
+        var xmax = -9999, ymax = -9999, xmin = 9999, ymin = 9999;
         angular.forEach(squares, function (square, index) {
             xmax = Math.max(square.location.x, xmax);
             ymax = Math.max(square.location.y, ymax);
             xmin = Math.min(square.location.x, xmin);
             ymin = Math.min(square.location.y, ymin);
         });
+        console.log('Grid size', ymin, xmax, ymax, xmin);
         return {
-            'margin-top': (-100000 + 48 + Math.abs(ymin) * 48) + 'px',
-            'width': (100000 + 96 + Math.abs(xmax) * 48) + 'px',
-            'height': (100000 + 96 + Math.abs(ymax) * 48) + 'px',
-            'margin-left': (-100000 + 48 + Math.abs(xmin) * 48) + 'px'
+            'margin-top': (-100000 + 48 + ymin * 48) + 'px',
+            'width': (100000 + 96 + xmax * 48) + 'px',
+            'height': (100000 + 96 + ymax * 48) + 'px',
+            'margin-left': (-100000 + 48 + xmin * 48) + 'px'
         };
     };
 

@@ -1,28 +1,33 @@
-<div id="asdf"></div>
-<div>
-    <a ng-repeat="availableYear in availableYears" href="" ng-class="" ng-click="selectYear(availableYear)">
-        {{availableYear.exists ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}
-    </a>
-</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="hidden-xs col-sm-3 sidebar">
+            <ul class="nav nav-sidebar">
+                <li ng-repeat="s in garden.species" ng-class="{active: selectedSpecies.id === s.id}">
+                    <a href="" ng-click="selectSpecies(s)">{{s.scientificName}} {{s | translate}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-9 col-sm-offset-3 main">
+            <div>
+                <div>
+                    <a ng-repeat="availableYear in availableYears" href="" ng-class="" ng-click="selectYear(availableYear)">
+                        {{availableYear.exists ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}
+                    </a>
+                </div>
 
-<div>
-    <div id="peephole">
-        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
-            <div style="top:99999px;left:99999px;position: absolute;width: 2px;height: 2px; background-color: #000000"></div>
-            <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)"
-                 ng-click="onSquareClick($event, s)">
-                {{'x'+s.location.x + 'y' + s.location.y}}
-                <div ng-repeat="p in s.plants">
-                    {{p.species | translate}}
+
+                <div id="peephole">
+                    <div id="grid" ng-click="onGridClick($event)"
+                         ng-style="getGridSizeCss(garden.squares[selectedYear])">
+                        <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                            {{'x'+s.location.x + 'y' + s.location.y}}
+                            <div ng-repeat="p in s.plants">
+                                {{p.species | translate}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div>
-    <div ng-repeat="s in garden.species">
-        <a href="" ng-click="selectSpecies(s)">{{s.scientificName}} {{s | translate}}</a>
-    </div>
-    <a href="" ng-click="refresh()">Refresh</a>
 </div>

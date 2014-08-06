@@ -1,58 +1,3 @@
-@CHARSET "UTF-8";
-/*############# meyer reset #################*/
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-}
-
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-    display: block;
-}
-
-body {
-    line-height: 1;
-}
-
-ol, ul {
-    list-style: none;
-}
-
-blockquote, q {
-    quotes: none;
-}
-
-blockquote:before, blockquote:after, q:before, q:after {
-    content: '';
-    content: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-/* float */
-.floatcontainer {
-    overflow: hidden;
-}
-
-.left {
-    float: left;
-}
-
-.right {
-    float: right;
-}
-
-.displayfalse,
-.toggleoff {
-    display: none;
-}
-
 /* ###############the garden grid ##################################*/
 .square {
     background-color: green;
@@ -77,46 +22,71 @@ table {
 }
 
 #peephole {
-    width: 400px;
-    height: 200px;
-    overflow: scroll;
-    margin: 3em;
-}
-
-/*############# selectspecieslist in garden #################*/
-#selectspecieslist {
-    z-index: 100;
-    float: left;
-    position: relative;
-    clear: left;
-}
-
-#selectspecieslist .selectspeciescontainer {
-    position: relative;
-}
-
-#selectspecieslist .selectspeciestooltipcontainer {
-    white-space: nowrap;
-}
-
-#selectspecieslist .selectspeciestooltipcontainer {
-    z-index: 100;
-    display: none;
+    overflow: auto;
     position: absolute;
-    left: 99.5%;
-    top: -150px;
+    bottom: 30px;
+    top: 30px;
+    left: 20px;
+    right: 20px;
 }
 
-#selectspecieslist .selectspeciescontainer:hover .selectspeciestooltipcontainer {
-    display: block;
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    padding-top: 50px;
 }
 
-/*############### main menu #####################*/
-#mainmenu {
-    text-align: center;
-    overflow: hidden;
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+    border: 0;
 }
 
-#mainmenu .separator, #mainmenu .mainmenuitem {
-    float: left;
+/* Sidebar navigation */
+.sidebar {
+    position: fixed;
+    overflow-y: scroll;
+    top: 50px;
+    bottom: 0;
+}
+
+.nav-sidebar {
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+    position: fixed;
+    bottom: 0;
+    top: 50px;
+}
+
+.main > div {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
