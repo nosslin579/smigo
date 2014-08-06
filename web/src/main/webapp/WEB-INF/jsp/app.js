@@ -166,10 +166,10 @@ app.controller('GardenController', function ($scope, $http, plantService) {
         });
         console.log('Grid size', ymin, xmax, ymax, xmin);
         return {
-            'margin-top': (-100000 + 48 + ymin * 48) + 'px',
+            'margin-top': (-100000 + 48 + -ymin * 48) + 'px',
             'width': (100000 + 96 + xmax * 48) + 'px',
             'height': (100000 + 96 + ymax * 48) + 'px',
-            'margin-left': (-100000 + 48 + xmin * 48) + 'px'
+            'margin-left': (-100000 + 48 + -xmin * 48) + 'px'
         };
     };
 
