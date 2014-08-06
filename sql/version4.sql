@@ -32,3 +32,7 @@ CREATE TABLE openid (
 );
 
 DROP TABLE messages;
+
+UPDATE species
+SET annual = FALSE
+WHERE item = TRUE;
