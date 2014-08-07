@@ -9,21 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 
 @Controller
 public class AboutController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @RequestMapping(value = "/about", method = RequestMethod.GET)
-    public ModelAndView getAbout() {
-        return new ModelAndView("about.jsp");
-    }
-
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public ModelAndView getHelp() throws SQLException {
-        return new ModelAndView("help.jsp");
-    }
 
     @RequestMapping(value = "/hastalavista", method = RequestMethod.GET)
     public ModelAndView hastalavista() {

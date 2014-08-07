@@ -13,8 +13,11 @@
     </script>
 
     <%--########## ng views ##############--%>
-    <script type="text/ng-template" id="garden">
+    <script type="text/ng-template" id="garden.html">
         <%@ include file="ng-garden.html" %>
+    </script>
+    <script type="text/ng-template" id="help.html">
+        <%@ include file="ng-help.html" %>
     </script>
 </div>
 

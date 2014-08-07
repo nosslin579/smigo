@@ -3,8 +3,12 @@ var app = angular.module('speciesModule', ['ngRoute']);
 
 app.config(function ($routeProvider) {
     $routeProvider.
+        when('/help', {
+            templateUrl: 'help.html',
+            controller: 'AboutController'
+        }).
         otherwise({
-            templateUrl: 'garden',
+            templateUrl: 'garden.html',
             controller: 'GardenController'
         });
 });
@@ -182,4 +186,7 @@ app.controller('GardenController', function ($scope, $http, plantService) {
 
     $scope.selectSpecies($scope.garden.species["1"]);
     $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
+});
+
+app.controller('AboutController', function () {
 });
