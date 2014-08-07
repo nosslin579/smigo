@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
-class AuthenticationListener implements AuthenticationSuccessHandler {
+class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -32,6 +33,6 @@ class AuthenticationListener implements AuthenticationSuccessHandler {
         final Map<String, String> translation = databaseResource.getTranslation(principal.getId());
         userSession.getTranslation().putAll(translation);
 
-        response.sendRedirect(request.getContextPath() + "/garden");
+        response.setStatus(HttpStatus.OK.value());
     }
 }

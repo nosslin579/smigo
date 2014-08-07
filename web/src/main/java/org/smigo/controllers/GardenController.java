@@ -53,11 +53,16 @@ public class GardenController implements Serializable {
         return "ng.jsp";
     }
 
-    @RequestMapping(value = "/update-garden", produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "/rest/garden", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public String updateGarden(@RequestBody UpdateGardenBean updateGardenBean) {
+    public Garden getGarden() {
+        return speciesHandler.getGarden();
+    }
+
+    @RequestMapping(value = {"/update-garden", "/rest/garden"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
+    @ResponseBody
+    public void updateGarden(@RequestBody UpdateGardenBean updateGardenBean) {
         speciesHandler.updateGarden(updateGardenBean);
-        return "aight";
     }
 
 

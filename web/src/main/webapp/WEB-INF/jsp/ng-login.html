@@ -1,0 +1,21 @@
+<div class="container">
+    <!-- Default panel contents -->
+    <div class="page-header text-center">
+        <h1>{{'account.login' | translate}}</h1>
+    </div>
+
+    <form name="loginform" role="form">
+        <input type="hidden" ng-model="loginFormModel.rememberme" value="true"/>
+
+        <div class="form-group">
+            <label for="username">{{'username' | translate}}</label>
+            <input type="text" class="form-control" id="username" placeholder="{{'username' | translate}}" ng-model="loginFormModel.username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">{{'password' | translate}}</label>
+            <input type="password" class="form-control" id="password" placeholder="{{'password' | translate}}" ng-model="loginFormModel.password" required>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="login(loginform)">{{'account.login' | translate}}</button>
+    </form>
+
+</div>

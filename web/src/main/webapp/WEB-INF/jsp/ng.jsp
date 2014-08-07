@@ -4,21 +4,27 @@
 <%@ taglib prefix="f" uri="http://smigo.org/jsp/functions" %>
 
 <jsp:include page="header.jsp"/>
+<body ng-app="speciesModule">
 
-<div ng-app="speciesModule">
-    <div ng-view></div>
+<%@ include file="menu.html" %>
 
-    <script type="application/javascript">
-        <%@ include file="app.js" %>
-    </script>
+<div ng-view></div>
 
-    <%--########## ng views ##############--%>
-    <script type="text/ng-template" id="garden.html">
-        <%@ include file="ng-garden.html" %>
-    </script>
-    <script type="text/ng-template" id="help.html">
-        <%@ include file="ng-help.html" %>
-    </script>
-</div>
+<script type="application/javascript">
+    <%@ include file="app.js" %>
+</script>
+
+<%--########## ng views ##############--%>
+<script type="text/ng-template" id="garden.html">
+    <%@ include file="ng-garden.html" %>
+</script>
+<script type="text/ng-template" id="help.html">
+    <%@ include file="ng-help.html" %>
+</script>
+<script type="text/ng-template" id="login.html">
+    <%@ include file="ng-login.html" %>
+</script>
+
+</body>
 
 <jsp:include page="footer.jsp"/>

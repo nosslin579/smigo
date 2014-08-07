@@ -7,10 +7,15 @@ app.config(function ($routeProvider) {
             templateUrl: 'help.html',
             controller: 'AboutController'
         }).
-        otherwise({
+        when('/login', {
+            templateUrl: 'login.html',
+            controller: 'LoginController'
+        }).
+        when('/garden', {
             templateUrl: 'garden.html',
             controller: 'GardenController'
-        });
+        }).
+        otherwise({redirectTo: '/garden'});
 });
 
 app.filter('translate', function () {
@@ -27,7 +32,10 @@ app.filter('translate', function () {
     };
 });
 
-app.factory('plantService', function ($http) {
+app.factory('plantService', function ($http, $rootScope) {
+    console.log('plantService');
+    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;
@@ -35,7 +43,18 @@ app.factory('plantService', function ($http) {
         this.speciesId = plant.species.id;
     }
 
-    return {
+    var ret = {
+        reloadGarden: function () {
+            $http.get('rest/garden').success(function (data) {
+                console.log('Garden reloaded', data);
+                garden = data;
+            }).error(function (data, status, headers, config) {
+                console.error('Could not reload garden', [data, status, headers, config]);
+            });
+        },
+        getGarden: function () {
+            return garden;
+        },
         addYear: function (garden, year) {
             var mostRecentYear = Object.keys(garden.squares).sort().slice(-1).pop();
             var newYearSquareArray = [];
@@ -114,13 +133,23 @@ app.factory('plantService', function ($http) {
                 });
             });
             console.log('Sending to server', update);
-            $http.post('update-garden', update);
+            $http.post('rest/garden', update);
         }
     };
+
+    $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
+        if (newValue !== oldValue) {
+            console.log('currentuser', newValue, oldValue, scope);
+            ret.reloadGarden();
+        }
+    });
+
+    return ret;
 });
 
 app.controller('GardenController', function ($scope, $http, plantService) {
-    $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+    console.log('GardenController');
+    $scope.garden = plantService.getGarden();
 
     $scope.selectSpecies = function (species) {
         console.log('Selected species set to', species);
@@ -188,5 +217,47 @@ app.controller('GardenController', function ($scope, $http, plantService) {
     $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
 });
 
+app.controller('LoginController', function ($route, $scope, $http, $location, plantService, $rootScope) {
+    $scope.loginFormModel = {
+        username: 'testreg17',
+        password: 'testreg17'
+    };
+    $scope.login = function (form) {
+        // If form is invalid, return and let AngularJS show validation errors.
+        if (form.$invalid) {
+            return;
+        }
+
+        $http({
+            method: 'POST',
+            url: 'login',
+            data: $.param($scope.loginFormModel),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success(function (data, status, headers, config) {
+            $rootScope.currentUser = $scope.loginFormModel.username;
+            delete $scope.loginFormModel;
+            $location.path('/garden');
+        }).error(function (data, status, headers, config) {
+            delete $rootScope.currentUser;
+        });
+        console.log('Login', $scope);
+
+    }
+});
+
 app.controller('AboutController', function () {
+});
+
+app.controller('MainMenuController', function ($http, $scope, $rootScope) {
+    $scope.logout = function () {
+        $http({
+            method: 'GET',
+            url: 'logout'
+        }).success(function (data, status, headers, config) {
+            delete $rootScope.currentUser;
+        }).error(function (data, status, headers, config) {
+            delete $rootScope.currentUser;
+        });
+
+    };
 });

@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -28,11 +31,15 @@ import java.util.ArrayList;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthenticationListener authenticationListener;
+    private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
     @Autowired
     public DataSource dataSource;
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private UserDetailsService customUserDetailsService;
+    @Autowired
+    private AuthenticationFailureHandler customAuthenticationFailureHandler;
+    @Autowired
+    private LogoutSuccessHandler customLogoutSuccessHandler;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,13 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login").successHandler(authenticationListener)
+                .formLogin().loginPage("/login").loginProcessingUrl("/login").successHandler(customAuthenticationSuccessHandler).failureHandler(customAuthenticationFailureHandler)
                 .and()
                 .rememberMe().userDetailsService(customUserDetailsService)
                 .key("MjYvVCDYOplXAWq").tokenValiditySeconds(Integer.MAX_VALUE).tokenRepository(persistentTokenRepository())
                 .and()
                 .userDetailsService(userDetailsService())
-                .logout().invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessUrl("/hastalavista")
+                .logout().logoutSuccessHandler(customLogoutSuccessHandler).invalidateHttpSession(true).logoutUrl("/logout")
                 .and()
                 .csrf().disable()
                 .openidLogin().loginPage("/login").loginProcessingUrl("/login-openid").authenticationUserDetailsService(authenticationUserDetailsService()).permitAll();
