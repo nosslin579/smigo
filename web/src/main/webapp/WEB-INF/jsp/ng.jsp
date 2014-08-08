@@ -2,6 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://smigo.org/jsp/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 
 <jsp:include page="header.jsp"/>
 <body ng-app="speciesModule">

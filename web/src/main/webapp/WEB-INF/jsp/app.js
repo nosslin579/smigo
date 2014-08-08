@@ -16,6 +16,11 @@ app.config(function ($routeProvider) {
             controller: 'GardenController'
         }).
         otherwise({redirectTo: '/garden'});
+
+});
+
+app.run(function ($rootScope) {
+    $rootScope.currentUser = '${pageContext.request.remoteUser}';
 });
 
 app.filter('translate', function () {
