@@ -1,9 +1,11 @@
 package org.smigo.user;
 
+import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Locale;
@@ -25,7 +28,7 @@ import java.util.Map;
 @Controller
 public class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserSession userSession;
     @Autowired
@@ -69,23 +72,18 @@ public class UserController {
         return "userform.jsp";
     }
 
-    @RequestMapping(value = "/cuuser", method = RequestMethod.POST)
-    public String handleUserForm(@Valid UserBean user, BindingResult result) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public String register(@Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
-            log.warn("Create user failed. Username:" + user.getUsername());
-            return "userform.jsp";
+            log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.toString();
         }
-        // create user
-        if (user.getId() == 0) {
-            final String password = user.getPassword();
-            userHandler.createUser(user);
-            userHandler.authenticateUser(user.getUsername(), password);
-            return "redirect:/garden";
-        } else {// update user
-            userHandler.updateUser(user);
-            return "redirect:user/";
-        }
+        userHandler.createUser(user);
+        userHandler.authenticateUser(user.getUsername(), user.getPassword());
+        return "";
     }
 
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)

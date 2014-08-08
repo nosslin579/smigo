@@ -24,9 +24,8 @@ class CustomAuthenticationUserDetailsService implements AuthenticationUserDetail
         final User user = userDao.getUserByOpenId(identityUrl);
         if (user == null) {
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "Created user from openid");
-            final UserBean newUser = new UserBean();
+            final RegisterFormBean newUser = new RegisterFormBean();
             newUser.setUsername("user" + System.nanoTime());
-            newUser.setLocale(request.getLocale());
             userHandler.createUser(newUser, identityUrl);
             return userDao.getUserByUsername(newUser.getUsername());
         }

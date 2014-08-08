@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @NotNull
-@Size(min = 6, max = 56)
+@Size(min = 6)
 public @interface NewPassword {
 
     String message() default "invalid";

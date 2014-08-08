@@ -48,12 +48,12 @@ public class UserHandler {
         databaseResource.updateUserDetails(user);
     }
 
-    public void createUser(User user, String identityUrl) {
+    public void createUser(RegisterFormBean user, String identityUrl) {
         final int userId = createUser(user);
         userDao.addOpenId(userId, identityUrl);
     }
 
-    public int createUser(User user) {
+    public int createUser(RegisterFormBean user) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
         long signupTime = userSession.getSignupTime();
         final String rawPassword = user.getPassword();

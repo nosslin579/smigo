@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.UserBean;
+import org.smigo.user.RegisterFormBean;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Test(groups = "selenium")
@@ -67,12 +66,11 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     private String addUser() {
-        final UserBean user = new UserBean();
+        final RegisterFormBean user = new RegisterFormBean();
         final String username = "selenium" + System.currentTimeMillis();
         user.setUsername(username);
         user.setPassword(HASHPW);
-        user.setLocale(Locale.ENGLISH);
-        user.setEmail(username + EMAIL_PROVIDER);
+//        user.setEmail(username + EMAIL_PROVIDER);
         userDao.addUser(user, HASHPW, 0, 0);
         return username;
     }

@@ -3,6 +3,10 @@ var app = angular.module('speciesModule', ['ngRoute']);
 
 app.config(function ($routeProvider) {
     $routeProvider.
+        when('/test', {
+            templateUrl: 'test.html',
+            controller: 'TestController'
+        }).
         when('/help', {
             templateUrl: 'help.html',
             controller: 'AboutController'
@@ -11,12 +15,21 @@ app.config(function ($routeProvider) {
             templateUrl: 'login.html',
             controller: 'LoginController'
         }).
+        when('/register', {
+            templateUrl: 'login.html',
+            controller: 'RegisterController'
+        }).
         when('/garden', {
             templateUrl: 'garden.html',
             controller: 'GardenController'
         }).
         otherwise({redirectTo: '/garden'});
 
+});
+app.controller('TestController', function ($scope) {
+    $scope.doSomething = function () {
+        alert('Submitted!');
+    }
 });
 
 app.run(function ($rootScope) {
@@ -25,7 +38,7 @@ app.run(function ($rootScope) {
 
 app.filter('translate', function () {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
-    return function (messageObject) {
+    return function (messageObject, param) {
         if (!messageObject) {
             console.error('Can not translate', messageObject);
             return 'n/a';
@@ -33,7 +46,7 @@ app.filter('translate', function () {
         if (messageObject.messageKey) {
             return msg[messageObject.messageKey];
         }
-        return msg[messageObject];
+        return msg[messageObject].replace('{0}', param);
     };
 });
 
@@ -144,12 +157,41 @@ app.factory('plantService', function ($http, $rootScope) {
 
     $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
         if (newValue !== oldValue) {
-            console.log('currentuser', newValue, oldValue, scope);
+            console.log('currentuser value changed', newValue, oldValue, scope);
             ret.reloadGarden();
         }
     });
 
     return ret;
+});
+
+app.factory('userService', function ($rootScope, $http, $location) {
+    return {
+        loginOrRegister: function (form, formModel, action) {
+            if (form.$invalid) {
+                console.error('Form is invalid', [form, formModel, action]);
+                return;
+            }
+            formModel['remember-me'] = true;
+            $http({
+                method: 'POST',
+                url: action,
+                data: $.param(formModel),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data, status, headers, config) {
+                $rootScope.currentUser = formModel.username;
+                formModel.password = "";
+                formModel.passwordAgain = "";
+                $location.path('/garden');
+            }).error(function (data, status, headers, config) {
+                formModel.password = "";
+                formModel.passwordAgain = "";
+                delete $rootScope.currentUser;
+                console.log('asdf');
+            }).then(function (response) {
+                console.log('Performed action:' + action, formModel.username, response);
+            });
+        }};
 });
 
 app.controller('GardenController', function ($scope, $http, plantService) {
@@ -202,7 +244,7 @@ app.controller('GardenController', function ($scope, $http, plantService) {
             xmin = Math.min(square.location.x, xmin);
             ymin = Math.min(square.location.y, ymin);
         });
-        console.log('Grid size', ymin, xmax, ymax, xmin);
+//        console.log('Grid size', ymin, xmax, ymax, xmin);
         return {
             'margin-top': (-100000 + 48 + -ymin * 48) + 'px',
             'width': (100000 + 96 + xmax * 48) + 'px',
@@ -222,31 +264,29 @@ app.controller('GardenController', function ($scope, $http, plantService) {
     $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
 });
 
-app.controller('LoginController', function ($route, $scope, $http, $location, plantService, $rootScope) {
-    $scope.loginFormModel = {
+app.controller('LoginController', function ($route, $scope, $http, $location, $rootScope, userService) {
+    $scope.pageMessageKey = 'account.login';
+    $scope.formModel = {
         username: 'testreg17',
         password: 'testreg17'
     };
-    $scope.login = function (form) {
-        // If form is invalid, return and let AngularJS show validation errors.
-        if (form.$invalid) {
-            return;
-        }
-        $scope.loginFormModel['remember-me'] = true;
-        $http({
-            method: 'POST',
-            url: 'login',
-            data: $.param($scope.loginFormModel),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function (data, status, headers, config) {
-            $rootScope.currentUser = $scope.loginFormModel.username;
-            delete $scope.loginFormModel;
-            $location.path('/garden');
-        }).error(function (data, status, headers, config) {
-            delete $rootScope.currentUser;
-        });
-        console.log('Login', $scope);
+    $scope.submitLoginOrRegisterForm = function (form) {
+        userService.loginOrRegister(form, $scope.formModel, 'login');
+    }
+});
+app.controller('RegisterController', function ($route, $scope, $http, $location, userService) {
+    $scope.register = true;
+    $scope.pageMessageKey = 'msg.account.register';
 
+    var newName = 'testreg' + Math.floor(Math.random() * 999999999);
+    $scope.formModel = {
+        username: newName,
+        password: newName,
+        passwordAgain: newName
+    };
+
+    $scope.submitLoginOrRegisterForm = function (form) {
+        userService.loginOrRegister(form, $scope.formModel, 'register');
     }
 });
 

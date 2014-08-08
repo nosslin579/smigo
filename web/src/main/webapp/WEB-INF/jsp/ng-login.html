@@ -1,13 +1,11 @@
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <!-- Default panel contents -->
     <div class="page-header text-center">
-        <h1>{{'account.login' | translate}}</h1>
+        <h1>{{pageMessageKey | translate}}</h1>
     </div>
 
     <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6 col-md-4 col-md-offset-1">
             <h3>Use another account</h3>
 
             <div>
@@ -36,29 +34,39 @@
                     <input required placeholder="https://openid.net/" class="form-control" id="openid-url" type="text" size="30" name="openid_identifier"/>
                 </div>
                 <div class="form-group">
-                    <button name="submit" type="submit" class="btn btn-default">Login</button>
+                    <button name="submit" type="submit" class="btn btn-default">{{pageMessageKey | translate}}</button>
                 </div>
             </form>
         </div>
-        <div class="col-sm-2">
-        </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-6 col-md-4 col-md-offset-2">
             <h3>Use a Smigo account</h3>
 
-            <form name="loginform" role="form">
+            <form name="loginOrRegisterform" role="form">
                 <div class="form-group">
                     <label for="username">{{'username' | translate}}</label>
-                    <input type="text" class="form-control" id="username" placeholder="{{'username' | translate}}" ng-model="loginFormModel.username" required/>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}" ng-model="formModel.username" required/>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid}">
                     <label for="password">{{'password' | translate}}</label>
-                    <input type="password" class="form-control" id="password" placeholder="{{'password' | translate}}" ng-model="loginFormModel.password" required/>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}" ng-model="formModel.password"
+                           required ng-minlength="6"/>
                 </div>
-                <button type="submit" class="btn btn-default" ng-click="login(loginform)">{{'account.login' | translate}}</button>
+                <div class="form-group" ng-if="register">
+                    <label for="password-again">{{'passwordagain' | translate}}</label>
+                    <input type="password" class="form-control" id="password-again" name="passwordagain" placeholder="{{'passwordagain' | translate}}" equals="formModel.password" ng-model="formModel.passwordAgain" required/>
+                    <p ng-show="true" class="help-block">{{loginOrRegisterform}}</p>
+                </div>
+                <div class="checkbox" ng-if="register">
+                    <label for="termsOfService">
+                        <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required/>
+                        {{'msg.account.agreetos' | translate}}
+                        <a target="_blank" href=/static/tos.html>{{'termsofservice' | translate}}</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{pageMessageKey | translate}}</button>
             </form>
-        </div>
-        <div class="col-sm-1">
+
         </div>
     </div>
 

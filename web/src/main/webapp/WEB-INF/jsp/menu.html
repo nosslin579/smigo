@@ -13,8 +13,9 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#garden">Garden</a></li>
-                <li ng-class="{hidden: currentUser}"><a href="#login">Login</a></li>
-                <li><a href="#help">Help</a></li>
+                <li><a href="#help">{{'help' | translate}}</a></li>
+                <li ng-class="{hidden: currentUser}"><a href="#login">{{'account.login' | translate}}</a></li>
+                <li ng-class="{hidden: currentUser}"><a href="#register">{{'msg.account.register' | translate}}</a></li>
                 <li ng-class="{hidden: !currentUser}"><a ng-click="logout()" href="">Logout</a></li>
 
             </ul>

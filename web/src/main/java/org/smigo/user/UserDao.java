@@ -3,7 +3,7 @@ package org.smigo.user;
 import java.util.List;
 
 public interface UserDao {
-    int addUser(User user, String encodedPassword, long signupTime, long decideTime);
+    int addUser(RegisterFormBean user, String encodedPassword, long signupTime, long decideTime);
 
     void addOpenId(int userId, String identityUrl);
 

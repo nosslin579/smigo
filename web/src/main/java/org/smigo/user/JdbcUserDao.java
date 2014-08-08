@@ -31,11 +31,12 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int addUser(User user, String encodedPassword, long signupTime, long decideTime) {
+    public int addUser(RegisterFormBean user, String encodedPassword, long signupTime, long decideTime) {
         final Map map = objectMapper.convertValue(user, Map.class);
         map.put("regtime", signupTime);
         map.put("decidetime", decideTime);
         map.put("password", encodedPassword);
+        map.put("enabled", true);
         Number newId = insert.executeAndReturnKey(map);
         return newId.intValue();
     }
