@@ -232,7 +232,7 @@ app.controller('LoginController', function ($route, $scope, $http, $location, pl
         if (form.$invalid) {
             return;
         }
-
+        $scope.loginFormModel['remember-me'] = true;
         $http({
             method: 'POST',
             url: 'login',
