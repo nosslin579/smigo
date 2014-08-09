@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Locale;
 
 public class RegisterFormBean {
@@ -13,8 +11,6 @@ public class RegisterFormBean {
     private static final Logger log = LoggerFactory.getLogger(RegisterFormBean.class);
 
     @Username
-    @Size(min = 5, max = 40)
-    @Pattern(regexp = "\\w*")
     private String username = "";
 
     @NewPassword

@@ -6,6 +6,8 @@ import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -22,9 +24,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = Username.UsernameValidator.class)
 @Documented
+@Size(min = 5, max = 40)
+@Pattern(regexp = "^[\\w]+$")
 public @interface Username {
 
-    String message() default "usernametaken";
+    String message() default "msg.usernametaken";
 
     Class<?>[] groups() default {};
 
@@ -39,9 +43,6 @@ public @interface Username {
         }
 
         public boolean isValid(String username, ConstraintValidatorContext constraintContext) {
-            if (username.equals("asdf1234567890")) {
-                return true;
-            }
             return userDao.getUsersByUsername(username).isEmpty();
         }
 

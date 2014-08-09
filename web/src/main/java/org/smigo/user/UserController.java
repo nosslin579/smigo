@@ -11,12 +11,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,16 +77,16 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public String register(@Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
+    public List<ObjectError> register(@Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            return result.toString();
+            return result.getAllErrors();
         }
         userHandler.createUser(user);
         userHandler.authenticateUser(user.getUsername(), user.getPassword());
-        return "";
+        return Collections.emptyList();
     }
 
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)

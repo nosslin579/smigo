@@ -1,12 +1,12 @@
 <div class="container" xmlns="http://www.w3.org/1999/html">
     <!-- Default panel contents -->
     <div class="page-header text-center">
-        <h1>{{pageMessageKey | translate}}</h1>
+        <h1>{{viewModel.pageMessageKey | translate}}</h1>
     </div>
 
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-1">
-            <h3>Use another account</h3>
+            <h3>{{'msg.useanotheraccount' | translate}}</h3>
 
             <div>
                 <a onClick="$('#googleOpenId').submit()" href="" class="list-group-item"><span class="signin-icon google"></span>Google</a>
@@ -14,19 +14,19 @@
                 <a onClick="$('#yahooOpenId').submit()" href="" class="list-group-item"><span class="signin-icon yahoo"></span>Yahoo</a>
             </div>
 
-            <form action="/web/login-openid" id="googleOpenId" method="post">
-                <input type="hidden" name="openid_identifier" value="https://www.google.com/accounts/o8/id"/>
+            <form action="login-openid" id="googleOpenId" method="post">
+            <input type="hidden" name="openid_identifier" value="https://www.google.com/accounts/o8/id"/>
                 <input type="hidden" name="remember-me" value="true">
             </form>
 
-            <form action="/web/login-openid" id="yahooOpenId" method="post">
-                <input type="hidden" name="openid_identifier" value="https://me.yahoo.com"/>
+            <form action="login-openid" id="yahooOpenId" method="post">
+            <input type="hidden" name="openid_identifier" value="https://me.yahoo.com"/>
                 <input type="hidden" name="remember-me" value="true">
             </form>
 
             <hr/>
 
-            <form action="/web/login-openid" method="POST" role="form">
+            <form action="login-openid" method="POST" role="form">
                 <input type="hidden" name="remember-me" value="true">
 
                 <div class="form-group">
@@ -34,37 +34,65 @@
                     <input required placeholder="https://openid.net/" class="form-control" id="openid-url" type="text" size="30" name="openid_identifier"/>
                 </div>
                 <div class="form-group">
-                    <button name="submit" type="submit" class="btn btn-default">{{pageMessageKey | translate}}</button>
+                    <button name="submit" type="submit" class="btn btn-default">{{viewModel.pageMessageKey | translate}}</button>
                 </div>
             </form>
         </div>
 
         <div class="col-sm-6 col-md-4 col-md-offset-2">
-            <h3>Use a Smigo account</h3>
+            <h3>{{'msg.usesmigoaccount' | translate}}</h3>
 
-            <form name="loginOrRegisterform" role="form">
-                <div class="form-group">
+            <form name="loginOrRegisterform" role="form" novalidate="">
+                <div class="has-error">
+                    <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && loginOrRegisterform.username.$dirty}">
                     <label for="username">{{'username' | translate}}</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}" ng-model="formModel.username" required/>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}"
+                           ng-model="formModel.username" ng-required="true" ng-minlength="{{viewModel.usernameMin}}"
+                           ng-maxlength="{{viewModel.usernameMax}}" ng-pattern="viewModel.usernamePattern"/>
+
+                    <div ng-if="loginOrRegisterform.username.$dirty">
+                        <span ng-show="loginOrRegisterform.username.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                        <span ng-show="loginOrRegisterform.username.$error.minlength" class="help-block">{{'msg.minlength' | translate:5}}</span>
+                        <span ng-show="loginOrRegisterform.username.$error.maxlength" class="help-block">{{'msg.maxlength' | translate:40}}</span>
+                        <span ng-show="loginOrRegisterform.username.$error.pattern" class="help-block">{{'msg.usecharactersonly' | translate}}</span>
+                    </div>
                 </div>
-                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid}">
+
+                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid && loginOrRegisterform.password.$dirty}">
                     <label for="password">{{'password' | translate}}</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}" ng-model="formModel.password"
-                           required ng-minlength="6"/>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}"
+                           ng-model="formModel.password" ng-required="true" ng-minlength="{{viewModel.passwordMin}}"/>
+
+                    <div ng-if="loginOrRegisterform.password.$dirty">
+                        <span ng-show="loginOrRegisterform.password.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                        <span ng-show="loginOrRegisterform.password.$error.minlength" class="help-block">{{'msg.minlength' | translate:6}}</span>
+                    </div>
                 </div>
-                <div class="form-group" ng-if="register">
+
+                <div class="form-group" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.passwordagain.$invalid && loginOrRegisterform.passwordagain.$dirty}">
                     <label for="password-again">{{'passwordagain' | translate}}</label>
-                    <input type="password" class="form-control" id="password-again" name="passwordagain" placeholder="{{'passwordagain' | translate}}" equals="formModel.password" ng-model="formModel.passwordAgain" required/>
-                    <p ng-show="true" class="help-block">{{loginOrRegisterform}}</p>
+                    <input type="password" class="form-control" id="password-again" name="passwordagain" placeholder="{{'passwordagain' | translate}}"
+                           ng-model="formModel.passwordAgain" equals="{{formModel.password}}"/>
+
+                    <div ng-if="loginOrRegisterform.passwordagain.$dirty">
+                        <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>
+                    </div>
                 </div>
-                <div class="checkbox" ng-if="register">
-                    <label for="termsOfService">
+
+                <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.termsOfService.$dirty}">
+                    <label for="termsOfService" class="checkbox">
                         <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required/>
-                        {{'msg.account.agreetos' | translate}}
+                        {{'msg.agreetos' | translate}}
                         <a target="_blank" href=/static/tos.html>{{'termsofservice' | translate}}</a>
                     </label>
+                    <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.termsOfService.$dirty" class="help-block">{{'msg.required' | translate}}</span>
                 </div>
-                <button type="submit" class="btn btn-default" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{pageMessageKey | translate}}</button>
+
+                <button type="submit" class="btn btn-default" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{viewModel.pageMessageKey | translate}}</button>
+
             </form>
 
         </div>
