@@ -32,6 +32,7 @@ app.controller('TestController', function ($scope) {
     }
 });
 app.run(function ($rootScope) {
+    console.log("App run");
     $rootScope.currentUser = '${pageContext.request.remoteUser}';
 });
 app.filter('translate', function () {
@@ -96,8 +97,7 @@ app.directive('rememberScroll', function ($timeout) {
     }
 });
 app.factory('plantService', function ($http, $rootScope) {
-    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-    console.log('plantService', garden);
+    console.log('plantService');
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;
@@ -105,17 +105,10 @@ app.factory('plantService', function ($http, $rootScope) {
         this.speciesId = plant.species.id;
     }
 
-    var ret = {
-        reloadGarden: function () {
-            $http.get('rest/garden').success(function (data) {
-                console.log('Garden reloaded', data);
-                garden = data;
-            }).error(function (data, status, headers, config) {
-                console.error('Could not reload garden', [data, status, headers, config]);
-            });
-        },
-        getGarden: function () {
-            return garden;
+    return {
+        reloadGarden: function (onSuccess, onError) {
+            console.log('Reloading garden');
+            $http.get('rest/garden').success(onSuccess).error(onError);
         },
         addYear: function (garden, year) {
             var mostRecentYear = Object.keys(garden.squares).sort().slice(-1).pop();
@@ -198,15 +191,6 @@ app.factory('plantService', function ($http, $rootScope) {
             $http.post('rest/garden', update);
         }
     };
-
-    $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
-        console.log('currentuser value changed', [newValue, oldValue, scope]);
-        if (newValue !== oldValue) {
-            ret.reloadGarden();
-        }
-    });
-
-    return ret;
 });
 app.factory('userService', function ($rootScope, $http, $location) {
     return {
@@ -241,9 +225,10 @@ app.factory('userService', function ($rootScope, $http, $location) {
             });
         }};
 });
-app.controller('GardenController', function ($scope, $http, plantService) {
-    console.log('GardenController');
-    $scope.garden = plantService.getGarden();
+app.controller('GardenController', function ($scope, $rootScope, $http, plantService) {
+    console.log('GardenController', $scope);
+
+    $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
 
     $scope.selectSpecies = function (species) {
         console.log('Selected species set to', species);
@@ -311,8 +296,23 @@ app.controller('GardenController', function ($scope, $http, plantService) {
 
     $scope.selectSpecies($scope.garden.species["1"]);
     $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
+
+    $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
+        console.log('currentuser value changed', [newValue, oldValue, scope]);
+        if (newValue !== oldValue) {
+            plantService.reloadGarden(
+                function (data) {
+                    $scope.garden = data;
+                    $scope.availableYears = plantService.getAvailableYears(data.squares);
+                    $scope.selectedYear = Object.keys(data.squares).sort().slice(-1).pop();
+                },
+                function (data, status, headers, config) {
+                    console.error('Could not reload garden', [data, status, headers, config]);
+                });
+        }
+    });
 });
-app.controller('LoginController', function ($route, $scope, $http, $location, $rootScope, userService) {
+app.controller('LoginController', function ($scope, userService) {
     $scope.viewModel = {
         login: true,
         usernameMin: 0,
@@ -330,7 +330,7 @@ app.controller('LoginController', function ($route, $scope, $http, $location, $r
         userService.loginOrRegister(form, $scope, 'login');
     }
 });
-app.controller('RegisterController', function ($route, $scope, $http, $location, userService) {
+app.controller('RegisterController', function ($scope, userService) {
     $scope.viewModel = {
         register: true,
         usernameMin: 5,
