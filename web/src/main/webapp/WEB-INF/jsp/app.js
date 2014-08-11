@@ -80,10 +80,27 @@ app.directive('equals', function () {
         }
     }
 });
+app.directive('rememberScroll', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, $elm, attr) {
+            scope.$watch('selectedYear', function (newYear, oldYear, wtf) {
+                $timeout(function () {
+                    $elm[0].scrollLeft = 99999;
+                    $elm[0].scrollLeft = $elm[0].scrollLeft / 2;
+                    $elm[0].scrollTop = 99999;
+                    $elm[0].scrollTop = $elm[0].scrollTop / 2;
+                }, 0, false);
+            }, true);
+        }
+    }
+});
 app.factory('plantService', function ($http, $rootScope) {
-    console.log('plantService');
     var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-
+    if (Object.keys(garden.squares).length === 0) {
+        garden.squares[new Date().getFullYear()] = [];
+    }
+    console.log('plantService', garden);
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;
@@ -96,6 +113,9 @@ app.factory('plantService', function ($http, $rootScope) {
             $http.get('rest/garden').success(function (data) {
                 console.log('Garden reloaded', data);
                 garden = data;
+                if (Object.keys(garden.squares).length === 0) {
+                    garden.squares[new Date().getFullYear()] = [];
+                }
             }).error(function (data, status, headers, config) {
                 console.error('Could not reload garden', [data, status, headers, config]);
             });
@@ -125,7 +145,7 @@ app.factory('plantService', function ($http, $rootScope) {
         getAvailableYears: function (squares) {
             var sortedYearsArray = Object.keys(squares).sort();
             var firstYear = +sortedYearsArray[0];
-            var lastYear = +sortedYearsArray[sortedYearsArray.length - 1];
+            var lastYear = +sortedYearsArray.slice(-1)[0];
             var ret = [];
             ret.push({year: firstYear - 1, exists: false});
             for (var i = firstYear; i <= lastYear; i++) {
@@ -244,7 +264,7 @@ app.controller('GardenController', function ($scope, $http, plantService) {
             $scope.availableYears = plantService.getAvailableYears($scope.garden.squares);
         }
         $scope.selectedYear = availableYear.year;
-        console.log('Year set to', availableYear, $scope.garden);
+        console.log('Year set to', [availableYear, $scope.garden]);
     };
 
     $scope.onSquareClick = function (clickEvent, square) {
@@ -270,7 +290,8 @@ app.controller('GardenController', function ($scope, $http, plantService) {
     };
 
     $scope.getGridSizeCss = function (squares) {
-        var xmax = -9999, ymax = -9999, xmin = 9999, ymin = 9999;
+        var axisLength = squares.length === 0 ? -1 : 9999;
+        var xmax = -axisLength, ymax = -axisLength, xmin = axisLength, ymin = axisLength;
         angular.forEach(squares, function (square, index) {
             xmax = Math.max(square.location.x, xmax);
             ymax = Math.max(square.location.y, ymax);
@@ -278,11 +299,12 @@ app.controller('GardenController', function ($scope, $http, plantService) {
             ymin = Math.min(square.location.y, ymin);
         });
 //        console.log('Grid size', ymin, xmax, ymax, xmin);
+        var margin = 48 * 10;
         return {
-            'margin-top': (-100000 + 48 + -ymin * 48) + 'px',
-            'width': (100000 + 96 + xmax * 48) + 'px',
-            'height': (100000 + 96 + ymax * 48) + 'px',
-            'margin-left': (-100000 + 48 + -xmin * 48) + 'px'
+            'margin-top': (-100000 + -ymin * 48 + margin) + 'px',
+            'width': (100000 + 48 + xmax * 48 + margin) + 'px',
+            'height': (100000 + 48 + ymax * 48 + margin) + 'px',
+            'margin-left': (-100000 + -xmin * 48 + margin) + 'px'
         };
     };
 
@@ -305,10 +327,10 @@ app.controller('LoginController', function ($route, $scope, $http, $location, $r
         passwordMin: 0,
         pageMessageKey: 'account.login'
     };
-//    $scope.formModel = {
-//        username: 'testreg17',
-//        password: 'testreg17'
-//    };
+    $scope.formModel = {
+        username: 'user7389327855123',
+        password: 'testreg17'
+    };
     $scope.submitLoginOrRegisterForm = function (form) {
         console.log('loginOrRegister', [form, $scope]);
         userService.loginOrRegister(form, $scope, 'login');

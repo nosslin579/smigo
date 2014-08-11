@@ -16,10 +16,9 @@
                 </div>
 
 
-                <div id="peephole">
-                    <div id="grid" ng-click="onGridClick($event)"
-                         ng-style="getGridSizeCss(garden.squares[selectedYear])">
-                        <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                <div id="peephole" remember-scroll="">
+                    <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
+                    <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                             {{'x'+s.location.x + 'y' + s.location.y}}
                             <div ng-repeat="p in s.plants">
                                 {{p.species | translate}}
