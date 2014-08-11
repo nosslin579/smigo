@@ -9,17 +9,19 @@
         </div>
         <div class="col-xs-12 col-sm-9 col-sm-offset-3 main">
             <div>
-                <div>
-                    <a ng-repeat="availableYear in availableYears" href="" ng-class="" ng-click="selectYear(availableYear)">
-                        {{availableYear.exists ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}
-                    </a>
-                </div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li ng-class="{active: availableYear.year == selectedYear}" ng-repeat="availableYear in availableYears">
+                        <a href="" ng-click="selectYear(availableYear)">
+                            {{availableYear.exists ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}
+                        </a>
+                    </li>
+                </ul>
 
 
                 <div id="peephole" remember-scroll="">
                     <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
-                    <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                            {{'x'+s.location.x + 'y' + s.location.y}}
+                        <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                        {{'x'+s.location.x + 'y' + s.location.y}}
                             <div ng-repeat="p in s.plants">
                                 {{p.species | translate}}
                             </div>

@@ -278,7 +278,7 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
             ymin = Math.min(square.location.y, ymin);
         });
 //        console.log('Grid size', ymin, xmax, ymax, xmin);
-        var margin = 48 * 10;
+        var margin = 48 * 5;
         return {
             'margin-top': (-100000 + -ymin * 48 + margin) + 'px',
             'width': (100000 + 48 + xmax * 48 + margin) + 'px',
