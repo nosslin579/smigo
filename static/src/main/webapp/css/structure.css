@@ -100,9 +100,18 @@ body {
 /* Sidebar navigation */
 .sidebar {
     position: fixed;
-    overflow-y: scroll;
     top: 50px;
     bottom: 0;
+    overflow: hidden;
+}
+
+.sidebar > div {
+    overflow-x: hidden;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .nav-sidebar {
