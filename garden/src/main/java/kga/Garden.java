@@ -113,6 +113,9 @@ public class Garden {
     }
 
     public Map<Integer, Collection<Square>> getSquares() {
+        if (squares.isEmpty()) {
+            addOrGetSquare(new YearXY(Calendar.getInstance().get(Calendar.YEAR), 0, 0));
+        }
         Multimap<Integer, Square> ret = ArrayListMultimap.create();
         for (Square square : squares.values()) {
             ret.put(square.getLocation().getYear(), square);

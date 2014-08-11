@@ -97,9 +97,6 @@ app.directive('rememberScroll', function ($timeout) {
 });
 app.factory('plantService', function ($http, $rootScope) {
     var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-    if (Object.keys(garden.squares).length === 0) {
-        garden.squares[new Date().getFullYear()] = [];
-    }
     console.log('plantService', garden);
     function PlantData(plant) {
         this.year = plant.location.year;
@@ -113,9 +110,6 @@ app.factory('plantService', function ($http, $rootScope) {
             $http.get('rest/garden').success(function (data) {
                 console.log('Garden reloaded', data);
                 garden = data;
-                if (Object.keys(garden.squares).length === 0) {
-                    garden.squares[new Date().getFullYear()] = [];
-                }
             }).error(function (data, status, headers, config) {
                 console.error('Could not reload garden', [data, status, headers, config]);
             });
@@ -206,8 +200,8 @@ app.factory('plantService', function ($http, $rootScope) {
     };
 
     $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
+        console.log('currentuser value changed', [newValue, oldValue, scope]);
         if (newValue !== oldValue) {
-            console.log('currentuser value changed', newValue, oldValue, scope);
             ret.reloadGarden();
         }
     });
