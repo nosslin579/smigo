@@ -96,8 +96,10 @@ app.directive('rememberScroll', function ($timeout) {
         }
     }
 });
-app.factory('plantService', function ($http, $rootScope) {
+app.factory('plantService', function ($http) {
     console.log('plantService');
+    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;
@@ -105,12 +107,24 @@ app.factory('plantService', function ($http, $rootScope) {
         this.speciesId = plant.species.id;
     }
 
+    function reloadGarden() {
+        var promise = $http.get('rest/garden');
+        promise.success(function (data) {
+            console.log('Garden reloaded', data);
+            garden = data;
+        });
+        promise.error(function (data, status, headers, config) {
+            console.error('Could not reload garden', [data, status, headers, config]);
+        });
+        return promise;
+    }
+
     return {
-        reloadGarden: function (onSuccess, onError) {
-            console.log('Reloading garden');
-            $http.get('rest/garden').success(onSuccess).error(onError);
+        getGarden: function () {
+            return garden;
         },
-        addYear: function (garden, year) {
+        reloadGarden: reloadGarden,
+        addYear: function (year) {
             var mostRecentYear = Object.keys(garden.squares).sort().slice(-1).pop();
             var newYearSquareArray = [];
             var copyFromSquareArray = garden.squares[mostRecentYear];
@@ -129,8 +143,8 @@ app.factory('plantService', function ($http, $rootScope) {
             garden.squares[year] = newYearSquareArray;
             console.log('Year added:' + year, garden.squares);
         },
-        getAvailableYears: function (squares) {
-            var sortedYearsArray = Object.keys(squares).sort();
+        getAvailableYears: function () {
+            var sortedYearsArray = Object.keys(garden.squares).sort();
             var firstYear = +sortedYearsArray[0];
             var lastYear = +sortedYearsArray.slice(-1)[0];
             var ret = [];
@@ -142,7 +156,7 @@ app.factory('plantService', function ($http, $rootScope) {
             console.log('AvailableYears', ret);
             return ret;
         },
-        addSquare: function (garden, year, x, y) {
+        addSquare: function (year, x, y) {
             var newSquare = {
                 location: {
                     x: x,
@@ -171,9 +185,9 @@ app.factory('plantService', function ($http, $rootScope) {
             square.plants[species.id].add = true;
             console.log('Species added', square.plants);
         },
-        save: function (yearMap) {
+        save: function () {
             var update = { addList: [], removeList: [] };
-            angular.forEach(yearMap, function (squareList) {
+            angular.forEach(garden.squares, function (squareList) {
                 angular.forEach(squareList, function (square) {
                     angular.forEach(square.plants, function (plant) {
                         if (plant.add && !plant.remove) {
@@ -192,7 +206,7 @@ app.factory('plantService', function ($http, $rootScope) {
         }
     };
 });
-app.factory('userService', function ($rootScope, $http, $location) {
+app.factory('userService', function ($rootScope, $http, $location, plantService) {
     return {
         loginOrRegister: function (form, scope, action) {
             scope.objectErrors = [];
@@ -216,7 +230,10 @@ app.factory('userService', function ($rootScope, $http, $location) {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data, status, headers, config) {
                 $rootScope.currentUser = scope.formModel.username;
-                $location.path('/garden');
+                plantService.reloadGarden().then(function () {
+                    console.log("Redirecting to garden");
+                    $location.path('/garden');
+                });
                 console.log('Performed successfully action:' + action, [data, status, headers, config]);
             }).error(function (data, status, headers, config) {
                 scope.objectErrors = data;
@@ -228,14 +245,14 @@ app.factory('userService', function ($rootScope, $http, $location) {
 app.controller('GardenController', function ($scope, $rootScope, $http, plantService) {
     console.log('GardenController', $scope);
 
-    $scope.garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+    $scope.garden = plantService.getGarden();
 
     $scope.selectSpecies = function (species) {
         console.log('Selected species set to', species);
         $scope.selectedSpecies = species;
     };
 
-    $scope.availableYears = plantService.getAvailableYears($scope.garden.squares);
+    $scope.availableYears = plantService.getAvailableYears();
 
     $scope.selectYear = function (availableYear) {
         if (!availableYear.exists) {
@@ -255,16 +272,16 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         } else {
             plantService.addPlant($scope.selectedSpecies, square);
         }
-        plantService.save($scope.garden.squares);
+        plantService.save();
         clickEvent.stopPropagation();
     };
 
     $scope.onGridClick = function (clickEvent) {
         var x = Math.floor((clickEvent.offsetX - 100000) / 48);
         var y = Math.floor((clickEvent.offsetY - 100000) / 48);
-        var addedSquare = plantService.addSquare($scope.garden, $scope.selectedYear, x, y);
+        var addedSquare = plantService.addSquare($scope.selectedYear, x, y);
         plantService.addPlant($scope.selectedSpecies, addedSquare);
-        plantService.save($scope.garden.squares);
+        plantService.save();
         clickEvent.stopPropagation();
     };
 
@@ -297,20 +314,6 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
     $scope.selectSpecies($scope.garden.species["1"]);
     $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
 
-    $rootScope.$watch('currentUser', function (newValue, oldValue, scope) {
-        console.log('currentuser value changed', [newValue, oldValue, scope]);
-        if (newValue !== oldValue) {
-            plantService.reloadGarden(
-                function (data) {
-                    $scope.garden = data;
-                    $scope.availableYears = plantService.getAvailableYears(data.squares);
-                    $scope.selectedYear = Object.keys(data.squares).sort().slice(-1).pop();
-                },
-                function (data, status, headers, config) {
-                    console.error('Could not reload garden', [data, status, headers, config]);
-                });
-        }
-    });
 });
 app.controller('LoginController', function ($scope, userService) {
     $scope.viewModel = {
@@ -355,13 +358,16 @@ app.controller('RegisterController', function ($scope, userService) {
 });
 app.controller('AboutController', function () {
 });
-app.controller('MainMenuController', function ($http, $scope, $rootScope) {
+app.controller('MainMenuController', function ($http, $scope, $rootScope, plantService, $route) {
     $scope.logout = function () {
         $http({
             method: 'GET',
             url: 'logout'
         }).success(function (data, status, headers, config) {
             delete $rootScope.currentUser;
+            plantService.reloadGarden().then(function () {
+                $route.reload();
+            });
         }).error(function (data, status, headers, config) {
             delete $rootScope.currentUser;
         });
