@@ -324,10 +324,10 @@ app.controller('LoginController', function ($scope, userService) {
         passwordMin: 0,
         pageMessageKey: 'account.login'
     };
-    $scope.formModel = {
-        username: 'user7389327855123',
+    /*$scope.formModel = {
+     username: 'user7389327855123',
         password: 'testreg17'
-    };
+     };*/
     $scope.submitLoginOrRegisterForm = function (form) {
         console.log('loginOrRegister', [form, $scope]);
         userService.loginOrRegister(form, $scope, 'login');

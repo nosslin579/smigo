@@ -4,12 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.RegisterFormBean;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -79,44 +81,32 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("login-link")).click();
         d.findElement(By.name("username")).sendKeys(username);
         d.findElement(By.name("password")).sendKeys(password);
-        d.findElement(By.id("submit-loginform-form")).click();
+        d.findElement(By.id("submit-login-register-form")).click();
     }
 
     public void register() throws Exception {
-        final String realName = "Seleniumsson";
         final String username = "selenium" + System.currentTimeMillis();
-        final String email = username + EMAIL_PROVIDER;
-        final String about = "Eco friendly garden";
 
         //add tomato
-        d.findElement(By.id("origo")).click();
-        d.findElement(By.id("savebutton")).click();
-//        w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Please login first"));
+        Actions builder = new Actions(d);
+        WebElement grid = d.findElement(By.id("grid"));
+        builder.moveToElement(grid, 100000, 100000).click().build().perform();
 
         //sign up
-        d.findElement(By.id("signup-link")).click();
+        d.findElement(By.id("register-link")).click();
         d.findElement(By.name("username")).sendKeys(username);
         d.findElement(By.name("password")).sendKeys(PASSWORD);
-        d.findElement(By.id("passwordagain")).sendKeys(PASSWORD);
-        d.findElement(By.name("email")).sendKeys(email);
-        d.findElement(By.name("displayname")).sendKeys(realName);
-        d.findElement(By.name("about")).sendKeys(about);
-        d.findElement(By.name("termsofservice")).click();
-        d.findElement(By.id("submit-userform-button")).click();
+        d.findElement(By.name("passwordagain")).sendKeys(PASSWORD);
+        d.findElement(By.name("termsOfService")).click();
+        d.findElement(By.id("submit-login-register-form")).click();
 
-        List<WebElement> src = d.findElements(By.cssSelector("#origo .speciesimage"));
+        List<WebElement> src = d.findElements(By.className("square"));
         Assert.assertEquals(src.size(), 1);
-        Assert.assertEquals(src.get(0).getAttribute("src"), "http://localhost:8080/pic/28.png");
 
-/*
-        d.manage().deleteCookieNamed("JSESSIONID");
 
-        d.findElement(By.id("account-details-link")).click();
-        Assert.assertTrue(d.getPageSource().contains(email));
-        Assert.assertTrue(d.getPageSource().contains(realName));
-        Assert.assertTrue(d.getPageSource().contains(about));
-*/
-
+        User user = userDao.getUserByUsername(username);
+        Assert.assertNotNull(user);
+        Assert.assertEquals(user.getUsername(), username);
     }
 
     public void addSpecies() {

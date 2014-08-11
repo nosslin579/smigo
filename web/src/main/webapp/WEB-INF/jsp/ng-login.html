@@ -91,7 +91,7 @@
                     <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.termsOfService.$dirty" class="help-block">{{'msg.required' | translate}}</span>
                 </div>
 
-                <button type="submit" class="btn btn-default" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{viewModel.pageMessageKey | translate}}</button>
+                <button type="submit" class="btn btn-default" id="submit-login-register-form" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{viewModel.pageMessageKey | translate}}</button>
 
             </form>
 
