@@ -115,6 +115,7 @@ body {
     top: 50px;
     bottom: 0;
     overflow: hidden;
+    padding: 0
 }
 
 .sidebar > div {
@@ -122,19 +123,27 @@ body {
     position: absolute;
     bottom: 0;
     top: 0;
-    width: 100%;
+    width: 106%;
     overflow-y: scroll;
 }
 
-.nav-sidebar {
-    margin-right: -21px; /* 20px padding + 1px border */
-    margin-bottom: 20px;
-    margin-left: -20px;
+.sidebar .navbar-form {
+    padding-left: 15px;
+}
+
+.sidebar .btn-group {
+    margin: 15px;
+    width: 90%;
+}
+
+.sidebar .navbar-form .form-control {
+    width: 100%;
 }
 
 .nav-sidebar > li > a {
     padding-right: 20px;
     padding-left: 20px;
+    padding-top: 6px;
 }
 
 .nav-sidebar > .active > a,
