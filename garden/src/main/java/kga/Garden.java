@@ -38,7 +38,7 @@ public class Garden {
         if (plants != null) {
             for (PlantData p : plants) {
                 Species s = species.get(p.getSpeciesId());
-                this.addOrGetSquare(p).addSpecies(s);
+                this.addOrGetSquare(new YearXY(p)).addSpecies(s);
             }
         }
     }

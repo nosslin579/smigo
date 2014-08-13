@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class GardenTest {
 
@@ -61,6 +62,17 @@ public class GardenTest {
         g.addOrGetSquare(new YearXY(2007, 0, 0)).addSpecies(carrot);
         List<Hint> hints = g.getHints();
         Assert.assertEquals(hints.size(), 0);
+    }
+
+    @Test
+    public void getSquares() throws Exception {
+        Garden garden = new Garden();
+        garden.addOrGetSquare(l).addSpecies(carrot);
+        garden.addOrGetSquare(l).addSpecies(onion);
+        Assert.assertEquals(garden.getSquare(l).getPlants().size(), 2);
+        Map<Integer, Collection<Square>> squares = garden.getSquares();
+        Assert.assertEquals(squares.get(2000).size(), 1);
+        Assert.assertEquals(squares.get(2000).iterator().next().getPlants().size(), 2);
     }
 
     @Test
