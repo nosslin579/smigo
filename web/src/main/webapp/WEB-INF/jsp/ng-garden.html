@@ -35,14 +35,14 @@
                 </ul>
 
 
-                <div class="row absolute-full">
+                <div class="row absolute-full grid-to-top">
                     <div class="col-sm-offset-1 col-sm-11 absolute-full">
-                        <div id="fade-top" class="grid-to-top"></div>
-                        <div id="fade-bottom"></div>
-                        <div id="fade-right" class="grid-to-top"></div>
-                        <div id="fade-left" class="grid-to-top"></div>
-                        <div id="peephole" class="grid-to-top" remember-scroll="">
-                            <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
+                        <div id="fade-top" class="absolute-full"></div>
+                        <div id="fade-bottom" class="absolute-full"></div>
+                        <div id="fade-right" class="absolute-full"></div>
+                        <div id="fade-left" class="absolute-full"></div>
+                        <div id="peephole" remember-scroll="">
+                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
                                 <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                     {{'x'+s.location.x + 'y' + s.location.y}}
                                     <div ng-repeat="p in s.plants">
