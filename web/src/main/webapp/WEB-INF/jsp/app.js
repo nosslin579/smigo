@@ -34,6 +34,10 @@ app.controller('TestController', function ($scope) {
 app.run(function ($rootScope) {
     console.log("App run");
     $rootScope.currentUser = '${pageContext.request.remoteUser}';
+    $rootScope.getObjectLength = function (obj) {
+        return Object.keys(obj).length;
+    }
+
 });
 app.filter('translate', function () {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
@@ -183,7 +187,7 @@ app.factory('plantService', function ($http) {
                 square.plants[species.id] = { species: species, location: square.location};
             }
             square.plants[species.id].add = true;
-            console.log('Species added', square.plants);
+            console.log('Species added', square);
         },
         save: function () {
             var update = { addList: [], removeList: [] };
@@ -324,10 +328,10 @@ app.controller('LoginController', function ($scope, userService) {
         passwordMin: 0,
         pageMessageKey: 'account.login'
     };
-    /*$scope.formModel = {
-     username: 'user7389327855123',
-     password: 'testreg17'
-     };*/
+    $scope.formModel = {
+        username: 'user7389327855123',
+        password: 'testreg17'
+    };
     $scope.submitLoginOrRegisterForm = function (form) {
         console.log('loginOrRegister', [form, $scope]);
         userService.loginOrRegister(form, $scope, 'login');

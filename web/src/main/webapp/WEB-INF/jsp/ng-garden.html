@@ -42,11 +42,10 @@
                         <div id="fade-right" class="absolute-full"></div>
                         <div id="fade-left" class="absolute-full"></div>
                         <div id="peephole" remember-scroll="">
-                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
+                            <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(garden.squares[selectedYear])">
                                 <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                                    {{'x'+s.location.x + 'y' + s.location.y}}
                                     <div ng-repeat="p in s.plants">
-                                        {{p.species | translate}}
+                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                     </div>
                                 </div>
                             </div>
