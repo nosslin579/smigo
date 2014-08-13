@@ -295,11 +295,11 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
             ymin = Math.min(square.location.y, ymin);
         });
 //        console.log('Grid size', ymin, xmax, ymax, xmin);
-        var margin = 48 * 5;
+        var margin = 48 * 2;
         return {
             'margin-top': (-100000 + -ymin * 48 + margin) + 'px',
-            'width': (100000 + 48 + xmax * 48 + margin) + 'px',
-            'height': (100000 + 48 + ymax * 48 + margin) + 'px',
+            'width': (100000 + 47 + xmax * 48 + margin) + 'px',
+            'height': (100000 + 47 + ymax * 48 + margin) + 'px',
             'margin-left': (-100000 + -xmin * 48 + margin) + 'px'
         };
     };
@@ -326,7 +326,7 @@ app.controller('LoginController', function ($scope, userService) {
     };
     /*$scope.formModel = {
      username: 'user7389327855123',
-        password: 'testreg17'
+     password: 'testreg17'
      };*/
     $scope.submitLoginOrRegisterForm = function (form) {
         console.log('loginOrRegister', [form, $scope]);
