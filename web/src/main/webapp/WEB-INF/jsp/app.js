@@ -113,6 +113,15 @@ app.factory('plantService', function ($http) {
         this.speciesId = plant.species.id;
     }
 
+    function fillGarden() {
+        angular.forEach(garden.squares, function (squareList) {
+            angular.forEach(squareList, function (square) {
+                angular.forEach(square.plants, function (plant) {
+                });
+            });
+        });
+    }
+
     function reloadGarden() {
         var promise = $http.get('rest/garden');
         promise.success(function (data) {
@@ -125,7 +134,25 @@ app.factory('plantService', function ($http) {
         return promise;
     }
 
+    function getBounds(year) {
+        var axisLength = 9999;
+        var ret = {
+            xmax: -axisLength,
+            ymax: -axisLength,
+            xmin: axisLength,
+            ymin: axisLength
+        };
+        angular.forEach(garden.squares[year], function (square, index) {
+            ret.xmax = Math.max(square.location.x, ret.xmax);
+            ret.ymax = Math.max(square.location.y, ret.ymax);
+            ret.xmin = Math.min(square.location.x, ret.xmin);
+            ret.ymin = Math.min(square.location.y, ret.ymin);
+        });
+        return ret;
+    }
+
     return {
+        getBounds: getBounds,
         getSelectedSpecies: function () {
             return selectedSpecies;
         },
@@ -160,6 +187,17 @@ app.factory('plantService', function ($http) {
                     }
                 });
             });
+
+            //add verge
+            var bounds = getBounds(mostRecentYear);
+            for (var x = bounds.xmin - 1; x <= bounds.xmax + 1; x++) {
+                newYearSquareArray.push({location: {year: year, x: x, y: bounds.ymin - 1}, plants: {}, verge: true});
+                newYearSquareArray.push({location: {year: year, x: x, y: bounds.ymax + 1}, plants: {}, verge: true});
+            }
+            for (var y = bounds.ymin; y <= bounds.ymax; y++) {
+                newYearSquareArray.push({location: {year: year, x: bounds.xmax + 1, y: y}, plants: {}, verge: true});
+                newYearSquareArray.push({location: {year: year, x: bounds.xmin - 1, y: y}, plants: {}, verge: true});
+            }
 
             garden.squares[year] = newYearSquareArray;
             selectedYear = year;
@@ -265,6 +303,7 @@ app.factory('userService', function ($rootScope, $http, $location, plantService)
 app.controller('GardenController', function ($scope, $rootScope, $http, plantService) {
     console.log('GardenController', $scope);
 
+    //Garden
     $scope.$watch(plantService.getGarden, function (newVal, oldVal, scope) {
         $scope.garden = plantService.getGarden();
         $scope.forwardYear = +Object.keys(plantService.getGarden().squares).sort().slice(-1).pop() + 1;
@@ -311,22 +350,15 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         clickEvent.stopPropagation();
     };
 
-    $scope.getGridSizeCss = function (squares) {
-        var axisLength = squares.length === 0 ? -1 : 9999;
-        var xmax = -axisLength, ymax = -axisLength, xmin = axisLength, ymin = axisLength;
-        angular.forEach(squares, function (square, index) {
-            xmax = Math.max(square.location.x, xmax);
-            ymax = Math.max(square.location.y, ymax);
-            xmin = Math.min(square.location.x, xmin);
-            ymin = Math.min(square.location.y, ymin);
-        });
+    $scope.getGridSizeCss = function (year) {
+        var bounds = plantService.getBounds(year);
 //        console.log('Grid size', ymin, xmax, ymax, xmin);
         var margin = 48 * 2;
         return {
-            'margin-top': (-100000 + -ymin * 48 + margin) + 'px',
-            'width': (100000 + 47 + xmax * 48 + margin) + 'px',
-            'height': (100000 + 47 + ymax * 48 + margin) + 'px',
-            'margin-left': (-100000 + -xmin * 48 + margin) + 'px'
+            'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',
+            'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',
+            'height': (100000 + 47 + bounds.ymax * 48 + margin) + 'px',
+            'margin-left': (-100000 + -bounds.xmin * 48 + margin) + 'px'
         };
     };
 
