@@ -190,12 +190,12 @@ body {
  * Main content
  */
 
-.main {
+#garden-frame {
     position: fixed;
     bottom: 0;
     top: 50px;
 }
 
-.main ul.nav-tabs {
+#garden-frame ul.nav-tabs {
     padding: 10px 0 0 10px;
 }
