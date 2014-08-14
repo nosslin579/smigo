@@ -172,10 +172,12 @@ app.factory('plantService', function ($http) {
             ymin: axisLength
         };
         angular.forEach(garden.squares[year], function (square, index) {
-            ret.xmax = Math.max(square.location.x, ret.xmax);
-            ret.ymax = Math.max(square.location.y, ret.ymax);
-            ret.xmin = Math.min(square.location.x, ret.xmin);
-            ret.ymin = Math.min(square.location.y, ret.ymin);
+            if (!square.verge) {
+                ret.xmax = Math.max(square.location.x, ret.xmax);
+                ret.ymax = Math.max(square.location.y, ret.ymax);
+                ret.xmin = Math.min(square.location.x, ret.xmin);
+                ret.ymin = Math.min(square.location.y, ret.ymin);
+            }
         });
         return ret;
     }
