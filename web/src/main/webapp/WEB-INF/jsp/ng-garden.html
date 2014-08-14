@@ -26,14 +26,24 @@
         </div>
         <div class="col-xs-12 col-sm-9 col-sm-offset-3 main">
             <div class="absolute-full">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li ng-class="{active: availableYear.year == selectedYear}" ng-repeat="availableYear in availableYears">
-                        <a href="" ng-click="selectYear(availableYear)">
-                            {{availableYear.exists ? ' ':'+'}}{{availableYear.year}}{{availableYear.exists ? ' ':'+'}}
-                        </a>
-                    </li>
-                </ul>
+                <div class="row absolute-full">
+                    <div class="col-sm-offset-1 col-sm-11 absolute-full">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li ng-class="{active: year == selectedYear}" ng-repeat="year in availableYears">
+                                <a href="" ng-click="setSelectedYear(year)">
+                                    {{year}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" data-toggle="modal" data-target="#add-year-modal">
 
+                                    <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
                 <div class="row absolute-full grid-to-top">
                     <div class="col-sm-offset-1 col-sm-11 absolute-full">
@@ -56,3 +66,26 @@
         </div>
     </div>
 </div>
+
+<div id="add-year-modal" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
+                </button>
+                <h4 class="modal-title">{{'addyear'|translate}}</h4>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear)">{{forwardYear}}</button>
+                <hr/>
+                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(backwardYear)">{{backwardYear}}</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{'msg.close' | translate}}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -103,6 +103,7 @@ app.directive('rememberScroll', function ($timeout) {
 app.factory('plantService', function ($http) {
     console.log('plantService');
     var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
+    var selectedYear = +Object.keys(garden.squares).sort().slice(-1).pop();
 
     function PlantData(plant) {
         this.year = plant.location.year;
@@ -124,6 +125,15 @@ app.factory('plantService', function ($http) {
     }
 
     return {
+        getSelectedYear: function () {
+            return selectedYear;
+        },
+        setSelectedYear: function (year) {
+            if (!garden.squares.hasOwnProperty(year)) {
+                garden.squares[year] = [];
+            }
+            selectedYear = year;
+        },
         getGarden: function () {
             return garden;
         },
@@ -145,6 +155,7 @@ app.factory('plantService', function ($http) {
             });
 
             garden.squares[year] = newYearSquareArray;
+            selectedYear = year;
             console.log('Year added:' + year, garden.squares);
         },
         getAvailableYears: function () {
@@ -152,11 +163,9 @@ app.factory('plantService', function ($http) {
             var firstYear = +sortedYearsArray[0];
             var lastYear = +sortedYearsArray.slice(-1)[0];
             var ret = [];
-            ret.push({year: firstYear - 1, exists: false});
             for (var i = firstYear; i <= lastYear; i++) {
-                ret.push({year: i, exists: sortedYearsArray.indexOf(i.toString()) !== -1});
+                ret.push(i);
             }
-            ret.push({year: lastYear + 1, exists: false});
             console.log('AvailableYears', ret);
             return ret;
         },
@@ -249,22 +258,29 @@ app.factory('userService', function ($rootScope, $http, $location, plantService)
 app.controller('GardenController', function ($scope, $rootScope, $http, plantService) {
     console.log('GardenController', $scope);
 
-    $scope.garden = plantService.getGarden();
+    $scope.$watch(plantService.getGarden, function (newVal, oldVal, scope) {
+        $scope.garden = plantService.getGarden();
+        $scope.forwardYear = +Object.keys(plantService.getGarden().squares).sort().slice(-1).pop() + 1;
+        $scope.backwardYear = +Object.keys(plantService.getGarden().squares).sort()[0] - 1;
+        console.log("Garden changed", [$scope, scope]);
+    }, true);
 
     $scope.selectSpecies = function (species) {
         console.log('Selected species set to', species);
         $scope.selectedSpecies = species;
     };
 
-    $scope.availableYears = plantService.getAvailableYears();
+    //Year
+    $scope.$watch(plantService.getSelectedYear, function (newVal, oldVal, scope) {
+        $scope.selectedYear = plantService.getSelectedYear();
+        $scope.availableYears = plantService.getAvailableYears();
+    });
+    $scope.addYear = plantService.addYear;
+    $scope.setSelectedYear = plantService.setSelectedYear;
 
-    $scope.selectYear = function (availableYear) {
-        if (!availableYear.exists) {
-            plantService.addYear($scope.garden, availableYear.year);
-            $scope.availableYears = plantService.getAvailableYears($scope.garden.squares);
-        }
-        $scope.selectedYear = availableYear.year;
-        console.log('Year set to', [availableYear, $scope.garden]);
+    $scope.selectSpecies = function (species) {
+        console.log('Selected species set to', species);
+        $scope.selectedSpecies = species;
     };
 
     $scope.onSquareClick = function (clickEvent, square) {
@@ -315,8 +331,7 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         };
     };
 
-    $scope.selectSpecies($scope.garden.species["1"]);
-    $scope.selectedYear = Object.keys($scope.garden.squares).sort().slice(-1).pop();
+    $scope.selectSpecies(plantService.getGarden().species["1"]);
 
 });
 app.controller('LoginController', function ($scope, userService) {

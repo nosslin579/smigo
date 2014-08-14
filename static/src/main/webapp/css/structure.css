@@ -196,6 +196,6 @@ body {
     top: 50px;
 }
 
-.main > div > ul {
-    padding: 10px 30px 0 40px;
+.main ul.nav-tabs {
+    padding: 10px 0 0 10px;
 }
