@@ -113,13 +113,42 @@ app.factory('plantService', function ($http) {
         this.speciesId = plant.species.id;
     }
 
-    function fillGarden() {
-        angular.forEach(garden.squares, function (squareList) {
-            angular.forEach(squareList, function (square) {
-                angular.forEach(square.plants, function (plant) {
-                });
+    function Location(year, x, y) {
+        if (!$.isNumeric(year) || !$.isNumeric(x) || !$.isNumeric(y)) {
+            throw "Location takes Numeric parameter only. x:" + x + " y:" + y + " year:" + year;
+        }
+        this.year = year;
+        this.x = x;
+        this.y = y;
+    }
+
+    function Plant(species, location, flag) {
+        this.species = species;
+        this.location = location;
+        if (flag) {
+            this[flag] = true;
+        }
+    }
+
+    function Square(location, plantsArray, flag) {
+        if (!location instanceof Location) {
+            throw "Square.location must be a Location object. location:" + location;
+        }
+        if (!plants instanceof Array) {
+            throw "Square.plants must be an Array of Plants. plants:" + plants;
+        }
+        this.location = location;
+        var plants = {};
+        if (plantsArray) {
+            plantsArray.forEach(function (plant) {
+                plants[plant.species.id] = plant;
             });
-        });
+        }
+        this.plants = plants;
+        if (flag) {
+            this[flag] = true;
+        }
+        console.log('Created square', [this, location, plantsArray, flag]);
     }
 
     function reloadGarden() {
@@ -177,13 +206,12 @@ app.factory('plantService', function ($http) {
             var newYearSquareArray = [];
             var copyFromSquareArray = garden.squares[mostRecentYear];
 
+            //add perennial from mostRecentYear
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.annual) {
-                        var newLocation = {year: year, x: plant.location.x, y: plant.location.y};
-                        var newSquare = {location: newLocation, plants: {}};
-                        newSquare.plants[plant.species.id] = {species: plant.species, location: newLocation, add: true};
-                        newYearSquareArray.push(newSquare);
+                        var newLocation = new Location(year, plant.location.x, plant.location.y);
+                        newYearSquareArray.push(new Square(newLocation, [new Plant(plant.species, newLocation, 'add')]));
                     }
                 });
             });
@@ -191,12 +219,12 @@ app.factory('plantService', function ($http) {
             //add verge
             var bounds = getBounds(mostRecentYear);
             for (var x = bounds.xmin - 1; x <= bounds.xmax + 1; x++) {
-                newYearSquareArray.push({location: {year: year, x: x, y: bounds.ymin - 1}, plants: {}, verge: true});
-                newYearSquareArray.push({location: {year: year, x: x, y: bounds.ymax + 1}, plants: {}, verge: true});
+                newYearSquareArray.push(new Square(new Location(year, x, bounds.ymax + 1), [], 'verge'));
+                newYearSquareArray.push(new Square(new Location(year, x, bounds.ymin - 1), [], 'verge'));
             }
             for (var y = bounds.ymin; y <= bounds.ymax; y++) {
-                newYearSquareArray.push({location: {year: year, x: bounds.xmax + 1, y: y}, plants: {}, verge: true});
-                newYearSquareArray.push({location: {year: year, x: bounds.xmin - 1, y: y}, plants: {}, verge: true});
+                newYearSquareArray.push(new Square(new Location(year, bounds.xmax + 1, y), [], 'verge'));
+                newYearSquareArray.push(new Square(new Location(year, bounds.xmin - 1, y), [], 'verge'));
             }
 
             garden.squares[year] = newYearSquareArray;
@@ -215,14 +243,7 @@ app.factory('plantService', function ($http) {
             return ret;
         },
         addSquare: function (year, x, y) {
-            var newSquare = {
-                location: {
-                    x: x,
-                    y: y,
-                    year: +year
-                },
-                plants: {}
-            };
+            var newSquare = new Square(new Location(year, x, y));
             garden.squares[year].push(newSquare);
             console.log('Square added', newSquare);
             return newSquare;
@@ -238,7 +259,7 @@ app.factory('plantService', function ($http) {
         },
         addPlant: function (species, square) {
             if (!square.plants[species.id]) {
-                square.plants[species.id] = { species: species, location: square.location};
+                square.plants[species.id] = new Plant(species, square.location, 'add');
             }
             square.plants[species.id].add = true;
             console.log('Species added', square);
