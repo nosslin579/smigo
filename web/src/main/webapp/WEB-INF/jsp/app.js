@@ -104,6 +104,7 @@ app.factory('plantService', function ($http) {
     console.log('plantService');
     var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
     var selectedYear = +Object.keys(garden.squares).sort().slice(-1).pop();
+    var selectedSpecies = garden.species["28"];
 
     function PlantData(plant) {
         this.year = plant.location.year;
@@ -125,6 +126,12 @@ app.factory('plantService', function ($http) {
     }
 
     return {
+        getSelectedSpecies: function () {
+            return selectedSpecies;
+        },
+        setSelectedSpecies: function (species) {
+            selectedSpecies = species;
+        },
         getSelectedYear: function () {
             return selectedYear;
         },
@@ -265,11 +272,6 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         console.log("Garden changed", [$scope, scope]);
     }, true);
 
-    $scope.selectSpecies = function (species) {
-        console.log('Selected species set to', species);
-        $scope.selectedSpecies = species;
-    };
-
     //Year
     $scope.$watch(plantService.getSelectedYear, function (newVal, oldVal, scope) {
         $scope.selectedYear = plantService.getSelectedYear();
@@ -278,10 +280,14 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
     $scope.addYear = plantService.addYear;
     $scope.setSelectedYear = plantService.setSelectedYear;
 
-    $scope.selectSpecies = function (species) {
-        console.log('Selected species set to', species);
-        $scope.selectedSpecies = species;
-    };
+    //Species
+    $scope.$watch(plantService.getSelectedSpecies, function (newVal, oldVal, scope) {
+        $scope.selectedSpecies = plantService.getSelectedSpecies();
+    });
+    $scope.setSelectedSpecies = plantService.setSelectedSpecies;
+
+    //Action
+    //todo
 
     $scope.onSquareClick = function (clickEvent, square) {
         console.log('Square clicked', [clickEvent, square, $scope.selectedSpecies]);
@@ -330,9 +336,6 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
             left: square.location.x * 48 + 100000 + 'px'
         };
     };
-
-    $scope.selectSpecies(plantService.getGarden().species["1"]);
-
 });
 app.controller('LoginController', function ($scope, userService) {
     $scope.viewModel = {
