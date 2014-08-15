@@ -130,25 +130,23 @@ app.factory('plantService', function ($http) {
         }
     }
 
-    function Square(location, plantsArray, flag) {
+    function Square(location, speciesArray, flag) {
         if (!location instanceof Location) {
             throw "Square.location must be a Location object. location:" + location;
         }
-        if (!plants instanceof Array) {
-            throw "Square.plants must be an Array of Plants. plants:" + plants;
+        if (!speciesArray instanceof Array) {
+            throw "Square.speciesArray must be an Array. speciesArray:" + speciesArray;
         }
         this.location = location;
-        var plants = {};
-        if (plantsArray) {
-            plantsArray.forEach(function (plant) {
-                plants[plant.species.id] = plant;
-            });
+        this.plants = {};
+        if (speciesArray) {
+            speciesArray.forEach(function (species) {
+                this.plants[species.id] = new Plant(species, location, 'add');
+            }, this);
         }
-        this.plants = plants;
         if (flag) {
             this[flag] = true;
         }
-        console.log('Created square', [this, location, plantsArray, flag]);
     }
 
     function reloadGarden() {
@@ -213,7 +211,7 @@ app.factory('plantService', function ($http) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.annual) {
                         var newLocation = new Location(year, plant.location.x, plant.location.y);
-                        newYearSquareArray.push(new Square(newLocation, [new Plant(plant.species, newLocation, 'add')]));
+                        newYearSquareArray.push(new Square(newLocation, [plant.species]));
                     }
                 });
             });
@@ -234,8 +232,7 @@ app.factory('plantService', function ($http) {
             return ret;
         },
         addSquare: function (year, x, y, species) {
-            var location = new Location(year, x, y);
-            var newSquare = new Square(location, [new Plant(species, location)], 'add');
+            var newSquare = new Square(new Location(year, x, y), [species]);
             garden.squares[year].push(newSquare);
             console.log('Square added', newSquare);
             return newSquare;
@@ -369,7 +366,7 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
 
     $scope.getGridSizeCss = function (year) {
         var bounds = plantService.getBounds([year, year - 1]);
-        console.log('Grid size', bounds);
+//        console.log('Grid size', bounds);
         var margin = 48 * 2;
         return {
             'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',
