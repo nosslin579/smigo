@@ -161,7 +161,7 @@ app.factory('plantService', function ($http) {
         return promise;
     }
 
-    function getBounds(years) {
+    function getBounds(year) {
         var axisLength = 9999;
         var ret = {
             xmax: -axisLength,
@@ -169,7 +169,7 @@ app.factory('plantService', function ($http) {
             xmin: axisLength,
             ymin: axisLength
         };
-        years.forEach(function (year) {
+        [year, getTrailingYear(year)].forEach(function (year) {
             angular.forEach(garden.squares[year], function (square, index) {
                 ret.xmax = Math.max(square.location.x, ret.xmax);
                 ret.ymax = Math.max(square.location.y, ret.ymax);
@@ -180,7 +180,19 @@ app.factory('plantService', function ($http) {
         return ret;
     }
 
+    function getTrailingYear(year) {
+        var yearSource = typeof year === 'undefined' ? selectedYear : year;
+        if (garden.squares[yearSource - 1]) {
+            return yearSource - 1;
+        } else if (garden.squares[yearSource + 1]) {
+            return yearSource + 1;
+        } else {
+            return Object.keys(garden.squares).sort().slice(-1);
+        }
+    }
+
     return {
+        getTrailingYear: getTrailingYear,
         getBounds: getBounds,
         getSelectedSpecies: function () {
             return selectedSpecies;
@@ -202,9 +214,8 @@ app.factory('plantService', function ($http) {
         },
         reloadGarden: reloadGarden,
         addYear: function (year) {
-            var mostRecentYear = Object.keys(garden.squares).sort().slice(-1).pop();
             var newYearSquareArray = [];
-            var copyFromSquareArray = garden.squares[mostRecentYear];
+            var copyFromSquareArray = garden.squares[getTrailingYear(year)];
 
             //add perennial from mostRecentYear
             angular.forEach(copyFromSquareArray, function (square) {
@@ -365,7 +376,7 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
     };
 
     $scope.getGridSizeCss = function (year) {
-        var bounds = plantService.getBounds([year, year - 1]);
+        var bounds = plantService.getBounds(year);
 //        console.log('Grid size', bounds);
         var margin = 48 * 2;
         return {
