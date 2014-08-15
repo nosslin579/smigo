@@ -36,8 +36,7 @@ app.run(function ($rootScope) {
     $rootScope.currentUser = '${pageContext.request.remoteUser}';
     $rootScope.getObjectLength = function (obj) {
         return Object.keys(obj).length;
-    }
-
+    };
 });
 app.filter('translate', function () {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
@@ -100,11 +99,17 @@ app.directive('rememberScroll', function ($timeout) {
         }
     }
 });
-app.factory('plantService', function ($http) {
+app.factory('plantService', function ($http, $window, $timeout) {
     console.log('plantService');
-    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
-    var selectedYear = +Object.keys(garden.squares).sort().slice(-1).pop();
-    var selectedSpecies = garden.species["28"];
+    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>,
+        selectedYear = +Object.keys(garden.squares).sort().slice(-1).pop(),
+        selectedSpecies = garden.species["28"],
+        unsavedCounter = 0,
+        autoSaveInterval = 60000,
+        timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
+
+    $window.onbeforeunload = sendUnsavedPlantsToServer;
+
 
     function PlantData(plant) {
         this.year = plant.location.year;
@@ -191,6 +196,43 @@ app.factory('plantService', function ($http) {
         }
     }
 
+    function sendUnsavedPlantsToServer() {
+        var update = { addList: [], removeList: [] };
+        angular.forEach(garden.squares, function (squareList) {
+            angular.forEach(squareList, function (square) {
+                angular.forEach(square.plants, function (plant) {
+                    if (plant.add && !plant.remove) {
+                        update.addList.push(new PlantData(plant));
+                        delete plant.add;
+                        delete plant.remove;
+                    } else if (plant.remove && !plant.add) {
+                        update.removeList.push(new PlantData(plant));
+                        delete square.plants[plant.species.id];
+                    }
+                });
+            });
+        });
+        console.log('Sending to server', update);
+        $http.post('rest/garden', update);
+
+    }
+
+    function countAutoSave() {
+        unsavedCounter++;
+        if (unsavedCounter > 13) {
+            unsavedCounter = 0;
+            $timeout.cancel(timedAutoSavePromise);
+            sendUnsavedPlantsToServer();
+            timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
+        }
+    }
+
+    function timedAutoSave() {
+        unsavedCounter = 0;
+        sendUnsavedPlantsToServer();
+        timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
+    }
+
     return {
         getTrailingYear: getTrailingYear,
         getBounds: getBounds,
@@ -245,6 +287,7 @@ app.factory('plantService', function ($http) {
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), [species]);
             garden.squares[year].push(newSquare);
+            countAutoSave();
             console.log('Square added', newSquare);
             return newSquare;
         },
@@ -256,32 +299,16 @@ app.factory('plantService', function ($http) {
                 }
             });
             console.log('Species removed', square);
+            countAutoSave();
         },
         addPlant: function (species, square) {
             if (!square.plants[species.id]) {
                 square.plants[species.id] = new Plant(species, square.location, 'add');
                 console.log('Plant added: ' + species.scientificName, square);
+                countAutoSave();
             }
         },
-        save: function () {
-            var update = { addList: [], removeList: [] };
-            angular.forEach(garden.squares, function (squareList) {
-                angular.forEach(squareList, function (square) {
-                    angular.forEach(square.plants, function (plant) {
-                        if (plant.add && !plant.remove) {
-                            update.addList.push(new PlantData(plant));
-                            delete plant.add;
-                            delete plant.remove;
-                        } else if (plant.remove && !plant.add) {
-                            update.removeList.push(new PlantData(plant));
-                            delete square.plants[plant.species.id];
-                        }
-                    });
-                });
-            });
-            console.log('Sending to server', update);
-            $http.post('rest/garden', update);
-        }
+        save: sendUnsavedPlantsToServer
     };
 });
 app.factory('userService', function ($rootScope, $http, $location, plantService) {
@@ -324,11 +351,10 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
     console.log('GardenController', $scope);
 
     //Garden
-    $scope.$watch(plantService.getGarden, function (newVal, oldVal, scope) {
+    $scope.$watch(plantService.getGarden, function () {
         $scope.garden = plantService.getGarden();
         $scope.forwardYear = +Object.keys(plantService.getGarden().squares).sort().slice(-1).pop() + 1;
         $scope.backwardYear = +Object.keys(plantService.getGarden().squares).sort()[0] - 1;
-        console.log("Garden changed", [$scope, scope]);
     }, true);
 
     //Year
@@ -357,7 +383,6 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         } else {
             plantService.addPlant($scope.selectedSpecies, square);
         }
-        plantService.save();
         clickEvent.stopPropagation();
     };
 
@@ -371,7 +396,6 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         var x = Math.floor((clickEvent.offsetX - 100000) / 48);
         var y = Math.floor((clickEvent.offsetY - 100000) / 48);
         plantService.addSquare($scope.selectedYear, x, y, $scope.selectedSpecies);
-        plantService.save();
         clickEvent.stopPropagation();
     };
 

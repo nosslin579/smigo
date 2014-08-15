@@ -130,6 +130,9 @@ public class SpeciesHandler {
     }
 
     public void updateGarden(UpdateGardenBean updateGardenBean) {
+        if (updateGardenBean.getAddList().isEmpty() && updateGardenBean.getRemoveList().isEmpty()) {
+            return;
+        }
         if (user.isAuthenticated()) {
             plantDao.addPlants(updateGardenBean.getAddList(), user.getId());
             plantDao.deletePlants(updateGardenBean.getRemoveList(), user.getId());
