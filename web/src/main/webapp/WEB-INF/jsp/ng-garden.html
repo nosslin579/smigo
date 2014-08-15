@@ -55,7 +55,7 @@
                             <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
                                 <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                     <div ng-repeat="p in s.plants">
-                                    <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
+                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,5 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{'msg.close' | translate}}</button>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
