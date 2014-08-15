@@ -58,6 +58,7 @@
                                         <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                     </div>
                                 </div>
+                                <div ng-repeat="s in garden.squares[selectedYear-1]" class="visibleRemainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                             </div>
                         </div>
                     </div>

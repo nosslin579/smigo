@@ -163,7 +163,7 @@ app.factory('plantService', function ($http) {
         return promise;
     }
 
-    function getBounds(year) {
+    function getBounds(years) {
         var axisLength = 9999;
         var ret = {
             xmax: -axisLength,
@@ -171,11 +171,13 @@ app.factory('plantService', function ($http) {
             xmin: axisLength,
             ymin: axisLength
         };
-        angular.forEach(garden.squares[year], function (square, index) {
-            ret.xmax = Math.max(square.location.x, ret.xmax);
-            ret.ymax = Math.max(square.location.y, ret.ymax);
-            ret.xmin = Math.min(square.location.x, ret.xmin);
-            ret.ymin = Math.min(square.location.y, ret.ymin);
+        years.forEach(function (year) {
+            angular.forEach(garden.squares[year], function (square, index) {
+                ret.xmax = Math.max(square.location.x, ret.xmax);
+                ret.ymax = Math.max(square.location.y, ret.ymax);
+                ret.xmin = Math.min(square.location.x, ret.xmin);
+                ret.ymin = Math.min(square.location.y, ret.ymin);
+            });
         });
         return ret;
     }
@@ -231,8 +233,9 @@ app.factory('plantService', function ($http) {
             console.log('AvailableYears', ret);
             return ret;
         },
-        addSquare: function (year, x, y) {
-            var newSquare = new Square(new Location(year, x, y));
+        addSquare: function (year, x, y, species) {
+            var location = new Location(year, x, y);
+            var newSquare = new Square(location, [new Plant(species, location)], 'add');
             garden.squares[year].push(newSquare);
             console.log('Square added', newSquare);
             return newSquare;
@@ -350,18 +353,23 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
         clickEvent.stopPropagation();
     };
 
+    $scope.onVisibleRemainderClick = function (clickEvent, s) {
+        plantService.addSquare($scope.selectedYear, s.location.x, s.location.y, $scope.selectedSpecies);
+        plantService.save();
+        clickEvent.stopPropagation();
+    };
+
     $scope.onGridClick = function (clickEvent) {
         var x = Math.floor((clickEvent.offsetX - 100000) / 48);
         var y = Math.floor((clickEvent.offsetY - 100000) / 48);
-        var addedSquare = plantService.addSquare($scope.selectedYear, x, y);
-        plantService.addPlant($scope.selectedSpecies, addedSquare);
+        plantService.addSquare($scope.selectedYear, x, y, $scope.selectedSpecies);
         plantService.save();
         clickEvent.stopPropagation();
     };
 
     $scope.getGridSizeCss = function (year) {
-        var bounds = plantService.getBounds(year);
-//        console.log('Grid size', ymin, xmax, ymax, xmin);
+        var bounds = plantService.getBounds([year, year - 1]);
+        console.log('Grid size', bounds);
         var margin = 48 * 2;
         return {
             'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',

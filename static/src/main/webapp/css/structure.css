@@ -39,6 +39,14 @@
     position: absolute;
 }
 
+.visibleRemainder {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    background-color: sandybrown;
+    opacity: 0.1;
+}
+
 .multiple-plants {
     width: 24px;
     height: 24px;
@@ -55,12 +63,14 @@
     opacity: 0.05;
 }
 
+/*Chrome gird background position*/
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     #grid::before {
         background-position: 40px 40px !important;
     }
 }
 
+/*Mozilla gird background position*/
 @-moz-document url-prefix() {
     #grid::before {
         background-position: 8px 8px !important;
