@@ -172,12 +172,10 @@ app.factory('plantService', function ($http) {
             ymin: axisLength
         };
         angular.forEach(garden.squares[year], function (square, index) {
-            if (!square.verge) {
-                ret.xmax = Math.max(square.location.x, ret.xmax);
-                ret.ymax = Math.max(square.location.y, ret.ymax);
-                ret.xmin = Math.min(square.location.x, ret.xmin);
-                ret.ymin = Math.min(square.location.y, ret.ymin);
-            }
+            ret.xmax = Math.max(square.location.x, ret.xmax);
+            ret.ymax = Math.max(square.location.y, ret.ymax);
+            ret.xmin = Math.min(square.location.x, ret.xmin);
+            ret.ymin = Math.min(square.location.y, ret.ymin);
         });
         return ret;
     }
@@ -218,17 +216,6 @@ app.factory('plantService', function ($http) {
                 });
             });
 
-            //add verge
-            var bounds = getBounds(mostRecentYear);
-            for (var x = bounds.xmin - 1; x <= bounds.xmax + 1; x++) {
-                newYearSquareArray.push(new Square(new Location(year, x, bounds.ymax + 1), [], 'verge'));
-                newYearSquareArray.push(new Square(new Location(year, x, bounds.ymin - 1), [], 'verge'));
-            }
-            for (var y = bounds.ymin; y <= bounds.ymax; y++) {
-                newYearSquareArray.push(new Square(new Location(year, bounds.xmax + 1, y), [], 'verge'));
-                newYearSquareArray.push(new Square(new Location(year, bounds.xmin - 1, y), [], 'verge'));
-            }
-
             garden.squares[year] = newYearSquareArray;
             selectedYear = year;
             console.log('Year added:' + year, garden.squares);
@@ -262,9 +249,8 @@ app.factory('plantService', function ($http) {
         addPlant: function (species, square) {
             if (!square.plants[species.id]) {
                 square.plants[species.id] = new Plant(species, square.location, 'add');
+                console.log('Plant added: ' + species.scientificName, square);
             }
-            square.plants[species.id].add = true;
-            console.log('Species added', square);
         },
         save: function () {
             var update = { addList: [], removeList: [] };

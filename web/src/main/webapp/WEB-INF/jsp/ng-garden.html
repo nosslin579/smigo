@@ -53,9 +53,9 @@
                         <div id="fade-left" class="absolute-full"></div>
                         <div id="peephole" remember-scroll="">
                             <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
-                                <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-class="{verge:s.verge}" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                                <div ng-repeat="p in s.plants">
-                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
+                                <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                                    <div ng-repeat="p in s.plants">
+                                    <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                     </div>
                                 </div>
                             </div>
