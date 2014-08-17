@@ -23,7 +23,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,12 +46,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private WebDriver d;
     private WebDriverWait w;
+    private Actions a;
+
 
     @BeforeClass
     public void init() {
         d = new FirefoxDriver();
         d.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         w = new WebDriverWait(d, 10);
+        a = new Actions(d);
     }
 
     @BeforeMethod
@@ -87,10 +89,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void register() throws Exception {
         final String username = "selenium" + System.currentTimeMillis();
 
-        //add tomato
-        Actions builder = new Actions(d);
-        WebElement grid = d.findElement(By.id("grid"));
-        builder.moveToElement(grid, 100000, 100000).click().build().perform();
+        //add default species
+        d.findElement(By.className("square")).click();
 
         //sign up
         d.findElement(By.id("register-link")).click();
@@ -109,6 +109,12 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(user.getUsername(), username);
     }
 
+    private void clickGrid() {
+        WebElement grid = d.findElement(By.className("square"));
+        a.moveToElement(grid).moveByOffset(48, 48).click().perform();
+    }
+
+    @Test(enabled = false)
     public void addSpecies() {
         final String username = addUser();
         login(username, PASSWORD);
@@ -133,23 +139,28 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     public void addYear() {
-        final String username = addUser();
-        login(username, PASSWORD);
-
-        //put carrot in grid
-        d.findElement(By.id("origo")).click();
-        //put item anywhere in grid
-        d.findElement(By.xpath("//div[contains(text(), '" + ITEM_NAME + "')]")).click();
-        d.findElement(By.className("jsgridcell")).click();
-        d.findElement(By.id("savebutton")).click();
-        w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Ok"));
+        //add default species
+        d.findElement(By.className("square")).click();
 
         //add year
         d.findElement(By.id("add-year-link")).click();
-        d.findElement(By.name("year")).sendKeys(Calendar.getInstance().get(Calendar.YEAR) + 1 + "");
-        d.findElement(By.id("addYearFormBean")).submit();
+        d.findElement(By.id("add-forward-year-button")).click();
 
-        Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
+        Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
+        Assert.assertEquals(d.findElement(By.id("garden-frame")).findElements(By.tagName("li")).size(), 3);
+        Assert.assertEquals(d.findElements(By.className("plant")).size(), 0);
+
+        d.findElement(By.partialLinkText("Lawn")).click();
+        d.findElement(By.className("visible-remainder")).click();
+
+        //add year
+        d.findElement(By.id("add-year-link")).click();
+        d.findElement(By.id("add-forward-year-button")).click();
+
+        Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
+        Assert.assertEquals(d.findElement(By.id("garden-frame")).findElements(By.tagName("li")).size(), 4);
+        Assert.assertEquals(d.findElements(By.className("plant")).size(), 1);
+
     }
 
     public void changePassword() {

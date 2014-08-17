@@ -35,11 +35,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="" data-toggle="modal" data-target="#add-year-modal">
-
-                                    <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                                <a id="add-year-link" href="" data-toggle="modal" data-target="#add-year-modal">
+                                <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
                                 </a>
-
                             </li>
                         </ul>
                     </div>
@@ -55,10 +53,10 @@
                             <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
                                 <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                     <div ng-repeat="p in s.plants">
-                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class={{'index'+$index}} ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
+                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                     </div>
                                 </div>
-                                <div ng-repeat="s in garden.squares[selectedYear-1]" class="visibleRemainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
+                                <div ng-repeat="s in garden.squares[selectedYear-1]" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                             </div>
                         </div>
                     </div>
@@ -78,7 +76,7 @@
                 <h4 class="modal-title">{{'addyear'|translate}}</h4>
             </div>
             <div class="modal-body">
-                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear)">{{forwardYear}}</button>
+                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear)">{{forwardYear}}</button>
                 <hr/>
                 <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(backwardYear)">{{backwardYear}}</button>
             </div>

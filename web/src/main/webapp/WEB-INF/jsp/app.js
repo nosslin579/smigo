@@ -122,9 +122,9 @@ app.factory('plantService', function ($http, $window, $timeout) {
         if (!$.isNumeric(year) || !$.isNumeric(x) || !$.isNumeric(y)) {
             throw "Location takes Numeric parameter only. x:" + x + " y:" + y + " year:" + year;
         }
-        this.year = year;
-        this.x = x;
-        this.y = y;
+        this.year = +year;
+        this.x = +x;
+        this.y = +y;
     }
 
     function Plant(species, location, flag) {
@@ -393,8 +393,11 @@ app.controller('GardenController', function ($scope, $rootScope, $http, plantSer
     };
 
     $scope.onGridClick = function (clickEvent) {
-        var x = Math.floor((clickEvent.offsetX - 100000) / 48);
-        var y = Math.floor((clickEvent.offsetY - 100000) / 48);
+        //http://stackoverflow.com/a/14872192/859514
+        var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
+        var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
+        var x = Math.floor((offsetX - 100000) / 48);
+        var y = Math.floor((offsetY - 100000) / 48);
         plantService.addSquare($scope.selectedYear, x, y, $scope.selectedSpecies);
         clickEvent.stopPropagation();
     };
