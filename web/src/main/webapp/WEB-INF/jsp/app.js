@@ -106,7 +106,7 @@ app.factory('plantService', function ($http, $window, $timeout) {
         selectedSpecies = garden.species["28"],
         unsavedCounter = 0,
         autoSaveInterval = 60000,
-        timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
+        timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
 
     $window.onbeforeunload = sendUnsavedPlantsToServer;
 
@@ -197,6 +197,10 @@ app.factory('plantService', function ($http, $window, $timeout) {
     }
 
     function sendUnsavedPlantsToServer() {
+        //reset counter
+        unsavedCounter = 0;
+        $timeout.cancel(timedAutoSavePromise);
+        //get unsaved plants
         var update = { addList: [], removeList: [] };
         angular.forEach(garden.squares, function (squareList) {
             angular.forEach(squareList, function (square) {
@@ -213,24 +217,16 @@ app.factory('plantService', function ($http, $window, $timeout) {
             });
         });
         console.log('Sending to server', update);
-        $http.post('rest/garden', update);
-
+        //start auto save timer
+        timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
+        return $http.post('rest/garden', update);
     }
 
     function countAutoSave() {
         unsavedCounter++;
         if (unsavedCounter > 13) {
-            unsavedCounter = 0;
-            $timeout.cancel(timedAutoSavePromise);
             sendUnsavedPlantsToServer();
-            timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
         }
-    }
-
-    function timedAutoSave() {
-        unsavedCounter = 0;
-        sendUnsavedPlantsToServer();
-        timedAutoSavePromise = $timeout(timedAutoSave, autoSaveInterval, false);
     }
 
     return {
@@ -328,23 +324,25 @@ app.factory('userService', function ($rootScope, $http, $location, plantService)
 
             scope.formModel['remember-me'] = true;
 
-            $http({
-                method: 'POST',
-                url: action,
-                data: $.param(scope.formModel),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).success(function (data, status, headers, config) {
-                $rootScope.currentUser = scope.formModel.username;
-                plantService.reloadGarden().then(function () {
-                    console.log("Redirecting to garden");
-                    $location.path('/garden');
-                });
-                console.log('Performed successfully action:' + action, [data, status, headers, config]);
-            }).error(function (data, status, headers, config) {
-                scope.objectErrors = data;
-                delete $rootScope.currentUser;
-                console.log('Performed unsuccessfully action:' + action, [form, data, status, headers, config]);
-            });
+            plantService.save().then(
+                $http({
+                    method: 'POST',
+                    url: action,
+                    data: $.param(scope.formModel),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                }).success(function (data, status, headers, config) {
+                    $rootScope.currentUser = scope.formModel.username;
+                    plantService.reloadGarden().then(function () {
+                        console.log("Redirecting to garden");
+                        $location.path('/garden');
+                    });
+                    console.log('Performed successfully action:' + action, [data, status, headers, config]);
+                }).error(function (data, status, headers, config) {
+                    scope.objectErrors = data;
+                    delete $rootScope.currentUser;
+                    console.log('Performed unsuccessfully action:' + action, [form, data, status, headers, config]);
+                })
+            );
         }};
 });
 app.controller('GardenController', function ($scope, $rootScope, $http, plantService) {

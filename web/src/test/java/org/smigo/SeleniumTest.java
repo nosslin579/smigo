@@ -100,18 +100,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("termsOfService")).click();
         d.findElement(By.id("submit-login-register-form")).click();
 
-        List<WebElement> src = d.findElements(By.className("square"));
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+        List<WebElement> src = d.findElements(By.className("plant"));
         Assert.assertEquals(src.size(), 1);
 
 
         User user = userDao.getUserByUsername(username);
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getUsername(), username);
-    }
-
-    private void clickGrid() {
-        WebElement grid = d.findElement(By.className("square"));
-        a.moveToElement(grid).moveByOffset(48, 48).click().perform();
     }
 
     @Test(enabled = false)
