@@ -108,7 +108,10 @@ app.factory('plantService', function ($http, $window, $timeout) {
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
 
-    $window.onbeforeunload = sendUnsavedPlantsToServer;
+    $window.onbeforeunload = function () {
+        sendUnsavedPlantsToServer();
+        return null;
+    };
 
 
     function PlantData(plant) {
