@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -46,7 +45,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private WebDriver d;
     private WebDriverWait w;
-    private Actions a;
 
 
     @BeforeClass
@@ -54,7 +52,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d = new FirefoxDriver();
         d.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         w = new WebDriverWait(d, 10);
-        a = new Actions(d);
     }
 
     @BeforeMethod
@@ -86,6 +83,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("submit-login-register-form")).click();
     }
 
+    @Test
     public void register() throws Exception {
         final String username = "selenium" + System.currentTimeMillis();
 
@@ -134,6 +132,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
     }
 
+    @Test
     public void addYear() {
         //add default species
         d.findElement(By.className("square")).click();
@@ -159,6 +158,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
+    @Test(enabled = false)
     public void changePassword() {
         final String username = addUser();
         login(username, PASSWORD);
@@ -182,6 +182,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 
+    @Test(enabled = false)
     public void resetPassword() {
         final String username = addUser();
         final String email = username + EMAIL_PROVIDER;
@@ -208,8 +209,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 
+    @Test
     public void loginOpenId() {
-        d.get("http://localhost:8080/web/login");
+        d.get("http://localhost:8080/web");
+        d.findElement(By.id("login-link")).click();
         d.findElement(By.id("googleOpenId")).submit();
         d.findElement(By.id("Email")).sendKeys("smigo.org@gmail.com");
         d.findElement(By.id("Passwd")).sendKeys("lstN09LLrZZx");
