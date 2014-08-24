@@ -6,7 +6,7 @@
 
 
 <jsp:include page="header.jsp"/>
-<body ng-app="speciesModule">
+<body ng-app="smigoModule">
 
 <%@ include file="menu.html" %>
 
@@ -14,6 +14,17 @@
 
 <script type="application/javascript">
     <%@ include file="app.js" %>
+    (function () {
+        <%@ include file="garden/GardenController.js" %>
+        <%@ include file="MainMenuController.js" %>
+        <%@ include file="user/RegisterController.js" %>
+        <%@ include file="user/LoginController.js" %>
+        <%@ include file="user/UserService.js" %>
+        <%@ include file="garden/PlantService.js" %>
+        <%@ include file="garden/RememberScrollDirective.js" %>
+        <%@ include file="EqualsDirective.js" %>
+        <%@ include file="TranslateFilter.js" %>
+    })();
 </script>
 
 <%--########## ng views ##############--%>
