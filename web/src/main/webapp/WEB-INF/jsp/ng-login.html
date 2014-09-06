@@ -44,7 +44,7 @@
 
             <form name="loginOrRegisterform" role="form" novalidate="">
                 <div class="has-error">
-                    <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
+                    <span ng-repeat="error in loginOrRegisterform.objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && loginOrRegisterform.username.$dirty}">

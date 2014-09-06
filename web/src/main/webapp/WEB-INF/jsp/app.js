@@ -7,8 +7,7 @@ angular.module('smigoModule', ['ngRoute'])
                 controller: 'TestController'
             }).
             when('/help', {
-                templateUrl: 'help.html',
-                controller: 'AboutController'
+                templateUrl: 'help.html'
             }).
             when('/login', {
                 templateUrl: 'login.html',

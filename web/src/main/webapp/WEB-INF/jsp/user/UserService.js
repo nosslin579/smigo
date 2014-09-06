@@ -1,39 +1,56 @@
-function UserService($rootScope, $http, $location, PlantService) {
+function UserService($rootScope, Http, $location, PlantService, $q) {
+
+    function validateForm(form) {
+        form.objectErrors = [];
+        var deferred = $q.defer();
+        if (form.$invalid) {
+            //set all values to trigger dirty, so validation messages become visible
+            angular.forEach(form, function (value) {
+                if (value.$setViewValue) {
+                    value.$setViewValue(value.$viewValue);
+                }
+            });
+//            console.log('Form is invalid', form);
+            deferred.reject('Form is invalid');
+        } else {
+            deferred.resolve();
+        }
+        return deferred.promise;
+    }
+
+    function login(form, formModel) {
+        console.log('Login');
+        formModel['remember-me'] = true;
+        return validateForm(form)
+            .then(function () {
+                return Http.post('login', formModel)
+            })
+            .then(PlantService.reloadGarden)
+            .then(function () {
+                $rootScope.currentUser = formModel.username;
+                $location.path('/garden');
+            }).catch(function (errorReason) {
+                console.log('Login failed', errorReason);
+                form.objectErrors = errorReason.data;
+            });
+    }
+
     return {
-        loginOrRegister: function (form, scope, action) {
-            scope.objectErrors = [];
-            if (form.$invalid) {
-                console.log('Form is invalid:' + action);
-                //set all values to trigger dirty, so validation messages become visible
-                angular.forEach(form, function (value) {
-                    if (value.$setViewValue) {
-                        value.$setViewValue(value.$viewValue);
-                    }
-                });
-                return;
-            }
-
-            scope.formModel['remember-me'] = true;
-
-            PlantService.save().then(
-                $http({
-                    method: 'POST',
-                    url: action,
-                    data: $.param(scope.formModel),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).success(function (data, status, headers, config) {
-                    $rootScope.currentUser = scope.formModel.username;
-                    PlantService.reloadGarden().then(function () {
-                        console.log("Redirecting to garden");
-                        $location.path('/garden');
-                    });
-                    console.log('Performed successfully action:' + action, [data, status, headers, config]);
-                }).error(function (data, status, headers, config) {
-                    scope.objectErrors = data;
-                    delete $rootScope.currentUser;
-                    console.log('Performed unsuccessfully action:' + action, [form, data, status, headers, config]);
+        register: function (form, formModel) {
+            validateForm(form)
+                .then(PlantService.save)
+                .then(function () {
+                    console.log('Registering');
+                    return Http.post('register', formModel);
                 })
-            );
-        }};
+                .then(function () {
+                    return login(form, formModel);
+                }).catch(function (errorReason) {
+                    console.log('Login failed', errorReason);
+                    form.objectErrors = errorReason.data;
+                });
+        },
+        login: login
+    };
 }
 angular.module('smigoModule').factory('UserService', UserService);

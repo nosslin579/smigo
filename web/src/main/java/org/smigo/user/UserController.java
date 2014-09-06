@@ -85,7 +85,6 @@ public class UserController {
             return result.getAllErrors();
         }
         userHandler.createUser(user);
-        userHandler.authenticateUser(user.getUsername(), user.getPassword());
         return Collections.emptyList();
     }
 

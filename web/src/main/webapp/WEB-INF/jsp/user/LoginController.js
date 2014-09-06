@@ -12,8 +12,7 @@ function LoginController($scope, UserService) {
 //        password: 'testreg17'
 //    };
     $scope.submitLoginOrRegisterForm = function (form) {
-        console.log('loginOrRegister', [form, $scope]);
-        UserService.loginOrRegister(form, $scope, 'login');
+        UserService.login(form, $scope.formModel);
     }
 }
 angular.module('smigoModule').controller('LoginController', LoginController);
