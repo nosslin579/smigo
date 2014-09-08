@@ -8,15 +8,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer;
+import org.springframework.security.config.annotation.web.configurers.openid.OpenIDLoginConfigurer;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -24,7 +27,6 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -68,25 +70,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/changepassword/**").fullyAuthenticated()
                 .antMatchers("/edituser/**").authenticated()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/login/**").permitAll()
-                .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login").successHandler(customAuthenticationSuccessHandler).failureHandler(customAuthenticationFailureHandler)
-                .and()
-                .rememberMe().userDetailsService(customUserDetailsService)
-                .key("MjYvVCDYOplXAWq").tokenValiditySeconds(Integer.MAX_VALUE).tokenRepository(persistentTokenRepository())
-                .and()
-                .userDetailsService(userDetailsService())
-                .logout().logoutSuccessHandler(customLogoutSuccessHandler).invalidateHttpSession(true).logoutUrl("/logout")
-                .and()
-                .csrf().disable()
-                .openidLogin().loginPage("/login").loginProcessingUrl("/login-openid").authenticationUserDetailsService(authenticationUserDetailsService()).permitAll();
-//                .attributeExchange("https://www.google.com/.*").attribute("axContactEmail").type("http://axschema.org/contact/email").required(true);
-    }
+                .antMatchers("/login/**").permitAll();
 
-    //To pevent default ProviderManager calling getUser twice
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(new ArrayList<UserDetails>());
+        FormLoginConfigurer<HttpSecurity> formLogin = http.formLogin();
+        formLogin.loginPage("/login");
+        formLogin.loginProcessingUrl("/login");
+        formLogin.successHandler(customAuthenticationSuccessHandler);
+        formLogin.failureHandler(customAuthenticationFailureHandler);
+
+        RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();
+        rememberMe.userDetailsService(customUserDetailsService);
+        rememberMe.key("MjYvVCDYOplXAWq");
+        rememberMe.tokenValiditySeconds(Integer.MAX_VALUE);
+        rememberMe.tokenRepository(persistentTokenRepository());
+
+        LogoutConfigurer<HttpSecurity> logout = http.logout();
+        logout.logoutSuccessHandler(customLogoutSuccessHandler);
+        logout.invalidateHttpSession(true);
+        logout.logoutUrl("/logout");
+
+        CsrfConfigurer<HttpSecurity> csrf = http.csrf();
+        csrf.disable();
+
+        OpenIDLoginConfigurer<HttpSecurity> openidLogin = http.openidLogin();
+        openidLogin.loginPage("/login");
+        openidLogin.loginProcessingUrl("/login-openid");
+        openidLogin.authenticationUserDetailsService(authenticationUserDetailsService());
+        openidLogin.permitAll();
+//      openidLogin.attributeExchange("https://www.google.com/.*").attribute("axContactEmail").type("http://axschema.org/contact/email").required(true);
     }
 
     @Bean
