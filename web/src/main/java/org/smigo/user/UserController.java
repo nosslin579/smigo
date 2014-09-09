@@ -88,6 +88,13 @@ public class UserController {
         return Collections.emptyList();
     }
 
+    @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.POST)
+    @ResponseBody
+    public void acceptTermsOfService() {
+        log.info("AcceptTermsOfService: " + user);
+        userHandler.acceptTermsOfService(user);
+    }
+
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)
     public String getUser(@PathVariable Integer userid, Model model, Principal principal) {
         UserBean u = new UserBean();

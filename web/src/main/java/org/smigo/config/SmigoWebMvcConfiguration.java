@@ -31,7 +31,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//    registry.addResourceHandler("/messages/**").addResourceLocations("/");
+        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/");
     }
 
     @Override

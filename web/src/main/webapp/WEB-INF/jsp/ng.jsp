@@ -13,10 +13,18 @@
 <div ng-view></div>
 
 <script type="application/javascript">
+    var currentUser = {
+        username: '${user.username}',
+        locale: '${user.locale}',
+        email: '${user.email}',
+        termsOfService: ${user.termsofservice}
+    };
+    console.log(currentUser);
     <%@ include file="app.js" %>
     (function () {
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="MainMenuController.js" %>
+        <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>
         <%@ include file="user/LoginController.js" %>
         <%@ include file="user/UserService.js" %>
@@ -47,6 +55,8 @@
         <button type="submit" ng-disabled="myForm.$invalid">Submit</button>
     </form>
 </script>
+
+<%@ include file="accept-terms-of-service-modal.html" %>
 
 </body>
 

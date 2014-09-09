@@ -50,7 +50,15 @@ function UserService($rootScope, Http, $location, PlantService, $q) {
                     form.objectErrors = errorReason.data;
                 });
         },
-        login: login
+        login: login,
+        acceptTermsOfService: function (form) {
+            console.log('Handle acceptTermsOfServiceForm', form);
+            if (form.$invalid) {
+                return;
+            }
+            $('#accept-terms-of-service-modal').modal('hide');
+            Http.post('accept-terms-of-service', {});
+        }
     };
 }
 angular.module('smigoModule').factory('UserService', UserService);

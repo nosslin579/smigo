@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.SafeHtml;
 import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,23 +25,23 @@ public class UserBean implements UserDetails, User {
     private int id = 0;
 
     @SafeHtml(whitelistType = WhiteListType.NONE)
-    private String displayname = "";
+    private String displayname = null;
 
     @Email
-    private String email = "";
+    private String email = null;
 
     @Username
     @Size(min = 5, max = 40)
     @Pattern(regexp = "\\w*")
-    private String username = "";
+    private String username = null;
 
     @NewPassword
-    private String password = "";
+    private String password = null;
 
     @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
-    private String about = "";
+    private String about = null;
 
-    private Locale locale = Locale.ENGLISH;
+    private Locale locale = null;
 
     @AssertTrue
     private boolean termsofservice;
@@ -155,6 +156,7 @@ public class UserBean implements UserDetails, User {
         this.id = id;
     }
 
+    @Override
     public boolean isTermsofservice() {
         return termsofservice;
     }
@@ -167,5 +169,11 @@ public class UserBean implements UserDetails, User {
     public boolean isAuthenticated() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && !(authentication instanceof AnonymousAuthenticationToken);
+    }
+
+    public static UserBean createCopy(User user) {
+        UserBean ret = new UserBean();
+        BeanUtils.copyProperties(user, ret);
+        return ret;
     }
 }

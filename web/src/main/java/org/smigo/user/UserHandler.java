@@ -1,6 +1,7 @@
 package org.smigo.user;
 
 import kga.PlantData;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.smigo.config.Props;
 import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class UserHandler {
     private UserDao userDao;
     @Autowired
     private Props props;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
 
@@ -114,5 +117,11 @@ public class UserHandler {
         databaseResource.updatePassword(user.getUsername(), encodedTempPassword);
         authenticateUser(user.getUsername(), rawTempPassword);
         databaseResource.updatePassword(user.getUsername(), "");
+    }
+
+    public void acceptTermsOfService(User user) {
+        UserBean target = UserBean.createCopy(user);
+        target.setTermsofservice(true);
+        userDao.updateUser(target);
     }
 }

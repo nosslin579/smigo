@@ -16,4 +16,6 @@ public interface UserDao {
     User getUserByEmail(String email);
 
     User getUserByOpenId(String identityUrl);
+
+    void updateUser(User user);
 }

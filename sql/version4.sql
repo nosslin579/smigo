@@ -36,3 +36,9 @@ DROP TABLE messages;
 UPDATE species
 SET annual = FALSE
 WHERE item = TRUE;
+
+ALTER TABLE users
+ADD COLUMN termsofservice BOOL DEFAULT FALSE;
+
+UPDATE users
+SET termsofservice = TRUE;

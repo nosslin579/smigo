@@ -1,0 +1,29 @@
+<div id="accept-terms-of-service-modal" class="modal fade" ng-controller="AcceptTermsOfServiceController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="acceptTermsOfServiceForm" role="form" ng-submit="acceptTermsOfService(acceptTermsOfServiceForm)">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
+                    </button>
+                    <h4 class="modal-title">{{'msg.accept-terms-of-service' | translate}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group checkbox">
+                        <label class="checkbox">
+                            <input type="checkbox" name="accepted" required="required"/>
+                            {{'msg.agreetos' | translate}}
+                            <a target="_blank" href=/static/tos.html>{{'termsofservice' | translate}}</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default" id="submit-accept-terms-of-service-form">
+                        {{'ok' | translate}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

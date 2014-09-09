@@ -48,6 +48,7 @@ public class GardenController implements Serializable {
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale) {
+        model.addAttribute("user", user);
         model.addAttribute("garden", speciesHandler.getGarden());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";

@@ -15,6 +15,8 @@ public interface User extends UserDetails {
 
     Locale getLocale();
 
+    boolean isTermsofservice();
+
     boolean isAuthenticated();
 
     String getDisplayname();

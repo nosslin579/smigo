@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,9 +76,17 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUserByOpenId(String identityUrl) {
-        final String sql = "SELECT * FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
+        final String sql = "SELECT users.* FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
         final List<UserBean> query = jdbcTemplate.query(sql, new Object[]{identityUrl}, mapper);
         return query.isEmpty() ? null : query.get(0);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        String sql = "UPDATE users SET email = ?, termsofservice = ? WHERE id = ?";
+        Object[] args = {user.getEmail(), user.isTermsofservice(), user.getId()};
+        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.INTEGER};
+        jdbcTemplate.update(sql, args, types);
     }
 
 }
