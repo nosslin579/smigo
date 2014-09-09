@@ -4,12 +4,12 @@ function MainMenuController($http, $scope, $rootScope, PlantService, $route) {
             method: 'GET',
             url: 'logout'
         }).success(function (data, status, headers, config) {
-            delete $rootScope.currentUser;
+            delete $rootScope.currentUser.authenticated;
             PlantService.reloadGarden().then(function () {
                 $route.reload();
             });
         }).error(function (data, status, headers, config) {
-            delete $rootScope.currentUser;
+            delete $rootScope.currentUser.authenticated;
         });
 
     };

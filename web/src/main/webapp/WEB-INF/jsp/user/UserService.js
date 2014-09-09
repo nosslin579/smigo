@@ -27,7 +27,7 @@ function UserService($rootScope, Http, $location, PlantService, $q) {
             })
             .then(PlantService.reloadGarden)
             .then(function () {
-                $rootScope.currentUser = formModel.username;
+                $rootScope.currentUser.authenticated = formModel.username;
                 $location.path('/garden');
             }).catch(function (errorReason) {
                 console.log('Login failed', errorReason);

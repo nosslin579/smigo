@@ -14,6 +14,7 @@
 
 <script type="application/javascript">
     var currentUser = {
+        authenticated: '${pageContext.request.remoteUser}',
         username: '${user.username}',
         locale: '${user.locale}',
         email: '${user.email}',

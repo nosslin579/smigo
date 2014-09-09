@@ -44,7 +44,7 @@ public class UserBean implements UserDetails, User {
     private Locale locale = null;
 
     @AssertTrue
-    private boolean termsofservice;
+    private boolean termsofservice = true;
 
     public UserBean() {
     }
