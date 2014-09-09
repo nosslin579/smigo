@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationUserDetailsService<OpenIDAuthenticationToken> authenticationUserDetailsService() {
-        return new CustomAuthenticationUserDetailsService();
+        return new OpenIdUserDetailsService();
     }
 
     @Bean

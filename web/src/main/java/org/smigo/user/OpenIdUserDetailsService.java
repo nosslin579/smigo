@@ -9,7 +9,7 @@ import org.springframework.security.openid.OpenIDAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
 
-class CustomAuthenticationUserDetailsService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
+class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
     @Autowired
     private UserHandler userHandler;
