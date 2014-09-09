@@ -3,7 +3,6 @@ package org.smigo.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -24,12 +23,10 @@ public class UserSetLocaleResolver implements LocaleResolver {
 
     @Autowired
     private User user;
-    @Autowired
-    ApplicationContext applicationContext;
 
     @Override
     public Locale resolveLocale(HttpServletRequest req) {
-        return user.isAuthenticated() ? user.getLocale() : req.getLocale();
+        return user.getLocale() != null ? user.getLocale() : req.getLocale();
     }
 
     @Override

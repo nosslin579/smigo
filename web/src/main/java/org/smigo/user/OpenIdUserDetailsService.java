@@ -20,15 +20,14 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
 
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-        final String identityUrl = token.getIdentityUrl();
-        final User user = userDao.getUserByOpenId(identityUrl);
-        if (user == null) {
+        final UserDetails userDetails = userDao.getUserDetails(token);
+        if (userDetails == null) {
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "Created user from openid");
             final RegisterFormBean newUser = new RegisterFormBean();
             newUser.setUsername("user" + System.nanoTime());
-            userHandler.createUser(newUser, identityUrl);
+            userHandler.createUser(newUser, token.getIdentityUrl());
             return userDao.getUserByUsername(newUser.getUsername());
         }
-        return user;
+        return userDetails;
     }
 }

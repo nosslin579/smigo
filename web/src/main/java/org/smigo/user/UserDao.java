@@ -1,5 +1,8 @@
 package org.smigo.user;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.openid.OpenIDAuthenticationToken;
+
 import java.util.List;
 
 public interface UserDao {
@@ -15,7 +18,9 @@ public interface UserDao {
 
     User getUserByEmail(String email);
 
-    User getUserByOpenId(String identityUrl);
+    UserDetails getUserDetails(OpenIDAuthenticationToken openIDAuthenticationToken);
 
     void updateUser(User user);
+
+    UserDetails getUserDetails(String username);
 }

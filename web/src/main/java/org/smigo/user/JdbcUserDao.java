@@ -4,14 +4,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcUserDao implements UserDao {
@@ -75,10 +79,10 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUserByOpenId(String identityUrl) {
-        final String sql = "SELECT users.* FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
-        final List<UserBean> query = jdbcTemplate.query(sql, new Object[]{identityUrl}, mapper);
-        return query.isEmpty() ? null : query.get(0);
+    public UserDetails getUserDetails(OpenIDAuthenticationToken token) {
+        final String sql = "SELECT username,password FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
+        Object[] identityUrl = {token.getIdentityUrl()};
+        return jdbcTemplate.queryForObject(sql, identityUrl, new UserDetailsRowMapper());
     }
 
     @Override
@@ -89,4 +93,19 @@ public class JdbcUserDao implements UserDao {
         jdbcTemplate.update(sql, args, types);
     }
 
+    @Override
+    public UserDetails getUserDetails(String username) {
+        final String sql = String.format(SELECT, "username");
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, new UserDetailsRowMapper());
+    }
+
+    private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
+        @Override
+        public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("user"));
+            return new org.springframework.security.core.userdetails.User(username, password, authorities);
+        }
+    }
 }
