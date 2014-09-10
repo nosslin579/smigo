@@ -2,7 +2,7 @@ package org.smigo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.config.VisitLogger;
+import org.smigo.log.VisitLogger;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
@@ -47,8 +47,7 @@ public class AboutController {
         final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
         log.error("Error during request. (Outside Spring MVC)", exception);
         final String note = "Exception:" + exception;
-        final String noteLengthChecked = note.length() > 255 ? note.substring(0, 255) : note;
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteLengthChecked);
+        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         return "error.jsp";
     }
 

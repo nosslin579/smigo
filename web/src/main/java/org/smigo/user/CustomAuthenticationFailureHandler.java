@@ -3,7 +3,7 @@ package org.smigo.user;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.config.VisitLogger;
+import org.smigo.log.VisitLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,8 +39,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         response.getWriter().append(responseBody);
 
         final String note = "Authentication Failure:" + request.getParameter("username") + exception.getMessage();
-        final String noteLengthChecked = note.length() > 255 ? note.substring(0, 255) : note;
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteLengthChecked);
+        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         log.info("Authentication Failure " + exception);
     }
 }

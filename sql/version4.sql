@@ -42,3 +42,30 @@ ADD COLUMN termsofservice BOOL DEFAULT FALSE;
 
 UPDATE users
 SET termsofservice = TRUE;
+
+ALTER TABLE visitlog
+DROP COLUMN locale;
+
+ALTER TABLE visitlog
+DROP COLUMN localeport;
+
+ALTER TABLE visitlog
+DROP COLUMN servername;
+
+ALTER TABLE visitlog
+DROP COLUMN validsessionid;
+
+ALTER TABLE visitlog
+DROP COLUMN sessionexists;
+
+ALTER TABLE visitlog
+DROP COLUMN sessionidfromurl;
+
+ALTER TABLE visitlog
+DROP COLUMN sessionidfromcookie;
+
+ALTER TABLE visitlog
+ADD COLUMN referer VARCHAR(256);
+
+
+

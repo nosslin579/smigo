@@ -1,4 +1,4 @@
-package org.smigo.config;
+package org.smigo.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +18,7 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         log.error("Error during request. (Inside Spring MVC) Handler:" + handler, ex);
         final String note = "Exception:" + ex.getMessage();
-        final String noteLengthChecked = note.length() > 255 ? note.substring(0, 255) : note;
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteLengthChecked);
+        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         return null;
     }
 

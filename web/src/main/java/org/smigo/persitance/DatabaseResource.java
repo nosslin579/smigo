@@ -2,7 +2,6 @@ package org.smigo.persitance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.config.VisitLogger;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.*;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -229,38 +225,6 @@ public class DatabaseResource implements Serializable {
         }
     }
 
-
-    public void logVisit(HttpServletRequest req) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO visitlog (username,requestedurl,locale,locales, localeport,servername,validsessionid,sessionexists,sessionidfromurl,sessionidfromcookie,useragent,sessionid,method,xforwardedfor,note) VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?, ?,?,?)");
-            StringBuilder locales = new StringBuilder();
-            for (Enumeration<Locale> l = req.getLocales(); l.hasMoreElements(); )
-                locales.append(l.nextElement().toString() + " ");
-            ps.setString(1, req.getRemoteUser());
-            ps.setString(2, req.getRequestURL().toString());
-            ps.setString(3, req.getLocale().toString());
-            ps.setString(4, locales.toString());
-            ps.setInt(5, req.getLocalPort());
-            ps.setString(6, req.getServerName());
-            ps.setBoolean(7, req.isRequestedSessionIdValid());
-            ps.setBoolean(8, req.getSession(false) != null);
-            ps.setBoolean(9, req.isRequestedSessionIdFromURL());
-            ps.setBoolean(10, req.isRequestedSessionIdFromCookie());
-            ps.setString(11, req.getHeader("user-agent"));// os, webreader
-            ps.setString(12, req.getRequestedSessionId());
-            ps.setString(13, req.getMethod());
-            ps.setString(14, req.getHeader("x-forwarded-for"));
-            ps.setString(15, (String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE));
-            ps.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not insert logvisit into database.", e);
-        } finally {
-            close(con, ps);
-        }
-    }
 
     public void updatePassword(String username, String encodedPassword) {
         Connection con = null;

@@ -1,6 +1,6 @@
 package org.smigo.user;
 
-import org.smigo.config.VisitLogger;
+import org.smigo.log.VisitLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +22,7 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
         final UserDetails userDetails = userDao.getUserDetails(token);
         if (userDetails == null) {
-            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "Created user from openid");
+            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "createdUserFromOpenid");
             final RegisterFormBean newUser = new RegisterFormBean();
             newUser.setUsername("user" + System.nanoTime());
             userHandler.createUser(newUser, token.getIdentityUrl());
