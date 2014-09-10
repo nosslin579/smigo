@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,9 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcUserDao implements UserDao {
@@ -55,40 +56,34 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
-    }
-
-    @Override
-    public List<? extends User> getUsersByUsername(String username) {
+    public List<? extends UserBean> getUsersByUsername(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.query(sql, new Object[]{username}, mapper);
     }
 
     @Override
-    public User getUserById(int id) {
+    public UserBean getUserById(int id) {
         final String sql = String.format(SELECT, "id");
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public UserBean getUserByEmail(String email) {
         final String sql = String.format(SELECT, "email");
         return jdbcTemplate.queryForObject(sql, new Object[]{email}, mapper);
     }
 
     @Override
     public UserDetails getUserDetails(OpenIDAuthenticationToken token) {
-        final String sql = "SELECT username,password FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
+        final String sql = "SELECT users.id,username,password FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
         Object[] identityUrl = {token.getIdentityUrl()};
         return jdbcTemplate.queryForObject(sql, identityUrl, new UserDetailsRowMapper());
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(int id, UserBean user) {
         String sql = "UPDATE users SET email = ?, termsofservice = ? WHERE id = ?";
-        Object[] args = {user.getEmail(), user.isTermsofservice(), user.getId()};
+        Object[] args = {user.getEmail(), user.isTermsofservice(), id};
         int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.INTEGER};
         jdbcTemplate.update(sql, args, types);
     }
@@ -99,13 +94,19 @@ public class JdbcUserDao implements UserDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{username}, new UserDetailsRowMapper());
     }
 
+    @Override
+    public UserBean getUser(String username) {
+        final String sql = String.format(SELECT, "username");
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
+    }
+
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
         @Override
         public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
             String username = rs.getString("username");
             String password = rs.getString("password");
-            Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("user"));
-            return new org.springframework.security.core.userdetails.User(username, password, authorities);
+            int id = rs.getInt("id");
+            return new AuthenticatedUser(id, username, password);
         }
     }
 }

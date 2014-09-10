@@ -18,21 +18,19 @@ import java.util.Locale;
 
 @Component("localeResolver")
 public class UserSetLocaleResolver implements LocaleResolver {
-
     private static final Logger log = LoggerFactory.getLogger(UserSetLocaleResolver.class);
 
     @Autowired
-    private User user;
+    private UserSession userSession;
 
     @Override
     public Locale resolveLocale(HttpServletRequest req) {
-        return user.getLocale() != null ? user.getLocale() : req.getLocale();
+        UserBean user = userSession.getUser();
+        return (user != null && user.getLocale() != null) ? user.getLocale() : req.getLocale();
     }
 
     @Override
     public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
         throw new UnsupportedOperationException();
     }
-
-
 }

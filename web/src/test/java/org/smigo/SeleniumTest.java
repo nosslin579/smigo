@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.RegisterFormBean;
-import org.smigo.user.User;
+import org.smigo.user.UserBean;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -103,7 +103,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(src.size(), 1);
 
 
-        User user = userDao.getUserByUsername(username);
+        UserBean user = userDao.getUser(username);
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getUsername(), username);
     }

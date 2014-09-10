@@ -16,4 +16,8 @@ public interface UserSession extends Serializable {
     Map<String, String> getTranslation();
 
     List<PlantData> getPlants();
+
+    void setUser(UserBean user);
+
+    UserBean getUser();
 }

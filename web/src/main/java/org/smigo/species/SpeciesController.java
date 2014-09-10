@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.persitance.DatabaseResource;
-import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +33,6 @@ public class SpeciesController implements Serializable {
     private DatabaseResource databaseresource;
     @Autowired
     private SpeciesHandler speciesHandler;
-    @Autowired
-    private User user;
 
     public SpeciesController() {
         log.debug("Creating new SpeciesController");
@@ -75,24 +73,17 @@ public class SpeciesController implements Serializable {
         return new ModelAndView("speciesinfo.jsp", "species", speciesHandler.getSpecies(id));
     }
 
-    @RequestMapping(value = "/deletespecies/{id}")
-    public String deleteSpecies(@PathVariable Integer id, Model model) {
-        databaseresource.deleteSpecies(user.getId(), id);
-        model.addAttribute("speciesId", id);
-        return "species-deleted.jsp";
-    }
-
     @RequestMapping(value = {"/update-species", "/add-species"}, method = RequestMethod.GET)
     public String getSpeciesForm() {
         return "speciesform.jsp";
     }
 
     @RequestMapping(value = "/add-species", method = RequestMethod.POST)
-    public String handleSpeciesForm(@Valid SpeciesFormBean speciesFormBean, BindingResult result) {
+    public String handleSpeciesForm(@Valid SpeciesFormBean speciesFormBean, BindingResult result, Principal principal) {
         if (result.hasErrors()) {
             return "speciesform.jsp";
         }
-        int id = speciesHandler.addSpecies(speciesFormBean);
+        int id = speciesHandler.addSpecies(principal.getName(), speciesFormBean);
         return "redirect:/species/" + id;
     }
 
@@ -111,13 +102,4 @@ public class SpeciesController implements Serializable {
         return "ruleform.jsp";
     }
 
-    @RequestMapping(value = "/addrule", method = RequestMethod.POST)
-    public String handleRuleForm(@Valid RuleFormModel rule, BindingResult result, ModelMap model) {
-        if (result.hasErrors()) {
-            model.addAttribute("host", speciesHandler.getSpecies(rule.getHost()));
-            return "ruleform.jsp";
-        }
-        databaseresource.addRule(rule, user.getId());
-        return "redirect:/species/" + rule.getHost();
-    }
 }

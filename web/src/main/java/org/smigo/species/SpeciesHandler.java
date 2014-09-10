@@ -7,15 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.garden.UpdateGardenBean;
-import org.smigo.persitance.DatabaseResource;
-import org.smigo.user.User;
+import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +25,7 @@ public class SpeciesHandler {
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
     @Autowired
-    private DatabaseResource databaseResource;
-    @Autowired
-    private User user;
+    private UserHandler userHandler;
     @Autowired
     private UserSession userSession;
     @Autowired
@@ -40,8 +37,8 @@ public class SpeciesHandler {
     @Autowired
     private FamilyDao familyDao;
 
-    public int addSpecies(SpeciesFormBean speciesFormBean) {
-        int id = databaseResource.addSpecies(speciesFormBean, user.getId());
+    public int addSpecies(String name, SpeciesFormBean speciesFormBean) {
+        int id = 0;//databaseResource.addSpecies(speciesFormBean, getId());
         userSession.getTranslation().put(JspFunctions.speciesMessageKey(id), speciesFormBean.getVernacularName());
         return id;
     }
@@ -67,23 +64,6 @@ public class SpeciesHandler {
         return null;
     }
 
-    public void updateGarden(List<? extends PlantData> plants) {
-        int year = plants.get(0).getYear();
-        if (user.isAuthenticated()) {
-            databaseResource.deleteYear(user.getId(), year);
-            databaseResource.saveGarden(user.getId(), plants);
-        } else {
-            final List<PlantData> userSessionPlants = userSession.getPlants();
-            for (Iterator<PlantData> iterator = userSessionPlants.iterator(); iterator.hasNext(); ) {
-                PlantData plantDb = iterator.next();
-                if (plantDb.getYear() == year) {
-                    iterator.remove();
-                }
-            }
-            userSessionPlants.addAll(plants);
-        }
-    }
-
     public Map<Integer, SpeciesView> getSpeciesMap() {
         Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
         for (SpeciesView s : speciesDao.getSpecies()) {
@@ -107,19 +87,14 @@ public class SpeciesHandler {
         return familyDao.getFamilies();
     }
 
-    public void addYear(int year) {
-        Garden g = getGarden();
-        g.addYear(year);
-        updateGarden(g.getPlants(year));
-    }
-
     public Garden getGarden() {
         return new Garden(getSpeciesMap(), getPlants());
     }
 
     public List<PlantData> getPlants() {
-        if (user.isAuthenticated()) {
-            return plantDao.getPlants(user.getId());
+        AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
+        if (authenticatedUser != null) {
+            return plantDao.getPlants(authenticatedUser.getId());
         } else {
             return userSession.getPlants();
         }
@@ -130,12 +105,13 @@ public class SpeciesHandler {
     }
 
     public void updateGarden(UpdateGardenBean updateGardenBean) {
+        AuthenticatedUser currentUser = userHandler.getCurrentUser();
         if (updateGardenBean.getAddList().isEmpty() && updateGardenBean.getRemoveList().isEmpty()) {
             return;
         }
-        if (user.isAuthenticated()) {
-            plantDao.addPlants(updateGardenBean.getAddList(), user.getId());
-            plantDao.deletePlants(updateGardenBean.getRemoveList(), user.getId());
+        if (currentUser != null) {
+            plantDao.addPlants(updateGardenBean.getAddList(), currentUser.getId());
+            plantDao.deletePlants(updateGardenBean.getRemoveList(), currentUser.getId());
         } else {
             userSession.getPlants().removeAll(updateGardenBean.getRemoveList());
             userSession.getPlants().addAll(updateGardenBean.getAddList());

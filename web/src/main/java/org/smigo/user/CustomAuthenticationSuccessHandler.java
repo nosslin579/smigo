@@ -6,6 +6,7 @@ import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,8 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
     @Autowired
     private UserSession userSession;
     @Autowired
+    private UserDao userDao;
+    @Autowired
     private DatabaseResource databaseResource;
 
 
@@ -29,10 +32,16 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         log.info("Login successful, user: " + authentication.getName());
-        final User principal = (User) authentication.getPrincipal();
+        final AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
+        //todo add gettranslation to new dao
         final Map<String, String> translation = databaseResource.getTranslation(principal.getId());
         userSession.getTranslation().putAll(translation);
+        UserBean user = userDao.getUser(principal.getUsername());
+        userSession.setUser(user);
 
         response.setStatus(HttpStatus.OK.value());
+        if (authentication instanceof OpenIDAuthenticationToken) {
+            response.sendRedirect("");
+        }
     }
 }

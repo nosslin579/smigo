@@ -1,7 +1,6 @@
 package org.smigo.user;
 
 import kga.PlantData;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.smigo.config.Props;
 import org.smigo.persitance.DatabaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -42,14 +42,8 @@ public class UserHandler {
     private UserDao userDao;
     @Autowired
     private Props props;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
-
-    public void updateUser(User user) {
-        databaseResource.updateUserDetails(user);
-    }
 
     public void createUser(RegisterFormBean user, String identityUrl) {
         final int userId = createUser(user);
@@ -110,7 +104,7 @@ public class UserHandler {
     public void authenticateUser(String loginKey) {
         final String email = resetMap.get(loginKey);
         resetMap.remove(loginKey);
-        final User user = userDao.getUserByEmail(email);
+        final UserBean user = userDao.getUserByEmail(email);
         final String rawTempPassword = UUID.randomUUID().toString();
         final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
         //TODO: Replace ugly hack for authenticating user with proper implementation.
@@ -119,9 +113,24 @@ public class UserHandler {
         databaseResource.updatePassword(user.getUsername(), "");
     }
 
-    public void acceptTermsOfService(User user) {
-        UserBean target = UserBean.createCopy(user);
-        target.setTermsofservice(true);
-        userDao.updateUser(target);
+    public void acceptTermsOfService(AuthenticatedUser principal) {
+        UserBean user = userDao.getUser(principal.getUsername());
+        user.setTermsofservice(true);
+        userDao.updateUser(principal.getId(), user);
+    }
+
+    public UserBean getUser(Principal principal) {
+        if (principal == null) {
+            return new UserBean();
+        }
+        return userDao.getUser(principal.getName());
+    }
+
+    public AuthenticatedUser getCurrentUser() {
+        final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof AuthenticatedUser) {
+            return (AuthenticatedUser) principal;
+        }
+        return null;
     }
 }

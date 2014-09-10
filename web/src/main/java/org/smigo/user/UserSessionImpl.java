@@ -19,6 +19,7 @@ public class UserSessionImpl implements UserSession {
     private long signupStart = 0;
     private final Map<String, String> translation = new HashMap<String, String>();
     private List<PlantData> plants = new ArrayList<PlantData>();
+    private UserBean user = null;
 
     @Override
     public void registerSignupStart() {
@@ -43,7 +44,17 @@ public class UserSessionImpl implements UserSession {
     }
 
     @Override
+    public void setUser(UserBean user) {
+        this.user = user;
+    }
+
+    @Override
     public String toString() {
         return "UserSessionImpl";
+    }
+
+    @Override
+    public UserBean getUser() {
+        return user;
     }
 }

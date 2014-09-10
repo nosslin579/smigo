@@ -36,8 +36,6 @@ public class UserController {
     private UserSession userSession;
     @Autowired
     private UserHandler userHandler;
-    @Autowired
-    private User user;
 
     public UserController() {
         log.debug("Creating new UserController");
@@ -61,10 +59,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
-    public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result) {
+    public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result, Principal principal) {
         if (result.hasErrors())
             return "passwordform.jsp";
-        userHandler.updatePassword(user.getUsername(), passwordFormBean.getNewPassword());
+        userHandler.updatePassword(principal.getName(), passwordFormBean.getNewPassword());
         return "redirect:/user/";
     }
 
@@ -90,9 +88,9 @@ public class UserController {
 
     @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.POST)
     @ResponseBody
-    public void acceptTermsOfService() {
-        log.info("AcceptTermsOfService: " + user);
-        userHandler.acceptTermsOfService(user);
+    public void acceptTermsOfService(Principal principal) {
+        log.info("AcceptTermsOfService: ");
+        userHandler.acceptTermsOfService((AuthenticatedUser) principal);
     }
 
     @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)

@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.smigo.config.VisitLogger;
 import org.smigo.species.RuleFormModel;
 import org.smigo.species.SpeciesFormBean;
-import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -310,27 +309,6 @@ public class DatabaseResource implements Serializable {
             throw new RuntimeException("Cant delete year:" + deleteyear + " from user:" + userId, e);
         } finally {
             close(con, ps);
-        }
-    }
-
-
-    public void updateUserDetails(User user) {
-        log.debug("Update user " + user);
-        Connection con = null;
-        PreparedStatement updateUser = null;
-        try {
-            con = getDatasource().getConnection();
-            updateUser = con.prepareStatement("UPDATE users SET displayname=?, email=?, about=?, locale=? WHERE id=?");
-            updateUser.setString(1, user.getDisplayname());
-            updateUser.setString(2, user.getEmail());
-            updateUser.setString(3, user.getAbout());
-            updateUser.setString(4, user.getLocale().toString());
-            updateUser.setInt(5, user.getId());
-            updateUser.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not update userdetails", e);
-        } finally {
-            close(con, updateUser);
         }
     }
 

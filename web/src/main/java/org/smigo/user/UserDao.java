@@ -10,17 +10,17 @@ public interface UserDao {
 
     void addOpenId(int userId, String identityUrl);
 
-    User getUserByUsername(String username);
+    List<? extends UserBean> getUsersByUsername(String username);
 
-    List<? extends User> getUsersByUsername(String username);
+    UserBean getUserById(int id);
 
-    User getUserById(int id);
-
-    User getUserByEmail(String email);
+    UserBean getUserByEmail(String email);
 
     UserDetails getUserDetails(OpenIDAuthenticationToken openIDAuthenticationToken);
 
-    void updateUser(User user);
+    void updateUser(int id, UserBean user);
 
     UserDetails getUserDetails(String username);
+
+    UserBean getUser(String name);
 }
