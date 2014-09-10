@@ -1,7 +1,6 @@
-package org.smigo.species;
+package org.smigo.plants;
 
 import kga.PlantData;
-import org.smigo.entities.PlantDataBean;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
-package org.smigo.species;
+package org.smigo.plants;
 
 import kga.PlantData;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.smigo.entities.PlantDataBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

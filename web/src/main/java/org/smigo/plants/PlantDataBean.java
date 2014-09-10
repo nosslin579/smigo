@@ -1,4 +1,4 @@
-package org.smigo.entities;
+package org.smigo.plants;
 
 import kga.PlantData;
 

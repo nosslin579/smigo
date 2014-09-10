@@ -1,6 +1,4 @@
-package org.smigo.garden;
-
-import org.smigo.entities.PlantDataBean;
+package org.smigo.plants;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,9 @@
-package org.smigo.species;
+package org.smigo.plants;
 
 import kga.Family;
 import kga.Species;
 import kga.rules.*;
+import org.smigo.species.RuleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
