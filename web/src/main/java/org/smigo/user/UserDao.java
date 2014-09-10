@@ -6,7 +6,7 @@ import org.springframework.security.openid.OpenIDAuthenticationToken;
 import java.util.List;
 
 public interface UserDao {
-    int addUser(RegisterFormBean user, String encodedPassword, long signupTime, long decideTime);
+    int addUser(RegisterFormBean user, String encodedPassword, long decideTime);
 
     void addOpenId(int userId, String identityUrl);
 

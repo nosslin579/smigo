@@ -9,10 +9,6 @@ import java.util.Map;
 
 public interface UserSession extends Serializable {
 
-    void registerSignupStart();
-
-    long getSignupTime();
-
     Map<String, String> getTranslation();
 
     List<PlantData> getPlants();

@@ -72,7 +72,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         user.setUsername(username);
         user.setPassword(HASHPW);
 //        user.setEmail(username + EMAIL_PROVIDER);
-        userDao.addUser(user, HASHPW, 0, 0);
+        userDao.addUser(user, HASHPW, 0);
         return username;
     }
 

@@ -52,10 +52,9 @@ public class UserHandler {
 
     public int createUser(RegisterFormBean user) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
-        long signupTime = userSession.getSignupTime();
         final String rawPassword = user.getPassword();
         final String encoded = rawPassword.isEmpty() ? "" : passwordEncoder.encode(rawPassword);
-        final int userId = userDao.addUser(user, encoded, signupTime, decideTime);
+        final int userId = userDao.addUser(user, encoded, decideTime);
 
         //save plants
         List<PlantData> plants = userSession.getPlants();
@@ -126,7 +125,7 @@ public class UserHandler {
         return userDao.getUser(principal.getName());
     }
 
-    public AuthenticatedUser getCurrentUser() {
+    public AuthenticatedUser getCurrentUser() {//@AuthenticationPrincipal
         final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof AuthenticatedUser) {
             return (AuthenticatedUser) principal;

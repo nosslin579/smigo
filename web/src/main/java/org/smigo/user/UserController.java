@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -21,7 +20,6 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Controller that handles user specific type of requests.
@@ -33,8 +31,6 @@ public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
-    private UserSession userSession;
-    @Autowired
     private UserHandler userHandler;
 
     public UserController() {
@@ -44,11 +40,6 @@ public class UserController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Locale.class, new LocaleEditor());
-    }
-
-    @ModelAttribute("availableLocales")
-    public Map<String, String> addAvailableLocales() {
-        return Translation.getTransalationMap();
     }
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
@@ -64,13 +55,6 @@ public class UserController {
             return "passwordform.jsp";
         userHandler.updatePassword(principal.getName(), passwordFormBean.getNewPassword());
         return "redirect:/user/";
-    }
-
-    @RequestMapping(value = {"/cuuser", "/signup", "/edituser"}, method = RequestMethod.GET)
-    public String getUserForm(ModelMap modelMap) {
-        userSession.registerSignupStart();
-        modelMap.addAttribute(new UserBean());
-        return "userform.jsp";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -91,34 +75,6 @@ public class UserController {
     public void acceptTermsOfService(Principal principal) {
         log.info("AcceptTermsOfService: ");
         userHandler.acceptTermsOfService((AuthenticatedUser) principal);
-    }
-
-    @RequestMapping(value = "/user/{userid}", method = RequestMethod.GET)
-    public String getUser(@PathVariable Integer userid, Model model, Principal principal) {
-        UserBean u = new UserBean();
-        u.setEmail("");
-        u.setUsername("");
-        model.addAttribute("showall", false);
-        model.addAttribute("user", u);
-        return "userinfo.jsp";
-    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public String getUser(Model model, @AuthenticationPrincipal UserBean principal) {
-        model.addAttribute("showall", true);
-        model.addAttribute("user", principal);
-        return "userinfo.jsp";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        return "loginform.jsp";
-    }
-
-    @RequestMapping(value = "/reset-password", method = RequestMethod.GET)
-    public String getReset(Model model) {
-        model.addAttribute(new ResetFormBean());
-        return "resetpasswordform.jsp";
     }
 
     @RequestMapping(value = "/reset-password", method = RequestMethod.POST)

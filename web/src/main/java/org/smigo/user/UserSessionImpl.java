@@ -16,22 +16,10 @@ import java.util.Map;
 @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
 public class UserSessionImpl implements UserSession {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private long signupStart = 0;
+
     private final Map<String, String> translation = new HashMap<String, String>();
     private List<PlantData> plants = new ArrayList<PlantData>();
-    private UserBean user = null;
-
-    @Override
-    public void registerSignupStart() {
-        this.signupStart = System.nanoTime();
-    }
-
-    @Override
-    public long getSignupTime() {
-        if (signupStart == 0)
-            return 0;
-        return (System.nanoTime() - signupStart) / 1000000000;
-    }
+    private UserBean user = new UserBean();
 
     @Override
     public Map<String, String> getTranslation() {

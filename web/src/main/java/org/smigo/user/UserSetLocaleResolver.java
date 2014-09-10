@@ -26,7 +26,7 @@ public class UserSetLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest req) {
         UserBean user = userSession.getUser();
-        return (user != null && user.getLocale() != null) ? user.getLocale() : req.getLocale();
+        return user.getLocale() != null ? user.getLocale() : req.getLocale();
     }
 
     @Override
