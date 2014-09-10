@@ -3,6 +3,7 @@ package org.smigo.user;
 import kga.PlantData;
 import org.smigo.config.Props;
 import org.smigo.persitance.DatabaseResource;
+import org.smigo.plants.PlantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -39,6 +40,8 @@ public class UserHandler {
     @Autowired
     private PersistentTokenRepository tokenRepository;
     @Autowired
+    private PlantDao plantDao;
+    @Autowired
     private UserDao userDao;
     @Autowired
     private Props props;
@@ -59,7 +62,7 @@ public class UserHandler {
         //save plants
         List<PlantData> plants = userSession.getPlants();
         if (!plants.isEmpty()) {
-            databaseResource.updateGarden(userId, plants);
+            plantDao.addPlants(plants, userId);
         }
         return userId;
     }

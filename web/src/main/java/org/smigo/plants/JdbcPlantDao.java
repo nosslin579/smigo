@@ -48,7 +48,7 @@ public class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void addPlants(List<PlantDataBean> plants, int userId) {
+    public void addPlants(List<? extends PlantData> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "INSERT INTO plants(fkuserid, species, year, x, y) VALUES (" + userId + ", :speciesId, :year, :x, :y)",
@@ -56,7 +56,7 @@ public class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void deletePlants(List<PlantDataBean> plants, int userId) {
+    public void deletePlants(List<? extends PlantData> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "DELETE FROM plants WHERE (fkuserid = " + userId + " AND species = :speciesId AND year = :year AND x = :x AND y = :y)",

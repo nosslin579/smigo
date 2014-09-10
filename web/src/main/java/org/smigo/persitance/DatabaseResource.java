@@ -1,6 +1,5 @@
 package org.smigo.persitance;
 
-import kga.PlantData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.config.VisitLogger;
@@ -16,9 +15,11 @@ import javax.sql.DataSource;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.security.Principal;
 import java.sql.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Core database superclass that handles the most general database communication
@@ -229,90 +230,6 @@ public class DatabaseResource implements Serializable {
     }
 
 
-    public void saveGarden(int userId, List<? extends PlantData> plants) {
-        if (plants == null || plants.isEmpty())
-            throw new RuntimeException("No plants to update");
-
-        StringBuilder insertSqlString = new StringBuilder("INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
-        for (PlantData pl : plants) {
-            insertSqlString.append("('").append(userId).append("',")
-                    .append(pl.getSpeciesId()).append(",")
-                    .append(pl.getYear()).append(",")
-                    .append(pl.getX()).append(",")
-                    .append(pl.getY()).append("),");
-        }
-        insertSqlString.setCharAt(insertSqlString.length() - 1, ';');
-
-        Connection con = null;
-        PreparedStatement insert = null;
-        try {
-            con = getDatasource().getConnection();
-            insert = con.prepareStatement(insertSqlString.toString());
-            insert.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not save plants database.", e);
-        } finally {
-            close(con, insert);
-        }
-    }
-
-    public void updateGarden(int userId, List<PlantData> plants) {
-        if (plants == null || plants.isEmpty())
-            throw new RuntimeException("No plants to update");
-        Set<Integer> yearsToUpdate = new HashSet<Integer>();
-        for (PlantData p : plants)
-            yearsToUpdate.add(p.getYear());
-
-        log.debug("Updating plants for user: " + userId + " plants.size() " + plants.size());
-
-        StringBuilder deleteSqlString = new StringBuilder("DELETE FROM plants WHERE fkuserid='"
-                + userId + "'");
-        for (Integer y : yearsToUpdate)
-            deleteSqlString.append(" AND year=").append(y);
-        deleteSqlString.append(';');
-
-        StringBuilder insertSqlString = new StringBuilder(
-                "INSERT INTO plants(fkuserid, species, year, x, y) VALUES ");
-        for (PlantData pl : plants)
-            insertSqlString.append("('" + userId + "'," + pl.getSpeciesId() + ","
-                    + pl.getYear() + "," + pl.getX() + "," + pl.getY() + "),");
-        insertSqlString.setCharAt(insertSqlString.length() - 1, ';');
-
-        Connection con = null;
-        PreparedStatement delete = null;
-        PreparedStatement insert = null;
-        try {
-            con = getDatasource().getConnection();
-            delete = con.prepareStatement(deleteSqlString.toString());
-            insert = con.prepareStatement(insertSqlString.toString());
-            delete.execute();
-            insert.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not update plants database.", e);
-        } finally {
-            close(con, delete);
-            close(con, insert);
-        }
-    }
-
-    public void deleteYear(int userId, Integer deleteyear) {
-        log.debug("Deleting year " + deleteyear + " for user: " + userId);
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("DELETE FROM plants WHERE fkuserid=? AND year=?");
-            ps.setInt(1, userId);
-            ps.setInt(2, deleteyear);
-            ps.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Cant delete year:" + deleteyear + " from user:" + userId, e);
-        } finally {
-            close(con, ps);
-        }
-    }
-
-
     public void logVisit(HttpServletRequest req) {
         Connection con = null;
         PreparedStatement ps = null;
@@ -343,50 +260,6 @@ public class DatabaseResource implements Serializable {
         } finally {
             close(con, ps);
         }
-    }
-
-    public void addMessage(String message, String column, int location, Principal principal)
-            throws SQLException, IllegalAccessException {
-        if (principal == null)
-            throw new IllegalAccessException("Principal cannont be null");
-        Connection con = null;
-        PreparedStatement ps = null;
-        try {
-            con = getDatasource().getConnection();
-            ps = con.prepareStatement("INSERT INTO messages (message," + column
-                    + ",postdate2,poster) " + "SELECT ? as message, ? as " + column
-                    + ", ? as postdate2, user_id as poster FROM users " + "WHERE username = ?");
-            ps.setString(1, message);
-            ps.setInt(2, location);
-            ps.setLong(3, System.currentTimeMillis());
-            ps.setString(4, principal.getName());
-            ps.executeUpdate();
-        } finally {
-            close(con, ps);
-        }
-    }
-
-    /**
-     * Admin use only
-     */
-    @Deprecated
-    public void updateIconFileName() {
-        Connection con = null;
-        PreparedStatement ps = null;
-        for (int i = 1; i < 160; i++) {
-            try {
-                con = getDatasource().getConnection();
-                ps = con.prepareStatement("UPDATE species SET iconfilename=? WHERE species_id=?");
-                ps.setString(1, i + ".png");
-                ps.setInt(2, i);
-                ps.execute();
-            } catch (SQLException e) {
-                log.debug("Not updating " + i + " reason " + e.getMessage());
-            } finally {
-                close(con, ps);
-            }
-        }
-
     }
 
     public void updatePassword(String username, String encodedPassword) {
