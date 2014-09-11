@@ -60,7 +60,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setExposeContextBeansAsAttributes(true);
-        resolver.setExposedContextBeanNames(new String[]{"hostEnvironmentInfo", "viewBean"});
+        resolver.setExposedContextBeanNames(new String[]{"hostEnvironmentInfo"});
         return resolver;
     }
 
