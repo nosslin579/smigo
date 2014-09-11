@@ -1,5 +1,8 @@
 <!-- ######## main men/u ######## -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="MainMenuController">
+<div class="navbar">
+
+</div>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="MainMenuController">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -15,9 +18,9 @@
                 <li><a href="#garden">Garden</a></li>
                 <li><a href="#help">{{'help' | translate}}</a></li>
                 <li ng-class="{hidden: currentUser.authenticated}">
-                <a href="#login" id="login-link">{{'account.login' | translate}}</a></li>
+                    <a href="#login" id="login-link">{{'account.login' | translate}}</a></li>
                 <li ng-class="{hidden: currentUser.authenticated}">
-                <a href="#register" id="register-link">{{'msg.account.register' | translate}}</a></li>
+                    <a href="#register" id="register-link">{{'msg.account.register' | translate}}</a></li>
                 <li ng-class="{hidden: !currentUser.authenticated}">
                     <a ng-click="logout()" href="" id="logout-link">Logout</a></li>
 

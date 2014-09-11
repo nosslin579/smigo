@@ -139,11 +139,6 @@
  * Base structure
  */
 
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-    padding-top: 50px;
-}
-
 /*
  * Top navigation
  * Hide default border to remove 1px line.
@@ -155,7 +150,7 @@ body {
 /* Sidebar navigation */
 .sidebar {
     position: fixed;
-    top: 50px;
+    top: 0px;
     bottom: 0;
     overflow: hidden;
     padding: 0
@@ -203,7 +198,14 @@ body {
 #garden-frame {
     position: fixed;
     bottom: 0;
-    top: 50px;
+    top: 0;
+}
+
+#grid-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 140px;
+    bottom: 0;
 }
 
 #garden-frame ul.nav-tabs {
