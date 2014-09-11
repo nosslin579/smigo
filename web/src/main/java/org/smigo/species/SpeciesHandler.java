@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.plants.PlantDao;
-import org.smigo.plants.UpdateGardenBean;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
@@ -105,17 +104,4 @@ public class SpeciesHandler {
         return getGarden().getHints();
     }
 
-    public void updateGarden(UpdateGardenBean updateGardenBean) {
-        AuthenticatedUser currentUser = userHandler.getCurrentUser();
-        if (updateGardenBean.getAddList().isEmpty() && updateGardenBean.getRemoveList().isEmpty()) {
-            return;
-        }
-        if (currentUser != null) {
-            plantDao.addPlants(updateGardenBean.getAddList(), currentUser.getId());
-            plantDao.deletePlants(updateGardenBean.getRemoveList(), currentUser.getId());
-        } else {
-            userSession.getPlants().removeAll(updateGardenBean.getRemoveList());
-            userSession.getPlants().addAll(updateGardenBean.getAddList());
-        }
-    }
 }
