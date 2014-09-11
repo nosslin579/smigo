@@ -15,8 +15,10 @@ class LogBean {
     private final String method;
     private final String ip;
     private final String note;
+    private final String origin;
 
-    public LogBean(String remoteUser, String url, String locales, String useragent, String referer, String sessionid, String method, String ip, String note) {
+    public LogBean(String remoteUser, String url, String locales, String useragent,
+                   String referer, String sessionid, String method, String ip, String note, String origin) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
@@ -26,6 +28,7 @@ class LogBean {
         this.method = method;
         this.ip = ip;
         this.note = note;
+        this.origin = origin;
     }
 
     public static LogBean create(HttpServletRequest req) {
@@ -39,10 +42,11 @@ class LogBean {
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),
                 truncate(req.getHeader("referer")),
-                req.getRequestedSessionId(),
+                truncate(req.getRequestedSessionId()),
                 req.getMethod(),
                 truncate(req.getHeader("x-forwarded-for")),
-                truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)));
+                truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)),
+                truncate(req.getHeader("origin")));
 
     }
 
@@ -103,5 +107,9 @@ class LogBean {
                 ", ip='" + ip + '\'' +
                 ", note='" + note + '\'' +
                 '}';
+    }
+
+    public String getOrigin() {
+        return origin;
     }
 }

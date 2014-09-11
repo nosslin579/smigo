@@ -67,5 +67,5 @@ DROP COLUMN sessionidfromcookie;
 ALTER TABLE visitlog
 ADD COLUMN referer VARCHAR(256);
 
-
-
+ALTER TABLE visitlog
+ADD COLUMN origin VARCHAR(256);

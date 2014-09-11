@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Types;
+import java.util.Arrays;
 
 @Repository
 class JdbcLogDao implements LogDao {
@@ -18,8 +20,8 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public void log(LogBean req) {
-        String sql = "INSERT INTO visitlog (username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note) VALUES (?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,
+        String sql = "INSERT INTO visitlog (username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note,origin) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        Object[] args = {
                 req.getRemoteUser(),
                 req.getUrl(),
                 req.getLocales(),
@@ -28,6 +30,10 @@ class JdbcLogDao implements LogDao {
                 req.getSessionid(),
                 req.getMethod(),
                 req.getIp(),
-                req.getNote());
+                req.getNote(),
+                req.getOrigin()};
+        int[] types = new int[args.length];
+        Arrays.fill(types, Types.VARCHAR);
+        jdbcTemplate.update(sql, args, types);
     }
 }
