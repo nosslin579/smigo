@@ -1,9 +1,9 @@
 function PlantService($http, $window, $timeout, $rootScope) {
-    console.log('plantService');
     var yearSquareMap = originalGarden.squares,
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
+    console.log('PlantService', [yearSquareMap]);
 
     $window.onbeforeunload = function () {
         sendUnsavedPlantsToServer();
