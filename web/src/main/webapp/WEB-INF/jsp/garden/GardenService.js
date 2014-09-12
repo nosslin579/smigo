@@ -1,9 +1,19 @@
-function GardenService(PlantService) {
-    var model = {
-        selectedSpecies: PlantService.getGarden().species["28"],
-        selectedYear: +Object.keys(PlantService.getGarden().squares).sort().slice(-1).pop(),
-        availableYears: PlantService.getAvailableYears()
-    };
+function GardenService(PlantService, SpeciesService, $rootScope, $http) {
+    var model = {};
+
+    function initModel() {
+        var availableYears = PlantService.getAvailableYears();
+        model.selectedSpecies = SpeciesService.getSpecies()["28"];
+        model.selectedYear = availableYears.slice(-1).pop();
+        model.availableYears = availableYears;
+        console.log('Garden model initialized', model);
+    }
+
+    initModel();
+
+    $rootScope.$on('newGardenAvailable', initModel);
+
+
     return {
         model: model,
         onSquareClick: function (clickEvent, square) {
@@ -47,7 +57,15 @@ function GardenService(PlantService) {
                 top: square.location.y * 48 + 100000 + 'px',
                 left: square.location.x * 48 + 100000 + 'px'
             };
+        },
+        reloadGarden: function () {
+            return $http.get('rest/garden')
+                .then(function (response) {
+                    console.log('Garden reloaded', response);
+                    $rootScope.$broadcast('newGardenAvailable', response.data);
+                });
         }
+
     }
 }
 angular.module('smigoModule').factory('GardenService', GardenService);

@@ -1,6 +1,6 @@
-function PlantService($http, $window, $timeout) {
+function PlantService($http, $window, $timeout, $rootScope) {
     console.log('plantService');
-    var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>,
+    var yearSquareMap = originalGarden.squares,
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
@@ -54,18 +54,6 @@ function PlantService($http, $window, $timeout) {
         }
     }
 
-    function reloadGarden() {
-        var promise = $http.get('rest/garden');
-        promise.success(function (data) {
-            console.log('Garden reloaded', data);
-            garden = data;
-        });
-        promise.error(function (data, status, headers, config) {
-            console.error('Could not reload garden', [data, status, headers, config]);
-        });
-        return promise;
-    }
-
     function getBounds(year) {
         var axisLength = 9999;
         var ret = {
@@ -75,7 +63,7 @@ function PlantService($http, $window, $timeout) {
             ymin: axisLength
         };
         [year, getTrailingYear(year)].forEach(function (year) {
-            angular.forEach(garden.squares[year], function (square, index) {
+            angular.forEach(yearSquareMap[year], function (square, index) {
                 ret.xmax = Math.max(square.location.x, ret.xmax);
                 ret.ymax = Math.max(square.location.y, ret.ymax);
                 ret.xmin = Math.min(square.location.x, ret.xmin);
@@ -87,17 +75,17 @@ function PlantService($http, $window, $timeout) {
 
     function getTrailingYear(year) {
         var yearSource = year;
-        if (garden.squares[yearSource - 1]) {
+        if (yearSquareMap[yearSource - 1]) {
             return yearSource - 1;
-        } else if (garden.squares[yearSource + 1]) {
+        } else if (yearSquareMap[yearSource + 1]) {
             return yearSource + 1;
         } else {
-            return Object.keys(garden.squares).sort().slice(-1);
+            return Object.keys(yearSquareMap).sort().slice(-1);
         }
     }
 
     function getAvailableYears() {
-        var sortedYearsArray = Object.keys(garden.squares).sort();
+        var sortedYearsArray = Object.keys(yearSquareMap).sort();
         var firstYear = +sortedYearsArray[0];
         var lastYear = +sortedYearsArray.slice(-1)[0];
         var ret = [];
@@ -114,7 +102,7 @@ function PlantService($http, $window, $timeout) {
         $timeout.cancel(timedAutoSavePromise);
         //get unsaved plants
         var update = { addList: [], removeList: [] };
-        angular.forEach(garden.squares, function (squareList) {
+        angular.forEach(yearSquareMap, function (squareList) {
             angular.forEach(squareList, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (plant.add && !plant.remove) {
@@ -141,15 +129,18 @@ function PlantService($http, $window, $timeout) {
         }
     }
 
+    $rootScope.$on('newGardenAvailable', function (event, garden) {
+        yearSquareMap = garden.squares;
+    });
+
     return {
-        getBounds: getBounds,
-        getGarden: function () {
-            return garden;
+        getSquares: function (year) {
+            return yearSquareMap[year];
         },
-        reloadGarden: reloadGarden,
+        getBounds: getBounds,
         addYear: function (year, model) {
             var newYearSquareArray = [];
-            var copyFromSquareArray = garden.squares[getTrailingYear(year)];
+            var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
 
             //add perennial from mostRecentYear
             angular.forEach(copyFromSquareArray, function (square) {
@@ -161,15 +152,15 @@ function PlantService($http, $window, $timeout) {
                 });
             });
 
-            garden.squares[year] = newYearSquareArray;
+            yearSquareMap[year] = newYearSquareArray;
             model.selectedYear = year;
             model.availableYears = getAvailableYears();
-            console.log('Year added:' + year, garden.squares);
+            console.log('Year added:' + year, yearSquareMap);
         },
         getAvailableYears: getAvailableYears,
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), [species]);
-            garden.squares[year].push(newSquare);
+            yearSquareMap[year].push(newSquare);
             countAutoSave();
             console.log('Square added', newSquare);
             return newSquare;

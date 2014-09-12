@@ -8,7 +8,8 @@ function Http($http) {
                 data: params,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
-        }
+        },
+        get: $http.get
     }
 }
 

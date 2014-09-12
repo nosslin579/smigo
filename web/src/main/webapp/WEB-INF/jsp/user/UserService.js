@@ -1,4 +1,4 @@
-function UserService($rootScope, Http, $location, PlantService, $q) {
+function UserService($rootScope, Http, $location, PlantService, $q, GardenService) {
 
     function validateForm(form) {
         form.objectErrors = [];
@@ -25,7 +25,7 @@ function UserService($rootScope, Http, $location, PlantService, $q) {
             .then(function () {
                 return Http.post('login', formModel)
             })
-            .then(PlantService.reloadGarden)
+            .then(GardenService.reloadGarden)
             .then(function () {
                 $rootScope.currentUser.authenticated = formModel.username;
                 $location.path('/garden');
@@ -58,6 +58,18 @@ function UserService($rootScope, Http, $location, PlantService, $q) {
             }
             $('#accept-terms-of-service-modal').modal('hide');
             Http.post('accept-terms-of-service', {});
+        },
+        logout: function () {
+            Http.get('logout')
+                .then(function () {
+                    delete $rootScope.currentUser.authenticated;
+                    $rootScope.$broadcast('newGardenAvailable', {species: {}, squares: {}});
+                })
+                .then(GardenService.reloadGarden)
+                .catch(function (data, status, headers, config) {
+                    console.error('Logout failed', data, status, headers, config);
+                });
+
         }
     };
 }

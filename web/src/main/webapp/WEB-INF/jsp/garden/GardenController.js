@@ -1,18 +1,18 @@
-function GardenController($scope, PlantService, GardenService) {
+function GardenController($scope, PlantService, SpeciesService, GardenService) {
     console.log('GardenController', $scope);
 
-    $scope.$watch('model.selectedYear', function (newYear) {
-        $scope.squares = PlantService.getGarden().squares[newYear];
-        $scope.visibleRemainderSquares = PlantService.getGarden().squares[newYear - 1];
+    $scope.$watch('model.selectedYear', function (toYear, fromYear) {
+        console.log('Selected year changed', toYear, fromYear);
+        $scope.squares = PlantService.getSquares(toYear);
+        $scope.visibleRemainderSquares = PlantService.getSquares(toYear - 1);
     });
-
-    $scope.species = PlantService.getGarden().species;
 
     $scope.$watch('model.availableYears', function (newYears) {
         $scope.forwardYear = newYears.slice(-1).pop() + 1;
         $scope.backwardYear = newYears[0] - 1;
     });
 
+    $scope.species = SpeciesService.getSpecies();
     $scope.addYear = PlantService.addYear;
     $scope.model = GardenService.model;
     $scope.onSquareClick = GardenService.onSquareClick;
