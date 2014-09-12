@@ -1,4 +1,4 @@
-function GardenController($scope, PlantService) {
+function GardenController($scope, PlantService, GardenService) {
     console.log('GardenController', $scope);
 
     //Garden
@@ -8,37 +8,27 @@ function GardenController($scope, PlantService) {
         $scope.backwardYear = +Object.keys(PlantService.getGarden().squares).sort()[0] - 1;
     }, true);
 
-    //Year
-    $scope.$watch(PlantService.getSelectedYear, function (newVal, oldVal, scope) {
-        $scope.selectedYear = PlantService.getSelectedYear();
-        $scope.availableYears = PlantService.getAvailableYears();
-    });
     $scope.addYear = PlantService.addYear;
-    $scope.setSelectedYear = PlantService.setSelectedYear;
 
-    //Species
-    $scope.$watch(PlantService.getSelectedSpecies, function (newVal, oldVal, scope) {
-        $scope.selectedSpecies = PlantService.getSelectedSpecies();
-    });
-    $scope.setSelectedSpecies = PlantService.setSelectedSpecies;
+    $scope.model = GardenService.model;
 
     //Action
     //todo
 
     $scope.onSquareClick = function (clickEvent, square) {
-        console.log('Square clicked', [clickEvent, square, $scope.selectedSpecies]);
+        console.log('Square clicked', [clickEvent, square, $scope.model.selectedSpecies]);
         if (clickEvent.shiftKey) {
             PlantService.removePlant(square);
         } else if (clickEvent.ctrlKey) {
             console.log('Copy species');
         } else {
-            PlantService.addPlant($scope.selectedSpecies, square);
+            PlantService.addPlant($scope.model.selectedSpecies, square);
         }
         clickEvent.stopPropagation();
     };
 
     $scope.onVisibleRemainderClick = function (clickEvent, s) {
-        PlantService.addSquare($scope.selectedYear, s.location.x, s.location.y, $scope.selectedSpecies);
+        PlantService.addSquare($scope.model.selectedYear, s.location.x, s.location.y, $scope.model.selectedSpecies);
         PlantService.save();
         clickEvent.stopPropagation();
     };
@@ -49,7 +39,7 @@ function GardenController($scope, PlantService) {
         var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
         var x = Math.floor((offsetX - 100000) / 48);
         var y = Math.floor((offsetY - 100000) / 48);
-        PlantService.addSquare($scope.selectedYear, x, y, $scope.selectedSpecies);
+        PlantService.addSquare($scope.model.selectedYear, x, y, $scope.model.selectedSpecies);
         clickEvent.stopPropagation();
     };
 

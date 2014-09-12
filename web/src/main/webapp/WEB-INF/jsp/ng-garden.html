@@ -22,8 +22,8 @@
                     <input class="form-control" type="text" placeholder="Search...">
                 </form>
                 <ul class="nav nav-sidebar">
-                    <li ng-repeat="s in garden.species" ng-class="{active: selectedSpecies.id === s.id}">
-                        <a href="" ng-click="setSelectedSpecies(s)">{{s.scientificName}} {{s | translate}}</a>
+                    <li ng-repeat="s in garden.species" ng-class="{active: model.selectedSpecies.id === s.id}">
+                        <a href="" ng-click="model.selectedSpecies = s">{{s.scientificName}} {{s | translate}}</a>
                     </li>
                 </ul>
             </div>
@@ -33,9 +33,9 @@
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-11">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li ng-class="{active: year == selectedYear}" ng-repeat="year in availableYears">
-                            <a href="" ng-click="setSelectedYear(year)">
-                                {{year}}
+                        <li ng-class="{active: year == model.selectedYear}" ng-repeat="year in model.availableYears">
+                            <a href="" ng-click="model.selectedYear = year">
+                            {{year}}
                             </a>
                         </li>
                         <li>
@@ -54,13 +54,13 @@
                     <div id="fade-right" class="absolute-full"></div>
                     <div id="fade-left" class="absolute-full"></div>
                     <div id="peephole" remember-scroll="">
-                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
-                            <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                                <div ng-repeat="p in s.plants">
+                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(model.selectedYear)">
+                            <div ng-repeat="s in garden.squares[model.selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                            <div ng-repeat="p in s.plants">
                                     <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                 </div>
                             </div>
-                            <div ng-repeat="s in garden.squares[selectedYear-1]" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
+                            <div ng-repeat="s in garden.squares[model.selectedYear-1]" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                         </div>
                     </div>
                 </div>
@@ -79,9 +79,9 @@
                 <h4 class="modal-title">{{'addyear'|translate}}</h4>
             </div>
             <div class="modal-body">
-                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear)">{{forwardYear}}</button>
+                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear, model)">{{forwardYear}}</button>
                 <hr/>
-                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(backwardYear)">{{backwardYear}}</button>
+                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(backwardYear, model)">{{backwardYear}}</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{'msg.close' | translate}}</button>

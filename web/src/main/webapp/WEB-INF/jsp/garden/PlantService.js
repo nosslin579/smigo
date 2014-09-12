@@ -1,8 +1,6 @@
 function PlantService($http, $window, $timeout) {
     console.log('plantService');
     var garden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>,
-        selectedYear = +Object.keys(garden.squares).sort().slice(-1).pop(),
-        selectedSpecies = garden.species["28"],
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
@@ -88,7 +86,7 @@ function PlantService($http, $window, $timeout) {
     }
 
     function getTrailingYear(year) {
-        var yearSource = typeof year === 'undefined' ? selectedYear : year;
+        var yearSource = year;
         if (garden.squares[yearSource - 1]) {
             return yearSource - 1;
         } else if (garden.squares[yearSource + 1]) {
@@ -96,6 +94,18 @@ function PlantService($http, $window, $timeout) {
         } else {
             return Object.keys(garden.squares).sort().slice(-1);
         }
+    }
+
+    function getAvailableYears() {
+        var sortedYearsArray = Object.keys(garden.squares).sort();
+        var firstYear = +sortedYearsArray[0];
+        var lastYear = +sortedYearsArray.slice(-1)[0];
+        var ret = [];
+        for (var i = firstYear; i <= lastYear; i++) {
+            ret.push(i);
+        }
+        console.log('AvailableYears', ret);
+        return ret;
     }
 
     function sendUnsavedPlantsToServer() {
@@ -132,28 +142,12 @@ function PlantService($http, $window, $timeout) {
     }
 
     return {
-        getTrailingYear: getTrailingYear,
         getBounds: getBounds,
-        getSelectedSpecies: function () {
-            return selectedSpecies;
-        },
-        setSelectedSpecies: function (species) {
-            selectedSpecies = species;
-        },
-        getSelectedYear: function () {
-            return selectedYear;
-        },
-        setSelectedYear: function (year) {
-            if (!garden.squares.hasOwnProperty(year)) {
-                garden.squares[year] = [];
-            }
-            selectedYear = year;
-        },
         getGarden: function () {
             return garden;
         },
         reloadGarden: reloadGarden,
-        addYear: function (year) {
+        addYear: function (year, model) {
             var newYearSquareArray = [];
             var copyFromSquareArray = garden.squares[getTrailingYear(year)];
 
@@ -168,20 +162,11 @@ function PlantService($http, $window, $timeout) {
             });
 
             garden.squares[year] = newYearSquareArray;
-            selectedYear = year;
+            model.selectedYear = year;
+            model.availableYears = getAvailableYears();
             console.log('Year added:' + year, garden.squares);
         },
-        getAvailableYears: function () {
-            var sortedYearsArray = Object.keys(garden.squares).sort();
-            var firstYear = +sortedYearsArray[0];
-            var lastYear = +sortedYearsArray.slice(-1)[0];
-            var ret = [];
-            for (var i = firstYear; i <= lastYear; i++) {
-                ret.push(i);
-            }
-            console.log('AvailableYears', ret);
-            return ret;
-        },
+        getAvailableYears: getAvailableYears,
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), [species]);
             garden.squares[year].push(newSquare);

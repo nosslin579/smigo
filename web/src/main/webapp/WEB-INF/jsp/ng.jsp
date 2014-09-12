@@ -24,6 +24,7 @@
     <%@ include file="app.js" %>
     (function () {
         <%@ include file="garden/GardenController.js" %>
+        <%@ include file="garden/GardenService.js" %>
         <%@ include file="MainMenuController.js" %>
         <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>

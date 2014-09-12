@@ -2,7 +2,8 @@ function rememberScroll($timeout) {
     return {
         restrict: 'A',
         link: function (scope, $elm, attr) {
-            scope.$watch('selectedYear', function (newYear, oldYear, wtf) {
+            scope.$watch('model.selectedYear', function (newYear, oldYear, wtf) {
+//                console.log('Watching model.selectedYear',[newYear,oldYear,wtf]);
                 $timeout(function () {
                     $elm[0].scrollLeft = 99999;
                     $elm[0].scrollLeft = $elm[0].scrollLeft / 2;
