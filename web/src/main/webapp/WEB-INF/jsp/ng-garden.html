@@ -4,11 +4,20 @@
             <div>
                 <div class="navbar"></div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default active">Add</button>
-                    <button type="button" class="btn btn-info">Info</button>
-                    <button type="button" class="btn btn-default">Delete</button>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-block btn-default" title="{{'msg.deletesquare.description' | translate}}">
+                                <span class="glyphicon glyphicon-info-sign"></span> {{'msg.view-square.title' | translate}}
+                            </button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-block btn-default" ng-click="setAction('delete')" title="{{'msg.view-square.description' | translate}}">
+                                <span class="glyphicon glyphicon-remove"></span> {{'deletesquare' | translate}}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <hr/>
+                <!--<hr/>-->
                 <form class="navbar-form">
                     <input class="form-control" type="text" placeholder="Search...">
                 </form>
@@ -23,39 +32,39 @@
             <div class="navbar"></div>
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-11">
-                <ul class="nav nav-tabs" role="tablist">
-                            <li ng-class="{active: year == selectedYear}" ng-repeat="year in availableYears">
-                                <a href="" ng-click="setSelectedYear(year)">
-                                    {{year}}
-                                </a>
-                            </li>
-                            <li>
-                                <a id="add-year-link" href="" data-toggle="modal" data-target="#add-year-modal">
-                                <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li ng-class="{active: year == selectedYear}" ng-repeat="year in availableYears">
+                            <a href="" ng-click="setSelectedYear(year)">
+                                {{year}}
+                            </a>
+                        </li>
+                        <li>
+                            <a id="add-year-link" href="" data-toggle="modal" data-target="#add-year-modal">
+                            <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </div>
 
             <div id="grid-wrapper" class="row">
-            <div class="col-sm-offset-1 col-sm-11 absolute-full">
-                        <div id="fade-top" class="absolute-full"></div>
-                        <div id="fade-bottom" class="absolute-full"></div>
-                        <div id="fade-right" class="absolute-full"></div>
-                        <div id="fade-left" class="absolute-full"></div>
-                        <div id="peephole" remember-scroll="">
-                            <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
-                                <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                                    <div ng-repeat="p in s.plants">
-                                        <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
-                                    </div>
+                <div class="col-sm-offset-1 col-sm-11 absolute-full">
+                    <div id="fade-top" class="absolute-full"></div>
+                    <div id="fade-bottom" class="absolute-full"></div>
+                    <div id="fade-right" class="absolute-full"></div>
+                    <div id="fade-left" class="absolute-full"></div>
+                    <div id="peephole" remember-scroll="">
+                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(selectedYear)">
+                            <div ng-repeat="s in garden.squares[selectedYear]" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                                <div ng-repeat="p in s.plants">
+                                    <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-class="{'multiple-plants': getObjectLength(s.plants) > 1 }"/>
                                 </div>
-                                <div ng-repeat="s in garden.squares[selectedYear-1]" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                             </div>
+                            <div ng-repeat="s in garden.squares[selectedYear-1]" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
