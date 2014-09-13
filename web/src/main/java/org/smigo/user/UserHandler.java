@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -121,11 +120,11 @@ public class UserHandler {
         userDao.updateUser(principal.getId(), user);
     }
 
-    public UserBean getUser(Principal principal) {
-        if (principal == null) {
+    public UserBean getUser(AuthenticatedUser user) {
+        if (user == null) {
             return new UserBean();
         }
-        return userDao.getUser(principal.getName());
+        return userDao.getUser(user.getUsername());
     }
 
     public AuthenticatedUser getCurrentUser() {//@AuthenticationPrincipal

@@ -13,19 +13,10 @@
 <div ng-view></div>
 
 <script type="application/javascript">
-    var currentUser = {
-        authenticated: '${pageContext.request.remoteUser}',
-        username: '${user.username}',
-        locale: '${user.locale}',
-        email: '${user.email}',
-        termsOfService: ${user.termsofservice}
-    };
-    console.log('currentUser', currentUser);
-
-    var originalGarden = <c:out escapeXml="false" value="${f:toJson(garden)}"/>;
 
     <%@ include file="app.js" %>
     (function () {
+        <%@ include file="InitService.js" %>
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/GardenService.js" %>
         <%@ include file="garden/SpeciesService.js" %>

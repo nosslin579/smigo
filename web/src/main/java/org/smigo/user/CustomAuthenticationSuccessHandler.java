@@ -1,5 +1,7 @@
 package org.smigo.user;
 
+import org.apache.http.HttpHeaders;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.persitance.DatabaseResource;
@@ -26,6 +28,8 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
     private UserDao userDao;
     @Autowired
     private DatabaseResource databaseResource;
+    @Autowired
+    private ObjectMapper objectMapper;
 
 
     @Override
@@ -39,9 +43,13 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
         UserBean user = userDao.getUser(principal.getUsername());
         userSession.setUser(user);
 
-        response.setStatus(HttpStatus.OK.value());
         if (authentication instanceof OpenIDAuthenticationToken) {
             response.sendRedirect("");
+        } else {
+            String userAsJson = objectMapper.writeValueAsString(user);
+            response.getWriter().append(userAsJson);
+            response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
+            response.setStatus(HttpStatus.OK.value());
         }
     }
 }

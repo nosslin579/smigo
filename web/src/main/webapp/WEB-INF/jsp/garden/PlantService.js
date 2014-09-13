@@ -1,5 +1,5 @@
-function PlantService($http, $window, $timeout, $rootScope) {
-    var yearSquareMap = originalGarden.squares,
+function PlantService($http, $window, $timeout, $rootScope, InitService) {
+    var yearSquareMap = InitService.garden.squares,
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);

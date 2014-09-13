@@ -1,5 +1,5 @@
-function SpeciesService($rootScope) {
-    var speciesMap = originalGarden.species;
+function SpeciesService(InitService, $rootScope) {
+    var speciesMap = InitService.garden.species;
     console.log('SpeciesService', [speciesMap]);
 
     $rootScope.$on('newGardenAvailable', function (event, garden) {

@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
 import org.smigo.species.SpeciesHandler;
+import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.Locale;
 
 @Controller
@@ -29,7 +30,7 @@ public class AboutController {
     private SpeciesHandler speciesHandler;
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
-    public String getGarden(Model model, Locale locale, Principal principal) {
+    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser principal) {
         model.addAttribute("user", userHandler.getUser(principal));
         model.addAttribute("garden", speciesHandler.getGarden());
         model.addAttribute("messages", messageSource.getAllMessages(locale));

@@ -26,10 +26,6 @@ angular.module('smigoModule', ['ngRoute'])
     })
     .run(function ($rootScope) {
         console.log("App run");
-        $rootScope.currentUser = currentUser;
-        if (!currentUser.termsOfService) {
-            $('#accept-terms-of-service-modal').modal({});
-        }
         $rootScope.getObjectLength = function (obj) {
             return Object.keys(obj).length;
         };

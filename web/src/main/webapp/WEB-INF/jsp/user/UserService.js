@@ -1,5 +1,7 @@
 function UserService($rootScope, Http, $location, PlantService, $q, GardenService) {
 
+    var anonymousUser = {username: '', termsOfService: true};
+
     function validateForm(form) {
         form.objectErrors = [];
         var deferred = $q.defer();
@@ -23,14 +25,17 @@ function UserService($rootScope, Http, $location, PlantService, $q, GardenServic
         formModel['remember-me'] = true;
         return validateForm(form)
             .then(function () {
-                return Http.post('login', formModel)
+                return Http.post('login', formModel);
+            })
+            .then(function (response) {
+                console.log('Login success, response:', response);
+                $rootScope.$broadcast('current-user-changed', response.data);
             })
             .then(GardenService.reloadGarden)
             .then(function () {
-                $rootScope.currentUser.authenticated = formModel.username;
                 $location.path('/garden');
             }).catch(function (errorReason) {
-                console.log('Login failed', errorReason);
+                console.log('Login failed, reason:', errorReason);
                 form.objectErrors = errorReason.data;
             });
     }
@@ -62,7 +67,7 @@ function UserService($rootScope, Http, $location, PlantService, $q, GardenServic
         logout: function () {
             Http.get('logout')
                 .then(function () {
-                    delete $rootScope.currentUser.authenticated;
+                    $rootScope.$broadcast('current-user-changed', anonymousUser);
                     $rootScope.$broadcast('newGardenAvailable', {species: {}, squares: {}});
                 })
                 .then(GardenService.reloadGarden)

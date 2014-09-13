@@ -1,5 +1,4 @@
 function GardenController($scope, PlantService, SpeciesService, GardenService) {
-    console.log('GardenController', $scope);
 
     $scope.$watch('model.selectedYear', function (toYear, fromYear) {
         console.log('Selected year changed', toYear, fromYear);
