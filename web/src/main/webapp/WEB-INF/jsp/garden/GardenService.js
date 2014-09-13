@@ -6,6 +6,7 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
         model.selectedSpecies = SpeciesService.getSpecies()["28"];
         model.selectedYear = availableYears.slice(-1).pop();
         model.availableYears = availableYears;
+        model.action = 'add';
         console.log('Garden model initialized', model);
     }
 
@@ -16,9 +17,13 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
 
     return {
         model: model,
+        setSelectedSpecies: function (species) {
+            model.selectedSpecies = species;
+            model.action = 'add';
+        },
         onSquareClick: function (clickEvent, square) {
             console.log('Square clicked', [clickEvent, square, model.selectedSpecies]);
-            if (clickEvent.shiftKey) {
+            if (clickEvent.shiftKey || model.action == 'delete') {
                 PlantService.removePlant(square);
             } else if (clickEvent.ctrlKey) {
                 console.log('Copy species');

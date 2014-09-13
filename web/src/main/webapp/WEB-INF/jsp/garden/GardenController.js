@@ -19,6 +19,7 @@ function GardenController($scope, PlantService, SpeciesService, GardenService) {
     $scope.onGridClick = GardenService.onGridClick;
     $scope.getGridSizeCss = GardenService.getGridSizeCss;
     $scope.getSquarePositionCss = GardenService.getSquarePositionCss;
+    $scope.setSelectedSpecies = GardenService.setSelectedSpecies;
 }
 
 angular.module('smigoModule').controller('GardenController', GardenController);
