@@ -1,5 +1,5 @@
-function translateFilter() {
-    var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
+function translateFilter(InitService) {
+    var msg = InitService.messages;
     return function (messageObject, param) {
         if (!messageObject) {
             console.error('Can not translate', messageObject);

@@ -1,7 +1,8 @@
 function InitService() {
 
     return  {
-        user: <c:out value="${f:toJson(user)}"/>,
+        messages: <c:out escapeXml="false" value="${f:toJson(messages)}" />,
+        user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
         garden: <c:out escapeXml="false" value="${f:toJson(garden)}"/>
     }
 }
