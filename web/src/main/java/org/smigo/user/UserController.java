@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -72,9 +73,9 @@ public class UserController {
 
     @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.POST)
     @ResponseBody
-    public void acceptTermsOfService(Principal principal) {
+    public void acceptTermsOfService(@AuthenticationPrincipal AuthenticatedUser principal) {
         log.info("AcceptTermsOfService: ");
-        userHandler.acceptTermsOfService((AuthenticatedUser) principal);
+        userHandler.acceptTermsOfService(principal);
     }
 
     @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
