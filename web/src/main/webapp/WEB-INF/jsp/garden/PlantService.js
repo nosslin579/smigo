@@ -169,13 +169,13 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
             angular.forEach(square.plants, function (plant, key) {
                 if (plant.add) {//undo add
                     delete square.plants[key];
-                    console.log('Undo add', plant)
+                    console.log('Undo add', plant);
                 } else {
                     plant.remove = true;
                     console.log('Plant removed', plant);
                 }
-                console.log('Plant(s) removed', square)
             });
+            console.log('Plant(s) removed', square);
             countAutoSave();
         },
         addPlant: function (species, square) {
