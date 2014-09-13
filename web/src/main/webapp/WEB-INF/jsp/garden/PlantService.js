@@ -162,17 +162,20 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
             var newSquare = new Square(new Location(year, x, y), [species]);
             yearSquareMap[year].push(newSquare);
             countAutoSave();
-            console.log('Square added', newSquare);
+            console.log('Square and plant added', newSquare);
             return newSquare;
         },
         removePlant: function (square) {
             angular.forEach(square.plants, function (plant, key) {
-                plant.remove = true;
                 if (plant.add) {//undo add
                     delete square.plants[key];
+                    console.log('Undo add', plant)
+                } else {
+                    plant.remove = true;
+                    console.log('Plant removed', plant);
                 }
+                console.log('Plant(s) removed', square)
             });
-            console.log('Species removed', square);
             countAutoSave();
         },
         addPlant: function (species, square) {
@@ -180,6 +183,9 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
                 square.plants[species.id] = new Plant(species, square.location, 'add');
                 console.log('Plant added: ' + species.scientificName, square);
                 countAutoSave();
+            } else {//undo remove
+                delete square.plants[species.id].remove;
+                console.log('Undo remove', square);
             }
         },
         save: sendUnsavedPlantsToServer
