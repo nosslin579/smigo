@@ -43,15 +43,6 @@
 <script type="text/ng-template" id="login.html">
     <%@ include file="ng-login.html" %>
 </script>
-<script type="text/ng-template" id="test.html">
-    <form name="myForm" ng-submit="doSomething()">
-        <div>Please words: coconuts, bananas or pears.</div>
-        <input type="text" name="fruitName" ng-model="data.fruitName" blacklist="coconuts,bananas,pears" required/>
-        <span class="invalid" ng-show="myForm.fruitName.$error.required">required</span>
-        <br/>
-        <button type="submit" ng-disabled="myForm.$invalid">Submit</button>
-    </form>
-</script>
 
 <%@ include file="accept-terms-of-service-modal.html" %>
 

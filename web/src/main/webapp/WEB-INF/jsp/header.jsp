@@ -26,7 +26,6 @@
 
 
     <link rel="stylesheet" type="text/css" href="/static/css/structure.css">
-    <%--<link rel="stylesheet" type="text/css" href="/static/css/firstlady.css">--%>
 
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript" src="/static/js/angular.js"></script>

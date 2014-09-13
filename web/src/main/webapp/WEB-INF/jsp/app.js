@@ -2,10 +2,6 @@
 angular.module('smigoModule', ['ngRoute'])
     .config(function ($routeProvider) {
         $routeProvider.
-            when('/test', {
-                templateUrl: 'test.html',
-                controller: 'TestController'
-            }).
             when('/help', {
                 templateUrl: 'help.html'
             }).
