@@ -184,7 +184,7 @@ public class Garden {
         return ret;
     }
 
-    public Map<Integer, ? extends Species> getSpecies() {
-        return species;
+    public Collection<? extends Species> getSpecies() {
+        return species.values();
     }
 }

@@ -3,7 +3,7 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
 
     function initModel() {
         var availableYears = PlantService.getAvailableYears();
-        model.selectedSpecies = SpeciesService.getSpecies()["28"];
+        model.selectedSpecies = SpeciesService.getSpecies()[0];
         model.selectedYear = availableYears.slice(-1).pop();
         model.availableYears = availableYears;
         model.action = 'add';
@@ -18,6 +18,7 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
     return {
         model: model,
         setSelectedSpecies: function (species) {
+            console.log('Species selected:', species);
             model.selectedSpecies = species;
             model.action = 'add';
         },

@@ -1,14 +1,24 @@
-function SpeciesService(InitService, $rootScope) {
-    var speciesMap = InitService.garden.species;
-    console.log('SpeciesService', [speciesMap]);
+function SpeciesService(InitService, $rootScope, translateFilter) {
+    var speciesArray = InitService.garden.species;
+    updateVernacularName();
+
+    console.log('SpeciesService', [speciesArray]);
 
     $rootScope.$on('newGardenAvailable', function (event, garden) {
-        speciesMap = garden.species;
+        speciesArray = garden.species;
+        updateVernacularName();
     });
+
+    function updateVernacularName() {
+        angular.forEach(speciesArray, function (s) {
+            var name = translateFilter(s);
+            s.vernacularName = name ? name : s.scientificName;
+        });
+    }
 
     return {
         getSpecies: function () {
-            return speciesMap;
+            return speciesArray;
         }
     }
 }

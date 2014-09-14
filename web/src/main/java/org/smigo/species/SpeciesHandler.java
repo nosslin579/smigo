@@ -80,7 +80,7 @@ public class SpeciesHandler {
     }
 
     public Species getSpecies(Integer id) {
-        return getGarden().getSpecies().get(id);
+        return getGarden().getSpecies().iterator().next();
     }
 
     public List<Family> getFamilies() {
