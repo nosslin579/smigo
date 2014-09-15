@@ -14,7 +14,6 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
 
     $rootScope.$on('newGardenAvailable', initModel);
 
-
     return {
         model: model,
         fn: {
@@ -34,12 +33,12 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
                     }
                 }
                 return true;
+            },
+            setSelectedSpecies: function (species) {
+                model.selectedSpecies = species;
+                model.action = 'add';
+                console.log('Species selected:', species);
             }
-        },
-        setSelectedSpecies: function (species) {
-            console.log('Species selected:', species);
-            model.selectedSpecies = species;
-            model.action = 'add';
         },
         onSquareClick: function (clickEvent, square) {
             console.log('Square clicked', [clickEvent, square, model.selectedSpecies]);

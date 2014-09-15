@@ -46,7 +46,7 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
         this.plants = {};
         if (speciesArray) {
             speciesArray.forEach(function (species) {
-                if (species.id) {
+                if (!species.id) {
                     console.error('Can not add species with no id', species);
                 } else {
                     this.plants[species.id] = new Plant(species, location, 'add');

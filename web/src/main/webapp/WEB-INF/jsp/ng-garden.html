@@ -20,12 +20,12 @@
                     </div>
                 </div>
                 <!--<hr/>-->
-                <form class="navbar-form">
-                    <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
+                <form class="navbar-form" ng-submit="setSelectedSpeciesFromTopResult(speciesSearch)">
+                <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
                 </form>
                 <ul class="nav nav-sidebar">
                     <li ng-repeat="s in species | speciesFilter:speciesSearch" ng-class="{active: model.selectedSpecies.id === s.id && model.action == 'add'}">
-                        <a href="" ng-click="setSelectedSpecies(s)">{{s.vernacularName}}</a>
+                        <a href="" ng-click="fn.setSelectedSpecies(s)">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="fn.isSpeciesAddable(speciesSearch) && currentUser.username">

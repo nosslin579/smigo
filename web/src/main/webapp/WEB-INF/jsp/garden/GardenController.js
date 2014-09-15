@@ -1,4 +1,4 @@
-function GardenController($scope, PlantService, SpeciesService, GardenService) {
+function GardenController($scope, PlantService, SpeciesService, GardenService, $filter) {
 
     $scope.$watch('model.selectedYear', function (toYear, fromYear) {
         console.log('Selected year changed', toYear, fromYear);
@@ -21,6 +21,15 @@ function GardenController($scope, PlantService, SpeciesService, GardenService) {
     $scope.getGridSizeCss = GardenService.getGridSizeCss;
     $scope.getSquarePositionCss = GardenService.getSquarePositionCss;
     $scope.setSelectedSpecies = GardenService.setSelectedSpecies;
+
+    $scope.setSelectedSpeciesFromTopResult = function (searchString) {
+        console.log('Setting species from', searchString);
+        var topResult = $filter('speciesFilter')(SpeciesService.getSpecies(), searchString)[0];
+        if (topResult) {
+            GardenService.fn.setSelectedSpecies(topResult);
+        }
+        $scope.speciesSearch = '';
+    };
 }
 
 angular.module('smigoModule').controller('GardenController', GardenController);
