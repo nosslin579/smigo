@@ -14,6 +14,7 @@
 
 <script type="application/javascript">
 
+    <%@ include file="Customization.js" %>
     <%@ include file="app.js" %>
     (function () {
         <%@ include file="InitService.js" %>

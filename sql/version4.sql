@@ -69,3 +69,16 @@ ADD COLUMN referer VARCHAR(256);
 
 ALTER TABLE visitlog
 ADD COLUMN origin VARCHAR(256);
+
+ALTER TABLE species
+ADD COLUMN vernacularname VARCHAR(128);
+
+UPDATE species
+  JOIN usersettingforspecies ON species.species_id = usersettingforspecies.species
+SET species.vernacularname = usersettingforspecies.translation
+WHERE species.creator = usersettingforspecies.user;
+
+UPDATE species
+  JOIN usersettingforspecies ON species.species_id = usersettingforspecies.species
+SET species.iconfilename = usersettingforspecies.iconfilename
+WHERE species.creator = usersettingforspecies.user;

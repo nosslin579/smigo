@@ -8,23 +8,15 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
 public class UserSessionImpl implements UserSession {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final Map<String, String> translation = new HashMap<String, String>();
     private List<PlantData> plants = new ArrayList<PlantData>();
     private UserBean user = new UserBean();
-
-    @Override
-    public Map<String, String> getTranslation() {
-        return translation;
-    }
 
     @Override
     public List<PlantData> getPlants() {

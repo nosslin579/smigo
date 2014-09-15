@@ -1,5 +1,6 @@
 function translateFilter(InitService) {
     var msg = InitService.messages;
+    console.log('TranslateFilter', [msg]);
     return function (messageObject, param) {
         if (!messageObject) {
             console.error('Can not translate', messageObject);

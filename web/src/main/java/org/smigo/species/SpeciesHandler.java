@@ -4,7 +4,6 @@ import kga.*;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.JspFunctions;
 import org.smigo.SpeciesView;
 import org.smigo.plants.PlantDao;
 import org.smigo.user.AuthenticatedUser;
@@ -37,10 +36,8 @@ public class SpeciesHandler {
     @Autowired
     private FamilyDao familyDao;
 
-    public int addSpecies(String name, SpeciesFormBean speciesFormBean) {
-        int id = 0;//databaseResource.addSpecies(speciesFormBean, getId());
-        userSession.getTranslation().put(JspFunctions.speciesMessageKey(id), speciesFormBean.getVernacularName());
-        return id;
+    public int addSpecies(SpeciesFormBean species, AuthenticatedUser user) {
+        return speciesDao.addSpecies(species, user.getId());
     }
 
 

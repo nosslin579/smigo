@@ -14,6 +14,7 @@ function GardenController($scope, PlantService, SpeciesService, GardenService) {
     $scope.species = SpeciesService.getSpecies();
     $scope.addYear = PlantService.addYear;
     $scope.model = GardenService.model;
+    $scope.fn = GardenService.fn;
     $scope.onSquareClick = GardenService.onSquareClick;
     $scope.onVisibleRemainderClick = GardenService.onVisibleRemainderClick;
     $scope.onGridClick = GardenService.onGridClick;

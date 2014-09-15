@@ -27,6 +27,13 @@
                     <li ng-repeat="s in species | speciesFilter:speciesSearch" ng-class="{active: model.selectedSpecies.id === s.id && model.action == 'add'}">
                         <a href="" ng-click="setSelectedSpecies(s)">{{s.vernacularName}}</a>
                     </li>
+                    <hr/>
+                    <li ng-if="fn.isSpeciesAddable(speciesSearch) && currentUser.username">
+                        <a href="" ng-click="fn.addSpecies(speciesSearch)">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            {{'msg.add-species' | translate:speciesSearch }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

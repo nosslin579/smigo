@@ -46,7 +46,11 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
         this.plants = {};
         if (speciesArray) {
             speciesArray.forEach(function (species) {
-                this.plants[species.id] = new Plant(species, location, 'add');
+                if (species.id) {
+                    console.error('Can not add species with no id', species);
+                } else {
+                    this.plants[species.id] = new Plant(species, location, 'add');
+                }
             }, this);
         }
         if (flag) {
@@ -179,6 +183,10 @@ function PlantService($http, $window, $timeout, $rootScope, InitService) {
             countAutoSave();
         },
         addPlant: function (species, square) {
+            if (!species.id) {
+                console.error('Can not add species with no id', species);
+                return;
+            }
             if (!square.plants[species.id]) {
                 square.plants[species.id] = new Plant(species, square.location, 'add');
                 console.log('Plant added: ' + species.scientificName, square);

@@ -17,6 +17,25 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
 
     return {
         model: model,
+        fn: {
+            addSpecies: function (vernacularName) {
+                SpeciesService.addSpecies(vernacularName);
+            },
+            isSpeciesAddable: function (vernacularName) {
+                if (!vernacularName) {
+                    return false;
+                }
+//                console.log('isSpeciesAddable', vernacularName);
+                var name = vernacularName.toLowerCase();
+                for (var i = 0; i < SpeciesService.getSpecies().length; i++) {
+                    var species = SpeciesService.getSpecies()[i];
+                    if (species.vernacularName && species.vernacularName.toLowerCase() == name) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        },
         setSelectedSpecies: function (species) {
             console.log('Species selected:', species);
             model.selectedSpecies = species;
@@ -34,6 +53,7 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
             clickEvent.stopPropagation();
         },
         onVisibleRemainderClick: function (clickEvent, square) {
+            console.log('VisibleRemainder clicked', [clickEvent, square, model.selectedSpecies]);
             PlantService.addSquare(model.selectedYear, square.location.x, square.location.y, model.selectedSpecies);
             PlantService.save();
             clickEvent.stopPropagation();

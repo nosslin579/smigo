@@ -2,6 +2,12 @@ function UserService($rootScope, Http, $location, PlantService, $q, GardenServic
 
     var anonymousUser = {username: '', termsOfService: true};
 
+    $rootScope.currentUser = InitService.user;
+
+    $rootScope.$on('current-user-changed', function (event, user) {
+        $rootScope.currentUser = user;
+    });
+
     function validateForm(form) {
         form.objectErrors = [];
         var deferred = $q.defer();

@@ -1,10 +1,13 @@
 package org.smigo.user;
 
 import org.slf4j.LoggerFactory;
+import org.smigo.SpeciesView;
+import org.smigo.species.SpeciesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -13,7 +16,7 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
     private final org.slf4j.Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserSession userSession;
+    private SpeciesDao speciesDao;
 
     public UserAdaptiveMessageSource(int cacheSeconds) {
         super();
@@ -24,18 +27,16 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         setDefaultEncoding("UTF-8");
     }
 
-    @Override
-    protected String getMessageInternal(String code, Object[] args, Locale locale) {
-        final String message = userSession.getTranslation().get(code);
-        if (message != null) {
-            return message;
-        }
-        return super.getMessageInternal(code, args, locale);
-    }
-
     public Properties getAllMessages(Locale locale) {
         clearCacheIncludingAncestors();
         PropertiesHolder propertiesHolder = getMergedProperties(locale);
-        return propertiesHolder.getProperties();
+        Properties properties = propertiesHolder.getProperties();
+        List<SpeciesView> species = speciesDao.getSpecies();
+        for (SpeciesView s : species) {
+            if (s.getVernacularName() != null) {
+                properties.setProperty(s.getMessageKey(), s.getVernacularName());
+            }
+        }
+        return properties;
     }
 }

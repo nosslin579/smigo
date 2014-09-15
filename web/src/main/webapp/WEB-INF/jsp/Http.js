@@ -1,7 +1,7 @@
 function Http($http) {
     return {
         post: function (url, data) {
-            var params = $.param(data);
+            var params = data && $.param(data);
             return $http({
                 method: 'POST',
                 url: url,

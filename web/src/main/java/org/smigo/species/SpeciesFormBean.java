@@ -1,26 +1,11 @@
 package org.smigo.species;
 
-import kga.Family;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotNull;
-
 public class SpeciesFormBean {
-    @Length(min = 2, max = 100)
     private String vernacularName;
-    @Length(min = 5, max = 255)
     private String scientificName;
-    @NotNull
-    private Family family;
+    private int family = 7200;
     private boolean annual = true;
-
-    public String getVernacularName() {
-        return vernacularName;
-    }
-
-    public void setVernacularName(String vernacularName) {
-        this.vernacularName = vernacularName;
-    }
+    private boolean item = false;
 
     public String getScientificName() {
         return scientificName;
@@ -30,11 +15,11 @@ public class SpeciesFormBean {
         this.scientificName = scientificName;
     }
 
-    public Family getFamily() {
+    public int getFamily() {
         return family;
     }
 
-    public void setFamily(Family family) {
+    public void setFamily(int family) {
         this.family = family;
     }
 
@@ -44,5 +29,21 @@ public class SpeciesFormBean {
 
     public void setAnnual(boolean annual) {
         this.annual = annual;
+    }
+
+    public boolean isItem() {
+        return item;
+    }
+
+    public void setItem(boolean item) {
+        this.item = item;
+    }
+
+    public String getVernacularName() {
+        return vernacularName;
+    }
+
+    public void setVernacularName(String vernacularName) {
+        this.vernacularName = vernacularName;
     }
 }
