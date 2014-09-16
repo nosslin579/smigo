@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +22,14 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"org.smigo"})
+@EnableCaching
 public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -114,5 +120,16 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        SimpleCacheManager cacheManager = new SimpleCacheManager();
+        List<ConcurrentMapCache> concurrentMapCacheArrayList = new ArrayList<ConcurrentMapCache>();
+        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.RULES));
+        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES));
+        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.FAMILIES));
+        cacheManager.setCaches(concurrentMapCacheArrayList);
+        return cacheManager;
     }
 }

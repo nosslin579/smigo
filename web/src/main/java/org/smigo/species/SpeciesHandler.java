@@ -12,6 +12,7 @@ import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -36,6 +37,8 @@ public class SpeciesHandler {
     private RuleDao ruleDao;
     @Autowired
     private FamilyDao familyDao;
+    @Autowired
+    private CacheManager cacheManager;
 
     public int addSpecies(SpeciesFormBean species, AuthenticatedUser user) {
         return speciesDao.addSpecies(species, user.getId());
@@ -51,15 +54,17 @@ public class SpeciesHandler {
     }
 
     public Map<Integer, SpeciesView> getSpeciesMap() {
+        long start = System.currentTimeMillis();
         Map<Integer, Family> familyMap = Maps.uniqueIndex(familyDao.getFamilies(), new IdMapper());
         Map<Integer, SpeciesView> ret = Maps.uniqueIndex(speciesDao.getSpecies(familyMap), new IdMapper());
         //Add rules to species
-        final List<Rule> rules = ruleDao.getRules();
+        final List<Rule> rules = ruleDao.getRules(familyMap);
         for (Rule r : rules) {
             int hostId = r.getHost().getId();
             Species s = ret.get(hostId);
             s.addRule(r);
         }
+        long l = System.currentTimeMillis() - start;
         return ret;
     }
 

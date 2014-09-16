@@ -6,8 +6,7 @@ import org.smigo.SpeciesView;
 import java.util.List;
 import java.util.Map;
 
-public interface SpeciesDao {
-    List<SpeciesView> getSpecies();
+interface SpeciesDao {
 
     int addSpecies(SpeciesFormBean species, int id);
 

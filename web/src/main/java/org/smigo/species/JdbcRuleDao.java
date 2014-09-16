@@ -1,10 +1,11 @@
-package org.smigo.plants;
+package org.smigo.species;
 
 import kga.Family;
 import kga.Species;
 import kga.rules.*;
-import org.smigo.species.RuleDao;
+import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -13,10 +14,11 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
-public class JdbcRuleDao implements RuleDao {
-    private static final String SELECT = "SELECT * FROM rules LEFT JOIN families ON families.id = rules.causerfamily";
+class JdbcRuleDao implements RuleDao {
+    private static final String SELECT = "SELECT * FROM rules";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -24,8 +26,8 @@ public class JdbcRuleDao implements RuleDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    @Override
-    public List<Rule> getRules() {
+    @Cacheable(Cache.RULES)
+    public List<Rule> getRules(final Map<Integer, Family> familyMap) {
         final String sql = String.format(SELECT);
         return jdbcTemplate.query(sql, new RowMapper<Rule>() {
             @Override
@@ -35,7 +37,7 @@ public class JdbcRuleDao implements RuleDao {
                 int gap = rs.getInt("gap");
                 Species causer = Species.create(rs.getInt("causer"));
                 Species host = Species.create(rs.getInt("host"));
-                Family family = new Family(rs.getInt("causerfamily"), rs.getString("families.name"));
+                Family family = familyMap.get(rs.getInt("causerfamily"));
 
                 if (RuleType.goodcompanion.getId() == type)
                     return new CompanionRule(ruleId, host, RuleType.goodcompanion, causer, "hint.goodcompanion");

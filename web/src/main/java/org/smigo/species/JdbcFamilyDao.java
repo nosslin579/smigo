@@ -2,7 +2,9 @@ package org.smigo.species;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kga.Family;
+import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -13,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class JdbcFamilyDao implements FamilyDao {
+class JdbcFamilyDao implements FamilyDao {
     private static final String SELECT = "SELECT * FROM families";
     private JdbcTemplate jdbcTemplate;
 
@@ -26,6 +28,7 @@ public class JdbcFamilyDao implements FamilyDao {
     }
 
     @Override
+    @Cacheable(Cache.FAMILIES)
     public List<Family> getFamilies() {
         final String sql = String.format(SELECT);
         return jdbcTemplate.query(sql, new RowMapper<Family>() {
