@@ -20,7 +20,7 @@ public interface UserDao {
 
     void updateUser(int id, UserBean user);
 
-    UserDetails getUserDetails(String username);
+    List<UserDetails> getUserDetails(String username);
 
     UserBean getUser(String name);
 }

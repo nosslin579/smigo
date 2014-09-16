@@ -71,7 +71,10 @@ function UserService($rootScope, Http, $location, PlantService, $q, GardenServic
             Http.post('accept-terms-of-service', {});
         },
         logout: function () {
-            Http.get('logout')
+            PlantService.save()
+                .then(function () {
+                    return Http.get('logout');
+                })
                 .then(function () {
                     $rootScope.$broadcast('current-user-changed', anonymousUser);
                     $rootScope.$broadcast('newGardenAvailable', {species: {}, squares: {}});

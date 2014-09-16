@@ -88,9 +88,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public UserDetails getUserDetails(String username) {
+    public List<UserDetails> getUserDetails(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.queryForObject(sql, new Object[]{username}, new UserDetailsRowMapper());
+        return jdbcTemplate.query(sql, new UserDetailsRowMapper(), username);
     }
 
     @Override

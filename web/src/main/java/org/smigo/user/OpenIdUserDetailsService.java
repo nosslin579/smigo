@@ -26,7 +26,7 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
             final RegisterFormBean newUser = new RegisterFormBean();
             newUser.setUsername("user" + System.nanoTime());
             userHandler.createUser(newUser, token.getIdentityUrl());
-            return userDao.getUserDetails(newUser.getUsername());
+            return userDao.getUserDetails(newUser.getUsername()).get(0);
         }
         return userDetails;
     }

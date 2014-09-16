@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="hidden-xs col-sm-3 sidebar">
+        <div id="species-frame" class="hidden-xs col-sm-3 sidebar">
             <div>
                 <div class="navbar"></div>
                 <div class="btn-group">
@@ -21,7 +21,7 @@
                 </div>
                 <!--<hr/>-->
                 <form class="navbar-form" ng-submit="setSelectedSpeciesFromTopResult(speciesSearch)">
-                <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
+                    <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
                 </form>
                 <ul class="nav nav-sidebar">
                     <li ng-repeat="s in species | speciesFilter:speciesSearch" ng-class="{active: model.selectedSpecies.id === s.id && model.action == 'add'}">
@@ -29,7 +29,7 @@
                     </li>
                     <hr/>
                     <li ng-if="fn.isSpeciesAddable(speciesSearch) && currentUser.username">
-                        <a href="" ng-click="fn.addSpecies(speciesSearch)">
+                        <a id="add-species-link" href="" ng-click="fn.addSpecies(speciesSearch)">
                             <span class="glyphicon glyphicon-plus"></span>
                             {{'msg.add-species' | translate:speciesSearch }}
                         </a>
@@ -67,6 +67,7 @@
                             <div ng-repeat="s in squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                 <div ng-repeat="p in s.plants">
                                     <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-if="!p.remove"
+                                         alt="{{p.species.vernacularName}}"
                                          ng-class="{'multiple-plants': getObjectLength(s.plants) > 1}"/>
                                 </div>
                             </div>

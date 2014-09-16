@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String PASSWORD = "password";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
-    private static final String SPECIES_NAME = "Frango";
+    private static final String SPECIES_NAME = "Frango Salada";
     private static final String SCIENTIFIC_NAME = "Frangus Saladus";
     private static final String ITEM_NAME = "Sand";
     private static final int NUMBER_OF_SPECIES = 83;
@@ -78,8 +77,12 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private void login(String username, String password) {
         d.findElement(By.id("login-link")).click();
-        d.findElement(By.name("username")).sendKeys(username);
-        d.findElement(By.name("password")).sendKeys(password);
+        WebElement usernameElement = d.findElement(By.name("username"));
+        usernameElement.clear();
+        usernameElement.sendKeys(username);
+        WebElement passwordElement = d.findElement(By.name("password"));
+        passwordElement.clear();
+        passwordElement.sendKeys(password);
         d.findElement(By.id("submit-login-register-form")).click();
     }
 
@@ -108,28 +111,28 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(user.getUsername(), username);
     }
 
-    @Test(enabled = false)
-    public void addSpecies() {
+    @Test
+    public void addSpecies() throws InterruptedException {
         final String username = addUser();
+        final String speciesName = SPECIES_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
-        d.findElement(By.id("plants-menu-item")).click();
-        Assert.assertEquals(d.findElements(By.className("speciesrow")).size(), NUMBER_OF_SPECIES);
+        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
         d.findElement(By.id("add-species-link")).click();
-        d.findElement(By.name("vernacularName")).sendKeys(SPECIES_NAME);
-        d.findElement(By.name("scientificName")).sendKeys(SCIENTIFIC_NAME);
-        new Select(d.findElement(By.name("family"))).selectByIndex(2);
-        d.findElement(By.id("submit-speciesform-button")).click();
+        d.findElement(By.linkText(speciesName)).click();
 
-        //plant new species
-        d.findElement(By.id("garden-menu-item")).click();
-        d.findElement(By.xpath("//div[contains(text(), '" + SPECIES_NAME + "')]")).click();
-        d.findElement(By.id("origo")).click();
-        d.findElement(By.id("savebutton")).click();
-        w.until(ExpectedConditions.textToBePresentInElementLocated(By.id("userdialog"), "Ok"));
 
-        d.navigate().refresh();
-        Assert.assertEquals(d.findElements(By.className("speciesimage")).size(), 1);
+        for (WebElement square = d.findElement(By.className("square")); square.findElements(By.className("plant")).isEmpty(); square.click()) {
+            Thread.sleep(500);
+        }
+
+        d.findElement(By.id("logout-link")).click();
+        login(username, PASSWORD);
+
+        List<WebElement> plants = d.findElements(By.className("plant"));
+        Assert.assertEquals(plants.size(), 1, "No plants found! User:" + username);
+        Assert.assertEquals(plants.iterator().next().getAttribute("alt"), speciesName);
+
     }
 
     @Test

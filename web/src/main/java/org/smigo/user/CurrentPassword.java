@@ -43,7 +43,7 @@ public @interface CurrentPassword {
 
         public boolean isValid(String rawPassword, ConstraintValidatorContext constraintContext) {
             AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
-            UserDetails userDetails = userDao.getUserDetails(authenticatedUser.getUsername());
+            UserDetails userDetails = userDao.getUserDetails(authenticatedUser.getUsername()).get(0);
             final String password = userDetails.getPassword();
             //user who signed up via openid has empty string as password
             if (password.isEmpty()) {

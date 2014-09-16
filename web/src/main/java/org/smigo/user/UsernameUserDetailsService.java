@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsernameUserDetailsService implements UserDetailsService {
 
@@ -14,10 +16,10 @@ public class UsernameUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final UserDetails userDetails = userDao.getUserDetails(username);
-        if (userDetails == null) {
+        final List<UserDetails> userDetails = userDao.getUserDetails(username);
+        if (userDetails.isEmpty()) {
             throw new UsernameNotFoundException("User not found:" + username);
         }
-        return userDetails;
+        return userDetails.get(0);
     }
 }
