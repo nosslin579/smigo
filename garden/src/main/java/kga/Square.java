@@ -22,8 +22,8 @@
 
 package kga;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kga.rules.Rule;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.*;
 

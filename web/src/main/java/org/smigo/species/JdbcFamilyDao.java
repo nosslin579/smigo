@@ -1,7 +1,7 @@
 package org.smigo.species;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kga.Family;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

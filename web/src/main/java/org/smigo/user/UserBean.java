@@ -7,9 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.AssertTrue;
+import java.io.Serializable;
 import java.util.Locale;
 
-public class UserBean {
+public class UserBean implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(UserBean.class);
 

@@ -1,5 +1,7 @@
 package org.smigo.species;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 import kga.*;
 import kga.rules.Rule;
 import org.slf4j.Logger;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +42,6 @@ public class SpeciesHandler {
     }
 
 
-    public String getIconFileName(String iconFileName) {
-        return iconFileName == null ? DEFAULTICONNAME : iconFileName;
-    }
-
     public String createIconFileName(int userId, int speciesId, CommonsMultipartFile uploadedIcon) {
         if (uploadedIcon == null || uploadedIcon.isEmpty()) {
             return null;
@@ -53,19 +50,9 @@ public class SpeciesHandler {
         }
     }
 
-    public Rule getRule(int ruleId) {
-        for (SpeciesView s : speciesDao.getSpecies())
-            for (Rule r : s.getRules())
-                if (r.getId() == ruleId)
-                    return r;
-        return null;
-    }
-
     public Map<Integer, SpeciesView> getSpeciesMap() {
-        Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
-        for (SpeciesView s : speciesDao.getSpecies()) {
-            ret.put(s.getId(), s);
-        }
+        Map<Integer, Family> familyMap = Maps.uniqueIndex(familyDao.getFamilies(), new IdMapper());
+        Map<Integer, SpeciesView> ret = Maps.uniqueIndex(speciesDao.getSpecies(familyMap), new IdMapper());
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules();
         for (Rule r : rules) {
@@ -74,6 +61,13 @@ public class SpeciesHandler {
             s.addRule(r);
         }
         return ret;
+    }
+
+    private static class IdMapper implements Function<Id, Integer> {
+        @Override
+        public Integer apply(Id input) {
+            return input.getId();
+        }
     }
 
     public Species getSpecies(Integer id) {

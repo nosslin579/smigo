@@ -14,10 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcSpeciesDao implements SpeciesDao {
     private static final String SELECT = "SELECT * FROM species LEFT JOIN families ON families.id = species.family";
+    private static final String SELECT1 = "SELECT * FROM species";
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert create;
 
@@ -58,5 +60,25 @@ public class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("vernacularname", species.getVernacularName());
         Number update = create.executeAndReturnKey(s);
         return update.intValue();
+    }
+
+    @Override
+    public List<SpeciesView> getSpecies(final Map<Integer, Family> familyMap) {
+        final String sql = String.format(SELECT1);
+        return jdbcTemplate.query(sql, new Object[]{}, new RowMapper<SpeciesView>() {
+            @Override
+            public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
+                SpeciesView ret = new SpeciesView();
+                ret.setId(rs.getInt("species_id"));
+                ret.setScientificName(rs.getString("name"));
+                ret.setItem(rs.getBoolean("item"));
+                ret.setAnnual(rs.getBoolean("annual"));
+                ret.setFamily(familyMap.get(rs.getInt("family")));
+                String iconfilename = rs.getString("iconfilename");
+                ret.setIconFileName(iconfilename == null ? "defaulticon.png" : iconfilename);
+                ret.setVernacularName(rs.getString("vernacularName"));
+                return ret;
+            }
+        });
     }
 }

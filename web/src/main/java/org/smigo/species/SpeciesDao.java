@@ -1,11 +1,15 @@
 package org.smigo.species;
 
+import kga.Family;
 import org.smigo.SpeciesView;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SpeciesDao {
     List<SpeciesView> getSpecies();
 
     int addSpecies(SpeciesFormBean species, int id);
+
+    List<SpeciesView> getSpecies(Map<Integer, Family> familyMap);
 }

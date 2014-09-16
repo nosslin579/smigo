@@ -27,7 +27,7 @@ package kga;
  *
  * @author Christian Nilsson
  */
-public class Family implements Comparable<Family> {
+public class Family implements Comparable<Family>, Id {
 
     private final int id;
     /**

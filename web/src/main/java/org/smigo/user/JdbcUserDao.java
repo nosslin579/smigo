@@ -1,14 +1,14 @@
 package org.smigo.user;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ public class JdbcUserDao implements UserDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
-    private final BeanPropertyRowMapper<UserBean> mapper = BeanPropertyRowMapper.newInstance(UserBean.class);
+    private final RowMapper<UserBean> mapper = new UserBeanRowMapper();
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -108,4 +108,21 @@ public class JdbcUserDao implements UserDao {
             return new AuthenticatedUser(id, username, password);
         }
     }
+
+
+    private static class UserBeanRowMapper implements RowMapper<UserBean> {
+        @Override
+        public UserBean mapRow(ResultSet rs, int rowNum) throws SQLException {
+            UserBean ret = new UserBean();
+            ret.setTermsofservice(rs.getBoolean("termsofservice"));
+            ret.setAbout(rs.getString("about"));
+            ret.setUsername(rs.getString("username"));
+            ret.setDisplayname(rs.getString("displayname"));
+            ret.setEmail(rs.getString("email"));
+            ret.setLocale(StringUtils.parseLocaleString(rs.getString("locale")));
+            return ret;
+        }
+    }
+
+
 }

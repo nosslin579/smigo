@@ -36,7 +36,7 @@ import java.util.Set;
  *
  * @author Christian Nilsson
  */
-public class Species {
+public class Species implements Id {
     private static final Logger log = LoggerFactory.getLogger(Species.class);
 
     private int id;
