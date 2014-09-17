@@ -1,4 +1,4 @@
-function MainMenuController(InitService, UserService, $scope) {
+function MainMenuController(UserService, $scope) {
     $scope.logout = UserService.logout;
 }
 

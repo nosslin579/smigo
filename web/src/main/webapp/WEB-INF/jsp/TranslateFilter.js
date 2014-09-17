@@ -1,5 +1,10 @@
-function translateFilter(InitService) {
-    var msg = InitService.messages;
+function translateFilter($rootScope) {
+    var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
+
+    $rootScope.$on('newMessagesAvailable', function (event, newMessages) {
+        angular.extend(msg, newMessages);
+    });
+
     console.log('TranslateFilter', [msg]);
     return function (messageObject, param) {
         if (!messageObject) {

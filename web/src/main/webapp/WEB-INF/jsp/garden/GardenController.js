@@ -7,13 +7,19 @@ function GardenController($scope, PlantService, SpeciesService, GardenService, $
     });
 
     $scope.$watch('model.availableYears', function (newYears) {
-        $scope.forwardYear = newYears.slice(-1).pop() + 1;
-        $scope.backwardYear = newYears[0] - 1;
+        if (newYears) {
+            $scope.forwardYear = newYears.slice(-1).pop() + 1;
+            $scope.backwardYear = newYears[0] - 1;
+        }
+    });
+
+    $scope.$on('newGardenAvailable', function (event, garden) {
+        $scope.species = garden.species;
     });
 
     $scope.species = SpeciesService.getSpecies();
     $scope.addYear = PlantService.addYear;
-    $scope.model = GardenService.model;
+    $scope.model = GardenService.getModel();
     $scope.fn = GardenService.fn;
     $scope.onSquareClick = GardenService.onSquareClick;
     $scope.onVisibleRemainderClick = GardenService.onVisibleRemainderClick;

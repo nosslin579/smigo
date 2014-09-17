@@ -17,7 +17,6 @@
     <%@ include file="Customization.js" %>
     <%@ include file="app.js" %>
     (function () {
-        <%@ include file="InitService.js" %>
         <%@ include file="garden/SpeciesFilter.js" %>
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/GardenService.js" %>

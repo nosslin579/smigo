@@ -10,12 +10,12 @@ function GardenService(PlantService, SpeciesService, $rootScope, $http) {
         console.log('Garden model initialized', model);
     }
 
-    initModel();
-
     $rootScope.$on('newGardenAvailable', initModel);
 
     return {
-        model: model,
+        getModel: function () {
+            return model
+        },
         fn: {
             addSpecies: function (vernacularName) {
                 SpeciesService.addSpecies(vernacularName);

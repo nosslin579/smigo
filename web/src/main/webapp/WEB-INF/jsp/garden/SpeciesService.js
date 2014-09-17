@@ -1,25 +1,18 @@
-function SpeciesService(InitService, $rootScope, translateFilter, Http) {
-    var speciesArray = InitService.garden.species;
-    updateVernacularName();
-
-    console.log('SpeciesService', [speciesArray]);
+function SpeciesService($rootScope, translateFilter, Http) {
+    var speciesArray = [];
+    console.log('SpeciesService');
 
     $rootScope.$on('newGardenAvailable', function (event, garden) {
         speciesArray = garden.species;
-        updateVernacularName();
-    });
-
-    function updateVernacularName() {
         angular.forEach(speciesArray, function (s) {
             s.vernacularName = translateFilter(s);
         });
-    }
+    });
 
     function Species(vernacularName) {
         this.vernacularName = vernacularName;
         this.annual = true;
         this.item = false;
-        this.iconFileName = 'defaulticon.png';
     }
 
     return {
@@ -30,10 +23,9 @@ function SpeciesService(InitService, $rootScope, translateFilter, Http) {
             return Http.post('rest/species', species)
                 .then(function (response) {
                     species.id = response.data;
-                })
-                .then(function () {
-                    var translation = {messageKey: 'species' + species.id, value: vernacularName};
-                    InitService.messages[translation.messageKey] = translation.value;
+                    var newMessage = {};
+                    newMessage['species' + species.id] = vernacularName;
+                    $rootScope.$broadcast('newMessagesAvailable', newMessage);
                 });
         },
         getSpecies: function () {
