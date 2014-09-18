@@ -20,19 +20,8 @@ angular.module('smigoModule', ['ngRoute'])
             otherwise({redirectTo: '/garden'});
 
     })
-    .run(function ($rootScope, $timeout) {
+    .run(function ($rootScope) {
         console.log("App run");
-
-        /*
-         var $oldDigest = $rootScope.$digest;
-
-         var $newDigest = function () {
-         console.time("$digest");
-         $oldDigest.apply($rootScope);
-         console.timeEnd("$digest");
-         };
-         $rootScope.$digest = $newDigest;
-         */
 
         $rootScope.getObjectLength = function (obj) {
             return Object.keys(obj).length;
