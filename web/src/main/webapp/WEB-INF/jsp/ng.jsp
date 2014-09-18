@@ -20,7 +20,8 @@
 
         var initData = {
             user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
-            garden: <c:out escapeXml="false" value="${f:toJson(garden)}"/>
+            squares: <c:out escapeXml="false" value="${f:toJson(squares)}"/>,
+            species: <c:out escapeXml="false" value="${f:toJson(species)}"/>
         };
 
 

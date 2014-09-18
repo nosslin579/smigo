@@ -3,7 +3,7 @@ package org.smigo.plants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateGardenBean {
+class UpdateGardenBean {
 
     List<PlantDataBean> removeList = new ArrayList<PlantDataBean>();
     List<PlantDataBean> addList = new ArrayList<PlantDataBean>();

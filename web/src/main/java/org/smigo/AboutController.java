@@ -3,6 +3,7 @@ package org.smigo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
+import org.smigo.plants.PlantHandler;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -27,12 +28,15 @@ public class AboutController {
     @Autowired
     private UserAdaptiveMessageSource messageSource;
     @Autowired
+    private PlantHandler plantHandler;
+    @Autowired
     private SpeciesHandler speciesHandler;
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser principal) {
         model.addAttribute("user", userHandler.getUser(principal));
-        model.addAttribute("garden", speciesHandler.getGarden());
+        model.addAttribute("species", speciesHandler.getSpeciesMap().values());
+        model.addAttribute("squares", plantHandler.getGarden(principal).getSquares());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }

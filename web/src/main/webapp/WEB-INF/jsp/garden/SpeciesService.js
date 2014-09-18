@@ -4,7 +4,7 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
         selectedSpecies: new Species('not set'),
         action: 'add'
     };
-    updateState(initData.garden.species);
+    updateState(initData.species);
     console.log('SpeciesService', state);
 
     $rootScope.$on('current-user-changed', function (event, user) {

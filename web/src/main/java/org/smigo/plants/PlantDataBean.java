@@ -4,7 +4,7 @@ import kga.PlantData;
 
 import java.io.Serializable;
 
-public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
+class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
     private int x;
     private int y;
     private int year;

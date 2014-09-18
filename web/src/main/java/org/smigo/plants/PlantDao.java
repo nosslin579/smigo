@@ -4,7 +4,7 @@ import kga.PlantData;
 
 import java.util.List;
 
-public interface PlantDao {
+interface PlantDao {
     List<PlantData> getPlants(int userId);
 
     void addPlants(List<? extends PlantData> plants, int userId);

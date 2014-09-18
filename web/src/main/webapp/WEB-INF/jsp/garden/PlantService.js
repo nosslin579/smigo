@@ -5,7 +5,7 @@ function PlantService($http, $window, $timeout, $rootScope) {
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
 
-    updateState(initData.garden.squares);
+    updateState(initData.squares);
 
     console.log('PlantService', state);
 

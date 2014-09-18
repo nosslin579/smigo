@@ -2,17 +2,15 @@ package org.smigo.species;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-import kga.*;
+import kga.Family;
+import kga.Id;
+import kga.Species;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
-import org.smigo.plants.PlantDao;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserHandler;
-import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -26,19 +24,11 @@ public class SpeciesHandler {
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
     @Autowired
-    private UserHandler userHandler;
-    @Autowired
-    private UserSession userSession;
-    @Autowired
     private SpeciesDao speciesDao;
-    @Autowired
-    private PlantDao plantDao;
     @Autowired
     private RuleDao ruleDao;
     @Autowired
     private FamilyDao familyDao;
-    @Autowired
-    private CacheManager cacheManager;
 
     public int addSpecies(SpeciesFormBean species, AuthenticatedUser user) {
         return speciesDao.addSpecies(species, user.getId());
@@ -76,28 +66,10 @@ public class SpeciesHandler {
     }
 
     public Species getSpecies(Integer id) {
-        return getGarden().getSpecies().iterator().next();
+        return new Species();
     }
 
     public List<Family> getFamilies() {
         return familyDao.getFamilies();
     }
-
-    public Garden getGarden() {
-        return new Garden(getSpeciesMap(), getPlants());
-    }
-
-    public List<PlantData> getPlants() {
-        AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
-        if (authenticatedUser != null) {
-            return plantDao.getPlants(authenticatedUser.getId());
-        } else {
-            return userSession.getPlants();
-        }
-    }
-
-    public List<Hint> getHints() {
-        return getGarden().getHints();
-    }
-
 }

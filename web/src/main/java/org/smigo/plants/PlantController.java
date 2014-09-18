@@ -3,7 +3,6 @@ package org.smigo.plants;
 import kga.Square;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -24,14 +23,12 @@ public class PlantController implements Serializable {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SpeciesHandler speciesHandler;
-    @Autowired
     private PlantHandler plantHandler;
 
     @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public Map<Integer, Collection<Square>> getPlants() {
-        return speciesHandler.getGarden().getSquares();
+    public Map<Integer, Collection<Square>> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
+        return plantHandler.getGarden(user).getSquares();
     }
 
     @RequestMapping(value = {"/update-garden", "/rest/plant"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class JdbcPlantDao implements PlantDao {
+class JdbcPlantDao implements PlantDao {
     private static final String SELECT = "SELECT * FROM plants WHERE fkuserid = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
