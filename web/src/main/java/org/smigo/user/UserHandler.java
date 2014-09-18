@@ -122,7 +122,7 @@ public class UserHandler {
 
     public UserBean getUser(AuthenticatedUser user) {
         if (user == null) {
-            return new UserBean();
+            return null;
         }
         return userDao.getUser(user.getUsername());
     }

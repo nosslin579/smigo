@@ -17,9 +17,15 @@
     <%@ include file="Customization.js" %>
     <%@ include file="app.js" %>
     (function () {
+
+        var initData = {
+            user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
+            garden: <c:out escapeXml="false" value="${f:toJson(garden)}"/>
+        };
+
+
         <%@ include file="garden/SpeciesFilter.js" %>
         <%@ include file="garden/GardenController.js" %>
-        <%@ include file="garden/GardenService.js" %>
         <%@ include file="garden/SpeciesService.js" %>
         <%@ include file="MainMenuController.js" %>
         <%@ include file="user/AcceptTermsOfServiceController.js" %>

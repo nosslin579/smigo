@@ -75,7 +75,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         return username;
     }
 
-    private void login(String username, String password) {
+    private void login(String username, String password) throws InterruptedException {
         d.findElement(By.id("login-link")).click();
         WebElement usernameElement = d.findElement(By.name("username"));
         usernameElement.clear();
@@ -84,6 +84,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         passwordElement.clear();
         passwordElement.sendKeys(password);
         d.findElement(By.id("submit-login-register-form")).click();
+        Thread.sleep(2000);
     }
 
     @Test
@@ -121,14 +122,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("add-species-link")).click();
         d.findElement(By.linkText(speciesName)).click();
 
-
-        for (WebElement square = d.findElement(By.className("square")); square.findElements(By.className("plant")).isEmpty(); square.click()) {
+        for (; d.findElements(By.className("plant")).isEmpty(); d.findElement(By.className("square")).click()) {
             Thread.sleep(500);
         }
 
         d.findElement(By.id("logout-link")).click();
         login(username, PASSWORD);
 
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         List<WebElement> plants = d.findElements(By.className("plant"));
         Assert.assertEquals(plants.size(), 1, "No plants found! User:" + username);
         Assert.assertEquals(plants.iterator().next().getAttribute("alt"), speciesName);
@@ -162,7 +163,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test(enabled = false)
-    public void changePassword() {
+    public void changePassword() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);
 
@@ -186,7 +187,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test(enabled = false)
-    public void resetPassword() {
+    public void resetPassword() throws InterruptedException {
         final String username = addUser();
         final String email = username + EMAIL_PROVIDER;
 

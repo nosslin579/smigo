@@ -38,26 +38,12 @@ angular.module('smigoModule', ['ngRoute'])
             return Object.keys(obj).length;
         };
 
-        var initData = {
-            user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
-            garden: <c:out escapeXml="false" value="${f:toJson(garden)}"/>
-        };
-        $timeout(function () {
-            console.log('Broadcasting init data');
-            $rootScope.$broadcast('current-user-changed', initData.user);
-            $rootScope.$broadcast('newGardenAvailable', initData.garden);
-        }, 0);
-
         $rootScope.$on('current-user-changed', function (event, user) {
             console.log('Broadcast: current-user-changed', [event, user]);
         });
 
         $rootScope.$on('$locationChangeSuccess', function (param1, param2) {
             console.log('Broadcast: $locationChangeSuccess', [param1, param2]);
-        });
-
-        $rootScope.$on('newGardenAvailable', function (param1, param2) {
-            console.log('Broadcast: newGardenAvailable', [param1, param2]);
         });
 
         $rootScope.$on('newMessagesAvailable', function (param1, param2) {

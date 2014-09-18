@@ -1,40 +1,78 @@
-function GardenController($scope, PlantService, SpeciesService, GardenService, $filter) {
+function GardenController($scope, $filter, PlantService, SpeciesService, UserService) {
 
-    $scope.$watch('model.selectedYear', function (toYear, fromYear) {
-        console.log('Selected year changed', toYear, fromYear);
-        $scope.squares = PlantService.getSquares(toYear);
-        $scope.visibleRemainderSquares = PlantService.getSquares(toYear - 1);
-    });
+    $scope.plantsState = PlantService.getState();
+    $scope.speciesState = SpeciesService.getState();
+    $scope.userState = UserService.getState();
 
-    $scope.$watch('model.availableYears', function (newYears) {
-        if (newYears) {
-            $scope.forwardYear = newYears.slice(-1).pop() + 1;
-            $scope.backwardYear = newYears[0] - 1;
-        }
-    });
-
-    $scope.$on('newGardenAvailable', function (event, garden) {
-        $scope.species = garden.species;
-    });
-
-    $scope.species = SpeciesService.getSpecies();
+    $scope.selectYear = PlantService.selectYear;
     $scope.addYear = PlantService.addYear;
-    $scope.model = GardenService.getModel();
-    $scope.fn = GardenService.fn;
-    $scope.onSquareClick = GardenService.onSquareClick;
-    $scope.onVisibleRemainderClick = GardenService.onVisibleRemainderClick;
-    $scope.onGridClick = GardenService.onGridClick;
-    $scope.getGridSizeCss = GardenService.getGridSizeCss;
-    $scope.getSquarePositionCss = GardenService.getSquarePositionCss;
-    $scope.setSelectedSpecies = GardenService.setSelectedSpecies;
+    $scope.addSpecies = SpeciesService.addSpecies;
+    $scope.selectSpecies = SpeciesService.selectSpecies;
 
-    $scope.setSelectedSpeciesFromTopResult = function (searchString) {
+    $scope.selectedSpeciesFromTopResult = function (searchString) {
         console.log('Setting species from', searchString);
         var topResult = $filter('speciesFilter')(SpeciesService.getSpecies(), searchString)[0];
         if (topResult) {
-            GardenService.fn.setSelectedSpecies(topResult);
+            SpeciesService.selectSpecies(topResult);
         }
         $scope.speciesSearch = '';
+    };
+    $scope.onSquareClick = function (clickEvent, square) {
+        console.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies]);
+        if (clickEvent.shiftKey || SpeciesService.getState().action == 'delete') {
+            PlantService.removePlant(square);
+        } else if (clickEvent.ctrlKey) {
+            console.log('Copy species');
+        } else {
+            PlantService.addPlant(SpeciesService.getState().selectedSpecies, square);
+        }
+        clickEvent.stopPropagation();
+    };
+    $scope.onVisibleRemainderClick = function (clickEvent, square) {
+        console.log('VisibleRemainder clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies]);
+        PlantService.addSquare(PlantService.getState().selectedYear, square.location.x, square.location.y, SpeciesService.getState().selectedSpecies);
+        PlantService.save();
+        clickEvent.stopPropagation();
+    };
+    $scope.onGridClick = function (clickEvent) {
+        //http://stackoverflow.com/a/14872192/859514
+        var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
+        var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
+        var x = Math.floor((offsetX - 100000) / 48);
+        var y = Math.floor((offsetY - 100000) / 48);
+        PlantService.addSquare(PlantService.getState().selectedYear, x, y, SpeciesService.getState().selectedSpecies);
+        clickEvent.stopPropagation();
+    };
+    $scope.getGridSizeCss = function (year) {
+        var bounds = PlantService.getBounds(year);
+//        console.log('Grid size', bounds);
+        var margin = 48 * 2;
+        return {
+            'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',
+            'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',
+            'height': (100000 + 47 + bounds.ymax * 48 + margin) + 'px',
+            'margin-left': (-100000 + -bounds.xmin * 48 + margin) + 'px'
+        };
+    };
+    $scope.getSquarePositionCss = function (square) {
+        return {
+            top: square.location.y * 48 + 100000 + 'px',
+            left: square.location.x * 48 + 100000 + 'px'
+        };
+    };
+    $scope.isSpeciesAddable = function (vernacularName) {
+        if (!vernacularName) {
+            return false;
+        }
+//                console.log('isSpeciesAddable', vernacularName);
+        var name = vernacularName.toLowerCase();
+        for (var i = 0; i < SpeciesService.getSpecies().length; i++) {
+            var species = SpeciesService.getSpecies()[i];
+            if (species.vernacularName && species.vernacularName.toLowerCase() == name) {
+                return false;
+            }
+        }
+        return true;
     };
 }
 

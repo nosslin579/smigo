@@ -6,30 +6,31 @@
                 <div class="btn-group">
                     <div class="row">
                         <div class="col-xs-6">
-                            <button type="button" class="btn btn-block btn-default" ng-class="{active: model.action == 'info'}"
-                                    ng-click="model.action ='info'" title="{{'msg.deletesquare.description' | translate}}">
+                            <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'info'}"
+                                    ng-click="speciesState.action ='info'" title="{{'msg.deletesquare.description' | translate}}">
                                 <span class="glyphicon glyphicon-info-sign"></span> {{'msg.view-square.title' | translate}}
                             </button>
                         </div>
                         <div class="col-xs-6">
-                            <button type="button" class="btn btn-block btn-default" ng-class="{active: model.action == 'delete'}"
-                                    ng-click="model.action ='delete'" title="{{'msg.view-square.description' | translate}}">
+                            <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'delete'}"
+                                    ng-click="speciesState.action ='delete'" title="{{'msg.view-square.description' | translate}}">
                                 <span class="glyphicon glyphicon-remove"></span> {{'deletesquare' | translate}}
                             </button>
                         </div>
                     </div>
                 </div>
                 <!--<hr/>-->
-                <form class="navbar-form" ng-submit="setSelectedSpeciesFromTopResult(speciesSearch)">
+                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesSearch)">
                     <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
                 </form>
                 <ul class="nav nav-sidebar">
-                    <li ng-repeat="s in species | speciesFilter:speciesSearch" ng-class="{active: model.selectedSpecies.id === s.id && model.action == 'add'}">
-                        <a href="" ng-click="fn.setSelectedSpecies(s)">{{s.vernacularName}}</a>
+                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
+                        ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}">
+                        <a href="" ng-click="selectSpecies(s)">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
-                    <li ng-if="fn.isSpeciesAddable(speciesSearch) && currentUser.username">
-                        <a id="add-species-link" href="" ng-click="fn.addSpecies(speciesSearch)">
+                    <li ng-if="isSpeciesAddable(speciesSearch) && userState.currentUser">
+                        <a id="add-species-link" href="" ng-click="addSpecies(speciesSearch)">
                             <span class="glyphicon glyphicon-plus"></span>
                             {{'msg.add-species' | translate:speciesSearch }}
                         </a>
@@ -42,8 +43,8 @@
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-11">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li ng-class="{active: year == model.selectedYear}" ng-repeat="year in model.availableYears">
-                            <a href="" ng-click="model.selectedYear = year">
+                        <li ng-class="{active: year == plantsState.selectedYear}" ng-repeat="year in plantsState.availableYears">
+                            <a href="" ng-click="selectYear(year)">
                                 {{year}}
                             </a>
                         </li>
@@ -63,15 +64,15 @@
                     <div id="fade-right" class="absolute-full"></div>
                     <div id="fade-left" class="absolute-full"></div>
                     <div id="peephole" remember-scroll="">
-                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(model.selectedYear)">
-                            <div ng-repeat="s in squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
+                            <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                 <div ng-repeat="p in s.plants">
                                     <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-if="!p.remove"
                                          alt="{{p.species.vernacularName}}"
                                          ng-class="{'multiple-plants': getObjectLength(s.plants) > 1}"/>
                                 </div>
                             </div>
-                            <div ng-repeat="s in visibleRemainderSquares" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
+                            <div ng-repeat="s in plantsState.visibleRemainderSquares" class="visible-remainder" ng-style="getSquarePositionCss(s)" ng-click="onVisibleRemainderClick($event, s)"></div>
                         </div>
                     </div>
                 </div>
@@ -90,9 +91,9 @@
                 <h4 class="modal-title">{{'addyear'|translate}}</h4>
             </div>
             <div class="modal-body">
-                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(forwardYear, model)">{{forwardYear}}</button>
+                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(plantsState.forwardYear)">{{plantsState.forwardYear}}</button>
                 <hr/>
-                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(backwardYear, model)">{{backwardYear}}</button>
+                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(plantsState.backwardYear)">{{plantsState.backwardYear}}</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{'msg.close' | translate}}</button>

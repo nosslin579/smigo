@@ -14,6 +14,6 @@ public class JspFunctions {
     }
 
     public static String toJson(Object o) throws IOException {
-        return objectMapper.writeValueAsString(o);
+        return o == null ? "null" : objectMapper.writeValueAsString(o);
     }
 }

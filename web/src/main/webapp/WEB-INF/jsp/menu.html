@@ -16,11 +16,11 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#garden">Garden</a></li>
                 <li><a href="#help">{{'help' | translate}}</a></li>
-                <li ng-class="{hidden: currentUser.username}">
+                <li ng-class="{hidden: userState.currentUser}">
                     <a href="#login" id="login-link">{{'account.login' | translate}}</a></li>
-                <li ng-class="{hidden: currentUser.username}">
+                <li ng-class="{hidden: userState.currentUser}">
                     <a href="#register" id="register-link">{{'msg.account.register' | translate}}</a></li>
-                <li ng-class="{hidden: !currentUser.username}">
+                <li ng-class="{hidden: !userState.currentUser}">
                     <a ng-click="logout()" href="" id="logout-link">Logout</a></li>
             </ul>
         </div>

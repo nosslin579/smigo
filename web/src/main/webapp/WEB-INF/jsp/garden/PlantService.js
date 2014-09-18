@@ -1,12 +1,23 @@
 function PlantService($http, $window, $timeout, $rootScope) {
-    var yearSquareMap = {},
+    var state = {},
+        yearSquareMap = {},
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
-    console.log('PlantService');
 
-    $rootScope.$on('newGardenAvailable', function (garden) {
-        yearSquareMap = garden.squares;
+    updateState(initData.garden.squares);
+
+    console.log('PlantService', state);
+
+    $rootScope.$on('current-user-changed', function (event, user) {
+        if (user) {
+            reloadPlants();
+        } else {
+            var year = new Date().getFullYear();
+            var squares = {};
+            squares[year] = [new Square(new Location(year, 0, 0))];
+            updateState(squares);
+        }
     });
 
     $window.onbeforeunload = function () {
@@ -81,6 +92,37 @@ function PlantService($http, $window, $timeout, $rootScope) {
         return ret;
     }
 
+    function selectYear(year) {
+        state.selectedYear = year;
+        state.squares = yearSquareMap[year];
+        state.visibleRemainderSquares = yearSquareMap[year - 1];
+        console.log('Year selected:' + year, state);
+    }
+
+    function updateState(squares) {
+        yearSquareMap = squares;
+        var sortedYearsArray = Object.keys(yearSquareMap).sort();
+        var firstYear = +sortedYearsArray[0];
+        var lastYear = +sortedYearsArray.slice(-1)[0];
+        var availableYears = [];
+        for (var i = firstYear; i <= lastYear; i++) {
+            availableYears.push(i);
+        }
+        state.availableYears = availableYears;
+        state.forwardYear = availableYears.slice(-1).pop() + 1;
+        state.backwardYear = availableYears[0] - 1;
+        selectYear(state.availableYears.slice(-1).pop());
+        console.log('Plants state updated', state);
+    }
+
+    function reloadPlants() {
+        return $http.get('rest/garden')
+            .then(function (response) {
+                console.log('Garden retrieve successful. Response:', response);
+                updateState(response.data.squares);
+            });
+    }
+
     function getTrailingYear(year) {
         var yearSource = year;
         if (yearSquareMap[yearSource - 1]) {
@@ -90,18 +132,6 @@ function PlantService($http, $window, $timeout, $rootScope) {
         } else {
             return Object.keys(yearSquareMap).sort().slice(-1);
         }
-    }
-
-    function getAvailableYears() {
-        var sortedYearsArray = Object.keys(yearSquareMap).sort();
-        var firstYear = +sortedYearsArray[0];
-        var lastYear = +sortedYearsArray.slice(-1)[0];
-        var ret = [];
-        for (var i = firstYear; i <= lastYear; i++) {
-            ret.push(i);
-        }
-        console.log('AvailableYears', ret);
-        return ret;
     }
 
     function sendUnsavedPlantsToServer() {
@@ -137,16 +167,13 @@ function PlantService($http, $window, $timeout, $rootScope) {
         }
     }
 
-    $rootScope.$on('newGardenAvailable', function (event, garden) {
-        yearSquareMap = garden.squares;
-    });
-
     return {
-        getSquares: function (year) {
-            return yearSquareMap[year];
+        selectYear: selectYear,
+        getState: function () {
+            return state;
         },
         getBounds: getBounds,
-        addYear: function (year, model) {
+        addYear: function (year) {
             var newYearSquareArray = [];
             var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
 
@@ -161,11 +188,9 @@ function PlantService($http, $window, $timeout, $rootScope) {
             });
 
             yearSquareMap[year] = newYearSquareArray;
-            model.selectedYear = year;
-            model.availableYears = getAvailableYears();
+            updateState(yearSquareMap);
             console.log('Year added:' + year, yearSquareMap);
         },
-        getAvailableYears: getAvailableYears,
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), [species]);
             yearSquareMap[year].push(newSquare);
