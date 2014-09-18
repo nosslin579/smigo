@@ -116,10 +116,10 @@ function PlantService($http, $window, $timeout, $rootScope) {
     }
 
     function reloadPlants() {
-        return $http.get('rest/garden')
+        return $http.get('rest/plant')
             .then(function (response) {
                 console.log('Garden retrieve successful. Response:', response);
-                updateState(response.data.squares);
+                updateState(response.data);
             });
     }
 
@@ -157,7 +157,7 @@ function PlantService($http, $window, $timeout, $rootScope) {
         console.log('Sending to server', update);
         //start auto save timer
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
-        return $http.post('rest/garden', update);
+        return $http.post('rest/plant', update);
     }
 
     function countAutoSave() {

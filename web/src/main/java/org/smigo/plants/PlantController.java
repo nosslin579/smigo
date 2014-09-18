@@ -1,6 +1,6 @@
 package org.smigo.plants;
 
-import kga.Garden;
+import kga.Square;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.species.SpeciesHandler;
@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
-public class GardenController implements Serializable {
+public class PlantController implements Serializable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -26,13 +28,13 @@ public class GardenController implements Serializable {
     @Autowired
     private PlantHandler plantHandler;
 
-    @RequestMapping(value = "/rest/garden", produces = "application/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public Garden getGarden() {
-        return speciesHandler.getGarden();
+    public Map<Integer, Collection<Square>> getPlants() {
+        return speciesHandler.getGarden().getSquares();
     }
 
-    @RequestMapping(value = {"/update-garden", "/rest/garden"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
+    @RequestMapping(value = {"/update-garden", "/rest/plant"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
     @ResponseBody
     public void updateGarden(@RequestBody UpdateGardenBean updateGardenBean, @AuthenticationPrincipal AuthenticatedUser user) {
         plantHandler.updateGarden(user, updateGardenBean);
