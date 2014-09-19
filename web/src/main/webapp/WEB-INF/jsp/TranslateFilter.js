@@ -1,8 +1,8 @@
 function translateFilter($rootScope) {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
 
-    $rootScope.$on('newMessagesAvailable', function (event, newMessages) {
-        angular.extend(msg, newMessages);
+    $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
+        msg[messageKey] = value;
     });
 
     console.log('TranslateFilter', [msg]);

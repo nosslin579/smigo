@@ -16,12 +16,16 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
     private static final String SELECT = "SELECT * FROM species";
+    private static final String WHERE = SELECT + " WHERE species_id = ?";
+    private static final String DEFAULTICONNAME = "defaulticon.png";
+
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert create;
 
@@ -48,21 +52,33 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Override
     @Cacheable(Cache.SPECIES)
     public List<SpeciesView> getSpecies(final Map<Integer, Family> familyMap) {
-        final String sql = String.format(SELECT);
-        return jdbcTemplate.query(sql, new Object[]{}, new RowMapper<SpeciesView>() {
-            @Override
-            public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
-                SpeciesView ret = new SpeciesView();
-                ret.setId(rs.getInt("species_id"));
-                ret.setScientificName(rs.getString("name"));
-                ret.setItem(rs.getBoolean("item"));
-                ret.setAnnual(rs.getBoolean("annual"));
-                ret.setFamily(familyMap.get(rs.getInt("family")));
-                String iconfilename = rs.getString("iconfilename");
-                ret.setIconFileName(iconfilename == null ? "defaulticon.png" : iconfilename);
-                ret.setVernacularName(rs.getString("vernacularName"));
-                return ret;
-            }
-        });
+        return jdbcTemplate.query(SELECT, new Object[]{}, new SpeciesViewRowMapper(familyMap));
+    }
+
+    @Override
+    public SpeciesView getSpecies(int id) {
+        return jdbcTemplate.queryForObject(WHERE, new Object[]{id}, new SpeciesViewRowMapper(new HashMap<Integer, Family>()));
+    }
+
+    private static class SpeciesViewRowMapper implements RowMapper<SpeciesView> {
+        private final Map<Integer, Family> familyMap;
+
+        public SpeciesViewRowMapper(Map<Integer, Family> familyMap) {
+            this.familyMap = familyMap;
+        }
+
+        @Override
+        public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
+            SpeciesView ret = new SpeciesView();
+            ret.setId(rs.getInt("species_id"));
+            ret.setScientificName(rs.getString("name"));
+            ret.setItem(rs.getBoolean("item"));
+            ret.setAnnual(rs.getBoolean("annual"));
+            ret.setFamily(familyMap.get(rs.getInt("family")));
+            String iconfilename = rs.getString("iconfilename");
+            ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
+            ret.setVernacularName(rs.getString("vernacularName"));
+            return ret;
+        }
     }
 }

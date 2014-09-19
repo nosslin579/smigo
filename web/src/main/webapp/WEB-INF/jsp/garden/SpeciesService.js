@@ -15,9 +15,6 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
 
     function Species(vernacularName) {
         this.vernacularName = vernacularName;
-        this.annual = true;
-        this.item = false;
-        this.iconFileName = "defaulticon.png";
     }
 
     function reloadSpecies() {
@@ -56,9 +53,11 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
                 .then(function (response) {
                     console.log('Response from post species', response);
                     species.id = response.data;
-                    var newMessage = {};
-                    newMessage['species' + species.id] = vernacularName;
-                    $rootScope.$broadcast('newMessagesAvailable', newMessage);
+                }).then(function () {
+                    return Http.get('rest/species/' + species.id);
+                }).then(function (response) {
+                    angular.extend(species, response.data);
+                    $rootScope.$broadcast('newMessagesAvailable', species.messageKey, vernacularName);
                 });
         },
         getSpecies: function () {

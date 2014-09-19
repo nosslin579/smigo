@@ -1,5 +1,6 @@
 package org.smigo.species;
 
+import kga.Species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
@@ -7,6 +8,7 @@ import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +27,12 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     public Collection<SpeciesView> getSpecies(@AuthenticationPrincipal AuthenticatedUser user) {
         return speciesHandler.getSpeciesMap().values();
+    }
+
+    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Species getSpecies(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user) {
+        return speciesHandler.getSpecies(id);
     }
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)

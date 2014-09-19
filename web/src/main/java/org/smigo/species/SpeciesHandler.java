@@ -21,8 +21,6 @@ import java.util.Map;
 public class SpeciesHandler {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final String DEFAULTICONNAME = "defaulticon.png";
-
     @Autowired
     private SpeciesDao speciesDao;
     @Autowired
@@ -65,8 +63,8 @@ public class SpeciesHandler {
         }
     }
 
-    public Species getSpecies(Integer id) {
-        return new Species();
+    public Species getSpecies(int id) {
+        return speciesDao.getSpecies(id);
     }
 
     public List<Family> getFamilies() {

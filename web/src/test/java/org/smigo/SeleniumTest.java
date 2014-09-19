@@ -122,14 +122,12 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("add-species-link")).click();
         d.findElement(By.linkText(speciesName)).click();
 
-        for (; d.findElements(By.className("plant")).isEmpty(); d.findElement(By.className("square")).click()) {
-            Thread.sleep(500);
-        }
+        d.findElement(By.className("square")).click();
+        Thread.sleep(2000);
 
         d.findElement(By.id("logout-link")).click();
         login(username, PASSWORD);
 
-        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         List<WebElement> plants = d.findElements(By.className("plant"));
         Assert.assertEquals(plants.size(), 1, "No plants found! User:" + username);
         Assert.assertEquals(plants.iterator().next().getAttribute("alt"), speciesName);
