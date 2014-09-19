@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,11 +72,19 @@ public class UserController {
         return Collections.emptyList();
     }
 
-    @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/user", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void acceptTermsOfService(@AuthenticationPrincipal AuthenticatedUser principal) {
-        log.info("AcceptTermsOfService: ");
-        userHandler.acceptTermsOfService(principal);
+    public List<ObjectError> updateUser(@RequestBody @Valid UserBean userBean, BindingResult result,
+                                        @AuthenticationPrincipal AuthenticatedUser user,
+                                        HttpServletResponse response) {
+        if (result.hasErrors()) {
+            log.warn("Update user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.getAllErrors();
+        }
+        log.info("Updating user: " + userBean.toString());
+        userHandler.updateUser(userBean, user);
+        return Collections.emptyList();
     }
 
     @RequestMapping(value = "/reset-password", method = RequestMethod.POST)

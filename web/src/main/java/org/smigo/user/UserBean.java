@@ -20,7 +20,6 @@ public class UserBean implements Serializable {
     @Email
     private String email = null;
 
-    @Username
     private String username = null;
 
     @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
@@ -29,7 +28,7 @@ public class UserBean implements Serializable {
     private Locale locale = null;
 
     @AssertTrue
-    private boolean termsofservice = true;
+    private boolean termsOfService = false;
 
     public UserBean() {
     }
@@ -46,10 +45,13 @@ public class UserBean implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                ", displayname='" + displayname + '\'' +
+        return "UserBean{" +
+                "displayname='" + displayname + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
+                ", about='" + about + '\'' +
+                ", locale=" + locale +
+                ", termsOfService=" + termsOfService +
                 '}';
     }
 
@@ -93,11 +95,11 @@ public class UserBean implements Serializable {
         this.locale = locale;
     }
 
-    public boolean isTermsofservice() {
-        return termsofservice;
+    public boolean isTermsOfService() {
+        return termsOfService;
     }
 
-    public void setTermsofservice(boolean termsofservice) {
-        this.termsofservice = termsofservice;
+    public void setTermsOfService(boolean termsOfService) {
+        this.termsOfService = termsOfService;
     }
 }

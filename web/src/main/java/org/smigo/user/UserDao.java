@@ -23,4 +23,6 @@ public interface UserDao {
     List<UserDetails> getUserDetails(String username);
 
     UserBean getUser(String name);
+
+    void deleteOpenId(String openIdUrl);
 }

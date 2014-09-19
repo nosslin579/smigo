@@ -51,8 +51,9 @@
 <script type="text/ng-template" id="login.html">
     <%@ include file="ng-login.html" %>
 </script>
-
-<%@ include file="accept-terms-of-service-modal.html" %>
+<script type="text/ng-template" id="accept-terms-of-service.html">
+    <%@ include file="accept-terms-of-service.html" %>
+</script>
 
 </body>
 

@@ -2,6 +2,9 @@
 angular.module('smigoModule', ['ngRoute'])
     .config(function ($routeProvider) {
         $routeProvider.
+            when('/hasta-luego', {
+                templateUrl: 'hasta-luego.html'
+            }).
             when('/help', {
                 templateUrl: 'help.html'
             }).
@@ -17,6 +20,10 @@ angular.module('smigoModule', ['ngRoute'])
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
             }).
+            when('/accept-terms-of-service', {
+                templateUrl: 'accept-terms-of-service.html',
+                controller: 'AcceptTermsOfServiceController'
+            }).
             otherwise({redirectTo: '/garden'});
 
     })
@@ -31,12 +38,20 @@ angular.module('smigoModule', ['ngRoute'])
             console.log('Broadcast: current-user-changed', [event, user]);
         });
 
-        $rootScope.$on('$locationChangeSuccess', function (param1, param2) {
-            console.log('Broadcast: $locationChangeSuccess', [param1, param2]);
+        $rootScope.$on('$locationChangeSuccess', function (param1, param2, param3) {
+            console.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
         });
 
-        $rootScope.$on('newMessagesAvailable', function (param1, param2) {
-            console.info('Broadcast: newMessagesAvailable', [param1, param2]);
+        $rootScope.$on('$locationChangeStart', function (param1, param2, param3) {
+            console.info('Broadcast: locationChangeStart', [param1, param2, param3]);
+        });
+
+        $rootScope.$on('$routeChangeStart', function (param1, param2, param3) {
+            console.info('Broadcast: routeChangeStart', [param1, param2, param3]);
+        });
+
+        $rootScope.$on('newMessagesAvailable', function (param1, param2, param3) {
+            console.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
         });
 
     });

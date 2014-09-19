@@ -69,6 +69,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final RegisterFormBean user = new RegisterFormBean();
         final String username = "selenium" + System.currentTimeMillis();
         user.setUsername(username);
+        user.setTermsOfService(true);
         user.setPassword(HASHPW);
 //        user.setEmail(username + EMAIL_PROVIDER);
         userDao.addUser(user, HASHPW, 0);
@@ -77,12 +78,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private void login(String username, String password) throws InterruptedException {
         d.findElement(By.id("login-link")).click();
-        WebElement usernameElement = d.findElement(By.name("username"));
-        usernameElement.clear();
-        usernameElement.sendKeys(username);
-        WebElement passwordElement = d.findElement(By.name("password"));
-        passwordElement.clear();
-        passwordElement.sendKeys(password);
+        d.findElement(By.name("username")).clear();
+        d.findElement(By.name("username")).sendKeys(username);
+        d.findElement(By.name("password")).clear();
+        d.findElement(By.name("password")).sendKeys(password);
         d.findElement(By.id("submit-login-register-form")).click();
         Thread.sleep(2000);
     }
@@ -96,8 +95,11 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         //sign up
         d.findElement(By.id("register-link")).click();
+        d.findElement(By.name("username")).clear();
         d.findElement(By.name("username")).sendKeys(username);
+        d.findElement(By.name("password")).clear();
         d.findElement(By.name("password")).sendKeys(PASSWORD);
+        d.findElement(By.name("passwordagain")).clear();
         d.findElement(By.name("passwordagain")).sendKeys(PASSWORD);
         d.findElement(By.name("termsOfService")).click();
         d.findElement(By.id("submit-login-register-form")).click();
@@ -211,14 +213,22 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 
-    @Test
-    public void loginOpenId() {
+    @Test(enabled = false)
+    public void registerWithOpenId() {
+        userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawmHkpXOGRHiOHQyptavuuui9uqtL1mkpyk");
+
         d.get("http://localhost:8080/web");
+        d.findElement(By.className("square")).click();
+
         d.findElement(By.id("login-link")).click();
         d.findElement(By.id("googleOpenId")).submit();
         d.findElement(By.id("Email")).sendKeys("smigo.org@gmail.com");
         d.findElement(By.id("Passwd")).sendKeys("lstN09LLrZZx");
         d.findElement(By.id("signIn")).click();
+        d.findElement(By.id("accept-terms-of-service-button")).click();
+
+//        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+//        Assert.assertEquals(d.findElement(By.className("plant")).getAttribute("alt"), "Eggplant");
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 }

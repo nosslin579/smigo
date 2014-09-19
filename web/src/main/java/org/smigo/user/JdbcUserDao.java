@@ -81,9 +81,9 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void updateUser(int id, UserBean user) {
-        String sql = "UPDATE users SET email = ?, termsofservice = ? WHERE id = ?";
-        Object[] args = {user.getEmail(), user.isTermsofservice(), id};
-        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.INTEGER};
+        String sql = "UPDATE users SET email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ? WHERE id = ?";
+        Object[] args = {user.getEmail(), user.isTermsOfService(), user.getAbout(), user.getLocale(), user.getDisplayname(), id};
+        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(sql, args, types);
     }
 
@@ -97,6 +97,12 @@ public class JdbcUserDao implements UserDao {
     public UserBean getUser(String username) {
         final String sql = String.format(SELECT, "username");
         return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
+    }
+
+    @Override
+    public void deleteOpenId(String openIdUrl) {
+        String sql = "DELETE FROM openid WHERE identity_url = ?";
+        jdbcTemplate.update(sql, new Object[]{openIdUrl}, new int[]{Types.VARCHAR});
     }
 
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
@@ -114,7 +120,7 @@ public class JdbcUserDao implements UserDao {
         @Override
         public UserBean mapRow(ResultSet rs, int rowNum) throws SQLException {
             UserBean ret = new UserBean();
-            ret.setTermsofservice(rs.getBoolean("termsofservice"));
+            ret.setTermsOfService(rs.getBoolean("termsofservice"));
             ret.setAbout(rs.getString("about"));
             ret.setUsername(rs.getString("username"));
             ret.setDisplayname(rs.getString("displayname"));

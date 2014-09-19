@@ -114,7 +114,7 @@ public class UserHandler {
 
     public void acceptTermsOfService(AuthenticatedUser principal) {
         UserBean user = userDao.getUser(principal.getUsername());
-        user.setTermsofservice(true);
+        user.setTermsOfService(true);
         userDao.updateUser(principal.getId(), user);
     }
 
@@ -131,5 +131,9 @@ public class UserHandler {
             return (AuthenticatedUser) principal;
         }
         return null;
+    }
+
+    public void updateUser(UserBean userBean, AuthenticatedUser user) {
+        userDao.updateUser(user.getId(), userBean);
     }
 }

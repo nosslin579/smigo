@@ -9,7 +9,8 @@ function Http($http) {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
         },
-        get: $http.get
+        get: $http.get,
+        put: $http.put
     }
 }
 

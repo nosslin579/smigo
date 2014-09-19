@@ -2,9 +2,28 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
 
     var state = {currentUser: initData.user};
 
+    console.log('UserService', state);
+
+    $rootScope.$on("$routeChangeStart", function (event, next, current) {
+        if (state.currentUser && !state.currentUser.termsOfService) {
+            console.log('User has not accepted terms of service', state);
+            if (next.templateUrl == "accept-terms-of-service.html") {
+                // already going to #accept, no redirect needed
+            } else {
+                // not going to #accept, we should redirect now
+                $location.path("/accept-terms-of-service");
+            }
+        }
+    });
+
+
     $rootScope.$on('current-user-changed', function (event, user) {
         state.currentUser = user;
     });
+
+    function updateUser(userBean) {
+        return Http.put('rest/user', userBean);
+    }
 
     function validateForm(form) {
         form.objectErrors = [];
@@ -62,13 +81,11 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
                 });
         },
         login: login,
-        acceptTermsOfService: function (form) {
-            console.log('Handle acceptTermsOfServiceForm', form);
-            if (form.$invalid) {
-                return;
-            }
-            $('#accept-terms-of-service-modal').modal('hide');
-            Http.post('accept-terms-of-service', {});
+        acceptTermsOfService: function () {
+            console.log('Handle acceptTermsOfService');
+            state.currentUser.termsOfService = true;
+            updateUser(state.currentUser);
+            $location.path('/garden');
         },
         logout: function () {
             PlantService.save()
@@ -77,6 +94,7 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
                 })
                 .then(function () {
                     $rootScope.$broadcast('current-user-changed', null);
+                    $location.path('/hasta-luego');
                 })
                 .catch(function (data, status, headers, config) {
                     console.error('Logout failed', data, status, headers, config);
