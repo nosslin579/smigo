@@ -213,12 +213,13 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
     }
 
-    @Test(enabled = false)
-    public void registerWithOpenId() {
-        userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawmHkpXOGRHiOHQyptavuuui9uqtL1mkpyk");
+    @Test
+    public void registerWithOpenId() throws InterruptedException {
+        userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
 
         d.get("http://localhost:8080/web");
         d.findElement(By.className("square")).click();
+        Thread.sleep(2000);
 
         d.findElement(By.id("login-link")).click();
         d.findElement(By.id("googleOpenId")).submit();
@@ -227,8 +228,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("signIn")).click();
         d.findElement(By.id("accept-terms-of-service-button")).click();
 
-//        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
-//        Assert.assertEquals(d.findElement(By.className("plant")).getAttribute("alt"), "Eggplant");
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+        Assert.assertTrue(d.findElement(By.className("plant")).getAttribute("src").endsWith("species/1.png"));
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+
+        d.findElement(By.id("logout-link")).click();
+        d.findElement(By.id("login-link")).click();
+        d.findElement(By.id("googleOpenId")).submit();
+        Assert.assertTrue(d.findElement(By.className("plant")).getAttribute("src").endsWith("species/1.png"));
+
     }
 }

@@ -125,7 +125,7 @@ public class UserHandler {
         return userDao.getUser(user.getUsername());
     }
 
-    public AuthenticatedUser getCurrentUser() {//@AuthenticationPrincipal
+    public AuthenticatedUser getCurrentUser() {
         final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof AuthenticatedUser) {
             return (AuthenticatedUser) principal;

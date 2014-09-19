@@ -8,9 +8,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
+    public static final long NOT_SO_RANDOM_POINT_IN_TIME = 1411140042351l;
     @Autowired
     private UserHandler userHandler;
     @Autowired
@@ -20,14 +22,14 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
 
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-        final UserDetails userDetails = userDao.getUserDetails(token);
-        if (userDetails == null) {
+        final List<UserDetails> userDetails = userDao.getUserDetails(token);
+        if (userDetails.isEmpty()) {
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, "createdUserFromOpenid");
             final RegisterFormBean newUser = new RegisterFormBean();
-            newUser.setUsername("user" + System.nanoTime());
+            newUser.setUsername("user" + String.valueOf(System.currentTimeMillis() - NOT_SO_RANDOM_POINT_IN_TIME));
             userHandler.createUser(newUser, token.getIdentityUrl());
             return userDao.getUserDetails(newUser.getUsername()).get(0);
         }
-        return userDetails;
+        return userDetails.get(0);
     }
 }

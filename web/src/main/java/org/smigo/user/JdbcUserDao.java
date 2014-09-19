@@ -73,10 +73,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public UserDetails getUserDetails(OpenIDAuthenticationToken token) {
+    public List<UserDetails> getUserDetails(OpenIDAuthenticationToken token) {
         final String sql = "SELECT users.id,username,password FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
-        Object[] identityUrl = {token.getIdentityUrl()};
-        return jdbcTemplate.queryForObject(sql, identityUrl, new UserDetailsRowMapper());
+        return jdbcTemplate.query(sql, new UserDetailsRowMapper(), token.getIdentityUrl());
     }
 
     @Override
