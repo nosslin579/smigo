@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    private static final String NON_LATIN_LETTERS = "Şehirde güzel köpek леп пас у граду 在城里漂亮的狗 سگ خوب در شهر";
     private static final String EMAIL_PROVIDER = "@mailinator.com";
+    private static final String DISPLAY_NAME = "Tomte Nisse";
     private static final String PASSWORD = "password";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
@@ -71,7 +74,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         user.setUsername(username);
         user.setTermsOfService(true);
         user.setPassword(HASHPW);
-//        user.setEmail(username + EMAIL_PROVIDER);
         userDao.addUser(user, HASHPW, 0);
         return username;
     }
@@ -237,5 +239,35 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("googleOpenId")).submit();
         Assert.assertTrue(d.findElement(By.className("plant")).getAttribute("src").endsWith("species/1.png"));
 
+    }
+
+    @Test
+    public void updateAccount() throws InterruptedException {
+        final String username = addUser();
+        login(username, PASSWORD);
+
+        d.findElement(By.id("account-link")).click();
+
+        Assert.assertTrue(d.getPageSource().contains(username));
+
+        d.findElement(By.name("email")).sendKeys(username + EMAIL_PROVIDER);
+        d.findElement(By.name("displayName")).sendKeys(DISPLAY_NAME);
+        new Select(d.findElement(By.name("locale"))).selectByValue("sv");
+        d.findElement(By.name("about")).sendKeys(NON_LATIN_LETTERS);
+        d.findElement(By.id("submit-account-button")).click();
+
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+
+        d.findElement(By.id("logout-link")).click();
+        login(username, PASSWORD);
+
+        d.findElement(By.id("account-link")).click();
+
+        Thread.sleep(1000);
+
+        Assert.assertEquals(d.findElement(By.name("email")).getAttribute("value"), username + EMAIL_PROVIDER);
+        Assert.assertEquals(d.findElement(By.name("displayName")).getAttribute("value"), DISPLAY_NAME);
+        Assert.assertEquals(new Select(d.findElement(By.name("locale"))).getFirstSelectedOption().getAttribute("value"), "sv");
+        Assert.assertEquals(d.findElement(By.name("about")).getAttribute("value"), NON_LATIN_LETTERS);
     }
 }
