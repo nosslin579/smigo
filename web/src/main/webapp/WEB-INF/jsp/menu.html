@@ -21,7 +21,9 @@
                 <li ng-class="{hidden: userState.currentUser}">
                     <a href="#register" id="register-link">{{'msg.account.register' | translate}}</a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
-                    <a ng-click="logout()" href="" id="logout-link">Logout</a></li>
+                    <a href="#account" id="account-link">{{'msg.settings' | translate}}</a></li>
+                <li ng-class="{hidden: !userState.currentUser}">
+                    <a ng-click="logout()" href="" id="logout-link">{{'account.logout' | translate}}</a></li>
             </ul>
         </div>
     </div>

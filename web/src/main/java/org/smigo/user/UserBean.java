@@ -15,14 +15,14 @@ public class UserBean implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(UserBean.class);
 
     @SafeHtml(whitelistType = WhiteListType.NONE)
-    private String displayname = null;
+    private String displayName = null;
 
     @Email
     private String email = null;
 
     private String username = null;
 
-    @SafeHtml(whitelistType = WhiteListType.BASIC_WITH_IMAGES)
+    @SafeHtml(whitelistType = WhiteListType.NONE)
     private String about = null;
 
     private Locale locale = null;
@@ -34,8 +34,8 @@ public class UserBean implements Serializable {
     }
 
 
-    public UserBean(String username, String displayname, String email, String about, Locale locale) {
-        this.displayname = displayname;
+    public UserBean(String username, String displayName, String email, String about, Locale locale) {
+        this.displayName = displayName;
         this.username = username;
         this.email = email;
         this.about = about;
@@ -46,7 +46,7 @@ public class UserBean implements Serializable {
     @Override
     public String toString() {
         return "UserBean{" +
-                "displayname='" + displayname + '\'' +
+                "displayName='" + displayName + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", about='" + about + '\'' +
@@ -55,12 +55,12 @@ public class UserBean implements Serializable {
                 '}';
     }
 
-    public String getDisplayname() {
-        return displayname;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplayname(String firstname) {
-        this.displayname = firstname;
+    public void setDisplayName(String firstname) {
+        this.displayName = firstname;
     }
 
     public String getUsername() {

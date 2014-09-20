@@ -81,7 +81,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public void updateUser(int id, UserBean user) {
         String sql = "UPDATE users SET email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ? WHERE id = ?";
-        Object[] args = {user.getEmail(), user.isTermsOfService(), user.getAbout(), user.getLocale(), user.getDisplayname(), id};
+        Object[] args = {user.getEmail(), user.isTermsOfService(), user.getAbout(), user.getLocale(), user.getDisplayName(), id};
         int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(sql, args, types);
     }
@@ -122,7 +122,7 @@ public class JdbcUserDao implements UserDao {
             ret.setTermsOfService(rs.getBoolean("termsofservice"));
             ret.setAbout(rs.getString("about"));
             ret.setUsername(rs.getString("username"));
-            ret.setDisplayname(rs.getString("displayname"));
+            ret.setDisplayName(rs.getString("displayname"));
             ret.setEmail(rs.getString("email"));
             ret.setLocale(StringUtils.parseLocaleString(rs.getString("locale")));
             return ret;

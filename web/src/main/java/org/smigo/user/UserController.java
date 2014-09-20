@@ -104,5 +104,11 @@ public class UserController {
         return "passwordform.jsp";
     }
 
+    @RequestMapping(value = "locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public java.util.Map<String, String> getLocales() {
+        return Language.getTransalationMap();
+    }
+
 
 }

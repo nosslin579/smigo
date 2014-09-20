@@ -1,6 +1,9 @@
 function UserService($rootScope, $q, $location, Http, PlantService) {
 
-    var state = {currentUser: initData.user};
+    var state = {
+        currentUser: initData.user,
+        locales: initData.locales
+    };
 
     console.log('UserService', state);
 
@@ -22,7 +25,11 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
     });
 
     function updateUser(userBean) {
-        return Http.put('rest/user', userBean);
+        return Http.put('rest/user', userBean)
+            .then(function (response) {
+                console.log('Update user success', response);
+                state.currentUser = userBean;
+            });
     }
 
     function validateForm(form) {
@@ -99,7 +106,8 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
                 .catch(function (data, status, headers, config) {
                     console.error('Logout failed', data, status, headers, config);
                 });
-        }
+        },
+        updateUser: updateUser
     };
 }
 angular.module('smigoModule').factory('UserService', UserService);

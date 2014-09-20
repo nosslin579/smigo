@@ -28,13 +28,17 @@
         <%@ include file="garden/SpeciesFilter.js" %>
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/SpeciesService.js" %>
-        <%@ include file="MainMenuController.js" %>
+        <%@ include file="garden/PlantService.js" %>
+        <%@ include file="garden/RememberScrollDirective.js" %>
+
         <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>
         <%@ include file="user/LoginController.js" %>
+        <%@ include file="user/AccountController.js" %>
         <%@ include file="user/UserService.js" %>
-        <%@ include file="garden/PlantService.js" %>
-        <%@ include file="garden/RememberScrollDirective.js" %>
+
+        <%@ include file="MainMenuController.js" %>
+
         <%@ include file="EqualsDirective.js" %>
         <%@ include file="TranslateFilter.js" %>
         <%@ include file="Http.js" %>
@@ -53,6 +57,9 @@
 </script>
 <script type="text/ng-template" id="accept-terms-of-service.html">
     <%@ include file="accept-terms-of-service.html" %>
+</script>
+<script type="text/ng-template" id="account.html">
+    <%@ include file="account.html" %>
 </script>
 
 </body>

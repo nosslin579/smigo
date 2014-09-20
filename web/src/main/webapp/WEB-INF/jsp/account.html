@@ -1,0 +1,65 @@
+<div class="container">
+    <div class="page-header text-center">
+        <h1>
+            {{'msg.settings' | translate}} - {{userBean.username}}
+        </h1>
+    </div>
+
+    <hr/>
+
+    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate="">
+        <div class="alert alert-success" role="alert" ng-if="updateSuccessful">
+            {{'msg.accountupdatesuccess' | translate}}
+        </div>
+        <div class="has-error">
+            <span ng-repeat="error in objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
+        </div>
+
+        <!--#### Email ####-->
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">{{'email' | translate}} </label>
+
+            <div class="col-sm-10">
+                <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="{{'email' | translate}}" ng-model="userBean.email"/>
+                <span ng-show="accountDetailsForm.email.$invalid" class="help-block">{{'msg.pleaseentervalidemail' | translate}}</span>
+            </div>
+        </div>
+
+        <!--#### Display name ####-->
+        <div class="form-group">
+            <label for="inputName3" class="col-sm-2 control-label">{{'name' | translate}}</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputName3" placeholder="{{'name' | translate}}" ng-model="userBean.displayName">
+            </div>
+        </div>
+
+        <!--#### Language ####-->
+        <div class="form-group">
+            <label for="inputLocale3" class="col-sm-2 control-label">{{'language' | translate}}</label>
+
+            <div class="col-sm-4">
+                <select id="inputLocale3" class="form-control" ng-model="userBean.locale" ng-options="k as v for (k,v) in locales">
+                </select>
+            </div>
+        </div>
+
+        <!--#### About ####-->
+        <div class="form-group">
+            <label for="inputAbout3" class="col-sm-2 control-label">{{'about' | translate}}</label>
+
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputAbout3" placeholder="{{'about' | translate}}" ng-model="userBean.about">
+            </div>
+        </div>
+
+        <!--#### Save button ####-->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">{{'save' | translate}}</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>

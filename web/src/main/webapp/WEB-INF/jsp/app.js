@@ -2,6 +2,10 @@
 angular.module('smigoModule', ['ngRoute'])
     .config(function ($routeProvider) {
         $routeProvider.
+            when('/account', {
+                templateUrl: 'account.html',
+                controller: "AccountController"
+            }).
             when('/hasta-luego', {
                 templateUrl: 'hasta-luego.html'
             }).
