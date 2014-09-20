@@ -7,6 +7,8 @@ class PasswordFormBean {
     @NewPassword
     private String newPassword;
 
+    private String verifyPassword;
+
     public String getNewPassword() {
         return newPassword;
     }
@@ -23,4 +25,11 @@ class PasswordFormBean {
         this.oldPassword = oldPassword;
     }
 
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
 }

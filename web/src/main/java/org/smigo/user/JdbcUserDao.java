@@ -104,6 +104,14 @@ public class JdbcUserDao implements UserDao {
         jdbcTemplate.update(sql, new Object[]{openIdUrl}, new int[]{Types.VARCHAR});
     }
 
+    @Override
+    public void updatePassword(int userId, String encodedPassword) {
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        Object[] args = {encodedPassword, userId};
+        int[] types = {Types.VARCHAR, Types.INTEGER};
+        jdbcTemplate.update(sql, args, types);
+    }
+
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
         @Override
         public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {

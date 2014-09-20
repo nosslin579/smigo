@@ -35,6 +35,7 @@
         <%@ include file="user/RegisterController.js" %>
         <%@ include file="user/LoginController.js" %>
         <%@ include file="user/AccountController.js" %>
+        <%@ include file="user/PasswordController.js" %>
         <%@ include file="user/UserService.js" %>
 
         <%@ include file="MainMenuController.js" %>

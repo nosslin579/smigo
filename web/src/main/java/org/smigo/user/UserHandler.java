@@ -74,10 +74,10 @@ public class UserHandler {
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
     }
 
-    public void updatePassword(String username, String newPassword) {
+    public void updatePassword(AuthenticatedUser username, String newPassword) {
         final String encodedPassword = passwordEncoder.encode(newPassword);
-        databaseResource.updatePassword(username, encodedPassword);
-        tokenRepository.removeUserTokens(username);
+        userDao.updatePassword(username.getId(), encodedPassword);
+        tokenRepository.removeUserTokens(username.getUsername());
     }
 
     public void sendResetPasswordEmail(String email) {

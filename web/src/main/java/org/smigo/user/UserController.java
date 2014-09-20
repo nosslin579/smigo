@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -44,19 +42,16 @@ public class UserController {
         binder.registerCustomEditor(Locale.class, new LocaleEditor());
     }
 
-    @RequestMapping(value = "/changepassword", method = RequestMethod.GET)
-    public String getChangePasswordForm(ModelMap modelMap) {
-        modelMap.addAttribute(new PasswordFormBean());
-        modelMap.addAttribute("requireCurrentPassword", true);
-        return "passwordform.jsp";
-    }
-
-    @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
-    public String handleChangePasswordForm(@Valid PasswordFormBean passwordFormBean, BindingResult result, Principal principal) {
-        if (result.hasErrors())
-            return "passwordform.jsp";
-        userHandler.updatePassword(principal.getName(), passwordFormBean.getNewPassword());
-        return "redirect:/user/";
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    @ResponseBody
+    public List<ObjectError> changePassword(@RequestBody @Valid PasswordFormBean passwordFormBean, BindingResult result,
+                                            @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.getAllErrors();
+        }
+        userHandler.updatePassword(user, passwordFormBean.getNewPassword());
+        return Collections.emptyList();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

@@ -25,4 +25,6 @@ public interface UserDao {
     UserBean getUser(String name);
 
     void deleteOpenId(String openIdUrl);
+
+    void updatePassword(int userId, String encodedPassword);
 }
