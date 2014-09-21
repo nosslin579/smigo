@@ -1,6 +1,6 @@
 function RequestPasswordLinkController($http, $scope) {
     $scope.resetBean = {};
-    $scope.resetBean = {email: 'user7389327855123@mailinator.com'};
+//    $scope.resetBean = {email: 'user7389327855123@mailinator.com'};
 
     $scope.submitForm = function (form, resetBean) {
         console.log('Submit ', [form, resetBean]);
@@ -12,7 +12,6 @@ function RequestPasswordLinkController($http, $scope) {
         }
 
         $scope.email = resetBean.email;
-        $scope.resetBean = {};
 
         form.$setPristine();
 

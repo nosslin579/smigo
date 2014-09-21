@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Test(groups = "selenium")
@@ -69,13 +70,22 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     private String addUser() {
-        final RegisterFormBean user = new RegisterFormBean();
+        return addUser(false).getUsername();
+    }
+
+    private UserBean addUser(boolean addEmail) {
+        final RegisterFormBean registerFormBean = new RegisterFormBean();
         final String username = "selenium" + System.currentTimeMillis();
-        user.setUsername(username);
+        registerFormBean.setUsername(username);
+        registerFormBean.setTermsOfService(true);
+        registerFormBean.setPassword(HASHPW);
+        int id = userDao.addUser(registerFormBean, HASHPW, 0);
+        UserBean user = new UserBean(username, "", username + EMAIL_PROVIDER, "", Locale.ENGLISH);
         user.setTermsOfService(true);
-        user.setPassword(HASHPW);
-        userDao.addUser(user, HASHPW, 0);
-        return username;
+        if (addEmail) {
+            userDao.updateUser(id, user);
+        }
+        return user;
     }
 
     private void login(String username, String password) throws InterruptedException {
@@ -194,31 +204,32 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertFalse(element.getText().isEmpty());
     }
 
-    @Test(enabled = false)
+    @Test
     public void resetPassword() throws InterruptedException {
-        final String username = addUser();
-        final String email = username + EMAIL_PROVIDER;
+        final UserBean user = addUser(true);
+
+        d.findElement(By.id("login-link")).click();
 
         //Reset
-        d.get("http://localhost:8080/web/reset-password");
-        d.findElement(By.name("email")).sendKeys(email);
-        d.findElement(By.tagName("form")).submit();
+        d.findElement(By.id("request-password-link")).click();
+        d.findElement(By.name("email")).clear();
+        d.findElement(By.name("email")).sendKeys(user.getEmail());
+        d.findElement(By.id("submit-request-button")).submit();
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-info")));
 
         //Check email
-        d.get("http://mailinator.com/inbox.jsp?to=" + username);
-        d.findElements(By.className("subject")).get(1).click();
-        final String link = d.switchTo().frame(1).findElement(By.className("mailview")).findElement(By.tagName("a")).getText();
-        d.get(link);
+        d.get("http://mailinator.com/inbox.jsp?to=" + user.getUsername());
+        d.findElement(By.className("message")).findElement(By.tagName("a")).click();
+        d.switchTo().frame(1).findElement(By.className("mailview")).findElement(By.tagName("a")).click();
 
         //Set new password
-        d.findElement(By.name("newPassword")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.id("passwordagain")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.tagName("form")).submit();
+        d.switchTo().window((String) d.getWindowHandles().toArray()[1]);
+        d.findElement(By.name("password")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.tagName("button")).click();
 
-        //Logout and login
-        d.findElement(By.id("logout-link")).click();
-        login(username, NEW_PASSWORD);
-        Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
+        //login
+        login(user.getUsername(), NEW_PASSWORD);
+        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
     @Test
