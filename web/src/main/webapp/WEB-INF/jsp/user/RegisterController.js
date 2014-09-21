@@ -17,8 +17,8 @@ function RegisterController($scope, UserService) {
      };
      */
 
-    $scope.submitLoginOrRegisterForm = function (form) {
-        UserService.register(form, $scope.formModel);
+    $scope.submitLoginOrRegisterForm = function (form, formModel) {
+        UserService.register(form, formModel);
     }
 }
 

@@ -31,7 +31,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         response.setStatus(HttpStatus.FORBIDDEN.value());
         List<ObjectError> errors = new ArrayList<ObjectError>();
         if (exception instanceof BadCredentialsException) {
-            errors.add(new ObjectError("username", "msg.badcredentials"));
+            errors.add(new ObjectError("bad-credentials", "msg.badcredentials"));
         } else {
             errors.add(new ObjectError("username", "msg.unknownerror"));
         }

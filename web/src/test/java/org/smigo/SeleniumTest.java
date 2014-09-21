@@ -185,6 +185,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
+    @Test
+    public void loginWrongPassword() throws InterruptedException {
+        final String username = addUser();
+        login(username, "wrong password");
+        WebElement element = d.findElement(By.id("bad-credentials"));
+        Assert.assertTrue(element.isDisplayed());
+        Assert.assertFalse(element.getText().isEmpty());
+    }
+
     @Test(enabled = false)
     public void resetPassword() throws InterruptedException {
         final String username = addUser();

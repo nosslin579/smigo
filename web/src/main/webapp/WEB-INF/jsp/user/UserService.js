@@ -36,12 +36,6 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
         form.objectErrors = [];
         var deferred = $q.defer();
         if (form.$invalid) {
-            //set all values to trigger dirty, so validation messages become visible
-            angular.forEach(form, function (value) {
-                if (value.$setViewValue) {
-                    value.$setViewValue(value.$viewValue);
-                }
-            });
 //            console.log('Form is invalid', form);
             deferred.reject('Form is invalid');
         } else {

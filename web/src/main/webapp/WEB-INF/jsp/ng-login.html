@@ -42,9 +42,9 @@
         <div class="col-sm-6 col-md-4 col-md-offset-2">
             <h3>{{'msg.usesmigoaccount' | translate}}</h3>
 
-            <form name="loginOrRegisterform" role="form" novalidate="">
+            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)">
                 <div class="has-error">
-                    <span ng-repeat="error in loginOrRegisterform.objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
+                    <span ng-repeat="error in loginOrRegisterform.objectErrors" id="{{error.objectName}}" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && loginOrRegisterform.username.$dirty}">
@@ -91,7 +91,7 @@
                     <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.termsOfService.$dirty" class="help-block">{{'msg.required' | translate}}</span>
                 </div>
 
-                <button type="submit" class="btn btn-default" id="submit-login-register-form" ng-click="submitLoginOrRegisterForm(loginOrRegisterform)">{{viewModel.pageMessageKey | translate}}</button>
+                <button type="submit" class="btn btn-default" id="submit-login-register-form">{{viewModel.pageMessageKey | translate}}</button>
 
             </form>
 
