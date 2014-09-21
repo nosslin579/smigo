@@ -14,7 +14,7 @@ public interface UserDao {
 
     UserBean getUserById(int id);
 
-    UserBean getUserByEmail(String email);
+    List<UserDetails> getUserByEmail(String email);
 
     List<UserDetails> getUserDetails(OpenIDAuthenticationToken token);
 

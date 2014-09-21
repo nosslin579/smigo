@@ -1,8 +1,9 @@
 package org.smigo.user;
 
 import kga.PlantData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smigo.config.Props;
-import org.smigo.persitance.DatabaseResource;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -11,25 +12,26 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserHandler {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private HttpServletRequest request;
     @Autowired
     private UserSession userSession;
-    @Autowired
-    private DatabaseResource databaseResource;
     @Autowired
     protected AuthenticationManager authenticationManager;
     @Autowired
@@ -45,7 +47,7 @@ public class UserHandler {
     @Autowired
     private Props props;
 
-    private final Map<String, String> resetMap = new ConcurrentHashMap<String, String>();
+    private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
     public void createUser(RegisterFormBean user, String identityUrl) {
         final int userId = createUser(user);
@@ -81,35 +83,25 @@ public class UserHandler {
     }
 
     public void sendResetPasswordEmail(String email) {
+        log.info("Sending reset email to: " + email);
+        log.info("Size of resetKeyMap:" + resetKeyMap.size());
         final String id = UUID.randomUUID().toString();
-        resetMap.put(id, email);
 
-        final TimerTask removeTask = new TimerTask() {
-            @Override
-            public void run() {
-                resetMap.remove(id);
+        for (String s : resetKeyMap.keySet()) {
+            ResetKeyItem resetKeyItem = resetKeyMap.get(s);
+            if (resetKeyItem != null && email.equals(resetKeyItem.getEmail()) && resetKeyItem.isValid()) {
+                log.warn("Multiple occurrence of email in resetPasswordMap" + resetKeyItem);
+                resetKeyItem.invalidate();
             }
-        };
+        }
 
-        new Timer().schedule(removeTask, TimeUnit.MINUTES.toMillis(15));
+        resetKeyMap.put(id, new ResetKeyItem(id, email));
 
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject("Smigo reset password");
         simpleMailMessage.setText("Click link to reset password. " + props.getResetUrl() + id);
         javaMailSender.send(simpleMailMessage);
-    }
-
-    public void authenticateUser(String loginKey) {
-        final String email = resetMap.get(loginKey);
-        resetMap.remove(loginKey);
-        final UserBean user = userDao.getUserByEmail(email);
-        final String rawTempPassword = UUID.randomUUID().toString();
-        final String encodedTempPassword = passwordEncoder.encode(rawTempPassword);
-        //TODO: Replace ugly hack for authenticating user with proper implementation.
-        databaseResource.updatePassword(user.getUsername(), encodedTempPassword);
-        authenticateUser(user.getUsername(), rawTempPassword);
-        databaseResource.updatePassword(user.getUsername(), "");
     }
 
     public void acceptTermsOfService(AuthenticatedUser principal) {
@@ -135,5 +127,33 @@ public class UserHandler {
 
     public void updateUser(UserBean userBean, AuthenticatedUser user) {
         userDao.updateUser(user.getId(), userBean);
+    }
+
+    public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
+        String resetKey = resetFormBean.getResetKey();
+        ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
+
+        if (resetKeyItem == null) {
+            log.warn("No valid resetPasswordKey found" + resetFormBean);
+            return false;
+        }
+
+        if (!resetKeyItem.isValid()) {
+            log.info("Reset key has expired." + resetFormBean);
+            return false;
+        }
+
+        String email = resetKeyItem.getEmail();
+        List<UserDetails> users = userDao.getUserByEmail(email);
+        if (users.isEmpty()) {
+            log.warn("No such email:" + email);
+            return false;
+        }
+
+        AuthenticatedUser user = (AuthenticatedUser) users.get(0);
+        String password = resetFormBean.getPassword();
+        updatePassword(user, password);
+        resetKeyItem.invalidate();
+        return true;
     }
 }

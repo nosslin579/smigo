@@ -1,10 +1,7 @@
 package org.smigo.user;
 
-import org.hibernate.validator.constraints.Email;
+class RequestPasswordLinkFormBean {
 
-class ResetFormBean {
-
-    @Email
     private String email;
 
     public String getEmail() {

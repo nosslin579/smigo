@@ -37,6 +37,7 @@
         <%@ include file="user/AccountController.js" %>
         <%@ include file="user/PasswordController.js" %>
         <%@ include file="user/UserService.js" %>
+        <%@ include file="user/RequestPasswordLinkController.js" %>
 
         <%@ include file="MainMenuController.js" %>
 
@@ -61,6 +62,9 @@
 </script>
 <script type="text/ng-template" id="account.html">
     <%@ include file="account.html" %>
+</script>
+<script type="text/ng-template" id="request-password-link.html">
+    <%@ include file="request-password-link.html" %>
 </script>
 
 </body>

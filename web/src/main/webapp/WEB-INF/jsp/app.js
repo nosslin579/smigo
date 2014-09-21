@@ -2,6 +2,9 @@
 angular.module('smigoModule', ['ngRoute'])
     .config(function ($routeProvider) {
         $routeProvider.
+            when('/request-password-link', {
+                templateUrl: 'request-password-link.html'
+            }).
             when('/account', {
                 templateUrl: 'account.html',
                 controller: "AccountController"

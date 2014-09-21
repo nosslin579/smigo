@@ -82,22 +82,31 @@ public class UserController {
         return Collections.emptyList();
     }
 
-    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
-    public String handleReset(@Valid ResetFormBean resetFormBean, BindingResult result) {
-        if (result.hasErrors()) {
-            return "resetpasswordform.jsp";
-        }
-        userHandler.sendResetPasswordEmail(resetFormBean.getEmail());
+    @RequestMapping(value = "request-password-link", method = RequestMethod.POST)
+    @ResponseBody
+    public void requestPasswordLink(@RequestBody RequestPasswordLinkFormBean bean) {
+        userHandler.sendResetPasswordEmail(bean.getEmail());
+    }
+
+    @RequestMapping(value = "/login-reset/{resetKey}", method = RequestMethod.GET)
+    public String getResetForm(@PathVariable String resetKey, Model model) {
+        model.addAttribute(new ResetKeyPasswordFormBean(resetKey));
         return "resetpasswordform.jsp";
     }
 
-    @RequestMapping(value = "/login-reset/{loginKey}", method = RequestMethod.GET)
-    public String handleReset(@PathVariable String loginKey, Model model) {
-        userHandler.authenticateUser(loginKey);
-        model.addAttribute(new PasswordFormBean());
-        model.addAttribute("requireCurrentPassword", false);
-        return "passwordform.jsp";
+    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+    public String setPassword(@Valid ResetKeyPasswordFormBean resetFormBean, BindingResult result) {
+        if (result.hasErrors()) {
+            return "resetpasswordform.jsp";
+        }
+        boolean success = userHandler.setPassword(resetFormBean);
+        if (!success) {
+            result.addError(new ObjectError("resetPassword", "Update password failed"));
+            return "resetpasswordform.jsp";
+        }
+        return "redirect:/#login";
     }
+
 
     @RequestMapping(value = "locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

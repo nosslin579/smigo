@@ -15,12 +15,12 @@
             </div>
 
             <form action="login-openid" id="googleOpenId" method="post">
-            <input type="hidden" name="openid_identifier" value="https://www.google.com/accounts/o8/id"/>
+                <input type="hidden" name="openid_identifier" value="https://www.google.com/accounts/o8/id"/>
                 <input type="hidden" name="remember-me" value="true">
             </form>
 
             <form action="login-openid" id="yahooOpenId" method="post">
-            <input type="hidden" name="openid_identifier" value="https://me.yahoo.com"/>
+                <input type="hidden" name="openid_identifier" value="https://me.yahoo.com"/>
                 <input type="hidden" name="remember-me" value="true">
             </form>
 
@@ -94,6 +94,10 @@
                 <button type="submit" class="btn btn-default" id="submit-login-register-form">{{viewModel.pageMessageKey | translate}}</button>
 
             </form>
+
+            <div ng-if="viewModel.login">
+                <a class="pull-right" href="#request-password-link">{{'msg.forgotpassword' | translate}}</a>
+            </div>
 
         </div>
     </div>
