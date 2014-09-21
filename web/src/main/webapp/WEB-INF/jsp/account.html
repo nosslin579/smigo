@@ -79,7 +79,7 @@
             <label for="old-password-input" class="col-sm-2 control-label">{{'account.currentpassword' | translate}}</label>
 
             <div class="col-sm-10">
-                <input type="text" name="oldPassword" class="form-control" id="old-password-input" placeholder="{{'account.currentpassword' | translate}}"
+                <input type="password" name="oldPassword" class="form-control" id="old-password-input" placeholder="{{'account.currentpassword' | translate}}"
                        ng-model="passwordBean.oldPassword" ng-required="true">
 
                 <div ng-if="passwordForm.oldPassword.$dirty">
@@ -93,7 +93,7 @@
             <label for="new-password-input" class="col-sm-2 control-label">{{'password' | translate}}</label>
 
             <div class="col-sm-10">
-                <input type="text" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'password' | translate}}"
+                <input type="password" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'password' | translate}}"
                        ng-model="passwordBean.newPassword" ng-required="true" ng-minlength="6">
 
                 <div ng-if="passwordForm.newPassword.$dirty">
@@ -107,8 +107,8 @@
             <label for="verify-password-input" class="col-sm-2 control-label">{{'passwordagain' | translate}}</label>
 
             <div class="col-sm-10">
-                <input type="text" name="verifyPassword" class="form-control" id="verify-password-input" placeholder="{{'passwordagain' | translate}}"
-                       ng-model="passwordBean.verifyPassword" equals="{{passwordBean.newPassword}}">
+                <input type="password" name="verifyPassword" class="form-control" id="verify-password-input" placeholder="{{'passwordagain' | translate}}"
+                       ng-model="verifyPassword" equals="{{passwordBean.newPassword}}">
 
                 <div ng-if="passwordForm.verifyPassword.$dirty">
                     <span ng-show="passwordForm.verifyPassword.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>

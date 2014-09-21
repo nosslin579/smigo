@@ -164,28 +164,25 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test(enabled = false)
+    @Test
     public void changePassword() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);
 
         //go to account details
-        d.findElement(By.id("account-details-link")).click();
+        d.findElement(By.id("account-link")).click();
 
         //change password
-        d.findElement(By.id("edit-password-link")).click();
         d.findElement(By.name("oldPassword")).sendKeys(PASSWORD);
         d.findElement(By.name("newPassword")).sendKeys(NEW_PASSWORD);
-        d.findElement(By.id("passwordagain")).sendKeys(NEW_PASSWORD);
+        d.findElement(By.name("verifyPassword")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-password-button")).click();
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
         d.findElement(By.id("logout-link")).click();
-
 
         //login again
         login(username, NEW_PASSWORD);
-        log.info("Url after login:" + d.getCurrentUrl());
-        Assert.assertEquals(d.getCurrentUrl(), "http://localhost:8080/web/garden");
-        Assert.assertEquals(d.findElement(By.id("account-details-link")).getText(), username);
+        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
     @Test(enabled = false)

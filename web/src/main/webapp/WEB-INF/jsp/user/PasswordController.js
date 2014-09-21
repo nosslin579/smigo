@@ -12,6 +12,8 @@ function PasswordController($scope, $http) {
         }
 
         $scope.passwordBean = {};
+        $scope.verifyPassword = '';
+
         form.$setPristine();
 
         $http.post('change-password', passwordBean)
