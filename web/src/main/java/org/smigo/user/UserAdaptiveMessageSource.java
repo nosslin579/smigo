@@ -8,8 +8,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Properties;
+import java.util.Map;
 
 public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSource implements MessageSource {
 
@@ -27,16 +28,20 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         setDefaultEncoding("UTF-8");
     }
 
-    public Properties getAllMessages(Locale locale) {
+    public Map<Object, Object> getAllMessages(Locale locale) {
+        long start = System.currentTimeMillis();
         clearCacheIncludingAncestors();
         PropertiesHolder propertiesHolder = getMergedProperties(locale);
-        Properties properties = propertiesHolder.getProperties();
+        Map properties = propertiesHolder.getProperties();
+        Map<Object, Object> ret = new HashMap<Object, Object>(properties);
+
         Collection<SpeciesView> species = speciesHandler.getSpeciesMap().values();
         for (SpeciesView s : species) {
             if (s.getVernacularName() != null) {
-                properties.setProperty(s.getMessageKey(), s.getVernacularName());
+                ret.put(s.getMessageKey(), s.getVernacularName());
             }
         }
-        return properties;
+        log.debug("Get all messages took " + (System.currentTimeMillis() - start) + "ms");
+        return ret;
     }
 }

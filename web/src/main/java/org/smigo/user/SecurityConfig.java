@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         rememberMe.key("MjYvVCDYOplXAWq");
         rememberMe.tokenValiditySeconds(Integer.MAX_VALUE);
         rememberMe.tokenRepository(persistentTokenRepository());
+        rememberMe.authenticationSuccessHandler(customAuthenticationSuccessHandler);
 
         LogoutConfigurer<HttpSecurity> logout = http.logout();
         logout.logoutSuccessHandler(customLogoutSuccessHandler);

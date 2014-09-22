@@ -32,6 +32,8 @@ public class UserController {
     private final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserHandler userHandler;
+    @Autowired
+    private UserAdaptiveMessageSource messageSource;
 
     public UserController() {
         log.debug("Creating new UserController");
@@ -112,6 +114,12 @@ public class UserController {
     @ResponseBody
     public java.util.Map<String, String> getLocales() {
         return Language.getTransalationMap();
+    }
+
+    @RequestMapping(value = "rest/translation/{locale}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public java.util.Map<Object, Object> getTranslation(@PathVariable Locale locale) {
+        return messageSource.getAllMessages(locale);
     }
 
 

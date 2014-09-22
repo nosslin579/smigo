@@ -5,6 +5,10 @@ function translateFilter($rootScope) {
         msg[messageKey] = value;
     });
 
+    $rootScope.$on('newLanguageAvailable', function (event, messages) {
+        msg = messages;
+    });
+
     console.log('TranslateFilter', [msg]);
     return function (messageObject, param) {
         if (!messageObject) {

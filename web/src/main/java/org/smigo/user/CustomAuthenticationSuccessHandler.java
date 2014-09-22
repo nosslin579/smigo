@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -35,7 +36,7 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
         UserBean user = userDao.getUser(principal.getUsername());
         userSession.setUser(user);
 
-        if (authentication instanceof OpenIDAuthenticationToken) {
+        if (authentication instanceof OpenIDAuthenticationToken || authentication instanceof RememberMeAuthenticationToken) {
             response.sendRedirect("");
         } else {
             String userAsJson = objectMapper.writeValueAsString(user);

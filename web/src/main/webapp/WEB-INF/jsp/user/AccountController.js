@@ -17,6 +17,12 @@ function AccountController($scope, UserService, $http) {
         }
         UserService.updateUser(userBean)
             .then(function () {
+                return $http.get('rest/translation/' + userBean.locale)
+                    .then(function (response) {
+                        $scope.$emit('newLanguageAvailable', response.data);
+                    });
+            })
+            .then(function () {
                 $scope.updateSuccessful = true;
             })
             .catch(function (response) {
