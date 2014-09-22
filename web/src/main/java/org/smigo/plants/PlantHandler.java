@@ -4,7 +4,6 @@ import kga.Garden;
 import kga.PlantData;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,6 @@ public class PlantHandler {
     private UserSession userSession;
     @Autowired
     private PlantDao plantDao;
-    @Autowired
-    private UserHandler userHandler;
     @Autowired
     private SpeciesHandler speciesHandler;
 
