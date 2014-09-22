@@ -1,7 +1,6 @@
 package org.smigo.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
         } else {
             String userAsJson = objectMapper.writeValueAsString(user);
             response.getWriter().append(userAsJson);
-            response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
+            response.setHeader("Content-Type", "application/json;charset=UTF-8");
             response.setStatus(HttpStatus.OK.value());
         }
     }
