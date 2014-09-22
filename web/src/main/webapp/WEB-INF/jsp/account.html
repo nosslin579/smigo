@@ -97,6 +97,7 @@
                        ng-model="passwordBean.newPassword" ng-required="true" ng-minlength="6">
 
                 <div ng-if="passwordForm.newPassword.$dirty">
+                    <span ng-show="passwordForm.newPassword.$error.minlength" class="help-block">{{'msg.minlength' | translate:6}}</span>
                     <span ng-show="passwordForm.newPassword.$error.required" class="help-block">{{'msg.required' | translate}}</span>
                 </div>
             </div>
