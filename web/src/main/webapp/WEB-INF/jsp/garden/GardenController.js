@@ -31,7 +31,6 @@ function GardenController($scope, $filter, PlantService, SpeciesService, UserSer
     $scope.onVisibleRemainderClick = function (clickEvent, square) {
         console.log('VisibleRemainder clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies]);
         PlantService.addSquare(PlantService.getState().selectedYear, square.location.x, square.location.y, SpeciesService.getState().selectedSpecies);
-        PlantService.save();
         clickEvent.stopPropagation();
     };
     $scope.onGridClick = function (clickEvent) {
