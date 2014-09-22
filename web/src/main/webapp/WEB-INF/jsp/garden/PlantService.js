@@ -1,4 +1,4 @@
-function PlantService($http, $window, $timeout, $rootScope) {
+function PlantService($http, $window, $timeout, $rootScope, $q) {
     var state = {},
         yearSquareMap = {},
         unsavedCounter = 0,
@@ -152,6 +152,13 @@ function PlantService($http, $window, $timeout, $rootScope) {
                 });
             });
         });
+
+        if (!update.addList.length && !update.removeList.length) {
+            console.log('No plants added nor removed, skipping send to server!');
+            var defer = $q.defer();
+            defer.resolve();
+            return defer.promise;
+        }
         console.log('Sending to server', update);
         //start auto save timer
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);

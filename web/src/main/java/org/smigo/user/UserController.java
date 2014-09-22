@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +31,8 @@ import java.util.Locale;
 public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
+    @Autowired
+    private UserSession userSession;
     @Autowired
     private UserHandler userHandler;
     @Autowired
@@ -54,6 +57,12 @@ public class UserController {
         }
         userHandler.updatePassword(user, passwordFormBean.getNewPassword());
         return Collections.emptyList();
+    }
+
+    @RequestMapping(value = "rest/user", method = RequestMethod.GET)
+    @ResponseBody
+    public UserBean register(@AuthenticationPrincipal AuthenticatedUser user) {
+        return userHandler.getUser(user);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -122,5 +131,17 @@ public class UserController {
         return messageSource.getAllMessages(locale);
     }
 
+
+    @RequestMapping(value = "ping", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Object ping(final Principal principal) {
+        log.debug("Ping" + principal);
+        return principal == null ? null : new Principal() {
+            @Override
+            public String getName() {
+                return principal.getName();
+            }
+        };
+    }
 
 }

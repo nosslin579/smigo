@@ -1,9 +1,11 @@
-function UserService($rootScope, $q, $location, Http, PlantService) {
+function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantService) {
 
     var state = {
         currentUser: initData.user,
-        locales: initData.locales
+        locales: initData.locales,
+        connection: true
     };
+    $timeout(pingServer, 120000, false);
 
     console.log('UserService', state);
 
@@ -23,6 +25,32 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
     $rootScope.$on('current-user-changed', function (event, user) {
         state.currentUser = user;
     });
+
+    function reloadCurrentUser() {
+        return $http.get('rest/user')
+            .then(function (resonse) {
+                var currentUser = resonse.data ? resonse.data : null;
+                $rootScope.$broadcast('current-user-changed', currentUser);
+            });
+    }
+
+    function pingServer() {
+        $http.get('ping')
+            .then(function (response) {
+                console.log("Ping success", response);
+                var username = state.currentUser ? state.currentUser.username : undefined;
+                if (username !== response.data.name) {
+                    console.log('Username mismatch detected', [state, response]);
+                    reloadCurrentUser();
+                }
+                state.connection = true;
+            })
+            .catch(function (response) {
+                console.warn("Ping fail", response);
+                state.connection = false;
+            });
+        $timeout(pingServer, 120000);
+    }
 
     function updateUser(userBean) {
         return Http.put('rest/user', userBean)
@@ -53,8 +81,8 @@ function UserService($rootScope, $q, $location, Http, PlantService) {
             })
             .then(function (response) {
                 console.log('Login success, response:', response);
-                $rootScope.$broadcast('current-user-changed', response.data);
             })
+            .then(reloadCurrentUser)
             .then(function () {
                 $location.path('/garden');
             }).catch(function (errorReason) {
