@@ -48,6 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+/*
+        HttpSessionSecurityContextRepository repository = new HttpSessionSecurityContextRepository();
+        repository.setDisableUrlRewriting(false);
+        http.securityContext().securityContextRepository(repository);
+*/
         http.authorizeRequests()
                 //Garden
                 .antMatchers("/savegarden/**").permitAll()
