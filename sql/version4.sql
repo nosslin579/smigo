@@ -82,3 +82,7 @@ UPDATE species
   JOIN usersettingforspecies ON species.species_id = usersettingforspecies.species
 SET species.iconfilename = usersettingforspecies.iconfilename
 WHERE species.creator = usersettingforspecies.user;
+
+
+ALTER TABLE visitlog
+ADD COLUMN httpstatus INT;

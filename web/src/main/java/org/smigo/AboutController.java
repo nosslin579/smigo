@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -42,18 +41,19 @@ public class AboutController {
     }
 
 
-    @RequestMapping(value = "/hastalavista", method = RequestMethod.GET)
-    public ModelAndView hastalavista() {
-        return new ModelAndView("message.jsp", "translatedmessage", "hastalavista");
-    }
-
     @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String error(HttpServletRequest request) {
+    public String error(Model model, HttpServletRequest request) {
         final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-        log.error("Error during request. (Outside Spring MVC)", exception);
-        final String note = "Exception:" + exception;
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
+        final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
+        final Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        final String note = (String) request.getAttribute(VisitLogger.NOTE_ATTRIBUTE);
+        log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode, exception);
+        String exMsg = exception == null ? "" : exception.getClass().getName() + ":" + exception.getMessage();
+        String uriMsg = uri == null ? "" : "Uri:" + uri;
+        String noteMsg = note == null ? "" : note;
+        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteMsg + "," + exMsg + "," + uriMsg);
+        model.addAttribute("statusCode", statusCode);
         return "error.jsp";
-    }
 
+    }
 }

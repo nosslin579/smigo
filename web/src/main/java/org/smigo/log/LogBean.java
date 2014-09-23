@@ -1,6 +1,7 @@
 package org.smigo.log;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.Locale;
 
@@ -16,9 +17,10 @@ class LogBean {
     private final String ip;
     private final String note;
     private final String origin;
+    private final int httpStatus;
 
     public LogBean(String remoteUser, String url, String locales, String useragent,
-                   String referer, String sessionid, String method, String ip, String note, String origin) {
+                   String referer, String sessionid, String method, String ip, String note, String origin, int status) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
@@ -29,9 +31,10 @@ class LogBean {
         this.ip = ip;
         this.note = note;
         this.origin = origin;
+        this.httpStatus = status;
     }
 
-    public static LogBean create(HttpServletRequest req) {
+    public static LogBean create(HttpServletRequest req, HttpServletResponse response) {
         StringBuilder locales = new StringBuilder();
         for (Enumeration<Locale> l = req.getLocales(); l.hasMoreElements(); ) {
             locales.append(l.nextElement().toString()).append(" ");
@@ -46,7 +49,8 @@ class LogBean {
                 req.getMethod(),
                 truncate(req.getHeader("x-forwarded-for")),
                 truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)),
-                truncate(req.getHeader("origin")));
+                truncate(req.getHeader("origin")),
+                response.getStatus());
 
     }
 
@@ -111,5 +115,9 @@ class LogBean {
 
     public String getOrigin() {
         return origin;
+    }
+
+    public int getHttpStatus() {
+        return httpStatus;
     }
 }

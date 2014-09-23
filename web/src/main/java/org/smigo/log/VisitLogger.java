@@ -26,7 +26,7 @@ public class VisitLogger extends HandlerInterceptorAdapter {
         if (requestedURL.endsWith(".js") || requestedURL.endsWith(".png") || requestedURL.endsWith(".css") || requestedURL.endsWith(".html")) {
             log.debug("Not logging " + requestedURL);
         } else if (request.getDispatcherType() != DispatcherType.FORWARD) {
-            LogBean logBean = LogBean.create(request);
+            LogBean logBean = LogBean.create(request, response);
 
             StringBuilder s = new StringBuilder("Logging request>");
             s.append(logBean.toString());

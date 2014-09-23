@@ -65,7 +65,6 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
         final SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
         simpleMappingExceptionResolver.setDefaultErrorView("error.jsp");
-        simpleMappingExceptionResolver.setDefaultStatusCode(500);
         return simpleMappingExceptionResolver;
     }
 
