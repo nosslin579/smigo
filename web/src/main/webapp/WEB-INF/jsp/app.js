@@ -6,8 +6,7 @@ angular.module('smigoModule', ['ngRoute'])
                 templateUrl: 'request-password-link.html'
             }).
             when('/account', {
-                templateUrl: 'account.html',
-                controller: "AccountController"
+                templateUrl: 'account.html'
             }).
             when('/hasta-luego', {
                 templateUrl: 'hasta-luego.html'

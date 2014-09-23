@@ -1,14 +1,15 @@
 <div class="container">
     <div class="page-header text-center">
         <h1>
-            {{'msg.settings' | translate}} - {{userBean.username}}
+            {{'msg.settings' | translate}}
         </h1>
     </div>
 
     <hr/>
 
-    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate="">
-        <div class="alert alert-success" role="alert" ng-if="updateSuccessful">
+    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate=""
+          ng-controller="AccountController">
+    <div class="alert alert-success" role="alert" ng-if="updateSuccessful">
             {{'msg.accountupdatesuccess' | translate}}
         </div>
         <div class="has-error">
