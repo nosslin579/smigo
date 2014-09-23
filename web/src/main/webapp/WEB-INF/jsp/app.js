@@ -1,6 +1,6 @@
 "use strict";
 angular.module('smigoModule', ['ngRoute'])
-    .config(function ($routeProvider) {
+    .config(function ($routeProvider, $provide) {
         $routeProvider.
             when('/request-password-link', {
                 templateUrl: 'request-password-link.html'
@@ -32,6 +32,18 @@ angular.module('smigoModule', ['ngRoute'])
             }).
             otherwise({redirectTo: '/garden'});
 
+        $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
+            return function (exception, cause) {
+                $delegate(exception, cause);
+                var referenceError = {
+                    message: exception.message,
+                    stack: exception.stack,
+                    cause: cause
+                };
+                var $http = $injector.get("$http");
+                $http.post('rest/log', referenceError);
+            };
+        }]);
     })
     .run(function ($rootScope) {
         console.log("App run");
