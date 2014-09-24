@@ -42,7 +42,6 @@
 
         <%@ include file="EqualsDirective.js" %>
         <%@ include file="TranslateFilter.js" %>
-        <%@ include file="Http.js" %>
     })();
 </script>
 

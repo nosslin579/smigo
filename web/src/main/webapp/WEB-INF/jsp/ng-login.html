@@ -75,7 +75,7 @@
                 <div class="form-group" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.passwordagain.$invalid && loginOrRegisterform.passwordagain.$dirty}">
                     <label for="password-again">{{'passwordagain' | translate}}</label>
                     <input type="password" class="form-control" id="password-again" name="passwordagain" placeholder="{{'passwordagain' | translate}}"
-                           ng-model="formModel.passwordAgain" equals="{{formModel.password}}"/>
+                           ng-model="passwordAgain" equals="{{formModel.password}}"/>
 
                     <div ng-if="loginOrRegisterform.passwordagain.$dirty">
                         <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>

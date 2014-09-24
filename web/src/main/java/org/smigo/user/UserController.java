@@ -32,8 +32,6 @@ public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
-    private UserSession userSession;
-    @Autowired
     private UserHandler userHandler;
     @Autowired
     private UserAdaptiveMessageSource messageSource;
@@ -61,13 +59,13 @@ public class UserController {
 
     @RequestMapping(value = "rest/user", method = RequestMethod.GET)
     @ResponseBody
-    public UserBean register(@AuthenticationPrincipal AuthenticatedUser user) {
+    public UserBean getUser(@AuthenticationPrincipal AuthenticatedUser user) {
         return userHandler.getUser(user);
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "rest/user", method = RequestMethod.POST)
     @ResponseBody
-    public List<ObjectError> register(@Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
+    public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));

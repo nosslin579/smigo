@@ -26,7 +26,7 @@ public class RegisterFormBean {
     public String toString() {
         return "RegisterFormBean{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='*******'" +
                 ", termsOfService=" + termsOfService +
                 '}';
     }

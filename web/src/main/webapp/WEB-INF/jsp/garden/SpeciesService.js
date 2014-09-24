@@ -1,4 +1,4 @@
-function SpeciesService($http, $rootScope, translateFilter, Http, $log) {
+function SpeciesService($http, $rootScope, translateFilter, $log) {
     var state = {
         speciesArray: [],
         selectedSpecies: new Species('not set'),
@@ -49,12 +49,12 @@ function SpeciesService($http, $rootScope, translateFilter, Http, $log) {
             state.selectedSpecies = species;
             state.speciesArray.push(species);
             $log.log('Species added:' + vernacularName, state);
-            return Http.post('rest/species', species)
+            return $http.post('rest/species', species)
                 .then(function (response) {
                     $log.log('Response from post species', response);
                     species.id = response.data;
                 }).then(function () {
-                    return Http.get('rest/species/' + species.id);
+                    return $http.get('rest/species/' + species.id);
                 }).then(function (response) {
                     angular.extend(species, response.data);
                     $rootScope.$broadcast('newMessagesAvailable', species.messageKey, vernacularName);

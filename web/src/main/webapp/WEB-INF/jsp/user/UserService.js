@@ -1,4 +1,4 @@
-function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, PlantService) {
+function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantService) {
 
     var state = {
         currentUser: initData.user,
@@ -53,7 +53,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, Pla
     }
 
     function updateUser(userBean) {
-        return Http.put('rest/user', userBean)
+        return $http.put('rest/user', userBean)
             .then(function (response) {
                 $log.log('Update user success', response);
                 state.currentUser = userBean;
@@ -77,7 +77,12 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, Pla
         formModel['remember-me'] = true;
         return validateForm(form)
             .then(function () {
-                return Http.post('login', formModel);
+                return $http({
+                    method: 'POST',
+                    url: 'login',
+                    data: $.param(formModel),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
             })
             .then(function (response) {
                 $log.log('Login success, response:', response);
@@ -100,7 +105,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, Pla
                 .then(PlantService.save)
                 .then(function () {
                     $log.log('Registering');
-                    return Http.post('register', formModel);
+                    return $http.post('rest/user', formModel);
                 })
                 .then(function () {
                     return login(form, formModel);
@@ -119,7 +124,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, Pla
         logout: function () {
             PlantService.save()
                 .then(function () {
-                    return Http.get('logout');
+                    return $http.get('logout');
                 })
                 .then(function () {
                     $rootScope.$broadcast('current-user-changed', null);
