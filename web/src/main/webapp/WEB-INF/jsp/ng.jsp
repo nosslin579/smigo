@@ -29,7 +29,6 @@
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/SpeciesService.js" %>
         <%@ include file="garden/PlantService.js" %>
-        <%@ include file="garden/RememberScrollDirective.js" %>
 
         <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>
