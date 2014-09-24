@@ -53,27 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         repository.setDisableUrlRewriting(false);
         http.securityContext().securityContextRepository(repository);
 */
-        http.authorizeRequests()
-                //Garden
-                .antMatchers("/savegarden/**").permitAll()
-                .antMatchers("/update-garden").permitAll()
-                .antMatchers("/garden/**").permitAll()
-                .antMatchers("/addyear/**").authenticated()
-                .antMatchers("/deleteyear/**").authenticated()
-                //Species
-                .antMatchers("/addspecies/**").authenticated()
-                .antMatchers("/update-species/**").authenticated()
-                .antMatchers("/listspecies/**").permitAll()
-                .antMatchers("/species/**").permitAll()
-                .antMatchers("/visible/**").authenticated()
-                .antMatchers("/deletespecies/**").authenticated()
-                .antMatchers("/addrule/**").authenticated()
-                //User
-                .antMatchers("/signup/**").permitAll()
-                .antMatchers("/changepassword/**").fullyAuthenticated()
-                .antMatchers("/edituser/**").authenticated()
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/login/**").permitAll();
+        http.authorizeRequests().anyRequest().permitAll();
 
         FormLoginConfigurer<HttpSecurity> formLogin = http.formLogin();
         formLogin.loginPage("/login");
