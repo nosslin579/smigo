@@ -1,11 +1,10 @@
-function GardenController($scope, $filter, PlantService, SpeciesService, UserService, $log) {
+function GardenController($modal, $scope, $filter, PlantService, SpeciesService, UserService, $log) {
 
     $scope.plantsState = PlantService.getState();
     $scope.speciesState = SpeciesService.getState();
     $scope.userState = UserService.getState();
 
     $scope.selectYear = PlantService.selectYear;
-    $scope.addYear = PlantService.addYear;
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
 
@@ -72,6 +71,15 @@ function GardenController($scope, $filter, PlantService, SpeciesService, UserSer
             }
         }
         return true;
+    };
+
+
+    $scope.openAddYearModal = function () {
+        $modal.open({
+            templateUrl: 'add-year-modal.html',
+            controller: AddYearModalController,
+            size: 'sm'
+        });
     };
 }
 

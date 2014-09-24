@@ -27,6 +27,7 @@
 
         <%@ include file="garden/SpeciesFilter.js" %>
         <%@ include file="garden/GardenController.js" %>
+        <%@ include file="garden/AddYearModalController.js" %>
         <%@ include file="garden/SpeciesService.js" %>
         <%@ include file="garden/PlantService.js" %>
 
@@ -63,6 +64,9 @@
 </script>
 <script type="text/ng-template" id="request-password-link.html">
     <%@ include file="request-password-link.html" %>
+</script>
+<script type="text/ng-template" id="add-year-modal.html">
+    <%@ include file="add-year-modal.html" %>
 </script>
 
 </body>

@@ -1,5 +1,5 @@
 "use strict";
-angular.module('smigoModule', ['ngRoute'])
+angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
     .config(function ($routeProvider, $provide) {
         $routeProvider.
             when('/request-password-link', {

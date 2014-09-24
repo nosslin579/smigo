@@ -49,7 +49,7 @@
                             </a>
                         </li>
                         <li>
-                            <a id="add-year-link" href="" data-toggle="modal" data-target="#add-year-modal">
+                            <a id="add-year-link" href="" ng-click="openAddYearModal()">
                                 <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
                             </a>
                         </li>
@@ -76,27 +76,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="add-year-modal" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
-                </button>
-                <h4 class="modal-title">{{'addyear'|translate}}</h4>
-            </div>
-            <div class="modal-body">
-                <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(plantsState.forwardYear)">{{plantsState.forwardYear}}</button>
-                <hr/>
-                <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal" ng-click="addYear(plantsState.backwardYear)">{{plantsState.backwardYear}}</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{'msg.close' | translate}}</button>
             </div>
         </div>
     </div>
