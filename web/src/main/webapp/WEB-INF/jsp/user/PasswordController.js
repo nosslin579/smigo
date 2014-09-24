@@ -1,13 +1,13 @@
-function PasswordController($scope, $http) {
+function PasswordController($scope, $http, $log) {
 
     $scope.passwordBean = {};
 
     $scope.submitForm = function (form, passwordBean) {
-//        console.log('Submit ', [form, passwordBean]);
+//        $log.log('Submit ', [form, passwordBean]);
         $scope.updateSuccessful = false;
         $scope.objectErrors = [];
         if (form.$invalid) {
-//            console.log('Form is invalid', form);
+//            $log.log('Form is invalid', form);
             return;
         }
 
@@ -18,11 +18,11 @@ function PasswordController($scope, $http) {
 
         $http.post('change-password', passwordBean)
             .then(function (response) {
-                console.log('Update password success', response);
+                $log.log('Update password success', response);
                 $scope.updateSuccessful = true;
             })
             .catch(function (response) {
-                console.error('Update password failed', response);
+                $log.error('Update password failed', response);
                 $scope.objectErrors = response.data;
             });
     };

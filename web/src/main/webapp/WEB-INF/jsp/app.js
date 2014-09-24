@@ -45,31 +45,31 @@ angular.module('smigoModule', ['ngRoute'])
             };
         }]);
     })
-    .run(function ($rootScope) {
-        console.log("App run");
+    .run(function ($rootScope, $log) {
+        $log.log("App run");
 
         $rootScope.getObjectLength = function (obj) {
             return Object.keys(obj).length;
         };
 
         $rootScope.$on('current-user-changed', function (event, user) {
-            console.log('Broadcast: current-user-changed', [event, user]);
+            $log.log('Broadcast: current-user-changed', [event, user]);
         });
 
         $rootScope.$on('$locationChangeSuccess', function (param1, param2, param3) {
-            console.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
+            $log.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
         });
 
         $rootScope.$on('$locationChangeStart', function (param1, param2, param3) {
-            console.info('Broadcast: locationChangeStart', [param1, param2, param3]);
+            $log.info('Broadcast: locationChangeStart', [param1, param2, param3]);
         });
 
         $rootScope.$on('$routeChangeStart', function (param1, param2, param3) {
-            console.info('Broadcast: routeChangeStart', [param1, param2, param3]);
+            $log.info('Broadcast: routeChangeStart', [param1, param2, param3]);
         });
 
         $rootScope.$on('newMessagesAvailable', function (param1, param2, param3) {
-            console.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
+            $log.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
         });
 
     });

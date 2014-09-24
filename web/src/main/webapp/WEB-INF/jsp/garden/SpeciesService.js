@@ -1,11 +1,11 @@
-function SpeciesService($http, $rootScope, translateFilter, Http) {
+function SpeciesService($http, $rootScope, translateFilter, Http, $log) {
     var state = {
         speciesArray: [],
         selectedSpecies: new Species('not set'),
         action: 'add'
     };
     updateState(initData.species);
-    console.log('SpeciesService', state);
+    $log.log('SpeciesService', state);
 
     $rootScope.$on('current-user-changed', function (event, user) {
         if (user) {
@@ -20,7 +20,7 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
     function reloadSpecies() {
         return $http.get('rest/species')
             .then(function (response) {
-                console.log('Species retrieve successful. Response:', response);
+                $log.log('Species retrieve successful. Response:', response);
                 updateState(response.data);
             });
     }
@@ -31,7 +31,7 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
         angular.forEach(state.speciesArray, function (s) {
             s.vernacularName = translateFilter(s);
         });
-        console.log('Species state updated', state);
+        $log.log('Species state updated', state);
     }
 
     return {
@@ -41,17 +41,17 @@ function SpeciesService($http, $rootScope, translateFilter, Http) {
         selectSpecies: function (species) {
             state.selectedSpecies = species;
             state.action = 'add';
-            console.log('Species selected:', state);
+            $log.log('Species selected:', state);
         },
         addSpecies: function (vernacularName) {
             var name = vernacularName.capitalize();
             var species = new Species(name);
             state.selectedSpecies = species;
             state.speciesArray.push(species);
-            console.log('Species added:' + vernacularName, state);
+            $log.log('Species added:' + vernacularName, state);
             return Http.post('rest/species', species)
                 .then(function (response) {
-                    console.log('Response from post species', response);
+                    $log.log('Response from post species', response);
                     species.id = response.data;
                 }).then(function () {
                     return Http.get('rest/species/' + species.id);

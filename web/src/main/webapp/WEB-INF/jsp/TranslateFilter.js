@@ -1,4 +1,4 @@
-function translateFilter($rootScope) {
+function translateFilter($rootScope, $log) {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
 
     $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
@@ -9,17 +9,17 @@ function translateFilter($rootScope) {
         msg = messages;
     });
 
-    console.log('TranslateFilter', [msg]);
+    $log.log('TranslateFilter', [msg]);
     return function (messageObject, param) {
         if (!messageObject) {
-            console.error('Can not translate', messageObject);
+            $log.error('Can not translate', messageObject);
             return 'n/a';
         }
         if (messageObject.messageKey) {
             return msg[messageObject.messageKey];
         }
         if (!msg[messageObject]) {
-            console.error('Could not translate:' + messageObject);
+            $log.error('Could not translate:' + messageObject);
             return messageObject;
         }
         return msg[messageObject].replace('{0}', param);

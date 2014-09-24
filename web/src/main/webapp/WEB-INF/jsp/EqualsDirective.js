@@ -1,9 +1,9 @@
-function EqualsDirective() {
+function EqualsDirective($log) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
         link: function (scope, elem, attrs, ngModel) {
-            console.log('Equals', [scope, elem, attrs, ngModel]);
+            $log.log('Equals', [scope, elem, attrs, ngModel]);
             if (!ngModel) return; // do nothing if no ng-model
 
             // watch own value and re-validate on change

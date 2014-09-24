@@ -1,18 +1,18 @@
-function AccountController($scope, UserService, $http) {
+function AccountController($scope, UserService, $http, $log) {
 
     $scope.userBean = angular.copy(UserService.getState().currentUser);
 
     $http.get('locales').then(function (resopnse) {
-        console.log('Locales retrieved', resopnse);
+        $log.log('Locales retrieved', resopnse);
         $scope.locales = resopnse.data;
     });
 
     $scope.submitAccountDetailsForm = function (form, userBean) {
-        console.log('Submit ', [form, userBean]);
+        $log.log('Submit ', [form, userBean]);
         $scope.updateSuccessful = false;
         $scope.objectErrors = [];
         if (form.$invalid) {
-            console.log('Form is invalid', form);
+            $log.log('Form is invalid', form);
             return;
         }
         UserService.updateUser(userBean)
@@ -26,7 +26,7 @@ function AccountController($scope, UserService, $http) {
                 $scope.updateSuccessful = true;
             })
             .catch(function (response) {
-                console.error('Update user failed', response);
+                $log.error('Update user failed', response);
                 $scope.objectErrors = response.data;
             });
     };

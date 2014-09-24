@@ -1,4 +1,4 @@
-function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantService) {
+function UserService($log, $http, $timeout, $rootScope, $q, $location, Http, PlantService) {
 
     var state = {
         currentUser: initData.user,
@@ -7,11 +7,11 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
     };
     $timeout(pingServer, 120000, false);
 
-    console.log('UserService', state);
+    $log.log('UserService', state);
 
     $rootScope.$on("$routeChangeStart", function (event, next, current) {
         if (state.currentUser && !state.currentUser.termsOfService) {
-            console.log('User has not accepted terms of service', state);
+            $log.log('User has not accepted terms of service', state);
             if (next.templateUrl == "accept-terms-of-service.html") {
                 // already going to #accept, no redirect needed
             } else {
@@ -37,16 +37,16 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
     function pingServer() {
         $http.get('ping')
             .then(function (response) {
-                console.log("Ping success", response);
+                $log.log("Ping success", response);
                 var username = state.currentUser ? state.currentUser.username : undefined;
                 if (username !== response.data.name) {
-                    console.log('Username mismatch detected', [state, response]);
+                    $log.log('Username mismatch detected', [state, response]);
                     reloadCurrentUser();
                 }
                 state.connection = true;
             })
             .catch(function (response) {
-                console.warn("Ping fail", response);
+                $log.warn("Ping fail", response);
                 state.connection = false;
             });
         $timeout(pingServer, 120000);
@@ -55,7 +55,7 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
     function updateUser(userBean) {
         return Http.put('rest/user', userBean)
             .then(function (response) {
-                console.log('Update user success', response);
+                $log.log('Update user success', response);
                 state.currentUser = userBean;
             });
     }
@@ -64,7 +64,7 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
         form.objectErrors = [];
         var deferred = $q.defer();
         if (form.$invalid) {
-//            console.log('Form is invalid', form);
+//            $log.log('Form is invalid', form);
             deferred.reject('Form is invalid');
         } else {
             deferred.resolve();
@@ -73,20 +73,20 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
     }
 
     function login(form, formModel) {
-        console.log('Login');
+        $log.log('Login');
         formModel['remember-me'] = true;
         return validateForm(form)
             .then(function () {
                 return Http.post('login', formModel);
             })
             .then(function (response) {
-                console.log('Login success, response:', response);
+                $log.log('Login success, response:', response);
             })
             .then(reloadCurrentUser)
             .then(function () {
                 $location.path('/garden');
             }).catch(function (errorReason) {
-                console.log('Login failed, reason:', errorReason);
+                $log.log('Login failed, reason:', errorReason);
                 form.objectErrors = errorReason.data;
             });
     }
@@ -99,19 +99,19 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
             validateForm(form)
                 .then(PlantService.save)
                 .then(function () {
-                    console.log('Registering');
+                    $log.log('Registering');
                     return Http.post('register', formModel);
                 })
                 .then(function () {
                     return login(form, formModel);
                 }).catch(function (errorReason) {
-                    console.log('Login failed', errorReason);
+                    $log.log('Login failed', errorReason);
                     form.objectErrors = errorReason.data;
                 });
         },
         login: login,
         acceptTermsOfService: function () {
-            console.log('Handle acceptTermsOfService');
+            $log.log('Handle acceptTermsOfService');
             state.currentUser.termsOfService = true;
             updateUser(state.currentUser);
             $location.path('/garden');
@@ -126,7 +126,7 @@ function UserService($http, $timeout, $rootScope, $q, $location, Http, PlantServ
                     $location.path('/hasta-luego');
                 })
                 .catch(function (data, status, headers, config) {
-                    console.error('Logout failed', data, status, headers, config);
+                    $log.error('Logout failed', data, status, headers, config);
                 });
         },
         updateUser: updateUser
