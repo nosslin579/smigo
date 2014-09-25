@@ -59,12 +59,12 @@
 
             <div id="grid-wrapper" class="row">
                 <div class="col-sm-offset-1 col-sm-11 absolute-full">
-                    <div id="fade-top" class="absolute-full"></div>
-                    <div id="fade-bottom" class="absolute-full"></div>
-                    <div id="fade-right" class="absolute-full"></div>
-                    <div id="fade-left" class="absolute-full"></div>
-                    <div id="peephole" remember-scroll="">
-                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
+                    <div class="top scroll-fade absolute-full" ng-click="scroll(0,-48)"></div>
+                    <div class="bottom scroll-fade absolute-full" ng-click="scroll(0,48)"></div>
+                    <div class="right scroll-fade absolute-full" ng-click="scroll(48,0)"></div>
+                    <div class="left scroll-fade absolute-full" ng-click="scroll(-48,0)"></div>
+                    <div id="peephole">
+                    <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
                             <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                 <div ng-repeat="p in s.plants">
                                     <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-if="!p.remove"

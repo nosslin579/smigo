@@ -33,6 +33,16 @@
 }
 
 /* ###############the garden grid ##################################*/
+
+#garden-frame {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .square {
     width: 48px;
     height: 48px;
@@ -77,12 +87,6 @@
     height: 100200px;
     margin-left: -99600px;
     margin-top: -99800px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .grid-to-top {
@@ -100,32 +104,59 @@
     /* box-shadow: -7px -4px 37px 2px #666 inset; */
 }
 
-#fade-top {
+.scroll-fade {
+    z-index: 100;
+}
+
+.scroll-fade.top {
     height: 20px;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
     bottom: auto;
-    z-index: 100;
 }
 
-#fade-bottom {
+.scroll-fade.bottom {
     height: 20px;
     background: linear-gradient(to top, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
     top: auto;
-    z-index: 100;
 }
 
-#fade-right {
+.scroll-fade.right {
     width: 20px;
     background: linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
     left: auto;
-    z-index: 100;
 }
 
-#fade-left {
+.scroll-fade.left {
     width: 20px;
     background: linear-gradient(to right, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
     right: auto;
-    z-index: 100;
+}
+
+.scroll-fade:hover:before {
+    font-size: 2.5em;
+    position: relative;
+}
+
+.scroll-fade.top:hover:before {
+    content: "⇈";
+    left: 240px;
+}
+
+.scroll-fade.bottom:hover:before {
+    content: "⇊";
+    left: 240px;
+    bottom: 35px;
+}
+
+.scroll-fade.left:hover:before {
+    content: "⇇";
+    top: 140px;
+}
+
+.scroll-fade.right:hover:before {
+    content: "⇉";
+    top: 140px;
+    right: 20px;
 }
 
 /*

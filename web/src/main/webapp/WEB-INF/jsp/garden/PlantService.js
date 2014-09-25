@@ -197,7 +197,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
             $log.log('Year added:' + year, yearSquareMap);
         },
         addSquare: function (year, x, y, species) {
-            var newSquare = new Square(new Location(year, x, y), [species]);
+            var newSquare = new Square(new Location(year, x, y), species ? [species] : []);
             yearSquareMap[year].push(newSquare);
             countAutoSave();
             $log.log('Square and plant added', newSquare);

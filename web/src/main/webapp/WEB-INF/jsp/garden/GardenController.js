@@ -81,6 +81,13 @@ function GardenController($modal, $scope, $filter, PlantService, SpeciesService,
             size: 'sm'
         });
     };
+
+    $scope.scroll = function (left, top) {
+        var peepholeElement = $('#peephole')[0];
+        $log.log('Scroll', peepholeElement);
+        peepholeElement.scrollLeft = peepholeElement.scrollLeft + left;
+        peepholeElement.scrollTop = peepholeElement.scrollTop + top;
+    };
 }
 
 angular.module('smigoModule').controller('GardenController', GardenController);
