@@ -27,7 +27,7 @@
 
     <script type="text/javascript" src="/static/js/angular.js"></script>
     <script type="text/javascript" src="/static/js/angular-route.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script type="text/javascript" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
 </head>
 
 

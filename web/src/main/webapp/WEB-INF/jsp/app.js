@@ -1,5 +1,5 @@
 "use strict";
-angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
+angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciespopover'])
     .config(function ($routeProvider, $provide) {
         $routeProvider.
             when('/request-password-link', {

@@ -25,8 +25,10 @@
                 </form>
                 <ul class="nav nav-sidebar">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
-                        ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}">
-                        <a href="" ng-click="selectSpecies(s)">{{s.vernacularName}}</a>
+                        ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
+                        speciespopover="{{('scientificname' | translate) + ':' +s.scientificName}}"
+                        speciespopover-title="{{'/static/species/' + s.iconFileName}}">
+                    <a href="" ng-click="selectSpecies(s)">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(speciesSearch) && userState.currentUser">
@@ -64,8 +66,8 @@
                     <div class="right scroll-fade absolute-full" ng-click="scroll(48,0)"></div>
                     <div class="left scroll-fade absolute-full" ng-click="scroll(-48,0)"></div>
                     <div id="peephole">
-                    <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
-                            <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
+                        <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
                                 <div ng-repeat="p in s.plants">
                                     <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-if="!p.remove"
                                          alt="{{p.species.vernacularName}}"

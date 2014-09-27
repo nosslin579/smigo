@@ -30,6 +30,7 @@
         <%@ include file="garden/AddYearModalController.js" %>
         <%@ include file="garden/SpeciesService.js" %>
         <%@ include file="garden/PlantService.js" %>
+        <%@ include file="garden/SpeciespopoverDirective.js" %>
 
         <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>
@@ -67,6 +68,9 @@
 </script>
 <script type="text/ng-template" id="add-year-modal.html">
     <%@ include file="add-year-modal.html" %>
+</script>
+<script type="text/ng-template" id="speciespopover.html">
+    <%@ include file="speciespopover.html" %>
 </script>
 
 </body>
