@@ -160,6 +160,28 @@
 }
 
 /*
+Square tooltip
+*/
+.square-tooltip {
+    top: 48px;
+    left: 48px;
+    display: none;
+    z-index: 100;
+    position: absolute;
+    background-color: #FFF;
+    box-shadow: 0px 0px 5px #666;
+    border: 1px solid #618039;
+    border-radius: 3px;
+    background-color: #FFF;
+    white-space: nowrap;
+}
+
+.square-tooltip-item {
+    margin: 10px;
+    display: inline-block;
+}
+
+/*
  * Base structure
  */
 

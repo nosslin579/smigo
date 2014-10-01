@@ -17,19 +17,16 @@ function GardenController($modal, $scope, $filter, PlantService, SpeciesService,
         $scope.speciesSearch = '';
     };
     $scope.onSquareClick = function (clickEvent, square) {
-        $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies]);
+        $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
         if (clickEvent.shiftKey || SpeciesService.getState().action == 'delete') {
             PlantService.removePlant(square);
+        } else if (SpeciesService.getState().action == 'info') {
+            square.showTooltip = !square.showTooltip;
         } else if (clickEvent.ctrlKey) {
             $log.log('Copy species');
         } else {
             PlantService.addPlant(SpeciesService.getState().selectedSpecies, square);
         }
-        clickEvent.stopPropagation();
-    };
-    $scope.onVisibleRemainderClick = function (clickEvent, square) {
-        $log.log('VisibleRemainder clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies]);
-        PlantService.addSquare(PlantService.getState().selectedYear, square.location.x, square.location.y, SpeciesService.getState().selectedSpecies);
         clickEvent.stopPropagation();
     };
     $scope.onGridClick = function (clickEvent) {

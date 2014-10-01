@@ -31,6 +31,7 @@
         <%@ include file="garden/SpeciesService.js" %>
         <%@ include file="garden/PlantService.js" %>
         <%@ include file="garden/SpeciespopoverDirective.js" %>
+        <%@ include file="garden/SquareInfoDirective.js" %>
 
         <%@ include file="user/AcceptTermsOfServiceController.js" %>
         <%@ include file="user/RegisterController.js" %>
@@ -71,6 +72,9 @@
 </script>
 <script type="text/ng-template" id="speciespopover.html">
     <%@ include file="speciespopover.html" %>
+</script>
+<script type="text/ng-template" id="squareinfo.html">
+    <%@ include file="squareinfo.html" %>
 </script>
 
 </body>
