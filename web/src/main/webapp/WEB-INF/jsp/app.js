@@ -41,7 +41,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                     cause: cause
                 };
                 var $http = $injector.get("$http");
-                $http.post('rest/log', referenceError);
+                $http.post('rest/log/error', referenceError);
             };
         }]);
     })

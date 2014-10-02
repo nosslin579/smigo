@@ -11,6 +11,8 @@ function LoginController($scope, UserService) {
 //        username: 'user7389327855123',
 //        password: 'testreg17'
 //    };
+    $scope.requestFeature = UserService.requestFeature;
+
     $scope.submitLoginOrRegisterForm = function (form, formModel) {
         UserService.login(form, formModel);
     }

@@ -9,19 +9,25 @@
 
 /* ############### login  ##################################*/
 .signin-icon.facebook {
-    background-position: -14px 0;
+    background-position: -1px 0;
+}
+
+.signin-icon.twitter {
+    background-position: -26px 0;
 }
 
 .signin-icon.yahoo {
-    background-position: -53px 0;
+    background-position: -150px -50px;
 }
 
 .signin-icon.google {
-    background-position: -33px 0;
+    background-position: -75px 0;
 }
 
 .signin-icon {
-    background: url('/static/icon/openid-icons.png') no-repeat scroll center center transparent;
+    background-repeat: no-repeat;
+    background-image: url('/static/icon/socialmedialogosprite.jpg');
+    background-color: transparent;
     float: left;
     height: 20px;
     width: 20px;

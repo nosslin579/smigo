@@ -9,8 +9,9 @@
             <h3>{{'msg.useanotheraccount' | translate}}</h3>
 
             <div>
-                <a onClick="$('#googleOpenId').submit()" href="" class="list-group-item"><span class="signin-icon google"></span>Google</a>
-                <a onClick="$('#facebookOpenId').submit()" href="" class="list-group-item"><span class="signin-icon facebook"></span>Facebook</a>
+                <a ng-click="requestFeature('google-sign-in')" href="" class="list-group-item"><span class="signin-icon google"></span>Google</a>
+                <a ng-click="requestFeature('facebook-sign-in')" href="" class="list-group-item"><span class="signin-icon facebook"></span>Facebook</a>
+                <a ng-click="requestFeature('twitter-sign-in')" href="" class="list-group-item"><span class="signin-icon twitter"></span>Twitter</a>
                 <a onClick="$('#yahooOpenId').submit()" href="" class="list-group-item"><span class="signin-icon yahoo"></span>Yahoo</a>
             </div>
 

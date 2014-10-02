@@ -134,7 +134,11 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
                     $log.error('Logout failed', data, status, headers, config);
                 });
         },
-        updateUser: updateUser
+        updateUser: updateUser,
+        requestFeature: function (feature) {
+            $http.post('rest/log/feature', {feature: feature});
+            alert("This service is not yet available. Please try again later.");
+        }
     };
 }
 angular.module('smigoModule').factory('UserService', UserService);

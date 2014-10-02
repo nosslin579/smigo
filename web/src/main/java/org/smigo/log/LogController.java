@@ -16,10 +16,16 @@ public class LogController implements Serializable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(value = "/rest/log", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/log/error", method = RequestMethod.POST)
     @ResponseBody
-    public void log(@RequestBody ReferenceError referenceError, HttpServletRequest request) {
+    public void logError(@RequestBody ReferenceError referenceError, HttpServletRequest request) {
         log.error("Angular error " + referenceError);
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, referenceError.getStack());
+    }
+
+    @RequestMapping(value = "/rest/log/feature", method = RequestMethod.POST)
+    @ResponseBody
+    public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request) {
+        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, feature.getFeature());
     }
 }
