@@ -25,9 +25,10 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/structure.css">
 
-    <script type="text/javascript" src="/static/js/angular.js"></script>
-    <script type="text/javascript" src="/static/js/angular-route.js"></script>
-    <script type="text/javascript" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+    <%--<script type="text/javascript" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>--%>
 </head>
 
 

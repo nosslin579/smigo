@@ -15,7 +15,6 @@
 <script type="application/javascript">
 
     <%@ include file="Customization.js" %>
-    <%@ include file="app.js" %>
     (function () {
 
         var initData = {
@@ -24,7 +23,7 @@
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>
         };
 
-
+        <%@ include file="app.js" %>
         <%@ include file="garden/SpeciesFilter.js" %>
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/AddYearModalController.js" %>
