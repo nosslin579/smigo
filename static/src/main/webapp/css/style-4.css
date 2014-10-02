@@ -1,0 +1,265 @@
+/* general */
+.absolute-full {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+/* ############### login  ##################################*/
+.signin-icon.facebook {
+    background-position: -1px 0;
+}
+
+.signin-icon.twitter {
+    background-position: -26px 0;
+}
+
+.signin-icon.yahoo {
+    background-position: -150px -50px;
+}
+
+.signin-icon.google {
+    background-position: -75px 0;
+}
+
+.signin-icon {
+    background-repeat: no-repeat;
+    background-image: url('/static/icon/socialmedialogosprite.jpg');
+    background-color: transparent;
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin: 0px 10px 0px 0px;
+}
+
+.list-group-item {
+    border: 0;
+}
+
+/* ###############the garden grid ##################################*/
+
+#garden-frame {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.square {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+}
+
+.visible-remainder {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    background-color: sandybrown;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.multiple-plants {
+    width: 24px;
+    height: 24px;
+    float: left;
+}
+
+/*Chrome gird background position*/
+/*
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    #grid::before {
+        background-position: 40px 40px !important;
+    }
+}
+*/
+
+/*Mozilla gird background*/
+@-moz-document url-prefix() {
+    #grid {
+        background-image: none !important;
+    }
+}
+
+#grid {
+    background: url('/static/icon/gridbackground.png') 40px 40px;
+    position: relative;
+    width: 100400px;
+    height: 100200px;
+    margin-left: -99600px;
+    margin-top: -99800px;
+}
+
+.grid-to-top {
+    top: 60px;
+}
+
+#peephole {
+    overflow: auto;
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    top: 0;
+    right: -15px;
+    margin: 0;
+    /* box-shadow: -7px -4px 37px 2px #666 inset; */
+}
+
+.scroll-fade {
+    z-index: 100;
+}
+
+.scroll-fade.top {
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
+    bottom: auto;
+}
+
+.scroll-fade.bottom {
+    height: 20px;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
+    top: auto;
+}
+
+.scroll-fade.right {
+    width: 20px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
+    left: auto;
+}
+
+.scroll-fade.left {
+    width: 20px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
+    right: auto;
+}
+
+.scroll-fade:hover:before {
+    font-size: 2.5em;
+    position: relative;
+}
+
+.scroll-fade.top:hover:before {
+    content: "⇈";
+    left: 240px;
+}
+
+.scroll-fade.bottom:hover:before {
+    content: "⇊";
+    left: 240px;
+    bottom: 35px;
+}
+
+.scroll-fade.left:hover:before {
+    content: "⇇";
+    top: 140px;
+}
+
+.scroll-fade.right:hover:before {
+    content: "⇉";
+    top: 140px;
+    right: 20px;
+}
+
+/*
+Square tooltip
+*/
+.square-tooltip {
+    top: 48px;
+    left: 48px;
+    display: none;
+    z-index: 100;
+    position: absolute;
+    background-color: #FFF;
+    box-shadow: 0px 0px 5px #666;
+    border: 1px solid #618039;
+    border-radius: 3px;
+    background-color: #FFF;
+    white-space: nowrap;
+}
+
+.square-tooltip-item {
+    margin: 10px;
+    display: inline-block;
+}
+
+/*
+ * Base structure
+ */
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+    border: 0;
+}
+
+/* Sidebar navigation */
+.sidebar {
+    position: fixed;
+    top: 0px;
+    bottom: 0;
+    overflow: hidden;
+    padding: 0
+}
+
+.sidebar > div {
+    overflow-x: hidden;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: 106%;
+    overflow-y: scroll;
+}
+
+.sidebar .navbar-form {
+    padding-left: 15px;
+}
+
+.sidebar .btn-group {
+    margin: 15px;
+    width: 90%;
+}
+
+.sidebar .navbar-form .form-control {
+    width: 100%;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 6px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+/*
+ * Main content
+ */
+
+#garden-frame {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+}
+
+#grid-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 140px;
+    bottom: 0;
+}
+
+#garden-frame ul.nav-tabs {
+    padding: 10px 0 0 10px;
+}
