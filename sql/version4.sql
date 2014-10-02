@@ -86,3 +86,6 @@ WHERE species.creator = usersettingforspecies.user;
 
 ALTER TABLE visitlog
 ADD COLUMN httpstatus INT;
+
+ALTER TABLE visitlog
+ADD COLUMN sessionage INT;

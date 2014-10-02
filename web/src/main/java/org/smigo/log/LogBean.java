@@ -2,8 +2,10 @@ package org.smigo.log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 class LogBean {
 
@@ -18,9 +20,10 @@ class LogBean {
     private final String note;
     private final String origin;
     private final int httpStatus;
+    private final long sessionAge;
 
     public LogBean(String remoteUser, String url, String locales, String useragent,
-                   String referer, String sessionid, String method, String ip, String note, String origin, int status) {
+                   String referer, String sessionid, String method, String ip, String note, String origin, int status, long sessionAge) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
@@ -32,6 +35,7 @@ class LogBean {
         this.note = note;
         this.origin = origin;
         this.httpStatus = status;
+        this.sessionAge = sessionAge;
     }
 
     public static LogBean create(HttpServletRequest req, HttpServletResponse response) {
@@ -40,6 +44,9 @@ class LogBean {
             locales.append(l.nextElement().toString()).append(" ");
         }
 
+        final HttpSession session = req.getSession(false);
+        final long age = session == null ? 0 : (System.currentTimeMillis() - session.getCreationTime());
+        final long ageSeconds = TimeUnit.MILLISECONDS.toSeconds(age);
         return new LogBean(truncate(req.getRemoteUser()),
                 truncate(req.getRequestURL().toString()),
                 truncate(locales.toString()),
@@ -50,7 +57,8 @@ class LogBean {
                 truncate(req.getHeader("x-forwarded-for")),
                 truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)),
                 truncate(req.getHeader("origin")),
-                response.getStatus());
+                response.getStatus(),
+                ageSeconds);
 
     }
 
@@ -110,6 +118,9 @@ class LogBean {
                 ", method='" + method + '\'' +
                 ", ip='" + ip + '\'' +
                 ", note='" + note + '\'' +
+                ", origin='" + origin + '\'' +
+                ", httpStatus=" + httpStatus +
+                ", sessionAge=" + sessionAge +
                 '}';
     }
 
@@ -119,5 +130,9 @@ class LogBean {
 
     public int getHttpStatus() {
         return httpStatus;
+    }
+
+    public long getSessionAge() {
+        return sessionAge;
     }
 }
