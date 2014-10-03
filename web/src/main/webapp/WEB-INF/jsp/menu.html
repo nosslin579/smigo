@@ -14,13 +14,12 @@
         </div>
         <div class="navbar-collapse collapse" collapse="menuIsCollapsed">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="">{{userState.connection}}</a></li>
-                <li><a href="#garden">Garden</a></li>
+                <li><a href="#garden">{{'garden' | translate}}</a></li>
                 <li><a href="#help">{{'help' | translate}}</a></li>
                 <li ng-class="{hidden: userState.currentUser}">
-                    <a href="#login" id="login-link">{{'account.login' | translate}}</a></li>
-                <li ng-class="{hidden: userState.currentUser}">
                     <a href="#register" id="register-link">{{'msg.account.register' | translate}}</a></li>
+                <li ng-class="{hidden: userState.currentUser}">
+                    <a href="#login" id="login-link">{{'account.login' | translate}}</a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
                     <a href="#account" id="account-link">{{'msg.settings' | translate}}</a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
