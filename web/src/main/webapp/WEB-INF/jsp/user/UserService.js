@@ -63,6 +63,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
     function validateForm(form) {
         form.objectErrors = [];
         form.submitted = true;
+        form.processing = true;
         var deferred = $q.defer();
         if (form.$invalid) {
 //            $log.log('Form is invalid', form);
@@ -94,6 +95,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
             }).catch(function (errorReason) {
                 $log.log('Login failed, reason:', errorReason);
                 form.objectErrors = errorReason.data;
+                form.processing = false;
             });
     }
 
@@ -113,6 +115,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
                 }).catch(function (errorReason) {
                     $log.log('Login failed', errorReason);
                     form.objectErrors = errorReason.data;
+                    form.processing = false;
                 });
         },
         login: login,
