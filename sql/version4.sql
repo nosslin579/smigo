@@ -106,3 +106,6 @@ ALTER TABLE species
 DROP COLUMN imagename;
 ALTER TABLE species
 DROP COLUMN displaybydefault;
+
+DELETE FROM species
+WHERE species_id IN (175, 187);

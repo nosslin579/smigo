@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
-    private static final String SELECT = "SELECT * FROM species";
+    private static final String SELECT = "SELECT * FROM species WHERE species_id NOT IN (176,177,178,179,181,190,193,194,195,199,200,201)";
     private static final String WHERE = SELECT + " WHERE species_id = ?";
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
