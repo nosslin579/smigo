@@ -91,3 +91,18 @@ ALTER TABLE visitlog
 ADD COLUMN sessionage INT;
 
 DROP TABLE usersettingforrules;
+
+ALTER TABLE species
+DROP COLUMN spacing;
+ALTER TABLE species
+DROP COLUMN precultivate;
+ALTER TABLE species
+DROP COLUMN ph;
+ALTER TABLE species
+DROP COLUMN plantspersquare;
+ALTER TABLE species
+DROP COLUMN seeddepth;
+ALTER TABLE species
+DROP COLUMN imagename;
+ALTER TABLE species
+DROP COLUMN displaybydefault;
