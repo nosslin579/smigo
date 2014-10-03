@@ -83,13 +83,13 @@
                     </div>
                 </div>
 
-                <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.termsOfService.$dirty}">
+                <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.submitted}">
                     <label for="termsOfService" class="checkbox">
                         <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required/>
                         {{'msg.agreetos' | translate}}
                         <a target="_blank" href=/static/tos.html>{{'termsofservice' | translate}}</a>
                     </label>
-                    <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.termsOfService.$dirty" class="help-block">{{'msg.required' | translate}}</span>
+                    <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.submitted" class="help-block">{{'msg.required' | translate}}</span>
                 </div>
 
                 <button type="submit" class="btn btn-default" id="submit-login-register-form">{{viewModel.pageMessageKey | translate}}</button>

@@ -62,6 +62,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
 
     function validateForm(form) {
         form.objectErrors = [];
+        form.submitted = true;
         var deferred = $q.defer();
         if (form.$invalid) {
 //            $log.log('Form is invalid', form);
