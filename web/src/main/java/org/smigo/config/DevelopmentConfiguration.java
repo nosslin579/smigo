@@ -21,9 +21,9 @@ public class DevelopmentConfiguration {
     public DataSource getDataSource() {
         HikariDataSource ds = new HikariDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUsername("nosslin2_dbusert");
-        ds.setPassword("To4[n=GGkp2l");
-        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_dbtest");
+        ds.setUsername("nosslin2_dev");
+        ds.setPassword("MC7TCz8Dp5inukeJ6z");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_stage4");
         return ds;
     }
 

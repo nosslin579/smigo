@@ -8,14 +8,12 @@ function RegisterController($scope, UserService) {
         pageMessageKey: 'msg.account.register'
     };
 
-    /*
-     var newName = 'testreg' + Math.floor(Math.random() * 999999999);
-     $scope.passwordAgain = newName;
-     $scope.formModel = {
-     username: newName,
-     password: newName
-     };
-     */
+//     var newName = 'testreg' + Math.floor(Math.random() * 999999999);
+//     $scope.passwordAgain = newName;
+//     $scope.formModel = {
+//     username: newName,
+//     password: newName
+//     };
 
     $scope.submitLoginOrRegisterForm = function (form, formModel) {
         UserService.register(form, formModel);

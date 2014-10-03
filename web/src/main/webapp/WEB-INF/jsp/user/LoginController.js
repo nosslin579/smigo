@@ -9,7 +9,7 @@ function LoginController($scope, UserService) {
     };
 //    $scope.formModel = {
 //        username: 'user7389327855123',
-//        password: 'testreg17'
+//        password: 'user7389327855123'
 //    };
     $scope.requestFeature = UserService.requestFeature;
 

@@ -98,7 +98,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(2000);
     }
 
-    @Test
+    @Test(enabled = true)
     public void register() throws Exception {
         final String username = "selenium" + System.currentTimeMillis();
 
@@ -126,7 +126,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(user.getUsername(), username);
     }
 
-    @Test
+    @Test(enabled = true)
     public void addSpecies() throws InterruptedException {
         final String username = addUser();
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
@@ -149,7 +149,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void addYear() {
         //add default species
         d.findElement(By.className("square")).click();
@@ -175,7 +175,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void changePassword() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);
@@ -196,7 +196,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
-    @Test
+    //    @Test
+    @Test(enabled = true)
     public void loginWrongPassword() throws InterruptedException {
         final String username = addUser();
         login(username, "wrong password");
@@ -205,7 +206,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertFalse(element.getText().isEmpty());
     }
 
-    @Test
+    @Test(enabled = true)
     public void resetPassword() throws InterruptedException {
         final UserBean user = addUser(true);
 
@@ -233,7 +234,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
-    @Test
+    @Test(enabled = true)
     public void registerWithOpenId() throws InterruptedException {
         userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
 
@@ -259,7 +260,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void updateAccount() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);

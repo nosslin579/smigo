@@ -18,12 +18,11 @@ public class TestConfiguration {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        log.debug("getDataSource from testconfig");
         HikariDataSource ds = new HikariDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_dbtest");
-        ds.setUsername("nosslin2_dbusert");
-        ds.setPassword("To4[n=GGkp2l");
+        ds.setUsername("nosslin2_dev");
+        ds.setPassword("MC7TCz8Dp5inukeJ6z");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_stage4");
         return ds;
     }
 

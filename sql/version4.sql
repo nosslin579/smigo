@@ -89,3 +89,5 @@ ADD COLUMN httpstatus INT;
 
 ALTER TABLE visitlog
 ADD COLUMN sessionage INT;
+
+DROP TABLE usersettingforrules;
