@@ -28,7 +28,7 @@
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         speciespopover="{{('scientificname' | translate) + ':' +s.scientificName}}"
                         speciespopover-title="{{'/static/species/' + s.iconFileName}}">
-                    <a href="" ng-click="selectSpecies(s)">{{s.vernacularName}}</a>
+                        <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(speciesSearch) && userState.currentUser">
