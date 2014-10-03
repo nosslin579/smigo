@@ -55,7 +55,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
     function updateUser(userBean) {
         return $http.put('rest/user', userBean)
             .then(function (response) {
-                $log.log('Update user success', response);
+                $log.log('Update user success', [userBean, response]);
                 state.currentUser = userBean;
             });
     }

@@ -12,6 +12,11 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
             reloadSpecies();
         }
     });
+    $rootScope.$on('newLanguageAvailable', function (event, locale) {
+        if (locale) {
+            updateState(state.speciesArray);
+        }
+    });
 
     function Species(vernacularName) {
         this.vernacularName = vernacularName;
