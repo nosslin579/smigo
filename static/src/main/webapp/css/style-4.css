@@ -205,3 +205,19 @@
     margin: 10px;
     display: inline-block;
 }
+
+#species-frame {
+    position: fixed;
+    top: 0px;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#species-frame .species-wrapper {
+    overflow-x: hidden;
+    position: absolute;
+    bottom: 0;
+    top: 94px;
+    width: 100%;
+    overflow-y: scroll;
+}
