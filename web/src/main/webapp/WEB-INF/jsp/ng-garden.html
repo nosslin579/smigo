@@ -24,7 +24,7 @@
             <ul class="nav nav-pills nav-stacked">
                 <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
                     ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
-                    speciespopover="{{('scientificname' | translate) + ':' +s.scientificName}}"
+                    speciespopover="{{s.scientificName}}"
                     speciespopover-title="{{'/static/species/' + s.iconFileName}}">
                     <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
                 </li>
