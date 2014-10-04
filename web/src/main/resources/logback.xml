@@ -2,7 +2,7 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/nosslin2/smigo.log</file>
+        <file>/home/nosslin2/weblogs/smigo.log</file>
         <append>true</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
