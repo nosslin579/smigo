@@ -18,11 +18,10 @@
     <%--<link rel="icon" href="../../favicon.ico">--%>
 
     <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">--%>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/flatly/bootstrap.min.css">
-
-
     <link rel="stylesheet" type="text/css" href="/static/css/style-4.css">
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>

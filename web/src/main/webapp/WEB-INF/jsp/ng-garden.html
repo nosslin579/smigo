@@ -1,10 +1,9 @@
 <div class="container-fluid">
     <div class="row">
-        <div id="species-frame" class="hidden-xs col-sm-3 sidebar">
+        <div id="species-frame" class="hidden-xs col-sm-3">
             <div>
-                <div class="navbar"></div>
-                <div class="btn-group">
-                    <div class="row">
+                <div class="btn-group full-width">
+                <div class="row">
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'info'}"
                                     ng-click="speciesState.action ='info'" title="{{'msg.view-square.description' | translate}}">
@@ -19,12 +18,12 @@
                         </div>
                     </div>
                 </div>
-                <!--<hr/>-->
+                <hr/>
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesSearch)">
-                    <input class="form-control" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
+                    <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch">
                 </form>
-                <ul class="nav nav-sidebar">
-                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
+                <ul class="nav nav-pills nav-stacked">
+                <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         speciespopover="{{('scientificname' | translate) + ':' +s.scientificName}}"
                         speciespopover-title="{{'/static/species/' + s.iconFileName}}">

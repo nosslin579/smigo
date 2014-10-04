@@ -1,10 +1,14 @@
-/* general */
+/* ############### general ###############*/
 .absolute-full {
     position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
+}
+
+.full-width {
+    width: 100% !important;
 }
 
 /* ############### login  ##################################*/
@@ -38,7 +42,7 @@
     border: 0;
 }
 
-/* ###############the garden grid ##################################*/
+/* ############### garden grid ##################################*/
 
 #garden-frame {
     -webkit-touch-callout: none;
@@ -47,6 +51,20 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+}
+
+#grid-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 140px;
+    bottom: 0;
+}
+
+#garden-frame ul.nav-tabs {
+    padding: 10px 0 0 10px;
 }
 
 .square {
@@ -168,9 +186,7 @@
     right: 20px;
 }
 
-/*
-Square tooltip
-*/
+/*############## Square tooltip  #########################*/
 .square-tooltip {
     top: 48px;
     left: 48px;
@@ -188,81 +204,4 @@ Square tooltip
 .square-tooltip-item {
     margin: 10px;
     display: inline-block;
-}
-
-/*
- * Base structure
- */
-
-/*
- * Top navigation
- * Hide default border to remove 1px line.
- */
-.navbar-fixed-top {
-    border: 0;
-}
-
-/* Sidebar navigation */
-.sidebar {
-    position: fixed;
-    top: 0px;
-    bottom: 0;
-    overflow: hidden;
-    padding: 0
-}
-
-.sidebar > div {
-    overflow-x: hidden;
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    width: 106%;
-    overflow-y: scroll;
-}
-
-.sidebar .navbar-form {
-    padding-left: 15px;
-}
-
-.sidebar .btn-group {
-    margin: 15px;
-    width: 90%;
-}
-
-.sidebar .navbar-form .form-control {
-    width: 100%;
-}
-
-.nav-sidebar > li > a {
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-top: 6px;
-}
-
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-    color: #fff;
-    background-color: #428bca;
-}
-
-/*
- * Main content
- */
-
-#garden-frame {
-    position: fixed;
-    bottom: 0;
-    top: 0;
-}
-
-#grid-wrapper {
-    position: absolute;
-    width: 100%;
-    top: 140px;
-    bottom: 0;
-}
-
-#garden-frame ul.nav-tabs {
-    padding: 10px 0 0 10px;
 }
