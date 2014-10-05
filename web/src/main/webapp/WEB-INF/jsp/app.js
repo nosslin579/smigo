@@ -33,8 +33,20 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
             otherwise({redirectTo: '/garden'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
+            var x = 0, previousStacks = [];
+
             return function (exception, cause) {
+                if (x++ > 30) {
+                    throw "To many errors";
+                }
+
                 $delegate(exception, cause);
+
+                if (previousStacks.indexOf(exception.stack) != -1) {
+                    //Already sent this error to server.
+                    return;
+                }
+                previousStacks.push(exception.stack);
                 var referenceError = {
                     message: exception.message,
                     stack: exception.stack,
