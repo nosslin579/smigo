@@ -101,11 +101,13 @@
 @-moz-document url-prefix() {
     #grid {
         background-image: none !important;
+        background: rgba(198, 221, 198, 0.2);
     }
 }
 
 #grid {
-    background: url('/static/icon/gridbackground.png') 40px 40px;
+    background-position: 40px 40px;
+    background-image: url('/static/icon/gridbackground.png');
     position: relative;
     width: 100400px;
     height: 100200px;
