@@ -1,6 +1,6 @@
 package org.smigo.config;
 
-import com.zaxxer.hikari.HikariDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 
 @Configuration
 @Profile(EnvironmentProfile.PRODUCTION)
@@ -19,11 +20,11 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Bean(name = "dataSource")
-    public DataSource getDataSource() {
-        HikariDataSource ds = new HikariDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
+    public DataSource getDataSource() throws PropertyVetoException {
+        ComboPooledDataSource ds = new ComboPooledDataSource();
+        ds.setDriverClass("com.mysql.jdbc.Driver");
         ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
-        ds.setUsername("nosslin2_dbuser");
+        ds.setUser("nosslin2_dbuser");
         ds.setPassword("N9WM[ONGP5yv");
         return ds;
     }
