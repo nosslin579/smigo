@@ -1,7 +1,5 @@
 package org.smigo.species;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import kga.Family;
 import kga.Id;
 import kga.Species;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +43,8 @@ public class SpeciesHandler {
 
     public Map<Integer, SpeciesView> getSpeciesMap() {
         long start = System.currentTimeMillis();
-        Map<Integer, Family> familyMap = Maps.uniqueIndex(familyDao.getFamilies(), new IdMapper());
-        Map<Integer, SpeciesView> ret = Maps.uniqueIndex(speciesDao.getSpecies(familyMap), new IdMapper());
+        Map<Integer, Family> familyMap = convertToMap(familyDao.getFamilies());
+        Map<Integer, SpeciesView> ret = convertToMap(speciesDao.getSpecies(familyMap));
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules(familyMap);
         for (Rule r : rules) {
@@ -56,11 +56,12 @@ public class SpeciesHandler {
         return ret;
     }
 
-    private static class IdMapper implements Function<Id, Integer> {
-        @Override
-        public Integer apply(Id input) {
-            return input.getId();
+    private static <V extends Id> Map<Integer, V> convertToMap(Collection<V> collection) {
+        final Map<Integer, V> ret = new HashMap<Integer, V>();
+        for (V v : collection) {
+            ret.put(v.getId(), v);
         }
+        return ret;
     }
 
     public Species getSpecies(int id) {

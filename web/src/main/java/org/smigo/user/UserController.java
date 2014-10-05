@@ -1,6 +1,5 @@
 package org.smigo.user;
 
-import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -68,7 +68,7 @@ public class UserController {
     public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {
         log.info("Create Update user: " + user);
         if (result.hasErrors()) {
-            log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));
+            log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
@@ -82,7 +82,7 @@ public class UserController {
                                         @AuthenticationPrincipal AuthenticatedUser user,
                                         HttpServletResponse response) {
         if (result.hasErrors()) {
-            log.warn("Update user failed. Username:" + user.getUsername() + " Errors:" + Joiner.on(", ").join(result.getAllErrors()));
+            log.warn("Update user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }

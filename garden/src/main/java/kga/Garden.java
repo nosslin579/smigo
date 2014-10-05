@@ -22,8 +22,6 @@
 
 package kga;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import kga.errors.GardenException;
 
 import java.util.*;
@@ -116,11 +114,16 @@ public class Garden {
         if (squares.isEmpty()) {
             addOrGetSquare(new YearXY(Calendar.getInstance().get(Calendar.YEAR), 0, 0));
         }
-        Multimap<Integer, Square> ret = ArrayListMultimap.create();
+
+        Map<Integer, Collection<Square>> ret = new HashMap<Integer, Collection<Square>>();
         for (Square square : squares.values()) {
-            ret.put(square.getLocation().getYear(), square);
+            final int year = square.getLocation().getYear();
+            if (ret.get(year) == null) {
+                ret.put(year, new ArrayList());
+            }
+            ret.get(year).add(square);
         }
-        return ret.asMap();
+        return ret;
     }
 
     /**
