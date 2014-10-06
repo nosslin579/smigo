@@ -21,7 +21,6 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
             final String note = ex.getClass().getName() + ":" + ex.getMessage();
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         }
-        response.setStatus(500);
         return null;
     }
 
