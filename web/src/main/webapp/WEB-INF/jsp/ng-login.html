@@ -43,32 +43,32 @@
         <div class="col-sm-6 col-md-4 col-md-offset-2">
             <h3>{{'msg.usesmigoaccount' | translate}}</h3>
 
-            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)">
+            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)" autocomplete="off">
                 <div class="has-error">
                     <span ng-repeat="error in loginOrRegisterform.objectErrors" id="{{error.objectName}}" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && loginOrRegisterform.username.$dirty}">
+                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && (loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted)}">
                     <label for="username">{{'username' | translate}}</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}"
+                    <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}" autocomplete="off"
                            ng-model="formModel.username" ng-required="true" ng-minlength="{{viewModel.usernameMin}}"
                            ng-maxlength="{{viewModel.usernameMax}}" ng-pattern="viewModel.usernamePattern"/>
 
-                    <div ng-if="loginOrRegisterform.username.$dirty">
-                        <span ng-show="loginOrRegisterform.username.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                    <div ng-if="loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted">
+                    <span ng-show="loginOrRegisterform.username.$error.required" class="help-block">{{'msg.required' | translate}}</span>
                         <span ng-show="loginOrRegisterform.username.$error.minlength" class="help-block">{{'msg.minlength' | translate:5}}</span>
                         <span ng-show="loginOrRegisterform.username.$error.maxlength" class="help-block">{{'msg.maxlength' | translate:40}}</span>
                         <span ng-show="loginOrRegisterform.username.$error.pattern" class="help-block">{{'msg.usecharactersonly' | translate}}</span>
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid && loginOrRegisterform.password.$dirty}">
+                <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid && (loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted)}">
                     <label for="password">{{'password' | translate}}</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}"
+                    <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}" autocomplete="off"
                            ng-model="formModel.password" ng-required="true" ng-minlength="{{viewModel.passwordMin}}"/>
 
-                    <div ng-if="loginOrRegisterform.password.$dirty">
-                        <span ng-show="loginOrRegisterform.password.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                    <div ng-if="loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted">
+                    <span ng-show="loginOrRegisterform.password.$error.required" class="help-block">{{'msg.required' | translate}}</span>
                         <span ng-show="loginOrRegisterform.password.$error.minlength" class="help-block">{{'msg.minlength' | translate:6}}</span>
                     </div>
                 </div>
