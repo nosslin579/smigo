@@ -708,3 +708,9 @@ INSERT INTO species_translation VALUES
 (18,'sv','Kålrot'),
 (17,'sv','Kål'),
 (40,'sv','Jordgubbar');
+
+
+INSERT INTO species_translation (SELECT species_id, '' as language,vernacularname as vernacular_name FROM species WHERE vernacularname IS NOT NULL);
+
+ALTER TABLE species
+DROP COLUMN vernacularname;
