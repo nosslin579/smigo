@@ -22,3 +22,5 @@ web/target/
 .idea/
 .svn/
 
+*.log
+
