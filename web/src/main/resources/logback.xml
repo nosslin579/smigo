@@ -15,14 +15,6 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/nosslin2/weblogs/smigo.log</file>
-        <append>true</append>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <logger name="org.smigo" level="TRACE"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.apache.coyote" level="INFO"/>
