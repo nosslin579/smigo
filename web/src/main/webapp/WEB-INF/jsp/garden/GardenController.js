@@ -30,12 +30,14 @@ function GardenController($modal, $scope, $filter, PlantService, SpeciesService,
         clickEvent.stopPropagation();
     };
     $scope.onGridClick = function (clickEvent) {
-        //http://stackoverflow.com/a/14872192/859514
-        var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
-        var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
-        var x = Math.floor((offsetX - 100000) / 48);
-        var y = Math.floor((offsetY - 100000) / 48);
-        PlantService.addSquare(PlantService.getState().selectedYear, x, y, SpeciesService.getState().selectedSpecies);
+        if (SpeciesService.getSpecies().action == 'add') {
+            //http://stackoverflow.com/a/14872192/859514
+            var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
+            var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
+            var x = Math.floor((offsetX - 100000) / 48);
+            var y = Math.floor((offsetY - 100000) / 48);
+            PlantService.addSquare(PlantService.getState().selectedYear, x, y, SpeciesService.getState().selectedSpecies);
+        }
         clickEvent.stopPropagation();
     };
     $scope.getGridSizeCss = function (year) {
