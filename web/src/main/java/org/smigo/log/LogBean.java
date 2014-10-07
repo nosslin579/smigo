@@ -21,14 +21,16 @@ class LogBean {
     private final String origin;
     private final int httpStatus;
     private final long sessionAge;
+    private final String host;
 
-    public LogBean(String remoteUser, String url, String locales, String useragent,
+    public LogBean(String remoteUser, String url, String locales, String useragent, String host,
                    String referer, String sessionid, String method, String ip, String note, String origin, int status, long sessionAge) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
         this.useragent = useragent;
         this.referer = referer;
+        this.host = host;
         this.sessionid = sessionid;
         this.method = method;
         this.ip = ip;
@@ -51,6 +53,7 @@ class LogBean {
                 truncate(req.getRequestURL().toString()),
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),
+                truncate(req.getHeader("host")),
                 truncate(req.getHeader("referer")),
                 truncate(req.getRequestedSessionId()),
                 req.getMethod(),
@@ -130,6 +133,10 @@ class LogBean {
 
     public int getHttpStatus() {
         return httpStatus;
+    }
+
+    public String getHost() {
+        return host;
     }
 
     public long getSessionAge() {
