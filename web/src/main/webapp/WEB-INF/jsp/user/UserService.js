@@ -60,12 +60,12 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
             });
     }
 
-    function validateForm(form) {
+    function validateForm(form, skipValidate) {
         form.objectErrors = [];
         form.submitted = true;
         form.processing = true;
         var deferred = $q.defer();
-        if (form.$invalid) {
+        if (form.$invalid && !skipValidate) {
             $log.log('Form is invalid', form);
             deferred.reject('Form is invalid');
         } else {
@@ -77,14 +77,15 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
     function login(form, formModel) {
 //        $log.log('Login', [form, formModel]);
 //        http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
-        if (!formModel) {
-            $log.warn('Autocomplete detected');
-            form.objectErrors = [
-                {objectName: 'autocomplete', defaultMessage: 'msg.autocompletenotsupported'}
-            ];
-            return;
+        if (!formModel.username) {
+            $log.warn('Possible autocomplete detected, formModel contains no username.');
+            formModel.username = $('#username').val();
         }
-        return validateForm(form)
+        if (!formModel.password) {
+            $log.warn('Possible autocomplete detected, formModel contains no password.');
+            formModel.password = $('#password').val();
+        }
+        return validateForm(form, true)
             .then(function () {
                 formModel['remember-me'] = true;
                 return $http({

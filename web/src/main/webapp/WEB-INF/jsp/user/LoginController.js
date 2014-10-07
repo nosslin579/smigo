@@ -7,10 +7,12 @@ function LoginController($scope, UserService) {
         passwordMin: 0,
         pageMessageKey: 'account.login'
     };
-//    $scope.formModel = {
+    $scope.formModel = {
+        username: '',
+        password: ''
 //        username: 'user7389327855123',
 //        password: 'user7389327855123'
-//    };
+    };
     $scope.requestFeature = UserService.requestFeature;
 
     $scope.submitLoginOrRegisterForm = function (form, formModel) {
