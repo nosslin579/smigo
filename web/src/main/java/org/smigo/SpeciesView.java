@@ -49,10 +49,6 @@ public class SpeciesView extends kga.Species {
         return iconFileName;
     }
 
-    public String getMessageKey() {
-        return JspFunctions.speciesMessageKey(getId());
-    }
-
     public void setVernacularName(String vernacularName) {
         this.vernacularName = vernacularName;
     }

@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class SpeciesHandler {
@@ -44,7 +41,7 @@ public class SpeciesHandler {
     public Map<Integer, SpeciesView> getSpeciesMap() {
         long start = System.currentTimeMillis();
         Map<Integer, Family> familyMap = convertToMap(familyDao.getFamilies());
-        Map<Integer, SpeciesView> ret = convertToMap(speciesDao.getSpecies(familyMap));
+        Map<Integer, SpeciesView> ret = convertToMap(speciesDao.getSpecies(familyMap, Locale.ENGLISH));
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules(familyMap);
         for (Rule r : rules) {
@@ -65,10 +62,11 @@ public class SpeciesHandler {
     }
 
     public Species getSpecies(int id) {
-        return speciesDao.getSpecies(id);
+        return speciesDao.getSpecies(id, Locale.ENGLISH);
     }
 
     public List<Family> getFamilies() {
         return familyDao.getFamilies();
     }
+
 }

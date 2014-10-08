@@ -5,10 +5,13 @@ ALTER TABLE visitlog
 ADD COLUMN host VARCHAR(255);
 
 
+ALTER TABLE species
+CHANGE species_id id INT NOT NULL AUTO_INCREMENT;
+
 CREATE TABLE species_translation
 (
   species_id INT NOT NULL,
-  language VARCHAR(5) NOT NULL,
+  locale VARCHAR(5) NOT NULL,
   vernacular_name VARCHAR(255),
   PRIMARY KEY (species_id, language)
 );
@@ -710,7 +713,7 @@ INSERT INTO species_translation VALUES
 (40,'sv','Jordgubbar');
 
 
-INSERT INTO species_translation (SELECT species_id, '' as language,vernacularname as vernacular_name FROM species WHERE vernacularname IS NOT NULL);
+INSERT INTO species_translation (SELECT species_id, '' as locale, vernacularname as vernacular_name FROM species WHERE vernacularname IS NOT NULL);
 
 ALTER TABLE species
 DROP COLUMN vernacularname;

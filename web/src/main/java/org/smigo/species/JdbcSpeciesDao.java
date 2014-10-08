@@ -5,7 +5,6 @@ import org.smigo.SpeciesView;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,12 +17,20 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
-    private static final String SELECT = "SELECT * FROM species WHERE species_id NOT IN (176,177,178,179,181,190,193,194,195,199,200,201)";
-    private static final String WHERE = SELECT + " WHERE species_id = ?";
+    private static final String SELECT2 = "SELECT\n" +
+            "species.*,\n" +
+            "coalesce(country.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
+            "FROM species\n" +
+            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.locale = ''\n" +
+            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.locale = ?\n" +
+            "LEFT JOIN species_translation country ON country.species_id = species.id AND country.locale = ?";
+    private static final String WHERE = SELECT2 + " WHERE id = ?";
+
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
     private JdbcTemplate jdbcTemplate;
@@ -50,14 +57,16 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @Cacheable(Cache.SPECIES)
-    public List<SpeciesView> getSpecies(final Map<Integer, Family> familyMap) {
-        return jdbcTemplate.query(SELECT, new Object[]{}, new SpeciesViewRowMapper(familyMap));
+//    @Cacheable(Cache.SPECIES)
+    public List<SpeciesView> getSpecies(final Map<Integer, Family> familyMap, Locale locale) {
+        final Object[] args = {locale.getLanguage(), locale.toString()};
+        return jdbcTemplate.query(SELECT2, args, new SpeciesViewRowMapper(familyMap));
     }
 
     @Override
-    public SpeciesView getSpecies(int id) {
-        return jdbcTemplate.queryForObject(WHERE, new Object[]{id}, new SpeciesViewRowMapper(new HashMap<Integer, Family>()));
+    public SpeciesView getSpecies(int id, Locale locale) {
+        final Object[] args = {locale.getLanguage(), locale.toString(), id};
+        return jdbcTemplate.queryForObject(WHERE, args, new SpeciesViewRowMapper(new HashMap<Integer, Family>()));
     }
 
     private static class SpeciesViewRowMapper implements RowMapper<SpeciesView> {
@@ -70,14 +79,14 @@ class JdbcSpeciesDao implements SpeciesDao {
         @Override
         public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
             SpeciesView ret = new SpeciesView();
-            ret.setId(rs.getInt("species_id"));
+            ret.setId(rs.getInt("id"));
             ret.setScientificName(rs.getString("name"));
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));
             ret.setFamily(familyMap.get(rs.getInt("family")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
-            ret.setVernacularName(rs.getString("vernacularName"));
+            ret.setVernacularName(rs.getString("vernacular_name"));
             return ret;
         }
     }

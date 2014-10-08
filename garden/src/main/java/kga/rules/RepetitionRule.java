@@ -54,7 +54,7 @@ public class RepetitionRule extends AbstractRule {
         for (Square s : garden.getPreviousAndSurroundingSquares(affected.getLocation(), gap, Rule.CLOSEST_NEIGHBOURS)) {
             for (Plant causing : s.getPlants().values()) {
                 if (causing.getSpecies().getId() == getHost().getId()) {
-                    final String[] messageKeyArguments = {getHost().getMessageKey(), String.valueOf(gap)};
+                    final String[] messageKeyArguments = {String.valueOf(getHost().getId()), String.valueOf(gap)};
                     return Hint.createHint(affected, causing, getHintMessageKey(), messageKeyArguments);
                 }
             }

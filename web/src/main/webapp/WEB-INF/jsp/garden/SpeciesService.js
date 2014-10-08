@@ -4,17 +4,13 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
         selectedSpecies: new Species('not set'),
         action: 'add'
     };
-    updateState(initData.species);
+    state.speciesArray = initData.species;
+    state.selectedSpecies = initData.species[0];
     $log.log('SpeciesService', state);
 
     $rootScope.$on('current-user-changed', function (event, user) {
         if (user) {
             reloadSpecies();
-        }
-    });
-    $rootScope.$on('newLanguageAvailable', function (event, locale) {
-        if (locale) {
-            updateState(state.speciesArray);
         }
     });
 
@@ -26,17 +22,9 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
         return $http.get('rest/species')
             .then(function (response) {
                 $log.log('Species retrieve successful. Response:', response);
-                updateState(response.data);
+                state.speciesArray = response.data;
+                state.selectedSpecies = state.species[0];
             });
-    }
-
-    function updateState(species) {
-        state.speciesArray = species;
-        state.selectedSpecies = species[0];
-        angular.forEach(state.speciesArray, function (s) {
-            s.vernacularName = translateFilter(s);
-        });
-        $log.log('Species state updated', state);
     }
 
     return {
