@@ -26,7 +26,9 @@ public class SpeciesHandler {
     private FamilyDao familyDao;
 
     public int addSpecies(SpeciesFormBean species, AuthenticatedUser user) {
-        return speciesDao.addSpecies(species, user.getId());
+        final int id = speciesDao.addSpecies(species, user.getId());
+        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), "");
+        return id;
     }
 
 

@@ -34,12 +34,14 @@ class JdbcSpeciesDao implements SpeciesDao {
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
     private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert create;
+    private SimpleJdbcInsert insertSpecies;
+    private SimpleJdbcInsert insertSpeciesTranslation;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.create = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id");
+        this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id");
+        this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
     }
 
     @Override
@@ -52,8 +54,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("family", species.getFamily(), Types.INTEGER);
         s.addValue("creator", userId, Types.INTEGER);
         s.addValue("vernacularname", species.getVernacularName());
-        Number update = create.executeAndReturnKey(s);
-        return update.intValue();
+        return insertSpecies.executeAndReturnKey(s).intValue();
     }
 
     @Override
@@ -67,6 +68,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     public SpeciesView getSpecies(int id, Locale locale) {
         final Object[] args = {locale.getLanguage(), locale.toString(), id};
         return jdbcTemplate.queryForObject(WHERE, args, new SpeciesViewRowMapper(new HashMap<Integer, Family>()));
+    }
+
+    @Override
+    public void setSpeciesTranslation(int id, String vernacularName, String locale) {
+        MapSqlParameterSource s = new MapSqlParameterSource();
+        s.addValue("species_id", id, Types.INTEGER);
+        s.addValue("locale", locale, Types.VARCHAR);
+        s.addValue("vernacular_name", vernacularName);
+        insertSpeciesTranslation.execute(s);
     }
 
     private static class SpeciesViewRowMapper implements RowMapper<SpeciesView> {

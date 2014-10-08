@@ -30,7 +30,8 @@ function GardenController($modal, $scope, $filter, PlantService, SpeciesService,
         clickEvent.stopPropagation();
     };
     $scope.onGridClick = function (clickEvent) {
-        if (SpeciesService.getSpecies().action == 'add') {
+        $log.log('Grid clicked', [clickEvent, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
+        if (SpeciesService.getState().action == 'add') {
             //http://stackoverflow.com/a/14872192/859514
             var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
             var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;

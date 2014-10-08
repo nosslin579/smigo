@@ -14,4 +14,6 @@ interface SpeciesDao {
     List<SpeciesView> getSpecies(Map<Integer, Family> familyMap, Locale locale);
 
     SpeciesView getSpecies(int id, Locale english);
+
+    void setSpeciesTranslation(int id, String vernacularName, String locale);
 }

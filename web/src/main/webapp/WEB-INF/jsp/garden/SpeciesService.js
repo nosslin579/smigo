@@ -23,7 +23,7 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
             .then(function (response) {
                 $log.log('Species retrieve successful. Response:', response);
                 state.speciesArray = response.data;
-                state.selectedSpecies = state.species[0];
+                state.selectedSpecies = state.speciesArray[0];
             });
     }
 
@@ -50,7 +50,6 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
                     return $http.get('rest/species/' + species.id);
                 }).then(function (response) {
                     angular.extend(species, response.data);
-                    $rootScope.$broadcast('newMessagesAvailable', species.messageKey, vernacularName);
                 });
         },
         getSpecies: function () {
