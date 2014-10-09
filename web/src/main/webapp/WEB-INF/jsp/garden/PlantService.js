@@ -20,6 +20,10 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         }
     });
 
+    $rootScope.$on('locale-changed', function (event, locale) {
+        reloadPlants();
+    });
+
     $window.onbeforeunload = function () {
         sendUnsavedPlantsToServer();
         return null;

@@ -56,6 +56,9 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
         return $http.put('rest/user', userBean)
             .then(function (response) {
                 $log.log('Update user success', [userBean, response]);
+                if (state.currentUser.locale != userBean.locale) {
+                    $rootScope.$broadcast('locale-changed', userBean.locale);
+                }
                 state.currentUser = userBean;
             });
     }

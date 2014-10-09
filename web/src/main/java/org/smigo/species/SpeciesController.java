@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Locale;
 
 @Controller
 public class SpeciesController implements Serializable {
@@ -22,8 +23,8 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<SpeciesView> getSpecies(@AuthenticationPrincipal AuthenticatedUser user) {
-        return speciesHandler.getSpeciesMap(user).values();
+    public Collection<SpeciesView> getSpecies(@AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
+        return speciesHandler.getSpeciesMap(user, locale).values();
     }
 
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)

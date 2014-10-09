@@ -43,12 +43,12 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<Integer, SpeciesView> getSpeciesMap(AuthenticatedUser user) {
+    public Map<Integer, SpeciesView> getSpeciesMap(AuthenticatedUser user, Locale locale) {
         long start = System.currentTimeMillis();
         Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
-        ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(Locale.ENGLISH)));
+        ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
         if (user != null) {
-            ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), Locale.ENGLISH)));
+            ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), locale)));
         }
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules();

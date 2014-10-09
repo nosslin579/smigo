@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -27,8 +28,8 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public Map<Integer, Collection<Square>> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
-        return plantHandler.getGarden(user).getSquares();
+    public Map<Integer, Collection<Square>> getPlants(@AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
+        return plantHandler.getGarden(user, locale).getSquares();
     }
 
     @RequestMapping(value = {"/update-garden", "/rest/plant"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)

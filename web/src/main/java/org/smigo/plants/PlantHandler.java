@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class PlantHandler {
@@ -40,8 +41,8 @@ public class PlantHandler {
         }
     }
 
-    public Garden getGarden(AuthenticatedUser user) {
-        return new Garden(speciesHandler.getSpeciesMap(user), getPlants(user));
+    public Garden getGarden(AuthenticatedUser user, Locale locale) {
+        return new Garden(speciesHandler.getSpeciesMap(user, locale), getPlants(user));
     }
 
     public void addPlants(List<PlantData> plants, int userId) {
