@@ -5,7 +5,7 @@ import kga.IdUtil;
 import org.smigo.SpeciesView;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -52,7 +52,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @CacheEvict(value = Cache.SPECIES, allEntries = true)
     public int addSpecies(SpeciesFormBean species, int userId) {
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("name", species.getScientificName(), Types.VARCHAR);
@@ -65,7 +64,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-//    @Cacheable(Cache.SPECIES)
+    @Cacheable(value = Cache.SPECIES, key = "#locale")
     public List<SpeciesView> getDefaultSpecies(Locale locale) {
         final String sql = String.format(SELECT, "species.id NOT IN (99,87)", 58);//Unknown and Hemp is never display by default
         final Object[] args = {locale.getLanguage(), locale.toString()};

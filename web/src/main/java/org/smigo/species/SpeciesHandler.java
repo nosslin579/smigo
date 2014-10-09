@@ -47,7 +47,9 @@ public class SpeciesHandler {
         long start = System.currentTimeMillis();
         Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
         ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(Locale.ENGLISH)));
-        ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), Locale.ENGLISH)));
+        if (user != null) {
+            ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), Locale.ENGLISH)));
+        }
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules();
         for (Rule r : rules) {
