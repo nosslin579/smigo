@@ -1,6 +1,7 @@
 package org.smigo.species;
 
 import kga.Family;
+import kga.IdUtil;
 import kga.Species;
 import kga.rules.*;
 import org.smigo.config.Cache;
@@ -26,9 +27,13 @@ class JdbcRuleDao implements RuleDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Autowired
+    private FamilyDao familyDao;
+
     @Cacheable(Cache.RULES)
-    public List<Rule> getRules(final Map<Integer, Family> familyMap) {
+    public List<Rule> getRules() {
         final String sql = String.format(SELECT);
+        final Map<Integer, Family> familyMap = IdUtil.convertToMap(familyDao.getFamilies());
         return jdbcTemplate.query(sql, new RowMapper<Rule>() {
             @Override
             public Rule mapRow(ResultSet rs, int rowNum) throws SQLException {

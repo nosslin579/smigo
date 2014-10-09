@@ -1,7 +1,7 @@
 package org.smigo.species;
 
 import kga.Family;
-import kga.Id;
+import kga.IdUtil;
 import kga.Species;
 import kga.rules.Rule;
 import org.slf4j.Logger;
@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Component
 public class SpeciesHandler {
@@ -42,24 +44,15 @@ public class SpeciesHandler {
 
     public Map<Integer, SpeciesView> getSpeciesMap() {
         long start = System.currentTimeMillis();
-        Map<Integer, Family> familyMap = convertToMap(familyDao.getFamilies());
-        Map<Integer, SpeciesView> ret = convertToMap(speciesDao.getSpecies(familyMap, Locale.ENGLISH));
+        Map<Integer, SpeciesView> ret = IdUtil.convertToMap(speciesDao.getSpecies(Locale.ENGLISH));
         //Add rules to species
-        final List<Rule> rules = ruleDao.getRules(familyMap);
+        final List<Rule> rules = ruleDao.getRules();
         for (Rule r : rules) {
             int hostId = r.getHost().getId();
             Species s = ret.get(hostId);
             s.addRule(r);
         }
         long l = System.currentTimeMillis() - start;
-        return ret;
-    }
-
-    private static <V extends Id> Map<Integer, V> convertToMap(Collection<V> collection) {
-        final Map<Integer, V> ret = new HashMap<Integer, V>();
-        for (V v : collection) {
-            ret.put(v.getId(), v);
-        }
         return ret;
     }
 

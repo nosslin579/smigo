@@ -1,6 +1,7 @@
 package org.smigo.species;
 
 import kga.Family;
+import kga.IdUtil;
 import org.smigo.SpeciesView;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ class JdbcSpeciesDao implements SpeciesDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
     private SimpleJdbcInsert insertSpeciesTranslation;
+    private Map<Integer, Family> families;
+
+    @Autowired
+    private FamilyDao familyDao;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -59,9 +64,10 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
 //    @Cacheable(Cache.SPECIES)
-    public List<SpeciesView> getSpecies(final Map<Integer, Family> familyMap, Locale locale) {
+    public List<SpeciesView> getSpecies(Locale locale) {
         final Object[] args = {locale.getLanguage(), locale.toString()};
-        return jdbcTemplate.query(SELECT2, args, new SpeciesViewRowMapper(familyMap));
+        final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
+        return jdbcTemplate.query(SELECT2, args, rowMapper);
     }
 
     @Override
