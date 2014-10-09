@@ -52,6 +52,9 @@ public class Square {
     }
 
     public void addSpecies(Species s) {
+        if (s == null) {
+            throw new IllegalArgumentException("Species may not be null" + location);
+        }
         plantsMap.put(s.getId(), new Plant(s, this));
     }
 

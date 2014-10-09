@@ -41,7 +41,7 @@ public class PlantHandler {
     }
 
     public Garden getGarden(AuthenticatedUser user) {
-        return new Garden(speciesHandler.getSpeciesMap(), getPlants(user));
+        return new Garden(speciesHandler.getSpeciesMap(user), getPlants(user));
     }
 
     public void addPlants(List<PlantData> plants, int userId) {

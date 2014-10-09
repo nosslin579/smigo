@@ -32,10 +32,10 @@ public class AboutController {
     private SpeciesHandler speciesHandler;
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
-    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser principal) {
-        model.addAttribute("user", userHandler.getUser(principal));
-        model.addAttribute("species", speciesHandler.getSpeciesMap().values());
-        model.addAttribute("squares", plantHandler.getGarden(principal).getSquares());
+    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
+        model.addAttribute("user", userHandler.getUser(user));
+        model.addAttribute("species", speciesHandler.getSpeciesMap(user).values());
+        model.addAttribute("squares", plantHandler.getGarden(user).getSquares());
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }

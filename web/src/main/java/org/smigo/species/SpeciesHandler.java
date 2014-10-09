@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -42,15 +43,19 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<Integer, SpeciesView> getSpeciesMap() {
+    public Map<Integer, SpeciesView> getSpeciesMap(AuthenticatedUser user) {
         long start = System.currentTimeMillis();
-        Map<Integer, SpeciesView> ret = IdUtil.convertToMap(speciesDao.getSpecies(Locale.ENGLISH));
+        Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
+        ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(Locale.ENGLISH)));
+        ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), Locale.ENGLISH)));
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules();
         for (Rule r : rules) {
             int hostId = r.getHost().getId();
             Species s = ret.get(hostId);
-            s.addRule(r);
+            if (s != null) {
+                s.addRule(r);
+            }
         }
         long l = System.currentTimeMillis() - start;
         return ret;
