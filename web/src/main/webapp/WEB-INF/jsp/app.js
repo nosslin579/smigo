@@ -64,24 +64,26 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
             return Object.keys(obj).length;
         };
 
-        $rootScope.$on('current-user-changed', function (event, user) {
-            $log.log('Broadcast: current-user-changed', [event, user]);
-        });
+        /*
+         $rootScope.$on('current-user-changed', function (event, user) {
+         $log.log('Broadcast: current-user-changed', [event, user]);
+         });
 
-        $rootScope.$on('$locationChangeSuccess', function (param1, param2, param3) {
-            $log.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
-        });
+         $rootScope.$on('$locationChangeSuccess', function (param1, param2, param3) {
+         $log.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
+         });
 
-        $rootScope.$on('$locationChangeStart', function (param1, param2, param3) {
-            $log.info('Broadcast: locationChangeStart', [param1, param2, param3]);
-        });
+         $rootScope.$on('$locationChangeStart', function (param1, param2, param3) {
+         $log.info('Broadcast: locationChangeStart', [param1, param2, param3]);
+         });
 
-        $rootScope.$on('$routeChangeStart', function (param1, param2, param3) {
-            $log.info('Broadcast: routeChangeStart', [param1, param2, param3]);
-        });
+         $rootScope.$on('$routeChangeStart', function (param1, param2, param3) {
+         $log.info('Broadcast: routeChangeStart', [param1, param2, param3]);
+         });
 
-        $rootScope.$on('newMessagesAvailable', function (param1, param2, param3) {
-            $log.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
-        });
+         $rootScope.$on('newMessagesAvailable', function (param1, param2, param3) {
+         $log.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
+         });
+         */
 
     });

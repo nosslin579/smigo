@@ -11,10 +11,11 @@ interface SpeciesDao {
 
     List<SpeciesView> getDefaultSpecies(Locale locale);
 
-    //    @Cacheable(Cache.SPECIES)
     List<SpeciesView> getUserSpecies(int userId, Locale locale);
 
     SpeciesView getSpecies(int id, Locale english);
 
     void setSpeciesTranslation(int id, String vernacularName, String locale);
+
+    List<SpeciesView> searchSpecies(String query, Locale locale);
 }

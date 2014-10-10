@@ -82,6 +82,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
+    public List<SpeciesView> searchSpecies(String query, Locale locale) {
+        final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR name LIKE ?";
+        final String sql = String.format(SELECT, whereClause, 10);
+        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), query, query, query, query};
+        final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
+        return jdbcTemplate.query(sql, args, rowMapper);
+    }
+
+    @Override
     public SpeciesView getSpecies(int id, Locale locale) {
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
         final String sql = String.format(SELECT, "species.id = ?", 1);

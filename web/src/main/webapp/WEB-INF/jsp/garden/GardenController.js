@@ -1,4 +1,4 @@
-function GardenController($modal, $scope, $filter, PlantService, SpeciesService, UserService, $log) {
+function GardenController($http, $log, $modal, $scope, $filter, PlantService, SpeciesService, UserService) {
 
     $scope.plantsState = PlantService.getState();
     $scope.speciesState = SpeciesService.getState();
@@ -7,6 +7,7 @@ function GardenController($modal, $scope, $filter, PlantService, SpeciesService,
     $scope.selectYear = PlantService.selectYear;
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
+    $scope.searchSpecies = SpeciesService.searchSpecies;
 
     $scope.selectedSpeciesFromTopResult = function (searchString) {
         $log.log('Setting species from', searchString);

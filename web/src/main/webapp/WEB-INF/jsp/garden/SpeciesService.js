@@ -1,9 +1,8 @@
-function SpeciesService($http, $rootScope, translateFilter, $log) {
-    var state = {
-        speciesArray: [],
-        selectedSpecies: new Species('not set'),
-        action: 'add'
-    };
+function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
+    var state = {},
+        search = {previous: [], promise: ""};
+    state.selectedSpecies = new Species('not set');
+    state.action = 'add';
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species[0];
     $log.log('SpeciesService', state);
@@ -32,6 +31,14 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
             });
     }
 
+    function getSpecies(id) {
+        for (var i = 0; i < state.speciesArray.length; i++) {
+            if (state.speciesArray[i].id === id) {
+                return state.speciesArray[i];
+            }
+        }
+    }
+
     return {
         getState: function () {
             return state;
@@ -44,7 +51,7 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
         addSpecies: function (vernacularName) {
             var name = vernacularName.capitalize();
             var species = new Species(name);
-            state.selectedSpecies = species;
+            return $http.post('rest/species', species)
             state.speciesArray.push(species);
             $log.log('Species added:' + vernacularName, state);
             return $http.post('rest/species', species)
@@ -56,6 +63,26 @@ function SpeciesService($http, $rootScope, translateFilter, $log) {
                 }).then(function (response) {
                     angular.extend(species, response.data);
                 });
+        },
+        searchSpecies: function (query) {
+            //Cancel search if new search within 2sec
+            $timeout.cancel(search.promise);
+            if (!query || query.length <= 2 || search.previous.indexOf(query) != -1) {
+                return;
+            }
+            search.promise = $timeout(function () {
+                $log.debug('Search with query', query);
+                search.previous.push(query);
+                $http.post('rest/species/search', {query: query})
+                    .then(function (response) {
+                        response.data.forEach(function (species) {
+                            if (!getSpecies(species.id)) {
+                                state.speciesArray.push(species);
+                            }
+                        });
+                        $log.debug('Response from search ', response);
+                    });
+            }, 2000);
         },
         getSpecies: function () {
             return state.speciesArray;

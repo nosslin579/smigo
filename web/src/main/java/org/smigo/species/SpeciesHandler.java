@@ -71,4 +71,13 @@ public class SpeciesHandler {
         return familyDao.getFamilies();
     }
 
+    public List<SpeciesView> searchSpecies(String query, Locale locale) {
+        if (query.length() >= 5) {
+            return speciesDao.searchSpecies('%' + query + '%', locale);
+        } else if (query.length() >= 3) {
+            return speciesDao.searchSpecies(query + '%', locale);
+        } else {
+            return speciesDao.searchSpecies(query, locale);
+        }
+    }
 }
