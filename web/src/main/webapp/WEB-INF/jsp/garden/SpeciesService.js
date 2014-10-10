@@ -51,7 +51,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         addSpecies: function (vernacularName) {
             var name = vernacularName.capitalize();
             var species = new Species(name);
-            return $http.post('rest/species', species)
+            state.selectedSpecies = species;
             state.speciesArray.push(species);
             $log.log('Species added:' + vernacularName, state);
             return $http.post('rest/species', species)
@@ -62,6 +62,10 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     return $http.get('rest/species/' + species.id);
                 }).then(function (response) {
                     angular.extend(species, response.data);
+                }).catch(function (error) {
+                    $log.warn('Could not add species', species, error);
+                    state.speciesArray.pop(species);
+                    state.selectedSpecies = state.speciesArray[0];
                 });
         },
         searchSpecies: function (query) {

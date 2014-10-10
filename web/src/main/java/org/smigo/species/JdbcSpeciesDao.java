@@ -25,8 +25,8 @@ class JdbcSpeciesDao implements SpeciesDao {
     private static final String SELECT = "SELECT\n" +
             "species.*,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
-            "FROM plants\n" +
-            "JOIN species ON species.id = plants.species\n" +
+            "FROM species\n" +
+            "LEFT JOIN plants ON species.id = plants.species\n" +
             "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
             "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
             "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
@@ -60,7 +60,6 @@ class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("annual", species.isAnnual(), Types.BOOLEAN);
         s.addValue("family", species.getFamily(), Types.INTEGER);
         s.addValue("creator", userId, Types.INTEGER);
-        s.addValue("vernacularname", species.getVernacularName());
         return insertSpecies.executeAndReturnKey(s).intValue();
     }
 
@@ -98,10 +97,11 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void setSpeciesTranslation(int id, String vernacularName, String locale) {
+    public void setSpeciesTranslation(int id, String vernacularName, String language, String country) {
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("species_id", id, Types.INTEGER);
-        s.addValue("locale", locale, Types.VARCHAR);
+        s.addValue("language", language, Types.VARCHAR);
+        s.addValue("country", country, Types.VARCHAR);
         s.addValue("vernacular_name", vernacularName);
         insertSpeciesTranslation.execute(s);
     }

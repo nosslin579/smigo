@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Collection;
@@ -36,8 +38,13 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public int addSpecies(@Valid @RequestBody SpeciesFormBean species, @AuthenticationPrincipal AuthenticatedUser user) {
-        return speciesHandler.addSpecies(species, user);
+    public int addSpecies(@Valid @RequestBody SpeciesFormBean species, @AuthenticationPrincipal AuthenticatedUser user,
+                          Locale locale, HttpServletResponse response) {
+        final Integer speciesId = speciesHandler.addSpecies(species, user, locale);
+        if (speciesId == -1) {
+            response.setStatus(HttpStatus.CONFLICT.value());
+        }
+        return speciesId;
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)

@@ -28,9 +28,14 @@ public class SpeciesHandler {
     @Autowired
     private FamilyDao familyDao;
 
-    public int addSpecies(SpeciesFormBean species, AuthenticatedUser user) {
+    public int addSpecies(SpeciesFormBean species, AuthenticatedUser user, Locale locale) {
+        final List<SpeciesView> searchedSpecies = speciesDao.searchSpecies(species.getVernacularName(), locale);
+        if (!searchedSpecies.isEmpty()) {
+            return -1;
+        }
         final int id = speciesDao.addSpecies(species, user.getId());
-        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), "");
+        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), "", "");
+        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), locale.getLanguage(), "");
         return id;
     }
 

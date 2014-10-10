@@ -15,7 +15,7 @@ interface SpeciesDao {
 
     SpeciesView getSpecies(int id, Locale english);
 
-    void setSpeciesTranslation(int id, String vernacularName, String locale);
+    void setSpeciesTranslation(int id, String vernacularName, String language, String country);
 
     List<SpeciesView> searchSpecies(String query, Locale locale);
 }
