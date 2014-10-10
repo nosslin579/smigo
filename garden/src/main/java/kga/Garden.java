@@ -36,6 +36,9 @@ public class Garden {
         if (plants != null) {
             for (PlantData p : plants) {
                 Species s = species.get(p.getSpeciesId());
+                if (s == null) {
+                    throw new IllegalArgumentException("Species may not be null. Id:" + p.getSpeciesId());
+                }
                 this.addOrGetSquare(new YearXY(p)).addSpecies(s);
             }
         }

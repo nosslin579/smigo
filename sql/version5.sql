@@ -11,103 +11,104 @@ CHANGE species_id id INT NOT NULL AUTO_INCREMENT;
 CREATE TABLE species_translation
 (
   species_id INT NOT NULL,
-  locale VARCHAR(5) NOT NULL,
-  vernacular_name VARCHAR(255),
-  PRIMARY KEY (species_id, language)
+  language VARCHAR(2) DEFAULT '',
+  country VARCHAR(2) DEFAULT '',
+  vernacular_name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (species_id, language, country)
 );
 
-INSERT INTO species_translation VALUES
-(73,'en','Sunflower'),
-(72,'en','Snapdragon'),
-(70,'en','Flax'),
-(116,'en','Path'),
-(115,'en','Sand'),
-(79,'en','Horseradish'),
-(118,'en','Clover'),
-(120,'en','Petunia'),
-(89,'en','Lovage'),
-(88,'en','Hyssop'),
-(87,'en','Hemp'),
-(125,'en','Lacy phacelia'),
-(85,'en','Chamomile'),
-(124,'en','Sweet potato'),
-(84,'en','Oregano'),
-(123,'en','Raspberry'),
-(83,'en','Caraway'),
-(122,'en','Grapes'),
-(121,'en','Tobacco'),
-(99,'en','Other'),
-(96,'en','Apricot'),
-(94,'en','Apple'),
-(47,'en','Potato'),
-(46,'en','Chickpea'),
-(45,'en','Pea'),
-(44,'en','Tomato'),
-(43,'en','Spinach'),
-(15,'en','Kohlrabi'),
-(13,'en','Brussels sprouts'),
-(19,'en','Turnip'),
-(18,'en','Swede'),
-(17,'en','Cabbage'),
-(21,'en','Chive'),
-(20,'en','Leek'),
-(29,'en','Parsnip'),
-(28,'en','Carrot'),
-(27,'en','Watermelon'),
-(26,'en','Melon'),
-(25,'en','Chard'),
-(24,'en','Beetroot'),
-(22,'en','Onion'),
-(36,'en','Rocket'),
-(35,'en','Lettuce'),
-(34,'en','Radish'),
-(33,'en','Rhubarb'),
-(32,'en','Pumpkin'),
-(31,'en','Parsley'),
-(30,'en','Capsicum'),
-(37,'en','Celery'),
-(39,'en','Wild strawberry'),
-(38,'en','Celeriac'),
-(42,'en','Asparagus'),
-(41,'en','Hybrid strawberry'),
-(40,'en','Strawberry'),
-(48,'en','Basil'),
-(49,'en','Thyme'),
-(53,'en','Chili'),
-(52,'en','Red cabbage'),
-(51,'en','Corn'),
-(50,'en','Soybean'),
-(59,'en','Rosemary'),
-(57,'en','Comfrey'),
-(56,'en','Coriander'),
-(54,'en','Chinese cabbage'),
-(61,'en','Borage'),
-(100,'en','Lawn'),
-(68,'en','Wormwood'),
-(107,'en','Geranium'),
-(66,'en','Garlic'),
-(105,'en','Nasturtium'),
-(65,'en','Catnip'),
-(104,'en','Mint'),
-(103,'en','Marigold'),
-(63,'en','Summer savory'),
-(102,'en','Concrete'),
-(109,'en','Pot Marigold'),
-(69,'en','Sage'),
-(108,'en','Squash'),
-(93,'en','Yarrow'),
-(12,'en','Broccoli'),
-(11,'en','Cauliflower'),
-(10,'en','Onion, Red'),
-(9,'en','Artichoke thistle'),
-(8,'en','Cucumber'),
-(7,'en','Fennel'),
-(6,'en','Dill'),
-(4,'en','Bean'),
-(2,'en','Broadbean'),
-(1,'en','Eggplant');
+INSERT INTO species_translation (species_id, vernacular_name) VALUES
+(73,'Sunflower'),
+(72,'Snapdragon'),
+(70,'Flax'),
+(116,'Path'),
+(115,'Sand'),
+(79,'Horseradish'),
+(118,'Clover'),
+(120,'Petunia'),
+(89,'Lovage'),
+(88,'Hyssop'),
+(87,'Hemp'),
+(125,'Lacy phacelia'),
+(85,'Chamomile'),
+(124,'Sweet potato'),
+(84,'Oregano'),
+(123,'Raspberry'),
+(83,'Caraway'),
+(122,'Grapes'),
+(121,'Tobacco'),
+(99,'Other'),
+(96,'Apricot'),
+(94,'Apple'),
+(47,'Potato'),
+(46,'Chickpea'),
+(45,'Pea'),
+(44,'Tomato'),
+(43,'Spinach'),
+(15,'Kohlrabi'),
+(13,'Brussels sprouts'),
+(19,'Turnip'),
+(18,'Swede'),
+(17,'Cabbage'),
+(21,'Chive'),
+(20,'Leek'),
+(29,'Parsnip'),
+(28,'Carrot'),
+(27,'Watermelon'),
+(26,'Melon'),
+(25,'Chard'),
+(24,'Beetroot'),
+(22,'Onion'),
+(36,'Rocket'),
+(35,'Lettuce'),
+(34,'Radish'),
+(33,'Rhubarb'),
+(32,'Pumpkin'),
+(31,'Parsley'),
+(30,'Capsicum'),
+(37,'Celery'),
+(39,'Wild strawberry'),
+(38,'Celeriac'),
+(42,'Asparagus'),
+(41,'Hybrid strawberry'),
+(40,'Strawberry'),
+(48,'Basil'),
+(49,'Thyme'),
+(53,'Chili'),
+(52,'Red cabbage'),
+(51,'Corn'),
+(50,'Soybean'),
+(59,'Rosemary'),
+(57,'Comfrey'),
+(56,'Coriander'),
+(54,'Chinese cabbage'),
+(61,'Borage'),
+(100,'Lawn'),
+(68,'Wormwood'),
+(107,'Geranium'),
+(66,'Garlic'),
+(105,'Nasturtium'),
+(65,'Catnip'),
+(104,'Mint'),
+(103,'Marigold'),
+(63,'Summer savory'),
+(102,'Concrete'),
+(109,'Pot Marigold'),
+(69,'Sage'),
+(108,'Squash'),
+(93,'Yarrow'),
+(12,'Broccoli'),
+(11,'Cauliflower'),
+(10,'Onion, Red'),
+(9,'Artichoke thistle'),
+(8,'Cucumber'),
+(7,'Fennel'),
+(6,'Dill'),
+(4,'Bean'),
+(2,'Broadbean'),
+(1,'Eggplant');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name) VALUES
 (124,'cs','Sladké brambory'),
 (123,'cs','Malina'),
 (49,'cs','Tymián'),
@@ -211,7 +212,7 @@ INSERT INTO species_translation VALUES
 (122,'cs','Réva'),
 (125,'cs','Svazenka vratičolistá');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name) VALUES
 (73,'de','Sonnenblume'),
 (72,'de','Löwenmäuler'),
 (70,'de','Gemeiner Lein'),
@@ -302,21 +303,20 @@ INSERT INTO species_translation VALUES
 (2,'de','Ackerbohne'),
 (1,'de','Aubergine');
 
-INSERT INTO species_translation VALUES
-(1,'en_UK','Aubergine'),
-(30,'en_UK','Sweet pepper'),
-(65,'en_UK','Cat mint'),
-(51,'en_UK','Maize'),
-(108,'en_UK','Marrows');
+INSERT INTO species_translation (species_id, language, country, vernacular_name) VALUES
+(1,'en','UK','Aubergine'),
+(65,'en','UK','Cat mint'),
+(51,'en','UK','Maize'),
+(108,'en','UK','Marrows');
 
-INSERT INTO species_translation VALUES
-(1,'en_US','Eggplant'),
-(30,'en_US','Bell pepper'),
-(19,'en_US','Turnip'),
-(18,'en_US','Rutabaga'),
-(53,'en_US','Chili pepper');
+INSERT INTO species_translation (species_id, language, country, vernacular_name)VALUES
+(1,'en','US','Eggplant'),
+(30,'en','US','Bell pepper'),
+(19,'en','US','Turnip'),
+(18,'en','US','Rutabaga'),
+(53,'en','US','Chili pepper');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name)VALUES
 (124,'es','Batata'),
 (123,'es','Frambuesa'),
 (49,'es','Tomillo'),
@@ -419,7 +419,7 @@ INSERT INTO species_translation VALUES
 (122,'es','Uvas'),
 (125,'es','Phacelia Tanacetifolia');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name)VALUES
 (124,'fr','Patates douce'),
 (123,'fr','Framboises'),
 (49,'fr','Thym'),
@@ -523,7 +523,7 @@ INSERT INTO species_translation VALUES
 (122,'fr','Raisin'),
 (125,'fr','Phacélie');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name) VALUES
 (12,'ro','Broccoli'),
 (11,'ro','Conopidă'),
 (10,'ro','Ceapă roşie'),
@@ -627,7 +627,7 @@ INSERT INTO species_translation VALUES
 (2,'ro','Bob'),
 (1,'ro','Vânătă');
 
-INSERT INTO species_translation VALUES
+INSERT INTO species_translation (species_id, language, vernacular_name)VALUES
 (12,'sv','Broccoli'),
 (11,'sv','Blomkål'),
 (68,'sv','Malört'),
@@ -712,8 +712,13 @@ INSERT INTO species_translation VALUES
 (17,'sv','Kål'),
 (40,'sv','Jordgubbar');
 
-
-INSERT INTO species_translation (SELECT species_id, '' as locale, vernacularname as vernacular_name FROM species WHERE vernacularname IS NOT NULL);
+INSERT INTO species_translation (SELECT
+                                   species_id,
+                                   ''             AS language,
+                                   ''             AS country,
+                                   vernacularname AS vernacular_name
+                                 FROM species
+                                 WHERE vernacularname IS NOT NULL);
 
 ALTER TABLE species
 DROP COLUMN vernacularname;

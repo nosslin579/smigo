@@ -23,16 +23,17 @@ import java.util.Map;
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
     private static final String SELECT = "SELECT\n" +
-            "species.*,coalesce(country.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
+            "species.*,\n" +
+            "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
             "FROM plants\n" +
             "JOIN species ON species.id = plants.species\n" +
-            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.locale = ''\n" +
-            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.locale = ?\n" +
-            "LEFT JOIN species_translation country ON country.species_id = species.id AND country.locale = ?\n" +
+            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
+            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
+            "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
             "WHERE %s\n" +
             "GROUP BY species.id\n" +
-            "ORDER BY count(species.id) DESC\n" +
-            "LIMIT %d;";
+            "ORDER BY COUNT(species.id) DESC\n" +
+            "LIMIT %d;\n";
 
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
@@ -67,7 +68,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Cacheable(value = Cache.SPECIES, key = "#locale")
     public List<SpeciesView> getDefaultSpecies(Locale locale) {
         final String sql = String.format(SELECT, "species.id NOT IN (99,87)", 58);//Unknown and Hemp is never display by default
-        final Object[] args = {locale.getLanguage(), locale.toString()};
+        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry()};
         final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
         return jdbcTemplate.query(sql, args, rowMapper);
     }
@@ -75,15 +76,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Override
     public List<SpeciesView> getUserSpecies(int userId, Locale locale) {
         final String sql = String.format(SELECT, "plants.fkuserid = ?", Integer.MAX_VALUE);
-        final Object[] args = {locale.getLanguage(), locale.toString(), userId};
+        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), userId};
         final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
         return jdbcTemplate.query(sql, args, rowMapper);
     }
 
     @Override
     public SpeciesView getSpecies(int id, Locale locale) {
-        final Object[] args = {locale.getLanguage(), locale.toString(), id};
-        final String sql = String.format(SELECT, "id = ?", 1);
+        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
+        final String sql = String.format(SELECT, "species.id = ?", 1);
         return jdbcTemplate.queryForObject(sql, args, new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies())));
     }
 
