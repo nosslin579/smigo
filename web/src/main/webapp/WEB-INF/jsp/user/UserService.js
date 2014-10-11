@@ -69,7 +69,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
         form.processing = true;
         var deferred = $q.defer();
         if (form.$invalid && !skipValidate) {
-            $log.log('Form is invalid', form);
+            $log.debug('Form is invalid', form);
             deferred.reject('Form is invalid');
         } else {
             deferred.resolve();
