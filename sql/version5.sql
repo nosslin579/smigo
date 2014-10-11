@@ -713,7 +713,7 @@ INSERT INTO species_translation (species_id, language, vernacular_name)VALUES
 (40,'sv','Jordgubbar');
 
 INSERT INTO species_translation (SELECT
-                                   species_id,
+                                   id,
                                    ''             AS language,
                                    ''             AS country,
                                    vernacularname AS vernacular_name
