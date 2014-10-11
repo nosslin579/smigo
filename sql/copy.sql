@@ -4,6 +4,8 @@ INSERT INTO families SELECT * FROM nosslin2_db.families;
 CREATE TABLE openid LIKE nosslin2_db.openid;
 INSERT INTO openid SELECT * FROM nosslin2_db.openid;
 
+CREATE TABLE persistent_logins LIKE nosslin2_db.persistent_logins;
+
 CREATE TABLE plants LIKE nosslin2_db.plants;
 INSERT INTO plants SELECT * FROM nosslin2_db.plants;
 
