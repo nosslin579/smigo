@@ -63,15 +63,7 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
         if (!vernacularName) {
             return false;
         }
-//                $log.log('isSpeciesAddable', vernacularName);
-        var name = vernacularName.toLowerCase();
-        for (var i = 0; i < SpeciesService.getSpecies().length; i++) {
-            var species = SpeciesService.getSpecies()[i];
-            if (species.vernacularName && species.vernacularName.toLowerCase() == name) {
-                return false;
-            }
-        }
-        return true;
+        return SpeciesService.getSpecies().find(vernacularName, 'vernacularName', {ignoreCase: true}) ? false : true;
     };
 
 
