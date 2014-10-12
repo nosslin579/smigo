@@ -42,6 +42,7 @@ public class SpeciesController implements Serializable {
                           Locale locale, HttpServletResponse response) {
         final Integer speciesId = speciesHandler.addSpecies(species, user, locale);
         if (speciesId == -1) {
+            log.warn("User:" + user.getId() + " could not add species:" + species.getVernacularName() + " with locale:" + locale);
             response.setStatus(HttpStatus.CONFLICT.value());
         }
         return speciesId;
@@ -50,6 +51,7 @@ public class SpeciesController implements Serializable {
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)
     @ResponseBody
     public List<SpeciesView> searchSpecies(@Valid @RequestBody SpeciesSearchBean species, Locale locale) {
+        log.info("Searching species, query:" + species.getQuery());
         return speciesHandler.searchSpecies(species.getQuery(), locale);
     }
 
