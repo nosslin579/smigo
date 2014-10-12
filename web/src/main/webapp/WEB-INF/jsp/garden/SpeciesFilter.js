@@ -1,21 +1,21 @@
-function SpeciesFilter(orderByFilter) {
-    return function (speciesArray, searchString) {
+function SpeciesFilter($log, orderByFilter) {
+    return function (speciesArray, query) {
 //        console.time('SpeciesFilter');
-//        console.log('SpeciesFilter', [input, searchString]);
-        if (!searchString) {
+//        console.log('SpeciesFilter', [input, query]);
+        if (!query) {
             return orderByFilter(speciesArray, 'vernacularName');
         }
 
         var ret = [];
-        var searchStringLowerCase = searchString.toLowerCase();
+        var queryLowerCase = query.toLowerCase();
         angular.forEach(speciesArray, function (s) {
             if (s.vernacularName &&
-                (s.vernacularName.toLowerCase().indexOf(searchStringLowerCase) === 0 ||
-                    s.vernacularName.toLowerCase().indexOf(' ' + searchStringLowerCase) !== -1)) {
+                (s.vernacularName.toLowerCase().indexOf(queryLowerCase) === 0 ||
+                    s.vernacularName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
                 ret.unshift(s);
             } else if (s.scientificName &&
-                (s.scientificName.toLowerCase().indexOf(searchStringLowerCase) === 0 ||
-                    s.scientificName.toLowerCase().indexOf(' ' + searchStringLowerCase) !== -1)) {
+                (s.scientificName.toLowerCase().indexOf(queryLowerCase) === 0 ||
+                    s.scientificName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
                 ret.push(s);
             }
         });

@@ -15,7 +15,7 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
         if (topResult) {
             SpeciesService.selectSpecies(topResult);
         }
-        $scope.speciesSearch = '';
+        $scope.speciesQuery = '';
     };
     $scope.onSquareClick = function (clickEvent, square) {
         $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);

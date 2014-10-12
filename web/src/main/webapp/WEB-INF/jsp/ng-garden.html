@@ -19,21 +19,21 @@
                 </div>
             </div>
             <hr/>
-            <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesSearch)">
-                <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesSearch" ng-change="searchSpecies(speciesSearch)">
-            </form>
+                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
+                    <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesSearch)">
+                </form>
             <ul class="nav nav-pills nav-stacked">
-                <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesSearch"
+                <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
                     ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                     speciespopover="{{s.scientificName}}"
                     speciespopover-title="{{'/static/species/' + s.iconFileName}}">
                     <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
                 </li>
                 <hr/>
-                <li ng-if="isSpeciesAddable(speciesSearch) && userState.currentUser">
-                    <a id="add-species-link" href="" ng-click="addSpecies(speciesSearch)">
+                <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">
+                    <a id="add-species-link" href="" ng-click="addSpecies(speciesQuery)">
                         <span class="glyphicon glyphicon-plus"></span>
-                        {{'msg.add-species' | translate:speciesSearch }}
+                        {{'msg.add-species' | translate:speciesQuery }}
                     </a>
                 </li>
             </ul>
