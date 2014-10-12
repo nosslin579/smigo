@@ -5,7 +5,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
         locales: initData.locales,
         connection: true
     };
-    $timeout(pingServer, 120000, false);
+    $timeout(pingServer, 480000, false);
 
     $log.log('UserService', state);
 
