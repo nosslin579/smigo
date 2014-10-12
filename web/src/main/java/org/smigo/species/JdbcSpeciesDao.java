@@ -2,6 +2,7 @@ package org.smigo.species;
 
 import kga.Family;
 import kga.IdUtil;
+import kga.PlantData;
 import org.smigo.SpeciesView;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
@@ -66,27 +65,39 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Override
     @Cacheable(value = Cache.SPECIES, key = "#locale")
     public List<SpeciesView> getDefaultSpecies(Locale locale) {
-        final String sql = String.format(SELECT, "species.id NOT IN (99,87)", 58);//Unknown and Hemp is never display by default
-        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry()};
-        final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
-        return jdbcTemplate.query(sql, args, rowMapper);
+        //Unknown and Hemp is never display by default
+        return querySpeciesForList("species.id NOT IN (99,87)", 58, locale, new Object[]{});
     }
 
     @Override
     public List<SpeciesView> getUserSpecies(int userId, Locale locale) {
-        final String sql = String.format(SELECT, "plants.fkuserid = ?", Integer.MAX_VALUE);
-        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), userId};
-        final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
-        return jdbcTemplate.query(sql, args, rowMapper);
+        return querySpeciesForList("plants.fkuserid = ?", Integer.MAX_VALUE, locale, new Object[]{userId});
     }
 
     @Override
     public List<SpeciesView> searchSpecies(String query, Locale locale) {
         final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR name LIKE ?";
-        final String sql = String.format(SELECT, whereClause, 10);
-        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), query, query, query, query};
+        return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query});
+    }
+
+    @Override
+    public List<SpeciesView> getSpeciesFromList(List<PlantData> plants, Locale locale) {
+        final StringBuilder whereClause = new StringBuilder("species.id IN (");
+        for (Iterator<PlantData> i = plants.iterator(); i.hasNext(); ) {
+            whereClause.append(i.next().getSpeciesId() + (i.hasNext() ? "," : (")")));
+        }
+        return querySpeciesForList(whereClause.toString(), Integer.MAX_VALUE, locale, new Object[]{});
+    }
+
+    private List<SpeciesView> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
+        List<Object> sqlArgs = new ArrayList<Object>();
+        sqlArgs.add(locale.getLanguage());
+        sqlArgs.add(locale.getLanguage());
+        sqlArgs.add(locale.getCountry());
+        sqlArgs.addAll(Arrays.asList(args));
+        final String sql = String.format(SELECT, whereClause, maxResult);
         final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
-        return jdbcTemplate.query(sql, args, rowMapper);
+        return jdbcTemplate.query(sql, sqlArgs.toArray(), rowMapper);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class SpeciesHandler {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private UserSession userSession;
     @Autowired
     private SpeciesDao speciesDao;
     @Autowired
@@ -54,6 +57,9 @@ public class SpeciesHandler {
         ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
         if (user != null) {
             ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), locale)));
+        }
+        if (!userSession.getPlants().isEmpty()) {
+            ret.putAll(IdUtil.convertToMap(speciesDao.getSpeciesFromList(userSession.getPlants(), locale)));
         }
         //Add rules to species
         final List<Rule> rules = ruleDao.getRules();

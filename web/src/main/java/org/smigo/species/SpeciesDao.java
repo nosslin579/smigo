@@ -1,5 +1,6 @@
 package org.smigo.species;
 
+import kga.PlantData;
 import org.smigo.SpeciesView;
 
 import java.util.List;
@@ -18,4 +19,6 @@ interface SpeciesDao {
     void setSpeciesTranslation(int id, String vernacularName, String language, String country);
 
     List<SpeciesView> searchSpecies(String query, Locale locale);
+
+    List<SpeciesView> getSpeciesFromList(List<PlantData> plants, Locale locale);
 }
