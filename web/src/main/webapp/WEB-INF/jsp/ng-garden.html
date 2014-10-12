@@ -20,7 +20,7 @@
             </div>
             <hr/>
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
-                    <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesSearch)">
+                    <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesQuery)">
                 </form>
             <ul class="nav nav-pills nav-stacked">
                 <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"

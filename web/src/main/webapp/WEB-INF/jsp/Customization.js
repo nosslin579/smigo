@@ -3,7 +3,8 @@ String.prototype.capitalize = function () {
 };
 
 Array.prototype.find = function (value, property, options) {
-    if (options.ignoreCase) {
+
+    if (options && options.ignoreCase) {
         for (var i = 0; i < this.length; i++) {
             if (this[i][property] && this[i][property].toLocaleLowerCase() == value.toLowerCase()) {
                 return this[i];
@@ -11,7 +12,7 @@ Array.prototype.find = function (value, property, options) {
         }
     } else {
         for (var i = 0; i < this.length; i++) {
-            if (this[i][property] == value) {
+            if (this[i][property] === value) {
                 return this[i];
             }
         }

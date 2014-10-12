@@ -31,14 +31,6 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             });
     }
 
-    function getSpecies(id) {
-        for (var i = 0; i < state.speciesArray.length; i++) {
-            if (state.speciesArray[i].id === id) {
-                return state.speciesArray[i];
-            }
-        }
-    }
-
     return {
         getState: function () {
             return state;
@@ -80,7 +72,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                 $http.post('rest/species/search', {query: query})
                     .then(function (response) {
                         response.data.forEach(function (species) {
-                            if (!getSpecies(species.id)) {
+                            if (!state.speciesArray.find(species.id, 'id')) {
                                 state.speciesArray.push(species);
                             }
                         });
