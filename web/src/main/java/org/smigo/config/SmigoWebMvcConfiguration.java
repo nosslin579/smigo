@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.ArrayList;
@@ -59,14 +58,6 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public VisitLogger visitLogger() {
         return new VisitLogger();
-    }
-
-    @Bean
-    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-        final SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-        simpleMappingExceptionResolver.setDefaultErrorView("error.jsp");
-        simpleMappingExceptionResolver.setDefaultStatusCode(500);
-        return simpleMappingExceptionResolver;
     }
 
     @Bean
