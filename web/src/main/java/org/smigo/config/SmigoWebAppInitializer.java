@@ -15,6 +15,8 @@ import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
+import java.util.Enumeration;
+import java.util.Map;
 
 public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitializer {
 
@@ -23,17 +25,26 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
     @Override
     protected void beforeSpringSecurityFilterChain(ServletContext servletContext) {
         super.beforeSpringSecurityFilterChain(servletContext);
-        log.info("Starting servlet context" +
-                ", contextName: " + servletContext.getServletContextName() +
-                ", contextPath:" + servletContext.getContextPath() +
-                ", effectiveMajorVersion:" + servletContext.getEffectiveMajorVersion() +
-                ", effectiveMinorVersion:" + servletContext.getEffectiveMinorVersion() +
-                ", majorVersion:" + servletContext.getMajorVersion() +
-                ", minorVersion:" + servletContext.getMinorVersion() +
-                ", serverInfo:" + servletContext.getServerInfo() +
+        log.info("Starting servlet context");
+        log.info("contextName: " + servletContext.getServletContextName());
+        log.info("contextPath:" + servletContext.getContextPath());
+        log.info("effectiveMajorVersion:" + servletContext.getEffectiveMajorVersion());
+        log.info("effectiveMinorVersion:" + servletContext.getEffectiveMinorVersion());
+        log.info("majorVersion:" + servletContext.getMajorVersion());
+        log.info("minorVersion:" + servletContext.getMinorVersion());
+        log.info("serverInfo:" + servletContext.getServerInfo());
 //               ", virtualServerName:" + servletContext.getVirtualServerName() +
-                ", toString:" + servletContext.toString());
+        log.info("toString:" + servletContext.toString());
 
+        for (Enumeration<String> e = servletContext.getAttributeNames(); e.hasMoreElements(); ) {
+            log.info("Attribute:" + e.nextElement());
+        }
+        for (Map.Entry<String, String> env : System.getenv().entrySet()) {
+            log.info("System env:" + env.toString());
+        }
+        for (Map.Entry<Object, Object> prop : System.getProperties().entrySet()) {
+            log.info("System prop:" + prop.toString());
+        }
         final String profile;
         try {
             InitialContext initialContext = new InitialContext();
