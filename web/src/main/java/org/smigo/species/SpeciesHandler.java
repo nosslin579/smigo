@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.SpeciesView;
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,7 +52,7 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<Integer, SpeciesView> getSpeciesMap(AuthenticatedUser user, Locale locale) {
+    public Map<Integer, SpeciesView> getSpeciesMap(User user, Locale locale) {
         long start = System.currentTimeMillis();
         Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
         ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
