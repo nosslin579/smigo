@@ -14,7 +14,7 @@ hs_err_pid*
 *.iml
 
 catalina.base_IS_UNDEFINED/
-pic/
+dump/
 static/target/
 web/catalina.base_IS_UNDEFINED/
 web/target/
