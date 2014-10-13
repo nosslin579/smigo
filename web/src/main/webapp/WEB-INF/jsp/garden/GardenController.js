@@ -8,6 +8,7 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
+    $scope.isSpeciesAddable = SpeciesService.isSpeciesAddable;
 
     $scope.selectedSpeciesFromTopResult = function (searchString) {
         $log.log('Setting species from', searchString);
@@ -59,13 +60,6 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
             left: square.location.x * 48 + 100000 + 'px'
         };
     };
-    $scope.isSpeciesAddable = function (vernacularName) {
-        if (!vernacularName) {
-            return false;
-        }
-        return SpeciesService.getSpecies().find(vernacularName, 'vernacularName', {ignoreCase: true}) ? false : true;
-    };
-
 
     $scope.openAddYearModal = function () {
         $modal.open({
