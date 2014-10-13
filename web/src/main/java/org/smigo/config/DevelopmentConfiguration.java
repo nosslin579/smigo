@@ -24,7 +24,7 @@ public class DevelopmentConfiguration {
         ds.setDriverClass("com.mysql.jdbc.Driver");
         ds.setUser("nosslin2_dev");
         ds.setPassword("MC7TCz8Dp5inukeJ6z");
-        ds.setJdbcUrl("jdbc:mysql://198.38.82.101/nosslin2_stage4");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_stage4");
         return ds;
     }
 

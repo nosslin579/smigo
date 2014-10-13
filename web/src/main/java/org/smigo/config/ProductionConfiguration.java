@@ -8,13 +8,14 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
 @Profile(EnvironmentProfile.PRODUCTION)
-public class ProductionConfiguration {
+public class ProductionConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -22,7 +23,7 @@ public class ProductionConfiguration {
     public DataSource getDataSource() throws PropertyVetoException {
         ComboPooledDataSource ds = new ComboPooledDataSource();
         ds.setDriverClass("com.mysql.jdbc.Driver");
-        ds.setJdbcUrl("jdbc:mysql://198.38.82.101/nosslin2_db");
+        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
         ds.setUser("nosslin2_dbuser");
         ds.setPassword("N9WM[ONGP5yv");
         return ds;
