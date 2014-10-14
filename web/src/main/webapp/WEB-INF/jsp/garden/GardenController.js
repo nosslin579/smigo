@@ -1,4 +1,4 @@
-function GardenController($http, $log, $modal, $scope, $filter, PlantService, SpeciesService, UserService) {
+function GardenController($http, $log, $modal, $scope, $filter, PlantService, SpeciesService, UserService, GridService) {
 
     $scope.plantsState = PlantService.getState();
     $scope.speciesState = SpeciesService.getState();
@@ -9,6 +9,8 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
     $scope.isSpeciesAddable = SpeciesService.isSpeciesAddable;
+    $scope.getGridSizeCss = GridService.getGridSizeCss;
+    $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
     $scope.selectedSpeciesFromTopResult = function (searchString) {
         $log.log('Setting species from', searchString);
@@ -43,37 +45,12 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
         }
         clickEvent.stopPropagation();
     };
-    $scope.getGridSizeCss = function (year) {
-        var bounds = PlantService.getBounds(year);
-//        $log.log('Grid size', bounds);
-        var margin = 48 * 2;
-        return {
-            'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',
-            'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',
-            'height': (100000 + 47 + bounds.ymax * 48 + margin) + 'px',
-            'margin-left': (-100000 + -bounds.xmin * 48 + margin) + 'px'
-        };
-    };
-    $scope.getSquarePositionCss = function (square) {
-        return {
-            top: square.location.y * 48 + 100000 + 'px',
-            left: square.location.x * 48 + 100000 + 'px'
-        };
-    };
-
     $scope.openAddYearModal = function () {
         $modal.open({
             templateUrl: 'add-year-modal.html',
             controller: AddYearModalController,
             size: 'sm'
         });
-    };
-
-    $scope.scroll = function (left, top) {
-        var peepholeElement = $('#peephole')[0];
-        $log.log('Scroll', peepholeElement);
-        peepholeElement.scrollLeft = peepholeElement.scrollLeft + left;
-        peepholeElement.scrollTop = peepholeElement.scrollTop + top;
     };
 }
 

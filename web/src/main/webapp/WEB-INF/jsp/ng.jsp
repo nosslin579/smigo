@@ -28,6 +28,7 @@
         <%@ include file="garden/GardenController.js" %>
         <%@ include file="garden/AddYearModalController.js" %>
         <%@ include file="garden/SpeciesService.js" %>
+        <%@ include file="garden/GridService.js" %>
         <%@ include file="garden/PlantService.js" %>
         <%@ include file="garden/SpeciespopoverDirective.js" %>
         <%@ include file="garden/SquareInfoDirective.js" %>
@@ -37,6 +38,7 @@
         <%@ include file="user/LoginController.js" %>
         <%@ include file="user/AccountController.js" %>
         <%@ include file="user/PasswordController.js" %>
+        <%@ include file="user/WallController.js" %>
         <%@ include file="user/UserService.js" %>
         <%@ include file="user/RequestPasswordLinkController.js" %>
 
@@ -74,6 +76,12 @@
 </script>
 <script type="text/ng-template" id="squareinfo.html">
     <%@ include file="squareinfo.html" %>
+</script>
+<script type="text/ng-template" id="wall.html">
+    <%@ include file="wall.html" %>
+</script>
+<script type="text/ng-template" id="grid.html">
+    <%@ include file="grid.html" %>
 </script>
 
 </body>

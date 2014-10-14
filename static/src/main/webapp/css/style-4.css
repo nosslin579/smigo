@@ -1,4 +1,45 @@
 /* ############### general ###############*/
+.adjust-height > div {
+    height: 100%;
+}
+
+.adjust-height {
+    height: 300px;
+}
+
+@media (min-height: 450px) {
+    .adjust-height {
+        height: 400px;
+    }
+}
+
+@media (min-height: 550px) {
+    .adjust-height {
+        height: 500px;
+    }
+}
+
+@media (min-height: 650px) {
+    .adjust-height {
+        height: 600px;
+    }
+}
+
+@media (min-height: 750px) {
+    .adjust-height {
+        height: 700px;
+    }
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .absolute-full {
     position: absolute;
     top: 0;
@@ -42,21 +83,31 @@
     border: 0;
 }
 
-/* ############### garden grid ##################################*/
+/* ############### garden page ##################################*/
+
+#species-frame {
+    position: fixed;
+    top: 0px;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#species-frame .species-wrapper {
+    overflow-x: hidden;
+    position: absolute;
+    bottom: 0;
+    top: 94px;
+    width: 100%;
+    overflow-y: scroll;
+}
 
 #garden-frame {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     position: fixed;
     bottom: 0;
     top: 0;
 }
 
-#grid-wrapper {
+.grid-wrapper {
     position: absolute;
     width: 100%;
     top: 140px;
@@ -67,6 +118,7 @@
     padding: 10px 0 0 10px;
 }
 
+/* ############### general grid ##################################*/
 .square {
     width: 48px;
     height: 48px;
@@ -99,13 +151,13 @@
 
 /*Mozilla gird background*/
 @-moz-document url-prefix() {
-    #grid {
+    .square-container {
         background-image: none !important;
         background: rgba(198, 221, 198, 0.2);
     }
 }
 
-#grid {
+.square-container {
     background-position: 40px 40px;
     background-image: url('/static/icon/gridbackground.png');
     position: relative;
@@ -116,76 +168,14 @@
     cursor: crosshair;
 }
 
-.grid-to-top {
-    top: 60px;
-}
-
-#peephole {
+.peephole {
     overflow: auto;
     position: absolute;
-    bottom: -15px;
+    bottom: 0;
     left: 0;
     top: 0;
-    right: -15px;
+    right: 0;
     margin: 0;
-    /* box-shadow: -7px -4px 37px 2px #666 inset; */
-}
-
-.scroll-fade {
-    z-index: 100;
-    cursor: pointer;
-}
-
-.scroll-fade.top {
-    height: 20px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
-    bottom: auto;
-}
-
-.scroll-fade.bottom {
-    height: 20px;
-    background: linear-gradient(to top, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
-    top: auto;
-}
-
-.scroll-fade.right {
-    width: 20px;
-    background: linear-gradient(to left, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
-    left: auto;
-}
-
-.scroll-fade.left {
-    width: 20px;
-    background: linear-gradient(to right, rgba(255, 255, 255, 1) 20%, rgba(255, 255, 255, 0) 80%);
-    right: auto;
-}
-
-.scroll-fade:hover:before {
-    font-size: 2em;
-    position: relative;
-    cursor: pointer;
-}
-
-.scroll-fade.top:hover:before {
-    content: "⇈";
-    left: 240px;
-}
-
-.scroll-fade.bottom:hover:before {
-    content: "⇊";
-    left: 240px;
-    bottom: 35px;
-}
-
-.scroll-fade.left:hover:before {
-    content: "⇇";
-    top: 140px;
-}
-
-.scroll-fade.right:hover:before {
-    content: "⇉";
-    top: 140px;
-    right: 20px;
 }
 
 /*############## Square tooltip  #########################*/
@@ -208,18 +198,8 @@
     display: inline-block;
 }
 
-#species-frame {
-    position: fixed;
-    top: 0px;
-    bottom: 0;
-    overflow: hidden;
-}
-
-#species-frame .species-wrapper {
-    overflow-x: hidden;
-    position: absolute;
-    bottom: 0;
-    top: 94px;
-    width: 100%;
-    overflow-y: scroll;
+/*############## Wall #########################*/
+.wall-grid-wrapper {
+    position: relative;
+    height: 100%;
 }

@@ -1,7 +1,7 @@
 "use strict";
 angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciespopover'])
-    .config(function ($routeProvider, $logProvider, $provide) {
-        $logProvider.debugEnabled(false);
+    .config(function ($routeProvider, $logProvider, $provide, $locationProvider) {
+//        $logProvider.debugEnabled(true);
         $routeProvider.
             when('/request-password-link', {
                 templateUrl: 'request-password-link.html'
@@ -26,6 +26,10 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
             when('/garden', {
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
+            }).
+            when('/wall/:userId', {
+                templateUrl: 'wall.html',
+                controller: 'WallController'
             }).
             when('/accept-terms-of-service', {
                 templateUrl: 'accept-terms-of-service.html',

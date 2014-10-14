@@ -2,44 +2,44 @@
     <div class="row">
         <div id="species-frame" class="hidden-xs col-sm-3">
             <div class="species-wrapper">
-            <div class="btn-group full-width">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'info'}"
-                                ng-click="speciesState.action ='info'" title="{{'msg.view-square.description' | translate}}">
-                        <span class="glyphicon glyphicon-info-sign"></span> {{'msg.view-square.title' | translate}}
-                        </button>
-                    </div>
-                    <div class="col-xs-6">
-                        <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'delete'}"
-                                ng-click="speciesState.action ='delete'" title="{{'msg.deletesquare.description' | translate}}">
-                        <span class="glyphicon glyphicon-remove"></span> {{'deletesquare' | translate}}
-                        </button>
+                <div class="btn-group full-width">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'info'}"
+                                    ng-click="speciesState.action ='info'" title="{{'msg.view-square.description' | translate}}">
+                                <span class="glyphicon glyphicon-info-sign"></span> {{'msg.view-square.title' | translate}}
+                            </button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'delete'}"
+                                    ng-click="speciesState.action ='delete'" title="{{'msg.deletesquare.description' | translate}}">
+                                <span class="glyphicon glyphicon-remove"></span> {{'deletesquare' | translate}}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <hr/>
+                <hr/>
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
                     <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesQuery)">
                 </form>
-            <ul class="nav nav-pills nav-stacked">
-                <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
-                    ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
-                    speciespopover="{{s.scientificName}}"
-                    speciespopover-title="{{'/static/species/' + s.iconFileName}}">
-                    <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
-                </li>
-                <hr/>
-                <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">
-                    <a id="add-species-link" href="" ng-click="addSpecies(speciesQuery)">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        {{'msg.add-species' | translate:speciesQuery }}
-                    </a>
-                </li>
-            </ul>
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
+                        ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
+                        speciespopover="{{s.scientificName}}"
+                        speciespopover-title="{{'/static/species/' + s.iconFileName}}">
+                        <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
+                    </li>
+                    <hr/>
+                    <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">
+                        <a id="add-species-link" href="" ng-click="addSpecies(speciesQuery)">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            {{'msg.add-species' | translate:speciesQuery }}
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div id="garden-frame" class="col-xs-12 col-sm-9 col-sm-offset-3">
+        <div id="garden-frame" class="col-xs-12 col-sm-9 col-sm-offset-3 no-select">
             <div class="navbar"></div>
             <div class="row">
                 <div class="col-sm-offset-1 col-sm-11">
@@ -58,26 +58,8 @@
                 </div>
             </div>
 
-            <div id="grid-wrapper" class="row">
-                <div class="col-sm-offset-1 col-sm-11 absolute-full">
-                    <div class="top scroll-fade absolute-full" ng-click="scroll(0,-48)"></div>
-                    <div class="bottom scroll-fade absolute-full" ng-click="scroll(0,48)"></div>
-                    <div class="right scroll-fade absolute-full" ng-click="scroll(48,0)"></div>
-                    <div class="left scroll-fade absolute-full" ng-click="scroll(-48,0)"></div>
-                    <div id="peephole">
-                        <div id="grid" ng-click="onGridClick($event)" ng-style="getGridSizeCss(plantsState.selectedYear)">
-                            <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
-                                <div class="square-tooltip" square-info="s" ng-class="{show: s.showTooltip}"></div>
-                                <div ng-repeat="p in s.plants">
-                                <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" ng-if="!p.remove"
-                                         alt="{{p.species.vernacularName}}"
-                                         ng-class="{'multiple-plants': getObjectLength(s.plants) > 1}"/>
-                                </div>
-                            </div>
-                            <div ng-repeat="s in plantsState.visibleRemainderSquares" class="visible-remainder" ng-style="getSquarePositionCss(s)"></div>
-                        </div>
-                    </div>
-                </div>
+            <div class="row grid-wrapper">
+                <div class="col-sm-offset-1 col-sm-11 absolute-full" ng-include="'grid.html'"/>
             </div>
         </div>
     </div>
