@@ -71,13 +71,13 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                 $log.debug('Search with query', query);
                 $http.post('rest/species/search', {query: query})
                     .then(function (response) {
+                        search.previous.push(queryLowerCase);
                         response.data.forEach(function (species) {
-                            search.previous.push(queryLowerCase);
                             if (!state.speciesArray.find(species.id, 'id')) {
                                 state.speciesArray.push(species);
                             }
                         });
-                        $log.debug('Response from search ', response);
+                        $log.debug('Response from search ' + queryLowerCase, response);
                     });
             }, 2000);
         },
@@ -86,6 +86,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         },
         isSpeciesAddable: function (vernacularName) {
             if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1) {
+                $log.debug('Species:' + vernacularName + ' not addable', search);
                 return false;
             }
             var species = state.speciesArray.find(vernacularName, 'vernacularName', {ignoreCase: true});
