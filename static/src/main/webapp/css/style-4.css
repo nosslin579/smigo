@@ -31,6 +31,18 @@
     }
 }
 
+@media (min-height: 850px) {
+    .adjust-height {
+        height: 800px;
+    }
+}
+
+@media (min-height: 950px) {
+    .adjust-height {
+        height: 900px;
+    }
+}
+
 .no-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

@@ -26,10 +26,10 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
             var bounds = getBounds(squareArrays);
             var margin = 48 * 2;
             return {
-                'margin-top': (-100000 + -bounds.ymin * 48 + margin) + 'px',
+                'margin-top': (-100001 + -bounds.ymin * 48 + margin) + 'px',
                 'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',
                 'height': (100000 + 47 + bounds.ymax * 48 + margin) + 'px',
-                'margin-left': (-100000 + -bounds.xmin * 48 + margin) + 'px'
+                'margin-left': (-100001 + -bounds.xmin * 48 + margin) + 'px'
             };
         },
         getSquarePositionCss: function (square) {
