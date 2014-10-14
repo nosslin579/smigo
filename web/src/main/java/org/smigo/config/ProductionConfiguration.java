@@ -23,7 +23,7 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
     public DataSource getDataSource() throws PropertyVetoException {
         ComboPooledDataSource ds = new ComboPooledDataSource();
         ds.setDriverClass("com.mysql.jdbc.Driver");
-        ds.setJdbcUrl("jdbc:mysql://smigo.org/nosslin2_db");
+        ds.setJdbcUrl("jdbc:mysql://198.38.82.101/nosslin2_db");
         ds.setUser("nosslin2_dbuser");
         ds.setPassword("N9WM[ONGP5yv");
         return ds;
