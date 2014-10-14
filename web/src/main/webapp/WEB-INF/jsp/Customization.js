@@ -2,6 +2,9 @@ String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+Array.prototype.last = function () {
+    return this.slice(-1)[0];
+}
 Array.prototype.find = function (value, property, options) {
 
     if (options && options.ignoreCase) {
