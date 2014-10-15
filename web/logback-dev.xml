@@ -3,10 +3,9 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/home/nosslin2/_java/smigo/log/smigo.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/home/nosslin2/_java/smigo/dump/devlog.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 365 days' worth of history -->
             <maxHistory>365</maxHistory>
