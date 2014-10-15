@@ -115,7 +115,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         var ret = new Garden();
         for (var i = 0; i < plantDataArray.length; i++) {
             var plantData = plantDataArray[i];
-            plantData.species = SpeciesService.getSpecies().find(plantData.speciesId, 'id');
+            plantData.species = SpeciesService.getSpecies(plantData.speciesId);
             ret.addPlant(plantData);
         }
         $log.debug("Garden created:", ret);

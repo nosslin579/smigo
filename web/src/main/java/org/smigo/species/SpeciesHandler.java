@@ -75,8 +75,8 @@ public class SpeciesHandler {
         return ret;
     }
 
-    public Species getSpecies(int id) {
-        return speciesDao.getSpecies(id, Locale.ENGLISH);
+    public Species getSpecies(int id, Locale locale) {
+        return speciesDao.getSpecies(id, locale);
     }
 
     public List<Family> getFamilies() {

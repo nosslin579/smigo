@@ -81,8 +81,21 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     });
             }, 2000);
         },
-        getSpecies: function () {
-            return state.speciesArray;
+        getSpecies: function (id) {
+            if (!id) {
+                return state.speciesArray;
+            }
+            var species = state.speciesArray.find(id, 'id');
+            if (species) {
+                return species;
+            }
+            var ret = {id: id, iconFileName: 'defaulticon.png'};
+            state.speciesArray.push(ret);
+            $http.get('rest/species/' + id)
+                .then(function (response) {
+                    angular.extend(ret, response.data);
+                });
+            return ret;
         },
         isSpeciesAddable: function (vernacularName) {
             if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1) {
@@ -91,6 +104,12 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             }
             var species = state.speciesArray.find(vernacularName, 'vernacularName', {ignoreCase: true});
             return species ? false : true;
+        },
+        loadSpeciesFromUser: function (userId) {
+            $http.get('rest/species/' + userId)
+                .then(function (response) {
+
+                });
         }
     }
 }

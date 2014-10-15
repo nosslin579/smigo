@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
-@RequestMapping("/")
 public class PlantController implements Serializable {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
