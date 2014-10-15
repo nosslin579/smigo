@@ -101,17 +101,10 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
 
     function updateState(squares) {
         yearSquareMap = squares;
-        var sortedYearsArray = Object.keys(yearSquareMap).sort();
-        var firstYear = +sortedYearsArray[0];
-        var lastYear = +sortedYearsArray.slice(-1)[0];
-        var availableYears = [];
-        for (var i = firstYear; i <= lastYear; i++) {
-            availableYears.push(i);
-        }
-        state.availableYears = availableYears;
-        state.forwardYear = availableYears.slice(-1).pop() + 1;
-        state.backwardYear = availableYears[0] - 1;
-        selectYear(state.availableYears.slice(-1).pop());
+        state.availableYears = Object.keys(yearSquareMap).map(Number).sort();
+        state.forwardYear = state.availableYears.last() + 1;
+        state.backwardYear = state.availableYears[0] - 1;
+        selectYear(state.availableYears.last());
         $log.log('Plants state updated', state);
     }
 
