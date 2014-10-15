@@ -26,6 +26,7 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
         ds.setJdbcUrl("jdbc:mysql://198.38.82.101/nosslin2_db");
         ds.setUser("nosslin2_dbuser");
         ds.setPassword("N9WM[ONGP5yv");
+        ds.setIdleConnectionTestPeriod(160);
         return ds;
     }
 
