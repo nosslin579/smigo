@@ -1,18 +1,16 @@
 function WallController($scope, $http, $log, $routeParams, PlantService, GridService) {
 
-    var wallState = {};
+    var state = {};
     $scope.plantsState = {};
 
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
-    $http.get('rest/plant/' + $routeParams.userId)
-        .then(function (response) {
-            $log.log('Garden retrieve successful. Response:', response);
-            wallState.squares = response.data;
-            $scope.plantsState.availableYears = Object.keys(wallState.squares).sort();
-            $scope.plantsState.selectedYear = Object.keys(wallState.squares).sort().last();
-            $scope.plantsState.squares = wallState.squares[$scope.plantsState.selectedYear];
+    PlantService.getGarden($routeParams.userId)
+        .then(function (garden) {
+            state.garden = garden;
+            $scope.plantsState.selectedYear = garden.getAvailableYears().last();
+            $scope.plantsState.squares = garden.getSquares($scope.plantsState.selectedYear);
         });
 }
 

@@ -1,6 +1,6 @@
 function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
     var state = {},
-        garden = new Garden(2014),
+        garden = new Garden(new Date().getFullYear()),
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
@@ -73,9 +73,8 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
 
     function Garden(year) {
         var yearSquareMap = {};
-        this.yearSquareMap = yearSquareMap;
         if (year) {
-            this.yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
+            yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
         }
 
         function getSquare(year, x, y) {
@@ -93,15 +92,25 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             return ret;
         };
 
+        this.yearSquareMap = yearSquareMap;
+
         this.addPlant = function (plant) {
             var square = getSquare(plant.year, plant.x, plant.y);
             square.plants[plant.speciesId] = new Plant(plant.species, square.location);
+        };
+
+        this.getAvailableYears = function () {
+            return Object.keys(yearSquareMap).sort()
+        };
+
+        this.getSquares = function (year) {
+            return yearSquareMap[year];
         };
     }
 
     function createGarden(plantDataArray) {
         if (!plantDataArray.length) {
-            return new Garden(2014);
+            return new Garden(new Date().getFullYear());
         }
         var ret = new Garden();
         for (var i = 0; i < plantDataArray.length; i++) {
@@ -130,10 +139,18 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
     }
 
     function reloadPlants() {
-        return $http.get('rest/plant')
+        getGarden()
+            .then(function (garden) {
+                updateState(garden);
+            });
+    }
+
+    function getGarden(userId) {
+        var url = 'rest/plant/' + (userId ? userId : '');
+        return $http.get(url)
             .then(function (response) {
-                $log.log('Plants retrieved successfully. Response:', response);
-                updateState(createGarden(response.data));
+                $log.info('Plants retrieved successfully. Response:', response);
+                return createGarden(response.data);
             });
     }
 
@@ -243,7 +260,8 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                 $log.log('Undo remove', square);
             }
         },
-        save: sendUnsavedPlantsToServer
+        save: sendUnsavedPlantsToServer,
+        getGarden: getGarden
     };
 }
 angular.module('smigoModule').factory('PlantService', PlantService);

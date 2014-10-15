@@ -1,7 +1,6 @@
 package org.smigo.plants;
 
 import kga.PlantData;
-import kga.Square;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
@@ -12,10 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -34,8 +31,8 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = "/rest/plant/{userId}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public Map<Integer, Collection<Square>> getPlants(@PathVariable Integer userId, Locale locale) {
-        return plantHandler.getGarden(new Guest(userId), locale).getSquares();
+    public List<PlantData> getPlants(@PathVariable Integer userId, Locale locale) {
+        return plantHandler.getPlants(new Guest(userId));
     }
 
     @RequestMapping(value = {"/update-garden", "/rest/plant"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
