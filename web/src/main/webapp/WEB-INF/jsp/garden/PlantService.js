@@ -73,25 +73,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         }
     }
 
-    function getBounds(year) {
-        var axisLength = 9999;
-        var ret = {
-            xmax: -axisLength,
-            ymax: -axisLength,
-            xmin: axisLength,
-            ymin: axisLength
-        };
-        [year, getTrailingYear(year)].forEach(function (year) {
-            angular.forEach(yearSquareMap[year], function (square, index) {
-                ret.xmax = Math.max(square.location.x, ret.xmax);
-                ret.ymax = Math.max(square.location.y, ret.ymax);
-                ret.xmin = Math.min(square.location.x, ret.xmin);
-                ret.ymin = Math.min(square.location.y, ret.ymin);
-            });
-        });
-        return ret;
-    }
-
     function selectYear(year) {
         state.selectedYear = year;
         state.squares = yearSquareMap[year];
@@ -174,7 +155,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         getState: function () {
             return state;
         },
-        getBounds: getBounds,
         addYear: function (year) {
             var newYearSquareArray = [];
             var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
