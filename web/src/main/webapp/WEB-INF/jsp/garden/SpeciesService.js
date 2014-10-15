@@ -86,7 +86,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         },
         isSpeciesAddable: function (vernacularName) {
             if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1) {
-                $log.debug('Species:' + vernacularName + ' not addable', search);
+//                $log.debug('Species:' + vernacularName + ' not addable', search);
                 return false;
             }
             var species = state.speciesArray.find(vernacularName, 'vernacularName', {ignoreCase: true});

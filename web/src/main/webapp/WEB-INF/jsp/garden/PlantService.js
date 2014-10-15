@@ -1,11 +1,11 @@
-function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
+function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
     var state = {},
-        yearSquareMap = {},
+        garden = new Garden(2014),
         unsavedCounter = 0,
         autoSaveInterval = 60000,
         timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
 
-    updateState(initData.squares);
+    updateState(createGarden(initData.plantDataArray));
 
     $log.log('PlantService', state);
 
@@ -14,9 +14,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
             reloadPlants();
         } else {
             var year = new Date().getFullYear();
-            var squares = {};
-            squares[year] = [new Square(new Location(year, 0, 0))];
-            updateState(squares);
+            updateState(new Garden(year));
         }
     });
 
@@ -73,16 +71,58 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         }
     }
 
+    function Garden(year) {
+        var yearSquareMap = {};
+        this.yearSquareMap = yearSquareMap;
+        if (year) {
+            this.yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
+        }
+
+        function getSquare(year, x, y) {
+            if (!yearSquareMap[year]) {
+                yearSquareMap[year] = [];
+            }
+            for (var i = 0; i < yearSquareMap[year].length; i++) {
+                var square = yearSquareMap[year][i];
+                if (square.x === x && square.y === y) {
+                    return square;
+                }
+            }
+            var ret = new Square(new Location(year, x, y));
+            yearSquareMap[year].push(ret);
+            return ret;
+        };
+
+        this.addPlant = function (plant) {
+            var square = getSquare(plant.year, plant.x, plant.y);
+            square.plants[plant.speciesId] = new Plant(plant.species, square.location);
+        };
+    }
+
+    function createGarden(plantDataArray) {
+        if (!plantDataArray.length) {
+            return new Garden(2014);
+        }
+        var ret = new Garden();
+        for (var i = 0; i < plantDataArray.length; i++) {
+            var plantData = plantDataArray[i];
+            plantData.species = SpeciesService.getSpecies().find(plantData.speciesId, 'id');
+            ret.addPlant(plantData);
+        }
+        $log.debug("Garden created:", ret);
+        return ret;
+    }
+
     function selectYear(year) {
         state.selectedYear = year;
-        state.squares = yearSquareMap[year];
-        state.visibleRemainderSquares = yearSquareMap[year - 1];
+        state.squares = garden.yearSquareMap[year];
+        state.visibleRemainderSquares = garden.yearSquareMap[year - 1];
         $log.log('Year selected:' + year, state);
     }
 
-    function updateState(squares) {
-        yearSquareMap = squares;
-        state.availableYears = Object.keys(yearSquareMap).map(Number).sort();
+    function updateState(newGarden) {
+        garden = newGarden;
+        state.availableYears = Object.keys(newGarden.yearSquareMap).map(Number).sort();
         state.forwardYear = state.availableYears.last() + 1;
         state.backwardYear = state.availableYears[0] - 1;
         selectYear(state.availableYears.last());
@@ -92,19 +132,19 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
     function reloadPlants() {
         return $http.get('rest/plant')
             .then(function (response) {
-                $log.log('Garden retrieve successful. Response:', response);
-                updateState(response.data);
+                $log.log('Plants retrieved successfully. Response:', response);
+                updateState(createGarden(response.data));
             });
     }
 
     function getTrailingYear(year) {
         var yearSource = year;
-        if (yearSquareMap[yearSource - 1]) {
+        if (garden.yearSquareMap[yearSource - 1]) {
             return yearSource - 1;
-        } else if (yearSquareMap[yearSource + 1]) {
+        } else if (garden.yearSquareMap[yearSource + 1]) {
             return yearSource + 1;
         } else {
-            return Object.keys(yearSquareMap).sort().slice(-1);
+            return Object.keys(garden.yearSquareMap).sort().slice(-1);
         }
     }
 
@@ -114,7 +154,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         $timeout.cancel(timedAutoSavePromise);
         //get unsaved plants
         var update = { addList: [], removeList: [] };
-        angular.forEach(yearSquareMap, function (squareList) {
+        angular.forEach(garden.yearSquareMap, function (squareList) {
             angular.forEach(squareList, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.id) {
@@ -157,7 +197,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
         },
         addYear: function (year) {
             var newYearSquareArray = [];
-            var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
+            var copyFromSquareArray = garden.yearSquareMap[getTrailingYear(year)];
 
             //add perennial from mostRecentYear
             angular.forEach(copyFromSquareArray, function (square) {
@@ -169,13 +209,13 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log) {
                 });
             });
 
-            yearSquareMap[year] = newYearSquareArray;
-            updateState(yearSquareMap);
-            $log.log('Year added:' + year, yearSquareMap);
+            garden.yearSquareMap[year] = newYearSquareArray;
+            updateState(garden);
+            $log.log('Year added:' + year, garden);
         },
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), species ? [species] : []);
-            yearSquareMap[year].push(newSquare);
+            garden.yearSquareMap[year].push(newSquare);
             countAutoSave();
             $log.log('Square and plant added', newSquare);
             return newSquare;

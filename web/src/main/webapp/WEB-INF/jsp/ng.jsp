@@ -19,8 +19,8 @@
 
         var initData = {
             user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
-            squares: <c:out escapeXml="false" value="${f:toJson(squares)}"/>,
-            species: <c:out escapeXml="false" value="${f:toJson(species)}"/>
+            species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
+            plantDataArray:<c:out escapeXml="false" value="${f:toJson(plantData)}"/>
         };
 
         <%@ include file="app.js" %>

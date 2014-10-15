@@ -22,7 +22,7 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
 
     return {
         getGridSizeCss: function (squareArrays) {
-            $log.debug('Grid CSS ', squareArrays);
+//            $log.debug('Grid CSS ', squareArrays);
             var bounds = getBounds(squareArrays);
             var margin = 48 * 2;
             return {

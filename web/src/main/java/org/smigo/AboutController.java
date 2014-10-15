@@ -35,7 +35,7 @@ public class AboutController {
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getSpeciesMap(user, locale).values());
-        model.addAttribute("squares", plantHandler.getGarden(user, locale).getSquares());
+        model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         return "ng.jsp";
     }
