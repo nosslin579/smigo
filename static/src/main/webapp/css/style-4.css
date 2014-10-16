@@ -11,7 +11,6 @@ body > .angular-view {
     height: -webkit-calc(100% - 81px);
     height: -moz-calc(100% - 81px);
     height: -o-calc(100% - 81px);
-    /*overflow-y: auto;*/
 }
 
 .no-select {
@@ -21,14 +20,6 @@ body > .angular-view {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.absolute-full {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
 }
 
 .full-width {
@@ -86,8 +77,8 @@ body > .angular-view {
     right: 1px;
 }
 
-#garden-frame ul.nav-tabs {
-    /*padding: 10px 0 0 10px;*/
+/*############## Wall #########################*/
+.view-grid-wrapper {
 }
 
 /* ############### general grid ##################################*/
@@ -168,10 +159,4 @@ body > .angular-view {
 .square-tooltip-item {
     margin: 10px;
     display: inline-block;
-}
-
-/*############## Wall #########################*/
-.wall-grid-wrapper {
-    position: relative;
-    height: 100%;
 }
