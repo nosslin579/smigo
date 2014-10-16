@@ -1,10 +1,11 @@
 function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantService) {
 
     var state = {
-        currentUser: initData.user,
-        locales: initData.locales,
-        connection: true
-    };
+            currentUser: initData.user,
+            locales: initData.locales,
+            connection: true
+        },
+        pingCounter = 0;
     $timeout(pingServer, 480000, false);
 
     $log.log('UserService', state);
@@ -37,7 +38,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
     function pingServer() {
         $http.get('ping')
             .then(function (response) {
-                $log.log("Ping success", response);
+                $log.debug("Ping success nr:" + pingCounter, response);
                 var username = state.currentUser ? state.currentUser.username : undefined;
                 if (username !== response.data.name) {
                     $log.log('Username mismatch detected', [state, response]);
@@ -49,7 +50,9 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
                 $log.warn("Ping fail", response);
                 state.connection = false;
             });
-        $timeout(pingServer, 120000);
+        if (pingCounter++ < 100) {
+            $timeout(pingServer, 960000);
+        }
     }
 
     function updateUser(userBean) {
