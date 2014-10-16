@@ -1,7 +1,7 @@
-<div class="container-fluid">
-    <div class="row">
-        <div id="species-frame" class="hidden-xs col-sm-3">
-            <div class="species-wrapper">
+<div class="container-fluid full-height">
+    <div class="row full-height">
+        <div id="species-frame" class="hidden-xs col-sm-3 full-height">
+        <div class="species-wrapper">
                 <div class="btn-group full-width">
                     <div class="row">
                         <div class="col-xs-6">
@@ -39,28 +39,20 @@
                 </ul>
             </div>
         </div>
-        <div id="garden-frame" class="col-xs-12 col-sm-9 col-sm-offset-3 no-select">
-            <div class="navbar"></div>
-            <div class="row">
-                <div class="col-sm-offset-1 col-sm-11">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li ng-class="{active: year == plantsState.selectedYear}" ng-repeat="year in plantsState.availableYears">
-                            <a href="" ng-click="selectYear(year)">
-                                {{year}}
-                            </a>
-                        </li>
-                        <li>
-                            <a id="add-year-link" href="" ng-click="openAddYearModal()">
-                                <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row grid-wrapper">
-                <div class="col-sm-offset-1 col-sm-11 absolute-full" ng-include="'grid.html'"/>
-            </div>
+        <div id="garden-frame" class="col-xs-12 col-sm-9 no-select full-height">
+            <ul class="nav nav-tabs" role="tablist">
+                <li ng-class="{active: year == plantsState.selectedYear}" ng-repeat="year in plantsState.availableYears">
+                    <a href="" ng-click="selectYear(year)">
+                        {{year}}
+                    </a>
+                </li>
+                <li>
+                    <a id="add-year-link" href="" ng-click="openAddYearModal()">
+                        <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                    </a>
+                </li>
+            </ul>
+            <div class="edit-grid-wrapper" ng-include="'grid.html'"></div>
         </div>
     </div>
 </div>

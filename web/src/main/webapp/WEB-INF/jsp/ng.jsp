@@ -10,7 +10,7 @@
 
 <%@ include file="menu.html" %>
 
-<div ng-view></div>
+<div ng-view class="angular-view"></div>
 
 <script type="application/javascript">
 

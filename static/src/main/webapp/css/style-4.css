@@ -1,46 +1,17 @@
 /* ############### general ###############*/
-.adjust-height > div {
-    height: 100%;
+html,
+body,
+.full-height {
+    height: 100%
 }
 
-.adjust-height {
-    height: 300px;
-}
-
-@media (min-height: 450px) {
-    .adjust-height {
-        height: 400px;
-    }
-}
-
-@media (min-height: 550px) {
-    .adjust-height {
-        height: 500px;
-    }
-}
-
-@media (min-height: 650px) {
-    .adjust-height {
-        height: 600px;
-    }
-}
-
-@media (min-height: 750px) {
-    .adjust-height {
-        height: 700px;
-    }
-}
-
-@media (min-height: 850px) {
-    .adjust-height {
-        height: 800px;
-    }
-}
-
-@media (min-height: 950px) {
-    .adjust-height {
-        height: 900px;
-    }
+body > .angular-view {
+    /*81 px is height of navbar including margin*/
+    height: calc(100% - 81px);
+    height: -webkit-calc(100% - 81px);
+    height: -moz-calc(100% - 81px);
+    height: -o-calc(100% - 81px);
+    /*overflow-y: auto;*/
 }
 
 .no-select {
@@ -98,36 +69,25 @@
 /* ############### garden page ##################################*/
 
 #species-frame {
-    position: fixed;
-    top: 0px;
-    bottom: 0;
-    overflow: hidden;
-}
-
-#species-frame .species-wrapper {
-    overflow-x: hidden;
-    position: absolute;
-    bottom: 0;
-    top: 94px;
-    width: 100%;
-    overflow-y: scroll;
+    overflow: auto;
 }
 
 #garden-frame {
-    position: fixed;
-    bottom: 0;
-    top: 0;
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    /*top: 0;*/
 }
 
-.grid-wrapper {
+.edit-grid-wrapper {
     position: absolute;
-    width: 100%;
-    top: 140px;
+    top: 50px;
     bottom: 0;
+    left: 1px;
+    right: 1px;
 }
 
 #garden-frame ul.nav-tabs {
-    padding: 10px 0 0 10px;
+    /*padding: 10px 0 0 10px;*/
 }
 
 /* ############### general grid ##################################*/
