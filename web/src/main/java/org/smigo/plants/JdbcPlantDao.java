@@ -17,12 +17,24 @@ import java.util.List;
 
 @Repository
 class JdbcPlantDao implements PlantDao {
-    private static final String SELECT = "SELECT * FROM plants WHERE fkuserid = ?";
+    private static final String SELECT = "SELECT fkuserid,year,x,y,species FROM plants JOIN users ON users.id = plants.fkuserid WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     public ObjectMapper objectMapper;
+
+    private RowMapper<PlantData> plantDataRowMapper = new RowMapper<PlantData>() {
+        @Override
+        public PlantData mapRow(ResultSet speciesRS, int rowNum) throws SQLException {
+            return new PlantDataBean(
+                    speciesRS.getInt("species"),
+                    speciesRS.getInt("year"),
+                    speciesRS.getInt("x"),
+                    speciesRS.getInt("y")
+            );
+        }
+    };
 
 
     @Autowired
@@ -33,18 +45,14 @@ class JdbcPlantDao implements PlantDao {
 
     @Override
     public List<PlantData> getPlants(int userId) {
-        final String sql = String.format(SELECT);
-        return jdbcTemplate.query(sql, new Object[]{userId}, new RowMapper<PlantData>() {
-            @Override
-            public PlantData mapRow(ResultSet speciesRS, int rowNum) throws SQLException {
-                return new PlantDataBean(
-                        speciesRS.getInt("species"),
-                        speciesRS.getInt("year"),
-                        speciesRS.getInt("x"),
-                        speciesRS.getInt("y")
-                );
-            }
-        });
+        final String sql = String.format(SELECT, "fkuserid");
+        return jdbcTemplate.query(sql, new Object[]{userId}, plantDataRowMapper);
+    }
+
+    @Override
+    public List<PlantData> getPlants(String username) {
+        final String sql = String.format(SELECT, "username");
+        return jdbcTemplate.query(sql, new Object[]{username}, plantDataRowMapper);
     }
 
     @Override

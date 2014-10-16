@@ -6,7 +6,7 @@ function WallController($scope, $http, $log, $routeParams, PlantService, GridSer
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
-    PlantService.getGarden($routeParams.userId)
+    PlantService.getGarden($routeParams.username)
         .then(function (garden) {
             state.garden = garden;
             $scope.plantsState.selectedYear = garden.getAvailableYears().last();

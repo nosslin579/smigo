@@ -27,7 +27,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
             }).
-            when('/wall/:userId', {
+            when('/wall/:username', {
                 templateUrl: 'wall.html',
                 controller: 'WallController'
             }).

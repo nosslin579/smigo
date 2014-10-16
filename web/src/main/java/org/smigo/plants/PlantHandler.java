@@ -4,6 +4,7 @@ import kga.Garden;
 import kga.PlantData;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.User;
+import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,8 @@ public class PlantHandler {
     private PlantDao plantDao;
     @Autowired
     private SpeciesHandler speciesHandler;
+    @Autowired
+    private UserHandler userHandler;
 
     public void updateGarden(User user, UpdateGardenBean updateGardenBean) {
         if (updateGardenBean.getAddList().isEmpty() && updateGardenBean.getRemoveList().isEmpty()) {
@@ -31,6 +34,10 @@ public class PlantHandler {
             userSession.getPlants().removeAll(updateGardenBean.getRemoveList());
             userSession.getPlants().addAll(updateGardenBean.getAddList());
         }
+    }
+
+    public List<PlantData> getPlants(String username) {
+        return plantDao.getPlants(username);
     }
 
     public List<PlantData> getPlants(User user) {
@@ -50,5 +57,4 @@ public class PlantHandler {
             plantDao.addPlants(plants, userId);
         }
     }
-
 }

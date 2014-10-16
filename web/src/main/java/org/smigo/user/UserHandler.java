@@ -97,6 +97,10 @@ public class UserHandler {
         userDao.updateUser(principal.getId(), user);
     }
 
+    public int getUserId(String username) {
+        return 0;
+    }
+
     public UserBean getUser(AuthenticatedUser user) {
         if (user == null) {
             return null;

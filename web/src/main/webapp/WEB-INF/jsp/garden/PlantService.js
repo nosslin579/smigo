@@ -145,8 +145,8 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             });
     }
 
-    function getGarden(userId) {
-        var url = 'rest/plant/' + (userId ? userId : '');
+    function getGarden(username) {
+        var url = 'rest/plant/' + (username ? username : '');
         return $http.get(url)
             .then(function (response) {
                 $log.info('Plants retrieved successfully. Response:', response);
