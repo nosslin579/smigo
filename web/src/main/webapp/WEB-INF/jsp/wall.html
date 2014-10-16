@@ -1,12 +1,10 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
         <div class="col-sm-3">
-            Text about user<br/>
-            Text about user<br/>
-            Text about user<br/>
-            Text about user<br/>
-            Text about user<br/>
-            Text about user<br/>
+            <h1>{{userState.user.username}}</h1>
+
+            <h3>{{userState.user.displayName}}</h3>
+            <p>{{userState.user.about}}</p>
         </div>
         <div class="col-sm-9 view-grid-wrapper full-height" ng-include="'grid.html'">
         </div>

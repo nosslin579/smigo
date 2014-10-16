@@ -63,6 +63,13 @@ public class UserController {
         return userHandler.getUser(user);
     }
 
+
+    @RequestMapping(value = "rest/user/{username}", method = RequestMethod.GET)
+    @ResponseBody
+    public PublicInfoUserBean getUser(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable String username) {
+        return userHandler.getUserPublicInfo(username);
+    }
+
     @RequestMapping(value = "rest/user", method = RequestMethod.POST)
     @ResponseBody
     public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response) {

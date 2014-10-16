@@ -1,7 +1,11 @@
-function WallController($scope, $http, $log, $routeParams, PlantService, GridService) {
+function WallController($scope, $http, $log, $routeParams, PlantService, GridService, WallService) {
+
+    WallService.setUser($routeParams.username);
 
     var state = {};
     $scope.plantsState = {};
+    $scope.userState = WallService.getState();
+
 
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;

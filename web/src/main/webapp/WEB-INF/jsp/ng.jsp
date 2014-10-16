@@ -38,9 +38,11 @@
         <%@ include file="user/LoginController.js" %>
         <%@ include file="user/AccountController.js" %>
         <%@ include file="user/PasswordController.js" %>
-        <%@ include file="user/WallController.js" %>
         <%@ include file="user/UserService.js" %>
         <%@ include file="user/RequestPasswordLinkController.js" %>
+
+        <%@ include file="wall/WallController.js" %>
+        <%@ include file="wall/WallService.js" %>
 
         <%@ include file="MainMenuController.js" %>
 
