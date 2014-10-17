@@ -171,7 +171,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                     updatePlants.addList = [];
                     updatePlants.removeList = [];
                 });
-        }, 7000);
+        }, 4000);
     }
 
     function reloadPlants() {

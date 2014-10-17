@@ -53,7 +53,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     @BeforeClass
     public void init() {
         d = new FirefoxDriver();
-        d.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        d.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         w = new WebDriverWait(d, 10);
     }
 
@@ -133,11 +133,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         login(username, PASSWORD);
         //add species
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
-        Thread.sleep(5000);
         d.findElement(By.id("add-species-link")).click();
         w.until(ExpectedConditions.presenceOfElementLocated(By.linkText(speciesName)));
         d.findElement(By.className("square")).click();
-        Thread.sleep(10000);
+        Thread.sleep(5000);
 
         d.findElement(By.id("logout-link")).click();
         Thread.sleep(1000);
