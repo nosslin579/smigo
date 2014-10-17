@@ -5,6 +5,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     state.action = 'add';
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species[0];
+    state.pendingAdd = false;
     $log.log('SpeciesService', state);
 
     $rootScope.$on('current-user-changed', function (event, user) {
@@ -41,15 +42,17 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             $log.log('Species selected:', state);
         },
         addSpecies: function (vernacularName) {
+            state.pendingAdd = true;
             var name = vernacularName.capitalize();
             var species = new Species(name);
-            state.selectedSpecies = species;
-            state.speciesArray.push(species);
             $log.log('Species added:' + vernacularName, state);
             return $http.post('rest/species', species)
                 .then(function (response) {
                     $log.log('Response from post species', response);
                     species.id = response.data;
+                    state.speciesArray.push(species);
+                    state.selectedSpecies = species;
+                    state.pendingAdd = false;
                 }).then(function () {
                     return $http.get('rest/species/' + species.id);
                 }).then(function (response) {
@@ -101,7 +104,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             return ret;
         },
         isSpeciesAddable: function (vernacularName) {
-            if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1) {
+            if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1 || state.pendingAdd) {
 //                $log.debug('Species:' + vernacularName + ' not addable', search);
                 return false;
             }
