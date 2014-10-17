@@ -1,12 +1,13 @@
 function WallService($http, $log, PlantService) {
 
-    var state = {user: {}, plants: {}};
+    var state = {user: {}, plants: {}},
+        garden;
 
-    function updatePlantsState(garden) {
-        state.garden = garden;
-        state.plants.availableYears = garden.getAvailableYears().reverse();
-        state.plants.selectedYear = garden.getAvailableYears().last();
-        state.plants.squares = garden.getSquares(state.plants.selectedYear);
+    function updatePlantsState(newGarden) {
+        garden = newGarden;
+        state.plants.availableYears = newGarden.getAvailableYears().reverse();
+        state.plants.selectedYear = newGarden.getAvailableYears().last();
+        state.plants.squares = newGarden.getSquares(state.plants.selectedYear);
     }
 
     return {
@@ -14,7 +15,6 @@ function WallService($http, $log, PlantService) {
             $http.get('rest/user/' + username)
                 .then(function (response) {
                     angular.extend(state.user, response.data);
-                    $log.debug('state.user', state.user);
                 });
             PlantService.getGarden(username)
                 .then(function (garden) {
@@ -23,8 +23,8 @@ function WallService($http, $log, PlantService) {
         },
         selectYear: function (year) {
             state.plants.selectedYear = year;
-            state.plants.squares = state.garden.getSquares(year);
-            $log.log('Year selected:' + year, state);
+            state.plants.squares = garden.getSquares(year);
+            $log.debug('Year selected:' + year, state);
         },
         getUserState: function () {
             return state.user;
