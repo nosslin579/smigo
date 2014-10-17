@@ -12,9 +12,9 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
-    $scope.selectedSpeciesFromTopResult = function (searchString) {
-        $log.log('Setting species from', searchString);
-        var topResult = $filter('speciesFilter')(SpeciesService.getSpecies(), searchString)[0];
+    $scope.selectedSpeciesFromTopResult = function (query) {
+        $log.log('Setting species from', query);
+        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
         if (topResult) {
             SpeciesService.selectSpecies(topResult);
         }

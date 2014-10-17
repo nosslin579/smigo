@@ -81,9 +81,12 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     });
             }, 2000);
         },
+        getAllSpecies: function () {
+            return state.speciesArray;
+        },
         getSpecies: function (id) {
             if (!id) {
-                return state.speciesArray;
+                throw "Can not get species with no id";
             }
             var species = state.speciesArray.find(id, 'id');
             if (species) {
