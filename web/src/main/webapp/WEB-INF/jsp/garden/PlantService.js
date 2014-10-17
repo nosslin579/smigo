@@ -92,19 +92,34 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             return ret;
         };
 
-        this.yearSquareMap = yearSquareMap;
-
         this.addPlant = function (plant) {
             var square = getSquare(plant.year, plant.x, plant.y);
             square.plants[plant.speciesId] = new Plant(plant.species, square.location);
         };
 
         this.getAvailableYears = function () {
-            return Object.keys(yearSquareMap).sort()
+            return Object.keys(yearSquareMap).map(Number).sort()
         };
 
         this.getSquares = function (year) {
             return yearSquareMap[year];
+        };
+
+        this.addYear = function (year) {
+            var newYearSquareArray = [];
+            var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
+
+            //add perennial from mostRecentYear
+            angular.forEach(copyFromSquareArray, function (square) {
+                angular.forEach(square.plants, function (plant) {
+                    if (!plant.species.annual) {
+                        var newLocation = new Location(year, plant.location.x, plant.location.y);
+                        newYearSquareArray.push(new Square(newLocation, [plant.species]));
+                    }
+                });
+            });
+
+            yearSquareMap[year] = newYearSquareArray;
         };
     }
 
@@ -124,14 +139,14 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
 
     function selectYear(year) {
         state.selectedYear = year;
-        state.squares = garden.yearSquareMap[year];
-        state.visibleRemainderSquares = garden.yearSquareMap[year - 1];
+        state.squares = garden.getSquares(year);
+        state.visibleRemainderSquares = garden.getSquares(year - 1);
         $log.log('Year selected:' + year, state);
     }
 
     function updateState(newGarden) {
         garden = newGarden;
-        state.availableYears = Object.keys(newGarden.yearSquareMap).map(Number).sort();
+        state.availableYears = newGarden.getAvailableYears();
         state.forwardYear = state.availableYears.last() + 1;
         state.backwardYear = state.availableYears[0] - 1;
         selectYear(state.availableYears.last());
@@ -156,12 +171,12 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
 
     function getTrailingYear(year) {
         var yearSource = year;
-        if (garden.yearSquareMap[yearSource - 1]) {
+        if (garden.getSquares(yearSource - 1)) {
             return yearSource - 1;
-        } else if (garden.yearSquareMap[yearSource + 1]) {
+        } else if (garden.getSquares(yearSource + 1)) {
             return yearSource + 1;
         } else {
-            return Object.keys(garden.yearSquareMap).sort().slice(-1);
+            return garden.getAvailableYears().last();
         }
     }
 
@@ -213,26 +228,13 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             return state;
         },
         addYear: function (year) {
-            var newYearSquareArray = [];
-            var copyFromSquareArray = garden.yearSquareMap[getTrailingYear(year)];
-
-            //add perennial from mostRecentYear
-            angular.forEach(copyFromSquareArray, function (square) {
-                angular.forEach(square.plants, function (plant) {
-                    if (!plant.species.annual) {
-                        var newLocation = new Location(year, plant.location.x, plant.location.y);
-                        newYearSquareArray.push(new Square(newLocation, [plant.species]));
-                    }
-                });
-            });
-
-            garden.yearSquareMap[year] = newYearSquareArray;
+            garden.addYear(year);
             updateState(garden);
             $log.log('Year added:' + year, garden);
         },
         addSquare: function (year, x, y, species) {
             var newSquare = new Square(new Location(year, x, y), species ? [species] : []);
-            garden.yearSquareMap[year].push(newSquare);
+            garden.getSquares(year).push(newSquare);
             countAutoSave();
             $log.log('Square and plant added', newSquare);
             return newSquare;
