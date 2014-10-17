@@ -144,7 +144,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
 
     function sendToServer(plant) {
 
-        function removePlantData(plantDataList, plant) {
+        function undo(plantDataList, plant) {
             for (var i = 0; i < plantDataList.length; i++) {
                 var plantData = plantDataList[i];
                 if (plantData.year == plant.location.year && plantData.x == plant.location.x &&
@@ -157,21 +157,27 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             return false;
         }
 
-        $timeout.cancel(updatePlantsPromise);
-        plant.add && !removePlantData(updatePlants.removeList, plant.add) && updatePlants.addList.push(new PlantData(plant.add));
-        plant.remove && !removePlantData(updatePlants.addList, plant.remove) && updatePlants.removeList.push(new PlantData(plant.remove));
-        if (updatePlants.addList.length == 0 && updatePlants.removeList.length == 0) {
-            $log.debug('Both addlist and removelist is empty. Not creating new updatePlantsPromise.');
-            return;
-        }
-        updatePlantsPromise = $timeout(function () {
+        function doHttpPost() {
             $http.post('rest/plant', updatePlants)
                 .then(function (response) {
                     $log.debug('Plants saved', angular.copy(updatePlants));
                     updatePlants.addList = [];
                     updatePlants.removeList = [];
+                })
+                .catch(function (error) {
+                    $log.error('Could not send update to server', error);
+                    updatePlantsPromise = $timeout(doHttpPost, 10000);
                 });
-        }, 4000);
+        };
+
+        $timeout.cancel(updatePlantsPromise);
+        plant.add && !undo(updatePlants.removeList, plant.add) && updatePlants.addList.push(new PlantData(plant.add));
+        plant.remove && !undo(updatePlants.addList, plant.remove) && updatePlants.removeList.push(new PlantData(plant.remove));
+        if (updatePlants.addList.length == 0 && updatePlants.removeList.length == 0) {
+            $log.debug('Both addlist and removelist is empty. Not creating new updatePlantsPromise.');
+            return;
+        }
+        updatePlantsPromise = $timeout(doHttpPost, 4000);
     }
 
     function reloadPlants() {
