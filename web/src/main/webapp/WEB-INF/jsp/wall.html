@@ -1,10 +1,16 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
         <div class="col-sm-3">
-            <h1>{{userState.user.username}}</h1>
+            <h2>{{hostUser.username}}</h2>
 
-            <h3>{{userState.user.displayName}}</h3>
-            <p>{{userState.user.about}}</p>
+            <h3>{{hostUser.displayName}}</h3>
+            <p>{{hostUser.about}}</p>
+
+            <ul class="nav nav-pills">
+                <li ng-repeat="year in plantsState.availableYears" ng-class="{active: year == plantsState.selectedYear}">
+                    <a href="" ng-click="selectYear(year)">{{year}}</a></li>
+            </ul>
+
         </div>
         <div class="col-sm-9 view-grid-wrapper full-height" ng-include="'grid.html'">
         </div>

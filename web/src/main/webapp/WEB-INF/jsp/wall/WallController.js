@@ -2,20 +2,15 @@ function WallController($scope, $http, $log, $routeParams, PlantService, GridSer
 
     WallService.setUser($routeParams.username);
 
-    var state = {};
-    $scope.plantsState = {};
-    $scope.userState = WallService.getState();
+    $scope.plantsState = WallService.getPlantsState();
+    $scope.hostUser = WallService.getUserState();
+
+    window.s = $scope;
 
 
+    $scope.selectYear = WallService.selectYear;
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;
-
-    PlantService.getGarden($routeParams.username)
-        .then(function (garden) {
-            state.garden = garden;
-            $scope.plantsState.selectedYear = garden.getAvailableYears().last();
-            $scope.plantsState.squares = garden.getSquares($scope.plantsState.selectedYear);
-        });
 }
 
 angular.module('smigoModule').controller('WallController', WallController);
