@@ -1,4 +1,4 @@
-function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantService) {
+function UserService($log, $http, $timeout, $rootScope, $q, $location) {
 
     var state = {
             currentUser: initData.user,
@@ -120,7 +120,6 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
         },
         register: function (form, formModel) {
             validateForm(form)
-                .then(PlantService.save)
                 .then(function () {
                     $log.log('Registering');
                     return $http.post('rest/user', formModel);
@@ -141,10 +140,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, PlantServ
             $location.path('/garden');
         },
         logout: function () {
-            PlantService.save()
-                .then(function () {
-                    return $http.get('logout');
-                })
+            $http.get('logout')
                 .then(function () {
                     $rootScope.$broadcast('current-user-changed', null);
                     $location.path('/hasta-luego');

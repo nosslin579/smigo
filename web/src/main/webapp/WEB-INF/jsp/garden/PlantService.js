@@ -1,9 +1,8 @@
 function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
     var state = {},
         garden = new Garden(new Date().getFullYear()),
-        unsavedCounter = 0,
-        autoSaveInterval = 60000,
-        timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
+        updatePlants = {addList: [], removeList: []},
+        updatePlantsPromise;
 
     updateState(createGarden(initData.plantDataArray));
 
@@ -22,12 +21,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         reloadPlants();
     });
 
-    $window.onbeforeunload = function () {
-        sendUnsavedPlantsToServer();
-        return null;
-    };
-
-
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;
@@ -44,15 +37,12 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         this.y = +y;
     }
 
-    function Plant(species, location, flag) {
+    function Plant(species, location) {
         this.species = species;
         this.location = location;
-        if (flag) {
-            this[flag] = true;
-        }
     }
 
-    function Square(location, speciesArray, flag) {
+    function Square(location, speciesArray) {
         if (!location instanceof Location) {
             throw "Square.location must be a Location object. location:" + location;
         }
@@ -63,11 +53,8 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         this.plants = {};
         if (speciesArray) {
             speciesArray.forEach(function (species) {
-                this.plants[species.id] = new Plant(species, location, 'add');
+                this.plants[species.id] = new Plant(species, location);
             }, this);
-        }
-        if (flag) {
-            this[flag] = true;
         }
     }
 
@@ -113,8 +100,9 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.annual) {
-                        var newLocation = new Location(year, plant.location.x, plant.location.y);
-                        newYearSquareArray.push(new Square(newLocation, [plant.species]));
+                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y));
+                        newYearSquareArray.push(newSquare);
+                        addPlant(plant.species, newSquare);
                     }
                 });
             });
@@ -153,6 +141,39 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         $log.log('Plants state updated', state);
     }
 
+
+    function sendToServer(plant) {
+
+        function removePlantData(plantDataList, plant) {
+            for (var i = 0; i < plantDataList.length; i++) {
+                var plantData = plantDataList[i];
+                if (plantData.year == plant.location.year && plantData.x == plant.location.x &&
+                    plantData.y == plant.location.y && plantData.speciesId == plant.species.id) {
+                    $log.debug('Found plant in opposite list. Removing from list.', plantDataList)
+                    plantDataList.splice(i, 1);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        $timeout.cancel(updatePlantsPromise);
+        plant.add && !removePlantData(updatePlants.removeList, plant.add) && updatePlants.addList.push(new PlantData(plant.add));
+        plant.remove && !removePlantData(updatePlants.addList, plant.remove) && updatePlants.removeList.push(new PlantData(plant.remove));
+        if (updatePlants.addList.length == 0 && updatePlants.removeList.length == 0) {
+            $log.debug('Both addlist and removelist is empty. Not creating new updatePlantsPromise.');
+            return;
+        }
+        updatePlantsPromise = $timeout(function () {
+            $http.post('rest/plant', updatePlants)
+                .then(function (response) {
+                    $log.debug('Plants saved', angular.copy(updatePlants));
+                    updatePlants.addList = [];
+                    updatePlants.removeList = [];
+                });
+        }, 7000);
+    }
+
     function reloadPlants() {
         getGarden()
             .then(function (garden) {
@@ -180,45 +201,11 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         }
     }
 
-    function sendUnsavedPlantsToServer() {
-        //reset counter
-        unsavedCounter = 0;
-        $timeout.cancel(timedAutoSavePromise);
-        //get unsaved plants
-        var update = { addList: [], removeList: [] };
-        angular.forEach(garden.yearSquareMap, function (squareList) {
-            angular.forEach(squareList, function (square) {
-                angular.forEach(square.plants, function (plant) {
-                    if (!plant.species.id) {
-                        $log.error('Not sending plant where species id is null:', plant);
-                    } else if (plant.add && !plant.remove) {
-                        update.addList.push(new PlantData(plant));
-                        delete plant.add;
-                        delete plant.remove;
-                    } else if (plant.remove && !plant.add) {
-                        update.removeList.push(new PlantData(plant));
-                        delete square.plants[plant.species.id];
-                    }
-                });
-            });
-        });
-
-        if (!update.addList.length && !update.removeList.length) {
-            $log.log('No plants added nor removed, skipping send to server!');
-            var defer = $q.defer();
-            defer.resolve();
-            return defer.promise;
-        }
-        $log.log('Sending to server', update);
-        //start auto save timer
-        timedAutoSavePromise = $timeout(sendUnsavedPlantsToServer, autoSaveInterval, false);
-        return $http.post('rest/plant', update);
-    }
-
-    function countAutoSave() {
-        unsavedCounter++;
-        if (unsavedCounter > 13) {
-            sendUnsavedPlantsToServer();
+    function addPlant(species, square) {
+        if (!square.plants[species.id]) {
+            square.plants[species.id] = new Plant(species, square.location);
+            sendToServer({add: square.plants[species.id]});
+            $log.log('Plant added: ' + species.scientificName, square);
         }
     }
 
@@ -233,36 +220,20 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             $log.log('Year added:' + year, garden);
         },
         addSquare: function (year, x, y, species) {
-            var newSquare = new Square(new Location(year, x, y), species ? [species] : []);
+            var newSquare = new Square(new Location(year, x, y));
             garden.getSquares(year).push(newSquare);
-            countAutoSave();
+            addPlant(species, newSquare);
             $log.log('Square and plant added', newSquare);
             return newSquare;
         },
         removePlant: function (square) {
             angular.forEach(square.plants, function (plant, key) {
-                if (plant.add) {//undo add
-                    delete square.plants[key];
-                    $log.log('Undo add', plant);
-                } else {
-                    plant.remove = true;
-                    $log.log('Plant removed', plant);
-                }
+                sendToServer({remove: plant});
             });
+            square.plants = {};
             $log.log('Plant(s) removed', square);
-            countAutoSave();
         },
-        addPlant: function (species, square) {
-            if (!square.plants[species.id]) {
-                square.plants[species.id] = new Plant(species, square.location, 'add');
-                $log.log('Plant added: ' + species.scientificName, square);
-                countAutoSave();
-            } else {//undo remove
-                delete square.plants[species.id].remove;
-                $log.log('Undo remove', square);
-            }
-        },
-        save: sendUnsavedPlantsToServer,
+        addPlant: addPlant,
         getGarden: getGarden
     };
 }
