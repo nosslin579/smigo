@@ -2,7 +2,7 @@
     <div class="row full-height">
         <div id="species-frame" class="hidden-xs col-sm-3 full-height">
             <div class="species-wrapper">
-            <div class="btn-group full-width">
+                <div class="btn-group full-width">
                     <div class="row">
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-block btn-default" ng-class="{active: speciesState.action == 'info'}"
@@ -50,10 +50,6 @@
                     <a id="add-year-link" href="" ng-click="openAddYearModal()">
                         <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
                     </a>
-                </li>
-                <li>
-                    <a twitter data-lang="{{userState.currentUser.locale}}" data-url="http://smigo.org/wall/{{userState.currentUser.username}}"
-                       data-via="smigogarden" data-size="large" data-text="{{'msg.twittersharetext' | translate}}" data-count="none"></a>
                 </li>
             </ul>
             <div class="edit-grid-wrapper" ng-include="'grid.html'"></div>

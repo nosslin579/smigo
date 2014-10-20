@@ -23,9 +23,9 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">--%>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/flatly/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/style-4.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style-5.2.css">
 
-    <%--angular--%>
+<%--angular--%>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
@@ -33,7 +33,7 @@
     <%--<script type="text/javascript" src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.2.js"></script>--%>
 
     <%--socila media--%>
-    <script src="http://platform.twitter.com/widgets.js"></script>
+    <%--<script src="http://platform.twitter.com/widgets.js"></script>--%>
 </head>
 
 
