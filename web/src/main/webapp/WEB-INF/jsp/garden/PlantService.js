@@ -158,7 +158,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         }
 
         function doHttpPost() {
-            $http.post('rest/plant', updatePlants)
+            $http.post('/rest/plant', updatePlants)
                 .then(function (response) {
                     $log.debug('Plants saved', angular.copy(updatePlants));
                     updatePlants.addList = [];
@@ -188,7 +188,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
     }
 
     function getGarden(username) {
-        var url = 'rest/plant/' + (username ? username : '');
+        var url = '/rest/plant/' + (username ? username : '');
         return $http.get(url)
             .then(function (response) {
                 $log.info('Plants retrieved successfully. Response:', response);

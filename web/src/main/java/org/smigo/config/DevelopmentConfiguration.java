@@ -46,7 +46,7 @@ public class DevelopmentConfiguration {
         return new Props() {
             @Override
             public String getResetUrl() {
-                return "http://localhost:8080/web/login-reset/";
+                return "http://localhost:8080/login-reset/";
             }
         };
     }

@@ -58,12 +58,16 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                     cause: cause
                 };
                 var $http = $injector.get("$http");
-                $http.post('rest/log/error', referenceError);
+                $http.post('/rest/log/error', referenceError);
             };
         }]);
     })
-    .run(function ($rootScope, $log) {
-        $log.log("App run");
+    .run(function ($rootScope, $log, $location) {
+        $log.log("App run", initData);
+
+        if (initData.wall) {
+            $location.path("/wall/" + initData.wall);
+        }
 
         $rootScope.getObjectLength = function (obj) {
             return Object.keys(obj).length;

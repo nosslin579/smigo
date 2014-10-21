@@ -12,7 +12,7 @@ function WallService($http, $log, PlantService) {
 
     return {
         setUser: function (username) {
-            $http.get('rest/user/' + username)
+            $http.get('/rest/user/' + username)
                 .then(function (response) {
                     angular.extend(state.user, response.data);
                 });

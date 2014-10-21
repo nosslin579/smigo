@@ -24,7 +24,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     }
 
     function reloadSpecies() {
-        return $http.get('rest/species')
+        return $http.get('/rest/species')
             .then(function (response) {
                 $log.log('Species retrieve successful. Response:', response);
                 state.speciesArray = response.data;
@@ -46,7 +46,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             var name = vernacularName.capitalize();
             var species = new Species(name);
             $log.log('Species added:' + vernacularName, state);
-            return $http.post('rest/species', species)
+            return $http.post('/rest/species', species)
                 .then(function (response) {
                     $log.log('Response from post species', response);
                     species.id = response.data;
@@ -54,7 +54,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     state.selectedSpecies = species;
                     state.pendingAdd = false;
                 }).then(function () {
-                    return $http.get('rest/species/' + species.id);
+                    return $http.get('/rest/species/' + species.id);
                 }).then(function (response) {
                     angular.extend(species, response.data);
                 }).catch(function (error) {
@@ -72,7 +72,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             }
             search.promise = $timeout(function () {
                 $log.debug('Search with query', query);
-                $http.post('rest/species/search', {query: query})
+                $http.post('/rest/species/search', {query: query})
                     .then(function (response) {
                         search.previous.push(queryLowerCase);
                         response.data.forEach(function (species) {
@@ -97,7 +97,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             }
             var ret = {id: id, iconFileName: 'defaulticon.png'};
             state.speciesArray.push(ret);
-            $http.get('rest/species/' + id)
+            $http.get('/rest/species/' + id)
                 .then(function (response) {
                     angular.extend(ret, response.data);
                 });
@@ -112,7 +112,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             return species ? false : true;
         },
         loadSpeciesFromUser: function (userId) {
-            $http.get('rest/species/' + userId)
+            $http.get('/rest/species/' + userId)
                 .then(function (response) {
 
                 });

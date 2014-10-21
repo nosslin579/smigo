@@ -6,7 +6,7 @@ function translateFilter($rootScope, $log, $http) {
     });
 
     $rootScope.$on('locale-changed', function (event, locale) {
-        return $http.get('rest/translation/' + locale)
+        return $http.get('/rest/translation/' + locale)
             .then(function (response) {
                 msg = response.data;
             });

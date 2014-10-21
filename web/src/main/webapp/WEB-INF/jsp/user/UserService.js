@@ -28,7 +28,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
     });
 
     function reloadCurrentUser() {
-        return $http.get('rest/user')
+        return $http.get('/rest/user')
             .then(function (resonse) {
                 var currentUser = resonse.data ? resonse.data : null;
                 $rootScope.$broadcast('current-user-changed', currentUser);
@@ -56,7 +56,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
     }
 
     function updateUser(userBean) {
-        return $http.put('rest/user', userBean)
+        return $http.put('/rest/user', userBean)
             .then(function (response) {
                 $log.log('Update user success', [userBean, response]);
                 if (state.currentUser.locale != userBean.locale) {
@@ -122,7 +122,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
             validateForm(form)
                 .then(function () {
                     $log.log('Registering');
-                    return $http.post('rest/user', formModel);
+                    return $http.post('/rest/user', formModel);
                 })
                 .then(function () {
                     return login(form, formModel);
@@ -151,7 +151,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
         },
         updateUser: updateUser,
         requestFeature: function (feature) {
-            $http.post('rest/log/feature', {feature: feature});
+            $http.post('/rest/log/feature', {feature: feature});
             alert("This service is not yet available. Please try again later.");
         }
     };

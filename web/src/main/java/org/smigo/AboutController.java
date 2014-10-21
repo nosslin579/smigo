@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -30,6 +31,12 @@ public class AboutController {
     private PlantHandler plantHandler;
     @Autowired
     private SpeciesHandler speciesHandler;
+
+    @RequestMapping(value = {"/wall/{username}"}, method = RequestMethod.GET)
+    public String getWall(Model model, @PathVariable String username, HttpServletRequest request) {
+        model.addAttribute("wall", username);
+        return "forward:/garden";
+    }
 
     @RequestMapping(value = {"/garden", "/"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {

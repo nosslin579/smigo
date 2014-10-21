@@ -56,6 +56,7 @@
                     <username>tomcat</username>
                     <password>s3cret</password>
                     <contextFile>context.xml</contextFile>
+                    <path>/</path>
                     <webapps>
                         <webapp>
                             <groupId>org.smigo</groupId>

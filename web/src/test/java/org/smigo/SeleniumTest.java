@@ -61,7 +61,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void goHome() {
         d.manage().deleteCookieNamed("JSESSIONID");
         d.manage().deleteCookieNamed("remember-me");
-        d.get("http://localhost:8080/web");
+        d.get("http://localhost:8080/");
     }
 
     @AfterClass
@@ -236,7 +236,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void registerWithOpenId() throws InterruptedException {
         userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
 
-        d.get("http://localhost:8080/web");
+        d.get("http://localhost:8080/");
         d.findElement(By.className("square")).click();
         Thread.sleep(2000);
 
