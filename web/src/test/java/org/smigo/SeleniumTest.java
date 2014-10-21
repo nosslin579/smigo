@@ -157,8 +157,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("add-forward-year-button")).click();
 
         Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
-        Assert.assertEquals(d.findElement(By.id("garden-frame")).findElements(By.tagName("li")).size(), 3);
-        Assert.assertEquals(d.findElements(By.className("plant")).size(), 0);
+        Assert.assertEquals(d.findElements(By.className("select-year")).size(), 2);
+        Assert.assertEquals(d.findElement(By.className("square-container")).findElements(By.tagName("div")).size(), 1);
 
         d.findElement(By.partialLinkText("Lawn")).click();
         d.findElement(By.className("visible-remainder")).click();
@@ -168,7 +168,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("add-forward-year-button")).click();
 
         Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
-        Assert.assertEquals(d.findElement(By.id("garden-frame")).findElements(By.tagName("li")).size(), 4);
+        Assert.assertEquals(d.findElements(By.className("select-year")).size(), 3);
         Assert.assertEquals(d.findElements(By.className("plant")).size(), 1);
 
     }
