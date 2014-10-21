@@ -46,6 +46,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/favicon.ico");
         registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/");
     }
 
