@@ -26,31 +26,30 @@ body > .angular-view {
     width: 100% !important;
 }
 
+.social-sprite {
+    background-image: url('/static/icon/socialmedialogosprite.jpg');
+    height: 20px;
+    width: 20px;
+    float: left;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
 /* ############### login  ##################################*/
-.signin-icon.facebook {
+.social-sprite.facebook {
     background-position: -1px 0;
 }
 
-.signin-icon.twitter {
+.social-sprite.twitter {
     background-position: -26px 0;
 }
 
-.signin-icon.yahoo {
+.social-sprite.yahoo {
     background-position: -150px -50px;
 }
 
-.signin-icon.google {
+.social-sprite.google {
     background-position: -75px 0;
-}
-
-.signin-icon {
-    background-repeat: no-repeat;
-    background-image: url('/static/icon/socialmedialogosprite.jpg');
-    background-color: transparent;
-    float: left;
-    height: 20px;
-    width: 20px;
-    margin: 0px 10px 0px 0px;
 }
 
 .list-group-item {

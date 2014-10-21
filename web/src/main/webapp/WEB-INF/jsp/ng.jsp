@@ -44,6 +44,9 @@
         <%@ include file="wall/WallController.js" %>
         <%@ include file="wall/WallService.js" %>
 
+        <%@ include file="social/FacebookDirective.js" %>
+        <%@ include file="social/TwitterDirective.js" %>
+
         <%@ include file="MainMenuController.js" %>
 
         <%@ include file="EqualsDirective.js" %>

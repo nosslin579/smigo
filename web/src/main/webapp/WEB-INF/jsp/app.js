@@ -1,5 +1,5 @@
 "use strict";
-angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciespopover', 'djds4rce.angular-socialshare'])
+angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciespopover'])
     .config(function ($routeProvider, $logProvider, $provide, $locationProvider) {
 //        $logProvider.debugEnabled(true);
         $routeProvider.
