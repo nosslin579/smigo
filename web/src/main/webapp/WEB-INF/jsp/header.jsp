@@ -28,7 +28,6 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="/static/js/angular-socialshare-0.0.2.js"></script>
 
     <style>
         <%@ include file="style.css" %>

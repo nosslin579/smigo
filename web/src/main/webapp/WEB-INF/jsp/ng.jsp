@@ -89,6 +89,9 @@
 <script type="text/ng-template" id="grid.html">
     <%@ include file="grid.html" %>
 </script>
+<script type="text/ng-template" id="hasta-luego.html">
+    <%@ include file="hasta-luego.html" %>
+</script>
 
 </body>
 

@@ -1,7 +1,10 @@
 "use strict";
 angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciespopover'])
     .config(function ($routeProvider, $logProvider, $provide, $locationProvider) {
-//        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(false);
+
+        $locationProvider.html5Mode(true);
+
         $routeProvider.
             when('/request-password-link', {
                 templateUrl: 'request-password-link.html'
@@ -62,12 +65,8 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
             };
         }]);
     })
-    .run(function ($rootScope, $log, $location) {
+    .run(function ($rootScope, $log) {
         $log.log("App run", initData);
-
-        if (initData.wall) {
-            $location.path("/wall/" + initData.wall);
-        }
 
         $rootScope.getObjectLength = function (obj) {
             return Object.keys(obj).length;
