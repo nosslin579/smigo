@@ -26,7 +26,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                 templateUrl: 'login.html',
                 controller: 'RegisterController'
             }).
-            when('/garden', {
+            when('/', {
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
             }).
@@ -38,7 +38,8 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                 templateUrl: 'accept-terms-of-service.html',
                 controller: 'AcceptTermsOfServiceController'
             }).
-            otherwise({redirectTo: '/garden'});
+            when('/garden', {redirectTo: '/'}).
+            otherwise({templateUrl: '404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
             var x = 0, previousStacks = [];
