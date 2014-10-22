@@ -55,8 +55,8 @@
                 </li>
                 <li twitter ng-model="userState.currentUser.username">
                 </li>
-                <li>
-                    <a href="http://smigo.org/wall/{{userState.currentUser.username}}" target="_blank">
+                <li ng-if="userState.currentUser.username">
+                <a href="http://smigo.org/wall/{{userState.currentUser.username}}" target="_blank">
                         <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
                 </li>
             </ul>

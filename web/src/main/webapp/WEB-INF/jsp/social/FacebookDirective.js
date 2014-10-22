@@ -7,7 +7,10 @@ function FacebookDirective($log, $window, $timeout) {
             ngModel: '='
         },
         require: '^ngModel',
-        template: '<a href="https://www.facebook.com/sharer/sharer.php?u=http://smigo.org/wall/{{ngModel}}" target="_blank"><span class="social-sprite facebook"></span>&NonBreakingSpace;</a>'
+        template: '<a ng-if="ngModel" href="https://www.facebook.com/sharer/sharer.php?u=http://smigo.org/wall/{{ngModel}}" target="_blank"><span class="social-sprite facebook"></span>&NonBreakingSpace;</a>',
+        link: function () {
+
+        }
     }
 }
 angular.module('smigoModule').directive('facebook', FacebookDirective);
