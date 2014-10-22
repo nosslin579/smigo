@@ -160,7 +160,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("select-year")).size(), 2);
         Assert.assertEquals(d.findElement(By.className("square-container")).findElements(By.tagName("div")).size(), 1);
 
-        d.findElement(By.partialLinkText("Lawn")).click();
+
+        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");
+        d.findElement(By.partialLinkText("Grapes")).click();
         d.findElement(By.className("visible-remainder")).click();
 
         //add year
