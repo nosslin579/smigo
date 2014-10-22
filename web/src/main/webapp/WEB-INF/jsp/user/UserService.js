@@ -93,7 +93,6 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
         }
         return validateForm(form, true)
             .then(function () {
-                formModel['remember-me'] = true;
                 return $http({
                     method: 'POST',
                     url: 'login',
