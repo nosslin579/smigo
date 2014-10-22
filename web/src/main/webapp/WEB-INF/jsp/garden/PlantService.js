@@ -70,7 +70,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             }
             for (var i = 0; i < yearSquareMap[year].length; i++) {
                 var square = yearSquareMap[year][i];
-                if (square.x === x && square.y === y) {
+                if (square.location.x === x && square.location.y === y) {
                     return square;
                 }
             }
