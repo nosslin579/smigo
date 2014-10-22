@@ -177,7 +177,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             $log.debug('Both addlist and removelist is empty. Not creating new updatePlantsPromise.');
             return;
         }
-        updatePlantsPromise = $timeout(doHttpPost, 4000);
+        updatePlantsPromise = $timeout(doHttpPost, 3000);
     }
 
     function reloadPlants() {
