@@ -41,6 +41,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String SPECIES_NAME = "Frango Salada";
     private static final String SCIENTIFIC_NAME = "Frangus Saladus";
     private static final String ITEM_NAME = "Sand";
+    private static final String HOST_URL = "http://localhost:8080";
     private static final int NUMBER_OF_SPECIES = 83;
 
     @Autowired
@@ -61,7 +62,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void goHome() {
         d.manage().deleteCookieNamed("JSESSIONID");
         d.manage().deleteCookieNamed("remember-me");
-        d.get("http://localhost:8080/");
+        d.get(HOST_URL);
     }
 
     @AfterClass
@@ -139,10 +140,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(5000);
 
         d.findElement(By.id("logout-link")).click();
-        Thread.sleep(1000);
-        login(username, PASSWORD);
 
-        final WebElement plant = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+        d.get(HOST_URL + "/wall/" + username);
+
+        final WebElement plant = d.findElement(By.className("plant"));
         Assert.assertEquals(plant.getAttribute("alt"), speciesName);
 
     }
@@ -238,7 +239,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void registerWithOpenId() throws InterruptedException {
         userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
 
-        d.get("http://localhost:8080/");
+        d.get(HOST_URL);
         d.findElement(By.className("square")).click();
         Thread.sleep(2000);
 
