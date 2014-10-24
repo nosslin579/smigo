@@ -17,6 +17,11 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         }
     });
 
+    $rootScope.$on('user-logout', function () {
+        $http.post('/rest/plant', updatePlants);
+        $log.info('Saving plants before logout', updatePlants);
+    });
+
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;

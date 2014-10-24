@@ -137,6 +137,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
             $location.path('/garden');
         },
         logout: function () {
+            $rootScope.$broadcast('user-logout');
             $http.get('logout')
                 .then(function () {
                     $rootScope.$broadcast('current-user-changed', null);
