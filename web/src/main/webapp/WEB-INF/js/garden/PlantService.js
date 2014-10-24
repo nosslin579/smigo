@@ -17,10 +17,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         }
     });
 
-    $rootScope.$on('locale-changed', function (event, locale) {
-        reloadPlants();
-    });
-
     function PlantData(plant) {
         this.year = plant.location.year;
         this.y = plant.location.y;

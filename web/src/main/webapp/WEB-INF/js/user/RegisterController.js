@@ -15,10 +15,7 @@ function RegisterController($scope, UserService) {
 //     password: newName
 //     };
 
-    $scope.submitLoginOrRegisterForm = function (form, formModel) {
-        UserService.register(form, formModel);
-    }
-
+    $scope.submitLoginOrRegisterForm = UserService.register;
     $scope.requestFeature = UserService.requestFeature;
 
 }

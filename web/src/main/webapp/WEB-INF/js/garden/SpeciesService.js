@@ -14,11 +14,6 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         }
     });
 
-    $rootScope.$on('locale-changed', function (event, locale) {
-        reloadSpecies();
-    });
-
-
     function Species(vernacularName) {
         this.vernacularName = vernacularName;
     }

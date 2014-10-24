@@ -13,10 +13,9 @@ function LoginController($scope, UserService) {
 //        username: 'user7389327855123',
 //        password: 'user7389327855123'
     };
-    $scope.requestFeature = UserService.requestFeature;
 
-    $scope.submitLoginOrRegisterForm = function (form, formModel) {
-        UserService.login(form, formModel);
-    }
+    $scope.requestFeature = UserService.requestFeature;
+    $scope.submitLoginOrRegisterForm = UserService.login;
+
 }
 angular.module('smigoModule').controller('LoginController', LoginController);

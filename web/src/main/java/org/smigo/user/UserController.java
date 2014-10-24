@@ -130,9 +130,9 @@ public class UserController {
         return Language.getTransalationMap();
     }
 
-    @RequestMapping(value = "rest/translation/{locale}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public java.util.Map<Object, Object> getTranslation(@PathVariable Locale locale) {
+    public java.util.Map<Object, Object> getDefaultTranslation(Locale locale) {
         return messageSource.getAllMessages(locale);
     }
 

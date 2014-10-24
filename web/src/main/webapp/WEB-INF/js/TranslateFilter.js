@@ -1,12 +1,13 @@
 function translateFilter($rootScope, $log, $http) {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
 
+
     $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
         msg[messageKey] = value;
     });
 
-    $rootScope.$on('locale-changed', function (event, locale) {
-        return $http.get('/rest/translation/' + locale)
+    $rootScope.$on('current-user-changed', function (event, user) {
+        $http.get('/rest/translation')
             .then(function (response) {
                 msg = response.data;
             });
