@@ -1,6 +1,6 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
-        <div id="species-frame" class="hidden-xs col-sm-3 full-height">
+        <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
                 <div class="btn-group full-width">
                     <div class="row">
@@ -39,10 +39,10 @@
                 </ul>
             </div>
         </div>
-        <div id="garden-frame" class="col-xs-12 col-sm-9 no-select full-height">
+        <div id="garden-frame" class="col-xs-9 no-select full-height">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="select-year" ng-class="{active: year == plantsState.selectedYear}" ng-repeat="year in plantsState.availableYears">
-                <a href="" ng-click="selectYear(year)">
+                    <a href="" ng-click="selectYear(year)">
                         {{year}}
                     </a>
                 </li>
@@ -56,7 +56,7 @@
                 <li twitter ng-model="userState.currentUser.username">
                 </li>
                 <li ng-if="userState.currentUser.username">
-                <a href="http://smigo.org/wall/{{userState.currentUser.username}}" target="_blank">
+                    <a href="http://smigo.org/wall/{{userState.currentUser.username}}" target="_blank">
                         <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
                 </li>
             </ul>
