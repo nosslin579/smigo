@@ -101,12 +101,10 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
                 });
             })
             .then(function (response) {
-                $log.log('Login success, response:', response);
+                $location.path('/garden');
             })
             .then(reloadCurrentUser)
-            .then(function () {
-                $location.path('/garden');
-            }).catch(function (errorReason) {
+            .catch(function (errorReason) {
                 $log.log('Login failed, reason:', errorReason);
                 form.objectErrors = errorReason.data;
                 form.processing = false;
