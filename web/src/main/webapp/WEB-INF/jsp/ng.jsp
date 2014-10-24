@@ -57,13 +57,13 @@
 
 <%--########## ng views ##############--%>
 <script type="text/ng-template" id="garden.html">
-    <%@ include file="../views/ng-garden.html" %>
+    <%@ include file="../views/garden.html" %>
 </script>
 <script type="text/ng-template" id="help.html">
-    <%@ include file="../views/ng-help.html" %>
+    <%@ include file="../views/help.html" %>
 </script>
 <script type="text/ng-template" id="login.html">
-    <%@ include file="../views/ng-login.html" %>
+    <%@ include file="../views/login.html" %>
 </script>
 <script type="text/ng-template" id="request-password-link.html">
     <%@ include file="../views/request-password-link.html" %>
