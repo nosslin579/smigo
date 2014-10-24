@@ -44,6 +44,18 @@ body > .angular-view {
     background-position: -26px 0;
 }
 
+.social-sprite.linkedin {
+    background-position: -125px 0;
+}
+
+.social-sprite.reddit {
+    background-position: -75px -50px;
+}
+
+.social-sprite.email {
+    background-position: -174px -100px;
+}
+
 .social-sprite.yahoo {
     background-position: -150px -50px;
 }
