@@ -19,6 +19,8 @@ public class RegisterFormBean {
     @AssertTrue
     private boolean termsOfService;
 
+    private Locale locale;
+
     public RegisterFormBean() {
     }
 
@@ -56,6 +58,10 @@ public class RegisterFormBean {
     }
 
     public Locale getLocale() {
-        return Locale.ENGLISH;
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

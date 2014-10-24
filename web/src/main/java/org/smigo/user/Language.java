@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public enum Language {
+enum Language {
     GERMAN(Locale.GERMAN),
     ENGLISH(Locale.ENGLISH),
     FRENCH(Locale.FRENCH),
@@ -37,5 +37,15 @@ public enum Language {
 
     public Locale getLocale() {
         return this.locale;
+    }
+
+    static boolean contains(Locale l) {
+        for (Language language : values()) {
+            final Locale l1 = language.getLocale();
+            if (l1.equals(l) || (l1.getLanguage().equals(l.getLanguage()) && l1.getCountry().isEmpty())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

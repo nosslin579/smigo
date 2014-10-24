@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,15 +47,16 @@ public class UserHandler {
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
-    public void createUser(RegisterFormBean user, String identityUrl) {
-        final int userId = createUser(user);
+    public void createUser(RegisterFormBean user, String identityUrl, Locale locale) {
+        final int userId = createUser(user, locale);
         userDao.addOpenId(userId, identityUrl);
     }
 
-    public int createUser(RegisterFormBean user) {
+    public int createUser(RegisterFormBean user, Locale locale) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
         final String rawPassword = user.getPassword();
         final String encoded = rawPassword.isEmpty() ? "" : passwordEncoder.encode(rawPassword);
+        user.setLocale(locale);
         final int userId = userDao.addUser(user, encoded, decideTime);
 
         //save plants
