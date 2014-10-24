@@ -8,7 +8,9 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Locale resolver that gets locale from user setting
@@ -26,7 +28,16 @@ public class UserSetLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest req) {
         UserBean user = userSession.getUser();
-        return user.getLocale() != null ? user.getLocale() : req.getLocale();
+        if (user.getLocale() != null) {
+            return user.getLocale();
+        }
+        final Set<String> availableLocales = Language.getTransalationMap().keySet();
+        for (Locale locale : Collections.list(req.getLocales())) {
+            if (Language.contains(locale)) {
+                return locale;
+            }
+        }
+        return req.getLocale() == null ? Locale.ENGLISH : req.getLocale();
     }
 
     @Override
