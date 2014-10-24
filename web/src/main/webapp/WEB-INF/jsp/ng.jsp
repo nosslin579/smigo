@@ -8,13 +8,13 @@
 <jsp:include page="header.jsp"/>
 <body ng-app="smigoModule">
 
-<%@ include file="menu.html" %>
+<%@ include file="../views/menu.html" %>
 
 <div ng-view class="angular-view"></div>
 
 <script type="application/javascript">
 
-    <%@ include file="Customization.js" %>
+    <%@ include file="../js/Customization.js" %>
     (function () {
 
         var initData = {
@@ -24,73 +24,64 @@
             wall: '<c:out value="${wall}"/>'
         };
 
-        <%@ include file="app.js" %>
-        <%@ include file="garden/SpeciesFilter.js" %>
-        <%@ include file="garden/GardenController.js" %>
-        <%@ include file="garden/AddYearModalController.js" %>
-        <%@ include file="garden/SpeciesService.js" %>
-        <%@ include file="garden/GridService.js" %>
-        <%@ include file="garden/PlantService.js" %>
-        <%@ include file="garden/SpeciespopoverDirective.js" %>
-        <%@ include file="garden/SquareInfoDirective.js" %>
+        <%@ include file="../js/app.js" %>
+        <%@ include file="../js/garden/SpeciesFilter.js" %>
+        <%@ include file="../js/garden/GardenController.js" %>
+        <%@ include file="../js/garden/AddYearModalController.js" %>
+        <%@ include file="../js/garden/SpeciesService.js" %>
+        <%@ include file="../js/garden/GridService.js" %>
+        <%@ include file="../js/garden/PlantService.js" %>
+        <%@ include file="../js/garden/SpeciespopoverDirective.js" %>
+        <%@ include file="../js/garden/SquareInfoDirective.js" %>
 
-        <%@ include file="user/AcceptTermsOfServiceController.js" %>
-        <%@ include file="user/RegisterController.js" %>
-        <%@ include file="user/LoginController.js" %>
-        <%@ include file="user/AccountController.js" %>
-        <%@ include file="user/PasswordController.js" %>
-        <%@ include file="user/UserService.js" %>
-        <%@ include file="user/RequestPasswordLinkController.js" %>
+        <%@ include file="../js/user/AcceptTermsOfServiceController.js" %>
+        <%@ include file="../js/user/RegisterController.js" %>
+        <%@ include file="../js/user/LoginController.js" %>
+        <%@ include file="../js/user/AccountController.js" %>
+        <%@ include file="../js/user/PasswordController.js" %>
+        <%@ include file="../js/user/UserService.js" %>
+        <%@ include file="../js/user/RequestPasswordLinkController.js" %>
 
-        <%@ include file="wall/WallController.js" %>
-        <%@ include file="wall/WallService.js" %>
+        <%@ include file="../js/wall/WallController.js" %>
+        <%@ include file="../js/wall/WallService.js" %>
 
-        <%@ include file="social/FacebookDirective.js" %>
-        <%@ include file="social/TwitterDirective.js" %>
+        <%@ include file="../js/social/FacebookDirective.js" %>
+        <%@ include file="../js/social/TwitterDirective.js" %>
 
-        <%@ include file="MainMenuController.js" %>
+        <%@ include file="../js/MainMenuController.js" %>
 
-        <%@ include file="EqualsDirective.js" %>
-        <%@ include file="TranslateFilter.js" %>
+        <%@ include file="../js/EqualsDirective.js" %>
+        <%@ include file="../js/TranslateFilter.js" %>
     })();
 </script>
 
 <%--########## ng views ##############--%>
 <script type="text/ng-template" id="garden.html">
-    <%@ include file="ng-garden.html" %>
+    <%@ include file="../views/ng-garden.html" %>
 </script>
 <script type="text/ng-template" id="help.html">
-    <%@ include file="ng-help.html" %>
+    <%@ include file="../views/ng-help.html" %>
 </script>
 <script type="text/ng-template" id="login.html">
-    <%@ include file="ng-login.html" %>
-</script>
-<script type="text/ng-template" id="accept-terms-of-service.html">
-    <%@ include file="accept-terms-of-service.html" %>
-</script>
-<script type="text/ng-template" id="account.html">
-    <%@ include file="account.html" %>
+    <%@ include file="../views/ng-login.html" %>
 </script>
 <script type="text/ng-template" id="request-password-link.html">
-    <%@ include file="request-password-link.html" %>
-</script>
-<script type="text/ng-template" id="add-year-modal.html">
-    <%@ include file="add-year-modal.html" %>
+    <%@ include file="../views/request-password-link.html" %>
 </script>
 <script type="text/ng-template" id="speciespopover.html">
-    <%@ include file="speciespopover.html" %>
+    <%@ include file="../views/speciespopover.html" %>
 </script>
 <script type="text/ng-template" id="squareinfo.html">
-    <%@ include file="squareinfo.html" %>
+    <%@ include file="../views/squareinfo.html" %>
 </script>
 <script type="text/ng-template" id="wall.html">
-    <%@ include file="wall.html" %>
+    <%@ include file="../views/wall.html" %>
 </script>
 <script type="text/ng-template" id="grid.html">
-    <%@ include file="grid.html" %>
+    <%@ include file="../views/grid.html" %>
 </script>
 <script type="text/ng-template" id="hasta-luego.html">
-    <%@ include file="hasta-luego.html" %>
+    <%@ include file="../views/hasta-luego.html" %>
 </script>
 
 </body>
