@@ -31,7 +31,7 @@ public class AboutController {
     @Autowired
     private SpeciesHandler speciesHandler;
 
-    @RequestMapping(value = {"/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getSpeciesMap(user, locale).values());

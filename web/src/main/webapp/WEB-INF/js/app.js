@@ -39,6 +39,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ui.bootstrap.speciesp
                 controller: 'AcceptTermsOfServiceController'
             }).
             when('/garden', {redirectTo: '/'}).
+            when('/beta', {redirectTo: '/'}).
             otherwise({templateUrl: '404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
