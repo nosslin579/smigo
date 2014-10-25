@@ -19,7 +19,7 @@ public class RegisterFormBean {
     @AssertTrue
     private boolean termsOfService;
 
-    private Locale locale;
+    private Locale locale = Locale.ENGLISH;
 
     public RegisterFormBean() {
     }
