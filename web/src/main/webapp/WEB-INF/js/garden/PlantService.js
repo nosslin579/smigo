@@ -1,10 +1,10 @@
 function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
     var state = {},
-        garden = new Garden(new Date().getFullYear()),
+        garden = new Garden([]),
         updatePlants = {addList: [], removeList: []},
         updatePlantsPromise;
 
-    updateState(createGarden(initData.plantDataArray));
+    updateState(new Garden(initData.plantDataArray));
 
     $log.log('PlantService', state);
 
@@ -12,9 +12,13 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         if (user) {
             reloadPlants();
         } else {
-            var year = new Date().getFullYear();
-            updateState(new Garden(year));
+            updateState(new Garden([]));
         }
+    });
+
+    $window.addEventListener("beforeunload", function (event) {
+        $http.post('/rest/plant', updatePlants);
+
     });
 
     $rootScope.$on('user-logout', function () {
@@ -43,29 +47,51 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         this.location = location;
     }
 
-    function Square(location, speciesArray) {
+    function Square(location) {
         if (!location instanceof Location) {
             throw "Square.location must be a Location object. location:" + location;
         }
-        if (!speciesArray instanceof Array) {
-            throw "Square.speciesArray must be an Array. speciesArray:" + speciesArray;
-        }
+        var self = this;
         this.location = location;
         this.plants = {};
-        if (speciesArray) {
-            speciesArray.forEach(function (species) {
-                this.plants[species.id] = new Plant(species, location);
-            }, this);
+        this.setPlant = function (species) {
+            self.plants[species.id] = new Plant(species, self.location);
         }
+        this.addPlant = function (species) {
+            if (!self.plants[species.id]) {
+                self.plants[species.id] = new Plant(species, self.location);
+                sendToServer({add: self.plants[species.id]});
+                $log.debug('Plant added: ' + species.scientificName, self);
+            }
+            return self;
+        }
+        this.removePlant = function () {
+            $log.debug('Removing plant(s)', angular.copy(self));
+            angular.forEach(self.plants, function (plant, id) {
+                sendToServer({remove: plant});
+            });
+            self.plants = {};
+        };
     }
 
-    function Garden(year) {
-        var yearSquareMap = {};
-        if (year) {
-            yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
-        }
+    function Garden(plantDataArray) {
+        var self = this, yearSquareMap = {};
 
-        function getSquare(year, x, y) {
+        function init() {
+            if (!plantDataArray || !plantDataArray.length) {
+                var year = new Date().getFullYear();
+                yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
+            }
+
+            for (var i = 0; i < plantDataArray.length; i++) {
+                var plantData = plantDataArray[i];
+                var species = SpeciesService.getSpecies(plantData.speciesId);
+                self.getSquare(plantData.year, plantData.x, plantData.y).setPlant(species);
+            }
+            $log.info("Garden created:", self);
+        };
+
+        this.getSquare = function (year, x, y) {
             if (!yearSquareMap[year]) {
                 yearSquareMap[year] = [];
             }
@@ -78,11 +104,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             var ret = new Square(new Location(year, x, y));
             yearSquareMap[year].push(ret);
             return ret;
-        };
-
-        this.addPlant = function (plant) {
-            var square = getSquare(plant.year, plant.x, plant.y);
-            square.plants[plant.speciesId] = new Plant(plant.species, square.location);
         };
 
         this.getAvailableYears = function () {
@@ -101,29 +122,16 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.annual) {
-                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y));
+                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y)).addPlant(plant.species);
                         newYearSquareArray.push(newSquare);
-                        addPlant(plant.species, newSquare);
                     }
                 });
             });
 
             yearSquareMap[year] = newYearSquareArray;
         };
-    }
 
-    function createGarden(plantDataArray) {
-        if (!plantDataArray.length) {
-            return new Garden(new Date().getFullYear());
-        }
-        var ret = new Garden();
-        for (var i = 0; i < plantDataArray.length; i++) {
-            var plantData = plantDataArray[i];
-            plantData.species = SpeciesService.getSpecies(plantData.speciesId);
-            ret.addPlant(plantData);
-        }
-        $log.debug("Garden created:", ret);
-        return ret;
+        init();
     }
 
     function selectYear(year) {
@@ -193,7 +201,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         return $http.get(url)
             .then(function (response) {
                 $log.info('Plants retrieved successfully. Response:', response);
-                return createGarden(response.data);
+                return new Garden(response.data);
             });
     }
 
@@ -209,11 +217,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
     }
 
     function addPlant(species, square) {
-        if (!square.plants[species.id]) {
-            square.plants[species.id] = new Plant(species, square.location);
-            sendToServer({add: square.plants[species.id]});
-            $log.log('Plant added: ' + species.scientificName, square);
-        }
+        throw 'deprecated 1'
     }
 
     return {
@@ -226,21 +230,15 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             updateState(garden);
             $log.log('Year added:' + year, garden);
         },
-        addSquare: function (year, x, y, species) {
+        addSquare: function (year, x, y) {
             var newSquare = new Square(new Location(year, x, y));
             garden.getSquares(year).push(newSquare);
-            addPlant(species, newSquare);
-            $log.log('Square and plant added', newSquare);
+            $log.debug('Square added', newSquare);
             return newSquare;
         },
         removePlant: function (square) {
-            angular.forEach(square.plants, function (plant, key) {
-                sendToServer({remove: plant});
-            });
-            square.plants = {};
-            $log.log('Plant(s) removed', square);
+            throw 'deprecated 2'
         },
-        addPlant: addPlant,
         getGarden: getGarden
     };
 }

@@ -235,7 +235,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void registerWithOpenId() throws InterruptedException {
         userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
 

@@ -23,13 +23,13 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
     $scope.onSquareClick = function (clickEvent, square) {
         $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
         if (clickEvent.shiftKey || SpeciesService.getState().action == 'delete') {
-            PlantService.removePlant(square);
+            square.removePlant();
         } else if (SpeciesService.getState().action == 'info') {
             square.showTooltip = !square.showTooltip;
         } else if (clickEvent.ctrlKey) {
             $log.log('Copy species');
         } else {
-            PlantService.addPlant(SpeciesService.getState().selectedSpecies, square);
+            square.addPlant(SpeciesService.getState().selectedSpecies);
         }
         clickEvent.stopPropagation();
     };
@@ -41,7 +41,7 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
             var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
             var x = Math.floor((offsetX - 100000) / 48);
             var y = Math.floor((offsetY - 100000) / 48);
-            PlantService.addSquare(PlantService.getState().selectedYear, x, y, SpeciesService.getState().selectedSpecies);
+            PlantService.addSquare(PlantService.getState().selectedYear, x, y).addPlant(SpeciesService.getState().selectedSpecies);
         }
         clickEvent.stopPropagation();
     };
