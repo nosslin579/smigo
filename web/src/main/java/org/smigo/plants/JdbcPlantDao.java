@@ -17,7 +17,7 @@ import java.util.List;
 
 @Repository
 class JdbcPlantDao implements PlantDao {
-    private static final String SELECT = "SELECT fkuserid,year,x,y,species FROM plants JOIN users ON users.id = plants.fkuserid WHERE %s = ?";
+    private static final String SELECT = "SELECT user_id,year,x,y,species_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -28,7 +28,7 @@ class JdbcPlantDao implements PlantDao {
         @Override
         public PlantData mapRow(ResultSet speciesRS, int rowNum) throws SQLException {
             return new PlantDataBean(
-                    speciesRS.getInt("species"),
+                    speciesRS.getInt("species_id"),
                     speciesRS.getInt("year"),
                     speciesRS.getInt("x"),
                     speciesRS.getInt("y")
@@ -45,7 +45,7 @@ class JdbcPlantDao implements PlantDao {
 
     @Override
     public List<PlantData> getPlants(int userId) {
-        final String sql = String.format(SELECT, "fkuserid");
+        final String sql = String.format(SELECT, "user_id");
         return jdbcTemplate.query(sql, new Object[]{userId}, plantDataRowMapper);
     }
 
@@ -59,7 +59,7 @@ class JdbcPlantDao implements PlantDao {
     public void addPlants(List<? extends PlantData> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
-                "INSERT INTO plants(fkuserid, species, year, x, y) VALUES (" + userId + ", :speciesId, :year, :x, :y)",
+                "INSERT INTO plants(user_id, species_id, year, x, y) VALUES (" + userId + ", :speciesId, :year, :x, :y)",
                 batch);
     }
 
@@ -67,7 +67,7 @@ class JdbcPlantDao implements PlantDao {
     public void deletePlants(List<? extends PlantData> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
-                "DELETE FROM plants WHERE (fkuserid = " + userId + " AND species = :speciesId AND year = :year AND x = :x AND y = :y)",
+                "DELETE FROM plants WHERE (user_id = " + userId + " AND species_id = :speciesId AND year = :year AND x = :x AND y = :y)",
                 batch);
     }
 }

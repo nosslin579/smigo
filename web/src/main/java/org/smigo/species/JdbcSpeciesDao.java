@@ -25,7 +25,7 @@ class JdbcSpeciesDao implements SpeciesDao {
             "species.*,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
             "FROM species\n" +
-            "LEFT JOIN plants ON species.id = plants.species\n" +
+            "LEFT JOIN plants ON species.id = plants.species_id\n" +
             "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
             "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
             "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
@@ -71,7 +71,7 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public List<SpeciesView> getUserSpecies(int userId, Locale locale) {
-        return querySpeciesForList("plants.fkuserid = ?", Integer.MAX_VALUE, locale, new Object[]{userId});
+        return querySpeciesForList("plants.user_id = ?", Integer.MAX_VALUE, locale, new Object[]{userId});
     }
 
     @Override

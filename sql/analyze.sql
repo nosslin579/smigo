@@ -12,7 +12,7 @@ SELECT
   count(IF(year = 2014, 1, NULL)) AS y2014,
   count(IF(year = 2015, 1, NULL)) AS y2015
 FROM users
-  LEFT JOIN plants ON plants.fkuserid = users.id
+  LEFT JOIN plants ON plants.user_id = users.id
   LEFT JOIN (SELECT
                username,
                count(*)                  AS requests,
