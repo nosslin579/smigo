@@ -1,8 +1,8 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
         <div class="species-hover">
-            <div class="popover right in fade " ng-class="{show:showSpeciesInfo}">
-                <div class="popover-inner">
+            <div class="popover right in fade " ng-class="{show:showSpeciesInfo}" ng-if="hoveredSpecies">
+            <div class="popover-inner">
                     <div class="popover-title text-center">
                         {{hoveredSpecies.vernacularName}}
                         <img class="small-species" ng-src="{{'/static/species/' + hoveredSpecies.iconFileName}}"/>
