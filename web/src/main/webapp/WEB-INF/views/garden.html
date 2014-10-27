@@ -1,5 +1,25 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
+        <div class="species-hover">
+            <div class="popover right in fade " ng-class="{show:showSpeciesInfo}">
+                <div class="popover-inner">
+                    <div class="popover-title text-center">
+                        {{hoveredSpecies.vernacularName}}
+                        <img class="small-species" ng-src="{{'/static/species/' + hoveredSpecies.iconFileName}}"/>
+                    </div>
+
+                    <div class="popover-content">
+                        <span>{{'scientificname'|translate}}:</span><em> {{hoveredSpecies.scientificName}}</em><br/>
+                        <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
+                        <ul>
+                            <li ng-repeat="r in hoveredSpecies.rules">
+                                {{r | translate}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
                 <div class="btn-group full-width">
@@ -22,12 +42,11 @@
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
                     <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesQuery)">
                 </form>
-                <ul class="nav nav-pills nav-stacked">
+                <ul class="nav nav-pills nav-stacked" ng-mouseenter="showSpeciesInfo=true" ng-mouseleave="showSpeciesInfo=false">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
-                        speciespopover="{{s.scientificName}}"
-                        speciespopover-title="{{'/static/species/' + s.iconFileName}}">
-                        <a href="" ng-click="selectSpecies(s)" ng-if="s.id != 99">{{s.vernacularName}}</a>
+                        ng-click="selectSpecies(s)">
+                        <a href="" ng-mouseover="setHoveredSpecies($event,s)">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">

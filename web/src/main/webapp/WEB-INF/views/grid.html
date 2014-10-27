@@ -3,8 +3,8 @@
         <div ng-repeat="s in plantsState.squares" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
             <div class="square-tooltip" square-info="s" ng-class="{show: s.showTooltip}"></div>
             <div ng-repeat="p in s.plants">
-                <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant" alt="{{p.species.vernacularName}}"
-                     ng-class="{'multiple-plants': getObjectLength(s.plants) > 1}"/>
+                <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant pull-left" alt="{{p.species.vernacularName}}"
+                     ng-class="{'small-species': getObjectLength(s.plants) > 1}"/>
             </div>
         </div>
         <div ng-repeat="s in plantsState.visibleRemainderSquares" class="visible-remainder" ng-style="getSquarePositionCss(s)"></div>

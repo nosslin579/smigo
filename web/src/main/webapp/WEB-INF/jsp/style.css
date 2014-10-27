@@ -88,6 +88,18 @@ body > .angular-view {
     right: 1px;
 }
 
+.popover {
+    max-width: 500px;
+}
+
+.species-hover {
+    position: absolute;
+    left: 23%;
+    top: 200px;
+    z-index: 100;
+    width: 500px;
+}
+
 /*############## Wall #########################*/
 .view-grid-wrapper {
 }
@@ -108,10 +120,9 @@ body > .angular-view {
     z-index: -1;
 }
 
-.multiple-plants {
+.small-species {
     width: 24px;
     height: 24px;
-    float: left;
 }
 
 /*Chrome gird background position*/
