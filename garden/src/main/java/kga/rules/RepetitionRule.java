@@ -63,11 +63,6 @@ public class RepetitionRule extends AbstractRule {
     }
 
     @Override
-    public RuleType getRuleType() {
-        return RuleType.speciesrepetition;
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (obj instanceof RepetitionRule && super.equals(obj)) {
             RepetitionRule r = (RepetitionRule) obj;

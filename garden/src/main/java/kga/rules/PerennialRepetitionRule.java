@@ -81,7 +81,7 @@ public class PerennialRepetitionRule extends AbstractRule {
     }
 
     @Override
-    public RuleType getRuleType() {
+    public int getRuleType() {
         throw new RuntimeException("Not implemented yet");
     }
 

@@ -25,6 +25,7 @@
 
         <%@ include file="../js/app.js" %>
         <%@ include file="../js/garden/SpeciesFilter.js" %>
+        <%@ include file="../js/garden/SortRuleFilter.js" %>
         <%@ include file="../js/garden/GardenController.js" %>
         <%@ include file="../js/garden/AddYearModalController.js" %>
         <%@ include file="../js/garden/SpeciesService.js" %>

@@ -11,7 +11,7 @@ public interface Rule {
 
     int getId();
 
-    RuleType getRuleType();
+    int getRuleType();
 
     String getMessageKey();
 

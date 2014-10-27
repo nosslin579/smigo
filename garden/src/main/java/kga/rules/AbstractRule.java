@@ -31,8 +31,8 @@ public abstract class AbstractRule implements Rule {
     }
 
     @Override
-    public RuleType getRuleType() {
-        return ruleType;
+    public int getRuleType() {
+        return ruleType.getId();
     }
 
 

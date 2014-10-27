@@ -28,7 +28,6 @@ function translateFilter($rootScope, $log, $http) {
         }
 
         if (param && param.messageKey) {
-            $log.info("param contains messagekey", [param]);
             return translatedMessage.replace('{0}', msg[param.messageKey]);
         }
         return translatedMessage.replace('{0}', param);
