@@ -7,7 +7,9 @@ import org.smigo.SpeciesView;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -21,6 +23,15 @@ import java.util.*;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
+
+    private static final String SELECT_MESSAGEKEY = "SELECT\n" +
+            "CONCAT('msg.species', species.id)                                         AS message_key,\n" +
+            "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
+            "FROM species\n" +
+            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
+            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
+            "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
+            "WHERE creator IS NULL;";
     private static final String SELECT = "SELECT\n" +
             "species.*,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
@@ -87,6 +98,27 @@ class JdbcSpeciesDao implements SpeciesDao {
             whereClause.append(i.next().getSpeciesId() + (i.hasNext() ? "," : (")")));
         }
         return querySpeciesForList(whereClause.toString(), Integer.MAX_VALUE, locale, new Object[]{});
+    }
+
+    @Override
+    @Cacheable(value = Cache.SPECIES_TRANSLATION, key = "#locale")
+    public Map<String, String> getSpeciesTranslation(Locale locale) {
+        List<Object> sqlArgs = new ArrayList<Object>();
+        sqlArgs.add(locale.getLanguage());
+        sqlArgs.add(locale.getLanguage());
+        sqlArgs.add(locale.getCountry());
+        int[] types = new int[sqlArgs.size()];
+        Arrays.fill(types, Types.VARCHAR);
+        return jdbcTemplate.query(SELECT_MESSAGEKEY, sqlArgs.toArray(), types, new ResultSetExtractor<Map<String, String>>() {
+            @Override
+            public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                Map<String, String> ret = new HashMap<>(rs.getFetchSize());
+                while (rs.next()) {
+                    ret.put(rs.getString(1), rs.getString(2));
+                }
+                return ret;
+            }
+        });
     }
 
     private List<SpeciesView> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
