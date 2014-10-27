@@ -8,8 +8,11 @@
                         <img class="small-species" ng-src="{{'/static/species/' + hoveredSpecies.iconFileName}}"/>
                     </div>
 
-                    <div class="popover-content">
-                        <span>{{'scientificname'|translate}}:</span><em> {{hoveredSpecies.scientificName}}</em><br/>
+                    <div class="popover-content" ng-if="hoveredSpecies.item">
+                        {{'msg.itemexplained' | translate}}
+                    </div>
+                    <div class="popover-content" ng-if="!hoveredSpecies.item">
+                    <span>{{'scientificname'|translate}}:</span><em> {{hoveredSpecies.scientificName}}</em><br/>
                         <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
                         <ul>
                             <li ng-repeat="r in hoveredSpecies.rules | sortruleFilter">
