@@ -35,7 +35,7 @@ public class CompanionRule extends AbstractRule implements Rule {
     private Species companion;
 
     public CompanionRule(int id, Species host, RuleType ruleType, Species companion, String hintMessageKey) {
-        super(id, host, ruleType, hintMessageKey);
+        super(id, host, ruleType, hintMessageKey, new MessageObject("msg.species" + companion.getId()));
         if (companion == null) {
             throw new RuleException("Friend can not be null, id:" + id);
         }

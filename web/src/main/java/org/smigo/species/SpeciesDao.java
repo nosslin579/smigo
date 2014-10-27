@@ -5,6 +5,7 @@ import org.smigo.SpeciesView;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 interface SpeciesDao {
 
@@ -21,4 +22,6 @@ interface SpeciesDao {
     List<SpeciesView> searchSpecies(String query, Locale locale);
 
     List<SpeciesView> getSpeciesFromList(List<PlantData> plants, Locale locale);
+
+    Map<String, String> getSpeciesTranslation(Locale locale);
 }

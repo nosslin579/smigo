@@ -2,6 +2,7 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.species.SpeciesHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Controller that handles user specific type of requests.
@@ -35,6 +37,8 @@ public class UserController {
     private UserHandler userHandler;
     @Autowired
     private UserAdaptiveMessageSource messageSource;
+    @Autowired
+    private SpeciesHandler speciesHandler;
 
     public UserController() {
         log.debug("Creating new UserController");
@@ -133,7 +137,10 @@ public class UserController {
     @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public java.util.Map<Object, Object> getDefaultTranslation(Locale locale) {
-        return messageSource.getAllMessages(locale);
+        final Map<String, String> speciesTranslation = speciesHandler.getSpeciesTranslation(locale);
+        final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
+        allMessages.putAll(speciesTranslation);
+        return allMessages;
     }
 
 

@@ -39,7 +39,7 @@ public class RepetitionRule extends AbstractRule {
     private int gap = 4;
 
     public RepetitionRule(int ruleId, Species host, RuleType ruleType, int gap, String hintMessageKey) {
-        super(ruleId, host, ruleType, hintMessageKey);
+        super(ruleId, host, ruleType, hintMessageKey, gap);
         if (gap <= 0)
             throw new RuleException("Gap must be greater than 0");
         this.gap = gap;

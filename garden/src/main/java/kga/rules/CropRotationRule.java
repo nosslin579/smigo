@@ -37,7 +37,7 @@ public class CropRotationRule extends AbstractRule {
     private Family family;
 
     public CropRotationRule(int ruleId, Species host, RuleType ruleType, Family family, String hintMessageKey) {
-        super(ruleId, host, ruleType, hintMessageKey);
+        super(ruleId, host, ruleType, hintMessageKey, family);
         if (family == null)
             throw new RuleException("Family may not be null");
         this.family = family;

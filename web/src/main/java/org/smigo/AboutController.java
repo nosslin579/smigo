@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import java.util.Map;
 
 @Controller
 public class AboutController {
@@ -33,10 +34,13 @@ public class AboutController {
 
     @RequestMapping(value = {"/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account"}, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
+        final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
+        allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
+
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getSpeciesMap(user, locale).values());
         model.addAttribute("plantData", plantHandler.getPlants(user));
-        model.addAttribute("messages", messageSource.getAllMessages(locale));
+        model.addAttribute("messages", allMessages);
         return "ng.jsp";
     }
 

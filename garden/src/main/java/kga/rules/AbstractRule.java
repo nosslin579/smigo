@@ -8,12 +8,13 @@ import kga.errors.RuleException;
 
 public abstract class AbstractRule implements Rule {
 
-    private int id;
-    private RuleType ruleType;
-    private String hintMessageKey;
-    private Species host;
+    private final int id;
+    private final RuleType ruleType;
+    private final String hintMessageKey;
+    private final Species host;
+    private final Object hintParameter;
 
-    protected AbstractRule(int id, Species host, RuleType ruleType, String hintMessageKey) {
+    protected AbstractRule(int id, Species host, RuleType ruleType, String hintMessageKey, Object hintParameter) {
         if (id == 0 || host == null || ruleType == null || hintMessageKey == null) {
             throw new RuleException("Illegal values on rule, id:" + id);
         }
@@ -21,6 +22,7 @@ public abstract class AbstractRule implements Rule {
         this.host = host;
         this.ruleType = ruleType;
         this.hintMessageKey = hintMessageKey;
+        this.hintParameter = hintParameter;
     }
 
     @Override
@@ -60,5 +62,9 @@ public abstract class AbstractRule implements Rule {
 
     public String getHintMessageKey() {
         return hintMessageKey;
+    }
+
+    public Object getHintParameter() {
+        return hintParameter;
     }
 }

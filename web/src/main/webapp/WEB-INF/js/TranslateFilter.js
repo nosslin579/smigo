@@ -3,6 +3,7 @@ function translateFilter($rootScope, $log, $http) {
 
 
     $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
+//        $log.debug("Adding translation", [messageKey,value,msg]);
         msg[messageKey] = value;
     });
 
@@ -16,17 +17,21 @@ function translateFilter($rootScope, $log, $http) {
     $log.log('TranslateFilter', [msg]);
     return function (messageObject, param) {
         if (!messageObject) {
-            $log.error('Can not translate', messageObject);
+            $log.error('Can not translate', messageObject, param);
             return 'n/a';
         }
-        if (messageObject.messageKey) {
-            return msg[messageObject.messageKey];
+        var translatedMessage = messageObject.messageKey ? msg[messageObject.messageKey] : msg[messageObject];
+
+        if (!translatedMessage) {
+            $log.error('Could not translate:' + messageObject, param);
+            return '-';
         }
-        if (!msg[messageObject]) {
-            $log.error('Could not translate:' + messageObject);
-            return messageObject;
+
+        if (param && param.messageKey) {
+            $log.info("param contains messagekey", [param]);
+            return translatedMessage.replace('{0}', msg[param.messageKey]);
         }
-        return msg[messageObject].replace('{0}', param);
+        return translatedMessage.replace('{0}', param);
     };
 }
 angular.module('smigoModule').filter('translate', translateFilter);

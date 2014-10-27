@@ -92,4 +92,8 @@ public class SpeciesHandler {
             return speciesDao.searchSpecies(query, locale);
         }
     }
+
+    public Map<String, String> getSpeciesTranslation(Locale locale) {
+        return speciesDao.getSpeciesTranslation(locale);
+    }
 }

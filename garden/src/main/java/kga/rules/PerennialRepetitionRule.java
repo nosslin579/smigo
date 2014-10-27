@@ -44,7 +44,7 @@ public class PerennialRepetitionRule extends AbstractRule {
     private Species host;
 
     public PerennialRepetitionRule(int id, Species host, String hintMessageKey, int gap, int allowedRepetitions) {
-        super(id, host, RuleType.speciesrepetition, hintMessageKey);
+        super(id, host, RuleType.speciesrepetition, hintMessageKey, gap);
         if (gap <= allowedRepetitions)
             throw new RuleException("Gap must be greater than allowed repetitions");
         this.host = host;

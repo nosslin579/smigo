@@ -2,7 +2,7 @@
     <div class="row full-height">
         <div class="species-hover">
             <div class="popover right in fade " ng-class="{show:showSpeciesInfo}" ng-if="hoveredSpecies">
-            <div class="popover-inner">
+                <div class="popover-inner">
                     <div class="popover-title text-center">
                         {{hoveredSpecies.vernacularName}}
                         <img class="small-species" ng-src="{{'/static/species/' + hoveredSpecies.iconFileName}}"/>
@@ -13,7 +13,7 @@
                         <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
                         <ul>
                             <li ng-repeat="r in hoveredSpecies.rules">
-                                {{r | translate}}
+                                {{r | translate:r.hintParameter}}
                             </li>
                         </ul>
                     </div>
