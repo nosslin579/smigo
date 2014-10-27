@@ -3,7 +3,7 @@ package org.smigo.species;
 import kga.Family;
 import kga.IdUtil;
 import kga.PlantData;
-import org.smigo.SpeciesView;
+import kga.Species;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -75,24 +75,24 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     @Cacheable(value = Cache.SPECIES, key = "#locale")
-    public List<SpeciesView> getDefaultSpecies(Locale locale) {
+    public List<Species> getDefaultSpecies(Locale locale) {
         //Unknown and Hemp is never display by default
         return querySpeciesForList("species.id NOT IN (99,87)", 58, locale, new Object[]{});
     }
 
     @Override
-    public List<SpeciesView> getUserSpecies(int userId, Locale locale) {
+    public List<Species> getUserSpecies(int userId, Locale locale) {
         return querySpeciesForList("plants.user_id = ?", Integer.MAX_VALUE, locale, new Object[]{userId});
     }
 
     @Override
-    public List<SpeciesView> searchSpecies(String query, Locale locale) {
+    public List<Species> searchSpecies(String query, Locale locale) {
         final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR name LIKE ?";
         return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query});
     }
 
     @Override
-    public List<SpeciesView> getSpeciesFromList(List<PlantData> plants, Locale locale) {
+    public List<Species> getSpeciesFromList(List<PlantData> plants, Locale locale) {
         final StringBuilder whereClause = new StringBuilder("species.id IN (");
         for (Iterator<PlantData> i = plants.iterator(); i.hasNext(); ) {
             whereClause.append(i.next().getSpeciesId() + (i.hasNext() ? "," : (")")));
@@ -121,7 +121,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         });
     }
 
-    private List<SpeciesView> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
+    private List<Species> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
         List<Object> sqlArgs = new ArrayList<Object>();
         sqlArgs.add(locale.getLanguage());
         sqlArgs.add(locale.getLanguage());
@@ -133,7 +133,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public SpeciesView getSpecies(int id, Locale locale) {
+    public Species getSpecies(int id, Locale locale) {
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
         final String sql = String.format(SELECT, "species.id = ?", 1);
         return jdbcTemplate.queryForObject(sql, args, new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies())));
@@ -149,7 +149,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         insertSpeciesTranslation.execute(s);
     }
 
-    private static class SpeciesViewRowMapper implements RowMapper<SpeciesView> {
+    private static class SpeciesViewRowMapper implements RowMapper<Species> {
         private final Map<Integer, Family> familyMap;
 
         public SpeciesViewRowMapper(Map<Integer, Family> familyMap) {
@@ -157,9 +157,8 @@ class JdbcSpeciesDao implements SpeciesDao {
         }
 
         @Override
-        public SpeciesView mapRow(ResultSet rs, int rowNum) throws SQLException {
-            SpeciesView ret = new SpeciesView();
-            ret.setId(rs.getInt("id"));
+        public Species mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Species ret = new Species(rs.getInt("id"));
             ret.setScientificName(rs.getString("name"));
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));

@@ -6,7 +6,6 @@ import kga.Species;
 import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.SpeciesView;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.User;
 import org.smigo.user.UserSession;
@@ -33,7 +32,7 @@ public class SpeciesHandler {
     private FamilyDao familyDao;
 
     public int addSpecies(SpeciesFormBean species, AuthenticatedUser user, Locale locale) {
-        final List<SpeciesView> searchedSpecies = speciesDao.searchSpecies(species.getVernacularName(), locale);
+        final List<Species> searchedSpecies = speciesDao.searchSpecies(species.getVernacularName(), locale);
         if (!searchedSpecies.isEmpty()) {
             return -1;
         }
@@ -52,9 +51,9 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<Integer, SpeciesView> getSpeciesMap(User user, Locale locale) {
+    public Map<Integer, Species> getSpeciesMap(User user, Locale locale) {
         long start = System.currentTimeMillis();
-        Map<Integer, SpeciesView> ret = new HashMap<Integer, SpeciesView>();
+        Map<Integer, Species> ret = new HashMap<>();
         ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
         if (user != null) {
             ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), locale)));
@@ -83,7 +82,7 @@ public class SpeciesHandler {
         return familyDao.getFamilies();
     }
 
-    public List<SpeciesView> searchSpecies(String query, Locale locale) {
+    public List<Species> searchSpecies(String query, Locale locale) {
         if (query.length() >= 5) {
             return speciesDao.searchSpecies('%' + query + '%', locale);
         } else if (query.length() >= 3) {

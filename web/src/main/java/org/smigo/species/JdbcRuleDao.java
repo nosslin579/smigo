@@ -40,8 +40,8 @@ class JdbcRuleDao implements RuleDao {
                 int ruleId = rs.getInt("rule_id");
                 int type = rs.getInt("type");
                 int gap = rs.getInt("gap");
-                Species causer = Species.create(rs.getInt("causer"));
-                Species host = Species.create(rs.getInt("host"));
+                Species causer = new Species(rs.getInt("causer"));
+                Species host = new Species(rs.getInt("host"));
                 Family family = familyMap.get(rs.getInt("causerfamily"));
 
                 if (RuleType.goodcompanion.getId() == type)

@@ -39,9 +39,9 @@ import java.util.Set;
 public class Species implements Id {
     private static final Logger log = LoggerFactory.getLogger(Species.class);
 
-    private int id;
+    private final int id;
 
-    private Set<Rule> rules = new HashSet<Rule>();
+    private Set<Rule> rules = new HashSet<>();
 
     private Family family = null;
 
@@ -51,15 +51,13 @@ public class Species implements Id {
     // If true instance is not a species but an object e.g. path, wall or house.
     private boolean item = false;
 
-    public Species() {
-    }
+    private String scientificName;
+    private String iconFileName;
+    private String vernacularName;
 
-    public Species(int id, Set<Rule> rules, Family family, boolean annual, boolean item) {
+
+    public Species(int id) {
         this.id = id;
-        this.rules = rules;
-        this.family = family;
-        this.annual = annual;
-        this.item = item;
     }
 
     public final Collection<Rule> getRules(Class<?>... ruleTypes) {
@@ -84,16 +82,8 @@ public class Species implements Id {
         return r;
     }
 
-    public boolean isRecurrent() {
-        return !annual || isItem();
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Family getFamily() {
@@ -120,6 +110,30 @@ public class Species implements Id {
         this.item = item;
     }
 
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
+
+    public void setIconFileName(String iconFileName) {
+        this.iconFileName = iconFileName;
+    }
+
+    public String getIconFileName() {
+        return iconFileName;
+    }
+
+    public void setVernacularName(String vernacularName) {
+        this.vernacularName = vernacularName;
+    }
+
+    public String getVernacularName() {
+        return vernacularName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -136,7 +150,15 @@ public class Species implements Id {
         return id;
     }
 
-    public static Species create(int id) {
-        return new Species(id, new HashSet<Rule>(), null, true, false);
+    public static Species create(int id, Family family, boolean annual, boolean item) {
+        final Species ret = new Species(id);
+        ret.setFamily(family);
+        ret.setAnnual(annual);
+        ret.setItem(item);
+        return ret;
+    }
+
+    public String getMessageKey() {
+        return "msg.species" + id;
     }
 }

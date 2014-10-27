@@ -101,7 +101,7 @@ public class Square {
     public List<Species> getPerennialSpecies() {
         List<Species> perennialSpecies = new ArrayList<Species>();
         for (Plant p : plantsMap.values())
-            if (p.getSpecies().isRecurrent())
+            if (!p.getSpecies().isAnnual())
                 perennialSpecies.add(p.getSpecies());
         return perennialSpecies;
     }

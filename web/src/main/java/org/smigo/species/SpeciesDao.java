@@ -1,7 +1,7 @@
 package org.smigo.species;
 
 import kga.PlantData;
-import org.smigo.SpeciesView;
+import kga.Species;
 
 import java.util.List;
 import java.util.Locale;
@@ -11,17 +11,17 @@ interface SpeciesDao {
 
     int addSpecies(SpeciesFormBean species, int id);
 
-    List<SpeciesView> getDefaultSpecies(Locale locale);
+    List<Species> getDefaultSpecies(Locale locale);
 
-    List<SpeciesView> getUserSpecies(int userId, Locale locale);
+    List<Species> getUserSpecies(int userId, Locale locale);
 
-    SpeciesView getSpecies(int id, Locale english);
+    Species getSpecies(int id, Locale english);
 
     void setSpeciesTranslation(int id, String vernacularName, String language, String country);
 
-    List<SpeciesView> searchSpecies(String query, Locale locale);
+    List<Species> searchSpecies(String query, Locale locale);
 
-    List<SpeciesView> getSpeciesFromList(List<PlantData> plants, Locale locale);
+    List<Species> getSpeciesFromList(List<PlantData> plants, Locale locale);
 
     Map<String, String> getSpeciesTranslation(Locale locale);
 }

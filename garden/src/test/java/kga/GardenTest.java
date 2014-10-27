@@ -9,7 +9,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,9 @@ public class GardenTest {
 
     public static final String HINT_MESSAGE_KEY = "hint.hint";
     private Family mockFamily = new Family(1, "Mock Family");
-    private Species carrot = new Species(1, new HashSet<Rule>(), mockFamily, true, false);
-    private Species onion = new Species(2, new HashSet<Rule>(), mockFamily, true, false);
-    private Species item = new Species(3, new HashSet<Rule>(), mockFamily, true, true);
+    private Species carrot = Species.create(1, mockFamily, true, false);
+    private Species onion = Species.create(2, mockFamily, true, false);
+    private Species item = Species.create(3, mockFamily, false, true);
     private Rule twoBrother = new CompanionRule(1, carrot, RuleType.goodcompanion, onion, HINT_MESSAGE_KEY);
     private Rule repetition = new RepetitionRule(2, carrot, RuleType.speciesrepetition, 4, HINT_MESSAGE_KEY);
     private Garden g;
