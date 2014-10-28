@@ -61,20 +61,20 @@ public class UserController {
         return Collections.emptyList();
     }
 
-    @RequestMapping(value = "rest/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/user", method = RequestMethod.GET)
     @ResponseBody
     public UserBean getUser(@AuthenticationPrincipal AuthenticatedUser user) {
         return userHandler.getUser(user);
     }
 
 
-    @RequestMapping(value = "rest/user/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/user/{username}", method = RequestMethod.GET)
     @ResponseBody
     public PublicInfoUserBean getUser(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable String username) {
         return userHandler.getUserPublicInfo(username);
     }
 
-    @RequestMapping(value = "rest/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
     @ResponseBody
     public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response, Locale locale) {
         log.info("Create Update user: " + user);
@@ -102,7 +102,7 @@ public class UserController {
         return Collections.emptyList();
     }
 
-    @RequestMapping(value = "request-password-link", method = RequestMethod.POST)
+    @RequestMapping(value = "/request-password-link", method = RequestMethod.POST)
     @ResponseBody
     public void requestPasswordLink(@RequestBody RequestPasswordLinkFormBean bean) {
         userHandler.sendResetPasswordEmail(bean.getEmail());
@@ -128,7 +128,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public java.util.Map<String, String> getLocales() {
         return Language.getTransalationMap();
@@ -144,7 +144,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "ping", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/ping", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Object ping(final Principal principal) {
         log.debug("Ping" + principal);
