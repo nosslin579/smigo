@@ -2,4 +2,7 @@
     <img ng-src="{{'/static/species/' + p.species.iconFileName}}"/>
 
     <div>{{p.species.vernacularName}}</div>
+    <div ng-repeat="h in p.hints">
+        {{h|translate}}
+    </div>
 </div>

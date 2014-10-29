@@ -43,8 +43,38 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
     }
 
     function Plant(species, location) {
+        var self = this;
         this.species = species;
         this.location = location;
+
+        function hasRuleHint(rule, location) {
+            if ([0, 1, 2].indexOf(rule.ruleType) != -1) {
+                var squares = garden.getSquares(location.year);
+                for (var i = 0; i < squares.length; i++) {
+                    var square = squares[i];
+                    var xDiff = Math.abs(location.x - square.location.x);
+                    var yDiff = Math.abs(location.y - square.location.y);
+                    if (xDiff <= 1 && yDiff <= 1 && square.plants[rule.hintParameter.id]) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                return false;
+            }
+        }
+
+        this.getHints = function () {
+            $log.log('get hints for ', self);
+            var ret = [];
+            for (var i = 0; i < self.species.rules.length; i++) {
+                var rule = self.species.rules[i];
+                if (hasRuleHint(rule, self.location)) {
+                    ret.push({messageKey: rule.hintMessageKey, messageKeyParameter: rule.hintParameter})
+                }
+            }
+            return ret;
+        };
     }
 
     function Square(location) {
@@ -89,7 +119,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                 self.getSquare(plantData.year, plantData.x, plantData.y).setPlant(species);
             }
             $log.info("Garden created:", self);
-        };
+        }
 
         this.getSquare = function (year, x, y) {
             if (!yearSquareMap[year]) {
@@ -230,12 +260,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             updateState(garden);
             $log.log('Year added:' + year, garden);
         },
-        addSquare: function (year, x, y) {
-            var newSquare = new Square(new Location(year, x, y));
-            garden.getSquares(year).push(newSquare);
-            $log.debug('Square added', newSquare);
-            return newSquare;
-        },
+        addSquare: garden.getSquare,
         removePlant: function (square) {
             throw 'deprecated 2'
         },
