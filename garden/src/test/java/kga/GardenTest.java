@@ -19,8 +19,8 @@ public class GardenTest {
     private Species carrot = Species.create(1, mockFamily, true, false);
     private Species onion = Species.create(2, mockFamily, true, false);
     private Species item = Species.create(3, mockFamily, false, true);
-    private Rule twoBrother = new CompanionRule(1, carrot, RuleType.goodcompanion, onion, HINT_MESSAGE_KEY);
-    private Rule repetition = new RepetitionRule(2, carrot, RuleType.speciesrepetition, 4, HINT_MESSAGE_KEY);
+    private Rule twoBrother = new CompanionRule(1, carrot, RuleType.GOODCOMPANION, onion, HINT_MESSAGE_KEY);
+    private Rule repetition = new RepetitionRule(2, carrot, RuleType.SPECIESREPETITION, 4, HINT_MESSAGE_KEY);
     private Garden g;
     private Location l = new YearXY(2000, 0, 0);
 

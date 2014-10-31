@@ -16,7 +16,7 @@
                         <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
                         <ul>
                             <li ng-repeat="r in hoveredSpecies.rules | sortruleFilter">
-                                {{r | translate:r.hintParameter}}
+                                {{r | translate:r.parameterMessageObject}}
                             </li>
                         </ul>
                     </div>

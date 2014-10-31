@@ -11,8 +11,6 @@ public interface Rule {
 
     int getId();
 
-    int getRuleType();
-
     String getMessageKey();
 
     Species getHost();

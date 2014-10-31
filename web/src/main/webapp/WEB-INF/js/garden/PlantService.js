@@ -48,29 +48,35 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         this.location = location;
 
         function hasRuleHint(rule, location) {
-            if ([0, 1, 2].indexOf(rule.ruleType) != -1) {
-                var squares = garden.getSquares(location.year);
-                for (var i = 0; i < squares.length; i++) {
-                    var square = squares[i];
-                    var xDiff = Math.abs(location.x - square.location.x);
-                    var yDiff = Math.abs(location.y - square.location.y);
-                    if (xDiff <= 1 && yDiff <= 1 && square.plants[rule.hintParameter.id]) {
-                        return true;
+            var radius = 1,
+                fromYear = location.year - rule.yearsBackFrom,
+                toYear = location.year - rule.yearsBackTo;
+            for (var year = fromYear; year >= toYear; year--) {
+                var squares = garden.getSquares(year);
+                if (squares) {
+                    for (var j = 0; j < squares.length; j++) {
+                        var square = squares[j],
+                            xDiff = Math.abs(location.x - square.location.x),
+                            yDiff = Math.abs(location.y - square.location.y);
+                        if (xDiff <= radius && yDiff <= radius) {
+                            if (rule.causerType === 'Species' && square.plants[rule.causer.id] ||
+                                rule.causerType === 'Family' && square.containsFamily(rule.causer.id)) {
+                                return true;
+                            }
+                        }
                     }
                 }
-                return false;
-            } else {
-                return false;
             }
+            return false;
         }
 
         this.getHints = function () {
-            $log.log('get hints for ', self);
+            $log.log('Get hints for', self);
             var ret = [];
             for (var i = 0; i < self.species.rules.length; i++) {
                 var rule = self.species.rules[i];
                 if (hasRuleHint(rule, self.location)) {
-                    ret.push({messageKey: rule.hintMessageKey, messageKeyParameter: rule.hintParameter})
+                    ret.push({messageKey: rule.hintMessageKey, messageKeyParameter: rule.parameterMessageObject})
                 }
             }
             return ret;
@@ -101,6 +107,16 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                 sendToServer({remove: plant});
             });
             self.plants = {};
+        };
+
+        this.containsFamily = function (familyId) {
+            for (speciesId in self.plants) {
+                var plant = self.plants[speciesId];
+                if (plant.species && plant.species.family && plant.species.family.id === familyId) {
+                    return true;
+                }
+            }
+            return false;
         };
     }
 

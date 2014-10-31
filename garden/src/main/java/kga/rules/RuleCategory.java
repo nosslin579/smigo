@@ -4,23 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum RuleCategory {
-  COMPANION_PLANTING,
-  CROP_ROTATION;
+    COMPANION_PLANTING,
+    CROP_ROTATION,
+    SPECIES_REPETITION;
 
-  public List<RuleType> getRuleTypes() {
-    List<RuleType> list = new ArrayList<RuleType>();
-    for (RuleType ruleType : RuleType.values()) {
-      if (ruleType.getCategory().name().equals(name()))
-        list.add(ruleType);
-    }
-    return list;
-  }
+    private int id;
 
-  public boolean isType(int type) {
-    for (RuleType ruleType : getRuleTypes()) {
-      if (ruleType.ordinal() == type)
-        return true;
+    public List<RuleType> getRuleTypes() {
+        List<RuleType> list = new ArrayList<RuleType>();
+        for (RuleType ruleType : RuleType.values()) {
+            if (ruleType.getCategory().name().equals(name()))
+                list.add(ruleType);
+        }
+        return list;
     }
-    return false;
-  }
+
+    public boolean isType(int type) {
+        for (RuleType ruleType : getRuleTypes()) {
+            if (ruleType.ordinal() == type)
+                return true;
+        }
+        return false;
+    }
+
+    public int getId() {
+        return ordinal();
+    }
 }

@@ -30,11 +30,6 @@ public abstract class AbstractRule implements Rule {
         return id;
     }
 
-    @Override
-    public int getRuleType() {
-        return ruleType.getId();
-    }
-
 
     @Override
     public String getMessageKey() {

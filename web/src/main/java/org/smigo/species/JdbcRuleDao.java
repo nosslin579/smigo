@@ -3,7 +3,7 @@ package org.smigo.species;
 import kga.Family;
 import kga.IdUtil;
 import kga.Species;
-import kga.rules.*;
+import kga.rules.Rule;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Repository
 class JdbcRuleDao implements RuleDao {
-    private static final String SELECT = "SELECT * FROM rules";
+    private static final String SELECT = "SELECT * FROM rules WHERE causerfamily IS NULL";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -37,31 +37,13 @@ class JdbcRuleDao implements RuleDao {
         return jdbcTemplate.query(sql, new RowMapper<Rule>() {
             @Override
             public Rule mapRow(ResultSet rs, int rowNum) throws SQLException {
-                int ruleId = rs.getInt("rule_id");
-                int type = rs.getInt("type");
-                int gap = rs.getInt("gap");
-                Species causer = new Species(rs.getInt("causer"));
-                Species host = new Species(rs.getInt("host"));
-                Family family = familyMap.get(rs.getInt("causerfamily"));
-
-                if (RuleType.goodcompanion.getId() == type)
-                    return new CompanionRule(ruleId, host, RuleType.goodcompanion, causer, "hint.goodcompanion");
-                else if (RuleType.badcompanion.getId() == type)
-                    return new CompanionRule(ruleId, host, RuleType.badcompanion, causer, "hint.badcompanion");
-                else if (RuleType.fightdisease.getId() == type)
-                    return new CompanionRule(ruleId, host, RuleType.fightdisease, causer, "hint.fightdisease");
-                else if (RuleType.repelpest.getId() == type)
-                    return new CompanionRule(ruleId, host, RuleType.repelpest, causer, "hint.repelpest");
-                else if (RuleType.improvesflavor.getId() == type)
-                    return new CompanionRule(ruleId, host, RuleType.improvesflavor, causer, "hint.improvesflavor");
-                else if (RuleType.goodcroprotation.getId() == type)
-                    return new CropRotationRule(ruleId, host, RuleType.goodcroprotation, family, "hint.goodcroprotation");
-                else if (RuleType.badcroprotation.getId() == type)
-                    return new CropRotationRule(ruleId, host, RuleType.badcroprotation, family, "hint.badcroprotation");
-                else if (RuleType.speciesrepetition.getId() == type)
-                    return new RepetitionRule(ruleId, host, RuleType.speciesrepetition, gap, "hint.speciesrepetition");
-
-                throw new RuntimeException("No such type of rule:" + type);
+                final int ruleId = rs.getInt("rule_id");
+                final int type = rs.getInt("type");
+                final int gap = rs.getInt("gap");//todo should return null if not set
+                final Species speciesCauser = new Species(rs.getInt("causer"));
+                final Species host = new Species(rs.getInt("host"));
+                final Family familyCauser = familyMap.get(rs.getInt("causerfamily"));
+                return WebRule.create(ruleId, host, type, speciesCauser, familyCauser, gap);
             }
         });
     }
