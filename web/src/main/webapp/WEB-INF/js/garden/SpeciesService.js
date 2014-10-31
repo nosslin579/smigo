@@ -29,15 +29,15 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
     function createRule(rule) {
 
-        function Rule(rule, messageKey, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, parameterMessageObject) {
+        function Rule(rule, messageKey, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, messageParameter) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
             this.messageKey = messageKey;
-            this.messageKeyParameter = parameterMessageObject;
+            this.messageParameter = messageParameter;
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
             this.hasCauser = hasCauser;
-            this.hint = {messageKey: hintMessageKey, messageKeyParameter: parameterMessageObject}
+            this.hint = {messageKey: hintMessageKey, messageParameter: messageParameter}
         }
 
         var hasCauser = {
@@ -54,19 +54,19 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
         switch (rule.type) {
             case 0:
-                return new Rule(rule, 'rule.goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+                return new Rule(rule, 'rule.goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
             case 1:
-                return new Rule(rule, 'rule.fightdisease', 'hint.fightdisease', 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+                return new Rule(rule, 'rule.fightdisease', 'hint.fightdisease', 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
             case 2:
-                return new Rule(rule, "rule.repelpest", "hint.repelpest", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+                return new Rule(rule, "rule.repelpest", "hint.repelpest", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
             case 3:
-                return new Rule(rule, "rule.improvesflavor", "hint.improvesflavor", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+                return new Rule(rule, "rule.improvesflavor", "hint.improvesflavor", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
             case 4:
-                return new Rule(rule, "rule.badcompanion", "hint.badcompanion", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+                return new Rule(rule, "rule.badcompanion", "hint.badcompanion", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
             case 5:
-                return new Rule(rule, "rule.goodcroprotation", "hint.goodcroprotation", 1, 1, hasCauser.rotation, new MessageObject("family" + rule.param));
+                return new Rule(rule, "rule.goodcroprotation", "hint.goodcroprotation", 1, 1, hasCauser.rotation, new Message("family" + rule.param));
             case 6:
-                return new Rule(rule, "rule.badcroprotation", "hint.badcroprotation", 1, 1, hasCauser.rotation, new MessageObject("family" + rule.param));
+                return new Rule(rule, "rule.badcroprotation", "hint.badcroprotation", 1, 1, hasCauser.rotation, new Message("family" + rule.param));
             case 7:
                 return new Rule(rule, "rule.speciesrepetition", "hint.speciesrepetition", 1, rule.param, hasCauser.repetition, rule.param);
             default :
@@ -74,7 +74,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         }
     }
 
-    function MessageObject(messageKey) {
+    function Message(messageKey) {
         this.messageKey = messageKey;
     }
 

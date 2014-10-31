@@ -1,5 +1,6 @@
 function translateFilter($rootScope, $log, $http) {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
+    $log.log('TranslateFilter', [msg]);
 
 
     $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
@@ -15,32 +16,30 @@ function translateFilter($rootScope, $log, $http) {
     });
 
     /**
-     * Param can be resolved from either messageObject or parameterMessageObject.
+     * Param can be resolved from either message or messageParameter.
      */
-    function getParameter(messageObject, parameterMessageObject) {
-        if (messageObject.messageKeyParameter) {
-            return messageObject.messageKeyParameter;
-        } else if (parameterMessageObject) {
-            return parameterMessageObject;
+    function getParameter(message, messageParameter) {
+        if (message.messageParameter) {
+            return message.messageParameter;
+        } else if (messageParameter) {
+            return messageParameter;
         }
         return '';
     }
 
-    $log.log('TranslateFilter', [msg]);
-
-    return function (messageObject, parameterMessageObject) {
-        if (!messageObject) {
-            $log.error('Can not translate', messageObject, parameterMessageObject);
+    return function (message, messageParameter) {
+        if (!message) {
+            $log.error('Can not translate', message, messageParameter);
             return 'n/a';
         }
 
         //resolve parameter
-        var param = getParameter(messageObject, parameterMessageObject);
-        var translatedParam = param.messageKey ? msg[param.messageKey] : param
-        var translatedMessage = messageObject.messageKey ? msg[messageObject.messageKey] : msg[messageObject];
+        var param = getParameter(message, messageParameter),
+            translatedParam = param.messageKey ? msg[param.messageKey] : param,
+            translatedMessage = message.messageKey ? msg[message.messageKey] : msg[message];
 
         if (!translatedMessage) {
-            $log.error('Could not translate:' + messageObject, parameterMessageObject);
+            $log.error('Could not translate:' + message, messageParameter);
             return '-';
         }
         return translatedMessage.replace('{0}', translatedParam);
