@@ -41,6 +41,7 @@ public class AboutController {
         model.addAttribute("species", speciesHandler.getSpeciesMap(user, locale).values());
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
+        model.addAttribute("rules", speciesHandler.getRules());
         return "ng.jsp";
     }
 

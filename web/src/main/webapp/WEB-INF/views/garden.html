@@ -15,8 +15,8 @@
                     <span>{{'scientificname'|translate}}:</span><em> {{hoveredSpecies.scientificName}}</em><br/>
                         <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
                         <ul>
-                            <li ng-repeat="r in hoveredSpecies.rules | sortruleFilter">
-                                {{r | translate:r.parameterMessageObject}}
+                            <li ng-repeat="r in hoveredSpecies.rules | orderBy:'type'">
+                                {{r | translate}}
                             </li>
                         </ul>
                     </div>

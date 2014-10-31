@@ -1,18 +1,82 @@
 function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     var state = {},
-        search = {previous: [], promise: ""};
-    state.selectedSpecies = new Species('not set');
+        search = {previous: [], promise: ""},
+        ruleArray = initData.rules;
+
     state.action = 'add';
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species[0];
     state.pendingAdd = false;
     $log.log('SpeciesService', state);
 
+    augmentSpecies(initData.species);
+
     $rootScope.$on('current-user-changed', function (event, user) {
         if (user) {
             reloadSpecies();
         }
     });
+
+
+    function augmentSpecies(speciesArray) {
+        ruleArray.forEach(function (rule) {
+            var species = speciesArray.find(rule.host, 'id');
+            if (species) {
+                species.rules.push(createRule(rule));
+            }
+        });
+    }
+
+    function createRule(rule) {
+
+        function Rule(rule, messageKey, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, parameterMessageObject) {
+            this.id = rule.id;
+            this.host = rule.host;
+            this.type = rule.type;
+            this.messageKey = messageKey;
+            this.messageKeyParameter = parameterMessageObject;
+            this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
+            this.hasCauser = hasCauser;
+            this.hint = {messageKey: hintMessageKey, messageKeyParameter: parameterMessageObject}
+        }
+
+        var hasCauser = {
+            companion: function (square) {
+                return square.plants.hasOwnProperty(rule.param);
+            },
+            rotation: function (square) {
+                return square.containsFamily(rule.param);
+            },
+            repetition: function (square) {
+                return square.plants.hasOwnProperty(rule.host);
+            }
+        }
+
+        switch (rule.type) {
+            case 0:
+                return new Rule(rule, 'rule.goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+            case 1:
+                return new Rule(rule, 'rule.fightdisease', 'hint.fightdisease', 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+            case 2:
+                return new Rule(rule, "rule.repelpest", "hint.repelpest", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+            case 3:
+                return new Rule(rule, "rule.improvesflavor", "hint.improvesflavor", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+            case 4:
+                return new Rule(rule, "rule.badcompanion", "hint.badcompanion", 0, 0, hasCauser.companion, new MessageObject("msg.species" + rule.param));
+            case 5:
+                return new Rule(rule, "rule.goodcroprotation", "hint.goodcroprotation", 1, 1, hasCauser.rotation, new MessageObject("family" + rule.param));
+            case 6:
+                return new Rule(rule, "rule.badcroprotation", "hint.badcroprotation", 1, 1, hasCauser.rotation, new MessageObject("family" + rule.param));
+            case 7:
+                return new Rule(rule, "rule.speciesrepetition", "hint.speciesrepetition", 1, rule.param, hasCauser.repetition, rule.param);
+            default :
+                throw "No such rule type " + rule.type;
+        }
+    }
+
+    function MessageObject(messageKey) {
+        this.messageKey = messageKey;
+    }
 
     function Species(vernacularName) {
         this.vernacularName = vernacularName;
@@ -23,7 +87,8 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             .then(function (response) {
                 $log.log('Species retrieve successful. Response:', response);
                 state.speciesArray = response.data;
-                state.selectedSpecies = state.speciesArray[0];
+                state.selectedSpecies = response.data[0];
+                augmentSpecies(response.data);
             });
     }
 
@@ -95,6 +160,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             $http.get('/rest/species/' + id)
                 .then(function (response) {
                     angular.extend(ret, response.data);
+                    augmentSpecies([ret]);
                 });
             return ret;
         },

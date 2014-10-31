@@ -20,12 +20,12 @@
         var initData = {
             user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
+            rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>,
             plantDataArray:<c:out escapeXml="false" value="${f:toJson(plantData)}"/>
         };
 
         <%@ include file="../js/app.js" %>
         <%@ include file="../js/garden/SpeciesFilter.js" %>
-        <%@ include file="../js/garden/SortRuleFilter.js" %>
         <%@ include file="../js/garden/GardenController.js" %>
         <%@ include file="../js/garden/AddYearModalController.js" %>
         <%@ include file="../js/garden/SpeciesService.js" %>

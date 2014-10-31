@@ -49,8 +49,8 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
 
         function hasRuleHint(rule, location) {
             var radius = 1,
-                fromYear = location.year - rule.yearsBackFrom,
-                toYear = location.year - rule.yearsBackTo;
+                fromYear = location.year - rule.yearsBack.min,
+                toYear = location.year - rule.yearsBack.max;
             for (var year = fromYear; year >= toYear; year--) {
                 var squares = garden.getSquares(year);
                 if (squares) {
@@ -59,8 +59,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                             xDiff = Math.abs(location.x - square.location.x),
                             yDiff = Math.abs(location.y - square.location.y);
                         if (xDiff <= radius && yDiff <= radius) {
-                            if (rule.causerType === 'Species' && square.plants[rule.causer.id] ||
-                                rule.causerType === 'Family' && square.containsFamily(rule.causer.id)) {
+                            if (rule.hasCauser(square)) {
                                 return true;
                             }
                         }
@@ -76,7 +75,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
             for (var i = 0; i < self.species.rules.length; i++) {
                 var rule = self.species.rules[i];
                 if (hasRuleHint(rule, self.location)) {
-                    ret.push({messageKey: rule.hintMessageKey, messageKeyParameter: rule.parameterMessageObject})
+                    ret.push(rule.hint)
                 }
             }
             return ret;

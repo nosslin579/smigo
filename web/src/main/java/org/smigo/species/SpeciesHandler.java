@@ -3,7 +3,6 @@ package org.smigo.species;
 import kga.Family;
 import kga.IdUtil;
 import kga.Species;
-import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
@@ -52,7 +51,6 @@ public class SpeciesHandler {
     }
 
     public Map<Integer, Species> getSpeciesMap(User user, Locale locale) {
-        long start = System.currentTimeMillis();
         Map<Integer, Species> ret = new HashMap<>();
         ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
         if (user != null) {
@@ -61,16 +59,6 @@ public class SpeciesHandler {
         if (!userSession.getPlants().isEmpty()) {
             ret.putAll(IdUtil.convertToMap(speciesDao.getSpeciesFromList(userSession.getPlants(), locale)));
         }
-        //Add rules to species
-        final List<Rule> rules = ruleDao.getRules();
-        for (Rule r : rules) {
-            int hostId = r.getHost().getId();
-            Species s = ret.get(hostId);
-            if (s != null) {
-                s.addRule(r);
-            }
-        }
-        long l = System.currentTimeMillis() - start;
         return ret;
     }
 
@@ -94,5 +82,9 @@ public class SpeciesHandler {
 
     public Map<String, String> getSpeciesTranslation(Locale locale) {
         return speciesDao.getSpeciesTranslation(locale);
+    }
+
+    public List<RuleBean> getRules() {
+        return ruleDao.getRules();
     }
 }
