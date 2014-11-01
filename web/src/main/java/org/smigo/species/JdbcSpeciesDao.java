@@ -6,6 +6,7 @@ import kga.PlantData;
 import kga.Species;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,14 +25,6 @@ import java.util.*;
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
 
-    private static final String SELECT_MESSAGEKEY = "SELECT\n" +
-            "CONCAT('msg.species', species.id)                                         AS message_key,\n" +
-            "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
-            "FROM species\n" +
-            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
-            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
-            "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
-            "WHERE creator IS NULL;";
     private static final String SELECT = "SELECT\n" +
             "species.*,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
@@ -111,12 +104,13 @@ class JdbcSpeciesDao implements SpeciesDao {
         sqlArgs.add(locale.getCountry());
         int[] types = new int[sqlArgs.size()];
         Arrays.fill(types, Types.VARCHAR);
-        return jdbcTemplate.query(SELECT_MESSAGEKEY, sqlArgs.toArray(), types, new ResultSetExtractor<Map<String, String>>() {
+        final String sql = String.format(SELECT, "TRUE", 1000);
+        return jdbcTemplate.query(sql, sqlArgs.toArray(), types, new ResultSetExtractor<Map<String, String>>() {
             @Override
             public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 Map<String, String> ret = new HashMap<>(rs.getFetchSize());
                 while (rs.next()) {
-                    ret.put(rs.getString(1), rs.getString(2));
+                    ret.put("msg.species" + rs.getInt("id"), rs.getString("vernacular_name"));
                 }
                 return ret;
             }
@@ -138,11 +132,14 @@ class JdbcSpeciesDao implements SpeciesDao {
         final Locale locale = Locale.ENGLISH;
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
         final String sql = String.format(SELECT, "species.id = ?", 1);
-        return jdbcTemplate.queryForObject(sql, args, new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies())));
+        return jdbcTemplate.queryForObject(sql, args, rowMapper);
     }
 
     @Override
-    public void setSpeciesTranslation(int id, String vernacularName, String language, String country) {
+    @CacheEvict(value = Cache.SPECIES_TRANSLATION, allEntries = true)
+    public void setSpeciesTranslation(int id, String vernacularName, Locale locale) {
+        String language = locale == null ? "" : locale.getLanguage();
+        String country = locale == null ? "" : locale.getCountry();
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("species_id", id, Types.INTEGER);
         s.addValue("language", language, Types.VARCHAR);

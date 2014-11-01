@@ -34,8 +34,8 @@ public class SpeciesHandler {
             return -1;
         }
         final int id = speciesDao.addSpecies(species, user.getId());
-        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), "", "");
-        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), locale.getLanguage(), "");
+        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), null);
+        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), locale);
         return id;
     }
 
@@ -49,14 +49,7 @@ public class SpeciesHandler {
     }
 
     public List<Species> getSpeciesMap(User user) {
-        final List<Species> ret = speciesDao.getDefaultSpecies();
-        if (user != null) {
-            ret.addAll(speciesDao.getUserSpecies(user.getId()));
-        }
-        if (!userSession.getPlants().isEmpty()) {
-            ret.addAll(speciesDao.getSpeciesFromList(userSession.getPlants()));
-        }
-        return ret;
+        return speciesDao.getDefaultSpecies();
     }
 
     public Species getSpecies(int id) {
