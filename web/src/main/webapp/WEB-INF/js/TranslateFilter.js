@@ -12,6 +12,7 @@ function translateFilter($rootScope, $log, $http) {
         $http.get('/rest/translation')
             .then(function (response) {
                 msg = response.data;
+                $rootScope.$broadcast('messages-reloaded', msg);
             });
     });
 

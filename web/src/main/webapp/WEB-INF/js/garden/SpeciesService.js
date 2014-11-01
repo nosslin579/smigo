@@ -1,7 +1,7 @@
 function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     var state = {},
         search = {previous: [], promise: ""},
-        ruleArray = initData.rules;
+        ruleMap = {};
 
     state.action = 'add';
     state.speciesArray = initData.species;
@@ -9,25 +9,24 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     state.pendingAdd = false;
     $log.log('SpeciesService', state);
 
-    augmentSpecies(initData.species);
+    initData.rules.forEach(function (rule) {
+        !ruleMap[rule.host] && (ruleMap[rule.host] = []);
+        ruleMap[rule.host].push(createRule(rule));
+    });
 
-    $rootScope.$on('current-user-changed', function (event, user) {
-        if (user) {
-            reloadSpecies();
-        }
+    augmentSpecies(state.speciesArray);
+
+    $rootScope.$on('messages-reloaded', function (event, msg) {
+        augmentSpecies(state.speciesArray);
     });
 
 
     function augmentSpecies(speciesArray) {
+        $log.info('Augmenting species', speciesArray);
         speciesArray.forEach(function (species) {
             species.vernacularName = translateFilter(species);
-        });
-
-        ruleArray.forEach(function (rule) {
-            var species = speciesArray.find(rule.host, 'id');
-            if (species) {
-                species.rules.push(createRule(rule));
-            }
+            species.rules = ruleMap[species.id];
+            !species.rules && (species.rules = []);
         });
     }
 
@@ -125,6 +124,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     $log.warn('Could not add species', species, error);
                     state.speciesArray.pop(species);
                     state.selectedSpecies = state.speciesArray[0];
+                    state.pendingAdd = false;
                 });
         },
         searchSpecies: function (query) {
