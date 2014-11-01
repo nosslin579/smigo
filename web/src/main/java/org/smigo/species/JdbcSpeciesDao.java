@@ -128,6 +128,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
+    @Cacheable(Cache.SPECIES_ID)
     public Species getSpecies(int id) {
         final Locale locale = Locale.ENGLISH;
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};

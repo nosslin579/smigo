@@ -122,6 +122,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES));
         concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.FAMILIES));
         concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES_TRANSLATION));
+        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES_ID));
         cacheManager.setCaches(concurrentMapCacheArrayList);
         return cacheManager;
     }
