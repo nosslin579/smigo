@@ -19,6 +19,10 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
 
     function augmentSpecies(speciesArray) {
+        speciesArray.forEach(function (species) {
+            species.vernacularName = translateFilter(species);
+        });
+
         ruleArray.forEach(function (rule) {
             var species = speciesArray.find(rule.host, 'id');
             if (species) {

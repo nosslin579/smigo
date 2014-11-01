@@ -1,7 +1,6 @@
 package org.smigo.species;
 
 import kga.Family;
-import kga.IdUtil;
 import kga.Species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,20 +48,19 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<Integer, Species> getSpeciesMap(User user, Locale locale) {
-        Map<Integer, Species> ret = new HashMap<>();
-        ret.putAll(IdUtil.convertToMap(speciesDao.getDefaultSpecies(locale)));
+    public List<Species> getSpeciesMap(User user) {
+        final List<Species> ret = speciesDao.getDefaultSpecies();
         if (user != null) {
-            ret.putAll(IdUtil.convertToMap(speciesDao.getUserSpecies(user.getId(), locale)));
+            ret.addAll(speciesDao.getUserSpecies(user.getId()));
         }
         if (!userSession.getPlants().isEmpty()) {
-            ret.putAll(IdUtil.convertToMap(speciesDao.getSpeciesFromList(userSession.getPlants(), locale)));
+            ret.addAll(speciesDao.getSpeciesFromList(userSession.getPlants()));
         }
         return ret;
     }
 
-    public Species getSpecies(int id, Locale locale) {
-        return speciesDao.getSpecies(id, locale);
+    public Species getSpecies(int id) {
+        return speciesDao.getSpecies(id);
     }
 
     public List<Family> getFamilies() {

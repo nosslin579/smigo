@@ -11,17 +11,17 @@ interface SpeciesDao {
 
     int addSpecies(SpeciesFormBean species, int id);
 
-    List<Species> getDefaultSpecies(Locale locale);
+    List<Species> getDefaultSpecies();
 
-    List<Species> getUserSpecies(int userId, Locale locale);
+    List<Species> getUserSpecies(int userId);
 
-    Species getSpecies(int id, Locale english);
+    Species getSpecies(int id);
 
     void setSpeciesTranslation(int id, String vernacularName, String language, String country);
 
     List<Species> searchSpecies(String query, Locale locale);
 
-    List<Species> getSpeciesFromList(List<PlantData> plants, Locale locale);
+    List<Species> getSpeciesFromList(List<PlantData> plants);
 
     Map<String, String> getSpeciesTranslation(Locale locale);
 }

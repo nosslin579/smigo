@@ -25,14 +25,14 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Species> getSpecies(@AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
-        return speciesHandler.getSpeciesMap(user, locale).values();
+    public Collection<Species> getSpecies(@AuthenticationPrincipal AuthenticatedUser user) {
+        return speciesHandler.getSpeciesMap(user);
     }
 
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Species getSpecies(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
-        return speciesHandler.getSpecies(id, locale);
+        return speciesHandler.getSpecies(id);
     }
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)

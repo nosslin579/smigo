@@ -39,7 +39,7 @@ function translateFilter($rootScope, $log, $http) {
             translatedMessage = message.messageKey ? msg[message.messageKey] : msg[message];
 
         if (!translatedMessage) {
-            $log.error('Could not translate:' + message, messageParameter);
+            $log.error('Could not translate:', [message, messageParameter]);
             return '-';
         }
         return translatedMessage.replace('{0}', translatedParam);

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.beans.PropertyEditorSupport;
-import java.util.Locale;
 
 public class SpeciesPropertyEditor extends PropertyEditorSupport {
 
@@ -28,7 +27,7 @@ public class SpeciesPropertyEditor extends PropertyEditorSupport {
     public void setAsText(final String text) throws IllegalArgumentException {
         if (StringUtils.hasText(text)) {
             Integer id = Integer.valueOf(text);
-            setValue(id == 0 ? null : speciesHandler.getSpecies(id, Locale.ENGLISH));
+            setValue(id == 0 ? null : speciesHandler.getSpecies(id));
         } else {
             throw new IllegalArgumentException("Cannot convert text '" + text + "', into a species");
         }

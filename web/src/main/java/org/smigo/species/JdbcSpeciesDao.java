@@ -51,6 +51,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     private SimpleJdbcInsert insertSpecies;
     private SimpleJdbcInsert insertSpeciesTranslation;
     private Map<Integer, Family> families;
+    private SpeciesViewRowMapper rowMapper;
 
     @Autowired
     private FamilyDao familyDao;
@@ -60,6 +61,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id");
         this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
+        rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
     }
 
     @Override
@@ -74,15 +76,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @Cacheable(value = Cache.SPECIES, key = "#locale")
-    public List<Species> getDefaultSpecies(Locale locale) {
+    @Cacheable(value = Cache.SPECIES)
+    public List<Species> getDefaultSpecies() {
         //Unknown and Hemp is never display by default
-        return querySpeciesForList("species.id NOT IN (99,87)", 58, locale, new Object[]{});
+        return querySpeciesForList("species.id NOT IN (99,87)", 58, Locale.ENGLISH, new Object[]{});
     }
 
     @Override
-    public List<Species> getUserSpecies(int userId, Locale locale) {
-        return querySpeciesForList("plants.user_id = ?", Integer.MAX_VALUE, locale, new Object[]{userId});
+    public List<Species> getUserSpecies(int userId) {
+        return querySpeciesForList("plants.user_id = ?", Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{userId});
     }
 
     @Override
@@ -92,12 +94,12 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public List<Species> getSpeciesFromList(List<PlantData> plants, Locale locale) {
+    public List<Species> getSpeciesFromList(List<PlantData> plants) {
         final StringBuilder whereClause = new StringBuilder("species.id IN (");
         for (Iterator<PlantData> i = plants.iterator(); i.hasNext(); ) {
             whereClause.append(i.next().getSpeciesId() + (i.hasNext() ? "," : (")")));
         }
-        return querySpeciesForList(whereClause.toString(), Integer.MAX_VALUE, locale, new Object[]{});
+        return querySpeciesForList(whereClause.toString(), Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{});
     }
 
     @Override
@@ -128,12 +130,12 @@ class JdbcSpeciesDao implements SpeciesDao {
         sqlArgs.add(locale.getCountry());
         sqlArgs.addAll(Arrays.asList(args));
         final String sql = String.format(SELECT, whereClause, maxResult);
-        final SpeciesViewRowMapper rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
         return jdbcTemplate.query(sql, sqlArgs.toArray(), rowMapper);
     }
 
     @Override
-    public Species getSpecies(int id, Locale locale) {
+    public Species getSpecies(int id) {
+        final Locale locale = Locale.ENGLISH;
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
         final String sql = String.format(SELECT, "species.id = ?", 1);
         return jdbcTemplate.queryForObject(sql, args, new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies())));
@@ -159,13 +161,12 @@ class JdbcSpeciesDao implements SpeciesDao {
         @Override
         public Species mapRow(ResultSet rs, int rowNum) throws SQLException {
             Species ret = new Species(rs.getInt("id"));
-            ret.setScientificName(rs.getString("name"));
+            ret.setScientificName(rs.getString("name"));//todo rename db field
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));
             ret.setFamily(familyMap.get(rs.getInt("family")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
-            ret.setVernacularName(rs.getString("vernacular_name"));
             return ret;
         }
     }

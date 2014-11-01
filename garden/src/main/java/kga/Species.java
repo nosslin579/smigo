@@ -53,7 +53,6 @@ public class Species implements Id {
 
     private String scientificName;
     private String iconFileName;
-    private String vernacularName;
 
 
     public Species(int id) {
@@ -124,14 +123,6 @@ public class Species implements Id {
 
     public String getIconFileName() {
         return iconFileName;
-    }
-
-    public void setVernacularName(String vernacularName) {
-        this.vernacularName = vernacularName;
-    }
-
-    public String getVernacularName() {
-        return vernacularName;
     }
 
     @Override

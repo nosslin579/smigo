@@ -1,6 +1,5 @@
 package org.smigo.plants;
 
-import kga.Garden;
 import kga.PlantData;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.User;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 
 @Component
 public class PlantHandler {
@@ -46,10 +44,6 @@ public class PlantHandler {
         } else {
             return userSession.getPlants();
         }
-    }
-
-    public Garden getGarden(User user, Locale locale) {
-        return new Garden(speciesHandler.getSpeciesMap(user, locale), getPlants(user));
     }
 
     public void addPlants(List<PlantData> plants, int userId) {
