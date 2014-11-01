@@ -5,7 +5,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
     state.action = 'add';
     state.speciesArray = initData.species;
-    state.selectedSpecies = initData.species[0];
+    state.selectedSpecies = initData.species.find(28, 'id');
     state.pendingAdd = false;
     $log.log('SpeciesService', state);
 
@@ -90,7 +90,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             .then(function (response) {
                 $log.log('Species retrieve successful. Response:', response);
                 state.speciesArray = response.data;
-                state.selectedSpecies = response.data[0];
+                state.selectedSpecies = state.speciesArray.find(28, 'id');
                 augmentSpecies(response.data);
             });
     }
@@ -123,7 +123,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                 }).catch(function (error) {
                     $log.warn('Could not add species', species, error);
                     state.speciesArray.pop(species);
-                    state.selectedSpecies = state.speciesArray[0];
+                    state.selectedSpecies = state.speciesArray.find(28, 'id');
                     state.pendingAdd = false;
                 });
         },
@@ -144,6 +144,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                                 state.speciesArray.push(species);
                             }
                         });
+                        augmentSpecies(response.data);
                         $log.debug('Response from search ' + queryLowerCase, response);
                     });
             }, 2000);

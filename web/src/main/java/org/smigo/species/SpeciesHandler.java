@@ -29,10 +29,6 @@ public class SpeciesHandler {
     private FamilyDao familyDao;
 
     public int addSpecies(SpeciesFormBean species, AuthenticatedUser user, Locale locale) {
-        final List<Species> searchedSpecies = speciesDao.searchSpecies(species.getVernacularName(), locale);
-        if (!searchedSpecies.isEmpty()) {
-            return -1;
-        }
         final int id = speciesDao.addSpecies(species, user.getId());
         speciesDao.setSpeciesTranslation(id, species.getVernacularName(), null);
         speciesDao.setSpeciesTranslation(id, species.getVernacularName(), locale);
