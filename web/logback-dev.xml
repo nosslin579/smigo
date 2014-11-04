@@ -23,6 +23,7 @@
     </appender>
 
     <logger name="org.smigo" level="TRACE"/>
+    <logger name="org.smigo.user.UserAdaptiveMessageSource" level="INFO"/>
     <logger name="org.springframework" level="DEBUG"/>
     <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="org.apache.coyote" level="INFO"/>

@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.smigo" level="TRACE"/>
+    <logger name="org.smigo" level="INFO"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.apache.coyote" level="INFO"/>
     <logger name="org.apache.tomcat" level="INFO"/>
