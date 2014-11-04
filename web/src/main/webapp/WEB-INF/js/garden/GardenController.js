@@ -12,9 +12,6 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
-    $scope.setHoveredSpecies = function (event, s) {
-        $scope.hoveredSpecies = s
-    }
     $scope.selectedSpeciesFromTopResult = function (query) {
         $log.log('Setting species from', query);
         var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];

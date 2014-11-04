@@ -92,7 +92,7 @@ body > .angular-view {
     max-width: 500px;
 }
 
-.species-hover {
+.species-tooltip {
     position: absolute;
     left: 23%;
     top: 200px;

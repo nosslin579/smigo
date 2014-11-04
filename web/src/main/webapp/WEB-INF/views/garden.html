@@ -1,27 +1,6 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
-        <div class="species-hover">
-            <div class="popover right in fade " ng-class="{show:showSpeciesInfo}" ng-if="hoveredSpecies">
-                <div class="popover-inner">
-                    <div class="popover-title text-center">
-                        {{hoveredSpecies.vernacularName}}
-                        <img class="small-species" ng-src="{{'/static/species/' + hoveredSpecies.iconFileName}}"/>
-                    </div>
-
-                    <div class="popover-content" ng-if="hoveredSpecies.item">
-                        {{'msg.itemexplained' | translate}}
-                    </div>
-                    <div class="popover-content" ng-if="!hoveredSpecies.item">
-                    <span>{{'scientificname'|translate}}:</span><em> {{hoveredSpecies.scientificName}}</em><br/>
-                        <span>{{'family'|translate}}:</span><em> {{hoveredSpecies.family | translate}}</em><br/>
-                        <ul>
-                            <li ng-repeat="r in hoveredSpecies.rules | orderBy:'type'">
-                                {{r | translate}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+        <div species-tooltip class="species-tooltip">
         </div>
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
@@ -45,11 +24,11 @@
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
                     <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesQuery)">
                 </form>
-                <ul class="nav nav-pills nav-stacked" ng-mouseenter="showSpeciesInfo=true" ng-mouseleave="showSpeciesInfo=false">
+                <ul class="nav nav-pills nav-stacked">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s)">
-                        <a href="" ng-mouseover="setHoveredSpecies($event,s)">{{s.vernacularName}}</a>
+                        <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">

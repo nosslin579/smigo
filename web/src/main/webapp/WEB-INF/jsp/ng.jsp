@@ -31,7 +31,7 @@
         <%@ include file="../js/garden/SpeciesService.js" %>
         <%@ include file="../js/garden/GridService.js" %>
         <%@ include file="../js/garden/PlantService.js" %>
-        <%@ include file="../js/garden/SpeciespopoverDirective.js" %>
+        <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
         <%@ include file="../js/garden/SquareInfoDirective.js" %>
 
         <%@ include file="../js/user/AcceptTermsOfServiceController.js" %>
@@ -68,8 +68,8 @@
 <script type="text/ng-template" id="request-password-link.html">
     <%@ include file="../views/request-password-link.html" %>
 </script>
-<script type="text/ng-template" id="speciespopover.html">
-    <%@ include file="../views/speciespopover.html" %>
+<script type="text/ng-template" id="species-tooltip.html">
+    <%@ include file="../views/species-tooltip.html" %>
 </script>
 <script type="text/ng-template" id="squareinfo.html">
     <%@ include file="../views/squareinfo.html" %>
