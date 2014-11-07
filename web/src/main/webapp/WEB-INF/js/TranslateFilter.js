@@ -21,11 +21,11 @@ function translateFilter($rootScope, $log, $http) {
      */
     function getParameter(message, messageParameter) {
         if (message.messageParameter) {
-            return message.messageParameter;
+            return message.messageParameter instanceof Array ? message.messageParameter : [message.messageParameter];
         } else if (messageParameter) {
-            return messageParameter;
+            return [messageParameter];
         }
-        return '';
+        return [];
     }
 
     return function (message, messageParameter) {
@@ -35,15 +35,19 @@ function translateFilter($rootScope, $log, $http) {
         }
 
         //resolve parameter
-        var param = getParameter(message, messageParameter),
-            translatedParam = param.messageKey ? msg[param.messageKey] : param,
+        var paramArray = getParameter(message, messageParameter),
             translatedMessage = message.messageKey ? msg[message.messageKey] : msg[message];
 
         if (!translatedMessage) {
             $log.error('Could not translate:', [message, messageParameter]);
             return '-';
         }
-        return translatedMessage.replace('{0}', translatedParam);
+
+        for (var i = 0; i < paramArray.length; i++) {
+            var param = paramArray[i];
+            translatedMessage = translatedMessage.replace('{' + i + '}', param.messageKey ? msg[param.messageKey] : param);
+        }
+        return translatedMessage;
     };
 }
 angular.module('smigoModule').filter('translate', translateFilter);

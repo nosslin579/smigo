@@ -1,5 +1,5 @@
 <div class="popover right in fade show">
-<div class="popover-inner">
+    <div class="popover-inner">
         <div class="popover-title text-center">
             {{species.vernacularName}}
             <img class="small-species" ng-src="{{'/static/species/' + species.iconFileName}}"/>
@@ -9,13 +9,38 @@
             {{'msg.itemexplained' | translate}}
         </div>
         <div class="popover-content" ng-if="!species.item">
-            <span>{{'scientificname'|translate}}:</span><em> {{species.scientificName}}</em><br/>
-            <span>{{'family'|translate}}:</span><em> {{species.family | translate}}</em><br/>
-            <ul>
-                <li ng-repeat="r in species.rules | orderBy:'type'">
-                    {{r | translate}}
-                </li>
-            </ul>
+            <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
+            <br/>
+            <strong>{{'family'|translate}}:</strong><em> {{species.family | translate}}</em>
+
+            <div ng-if="species.rules.find('goodcompanion','category') != null">
+                <strong>{{'rule.goodcompanion'|translate}}: </strong>
+                <span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
+                    {{r.hint.messageParameter | translate}}{{$last ? '':','}}
+                </span>
+            </div>
+            <div ng-if="species.rules.find('badcompanion','category') != null">
+                <strong>{{'rule.badcompanion'|translate}}: </strong>
+                <span ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
+                    {{r.hint.messageParameter | translate}}{{$last ? '':','}}
+                </span>
+            </div>
+            <div ng-if="species.rules.find('goodcroprotation','category') != null">
+                <strong>{{'rule.goodcroprotation'|translate}}: </strong>
+                <span ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
+                    {{r.hint.messageParameter[1] | translate}}{{$last ? '':','}}
+                </span>
+            </div>
+            <div ng-if="species.rules.find('badcroprotation','category') != null">
+                <strong>{{'rule.badcroprotation'|translate}}: </strong>
+                <span ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
+                    {{r.hint.messageParameter | translate}}{{$last ? '':','}}
+                </span>
+            </div>
+            <div ng-if="species.rules.find('speciesrepetition','category') != null">
+                <strong>{{'rule.croprotation'|translate}}: </strong>
+                <span>{{'rule.speciesrepetition' | translate:species.rules.find('speciesrepetition','category').hint.messageParameter}}</span>
+            </div>
         </div>
     </div>
 </div>

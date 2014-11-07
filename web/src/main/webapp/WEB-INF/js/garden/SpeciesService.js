@@ -32,46 +32,48 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
     function createRule(rule) {
 
-        function Rule(rule, messageKey, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, messageParameter) {
+        function Rule(rule, category, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, arg) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
-            this.messageKey = messageKey;
-            this.messageParameter = messageParameter;
+            this.category = category;
+            this.hint = {messageKey: hintMessageKey, messageParameter: arg}
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
             this.hasCauser = hasCauser;
-            this.hint = {messageKey: hintMessageKey, messageParameter: messageParameter}
         }
 
         var hasCauser = {
-            companion: function (square) {
-                return square.plants.hasOwnProperty(rule.param);
+                companion: function (square) {
+                    return square.plants.hasOwnProperty(rule.param);
+                },
+                rotation: function (square) {
+                    return square.containsFamily(rule.param);
+                },
+                repetition: function (square) {
+                    return square.plants.hasOwnProperty(rule.host);
+                }
             },
-            rotation: function (square) {
-                return square.containsFamily(rule.param);
-            },
-            repetition: function (square) {
-                return square.plants.hasOwnProperty(rule.host);
-            }
-        }
+            speciesArg = new Message("msg.species" + rule.param),
+            speciesHost = new Message("msg.species" + rule.host),
+            familyArg = new Message("family" + rule.param);
 
         switch (rule.type) {
             case 0:
-                return new Rule(rule, 'rule.goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
+                return new Rule(rule, 'goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, speciesArg);
             case 1:
-                return new Rule(rule, 'rule.fightdisease', 'hint.fightdisease', 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
+                return new Rule(rule, 'goodcompanion', 'hint.fightdisease', 0, 0, hasCauser.companion, speciesArg);
             case 2:
-                return new Rule(rule, "rule.repelpest", "hint.repelpest", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
+                return new Rule(rule, 'goodcompanion', "hint.repelpest", 0, 0, hasCauser.companion, speciesArg);
             case 3:
-                return new Rule(rule, "rule.improvesflavor", "hint.improvesflavor", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
+                return new Rule(rule, 'goodcompanion', "hint.improvesflavor", 0, 0, hasCauser.companion, speciesArg);
             case 4:
-                return new Rule(rule, "rule.badcompanion", "hint.badcompanion", 0, 0, hasCauser.companion, new Message("msg.species" + rule.param));
+                return new Rule(rule, 'badcompanion', "hint.badcompanion", 0, 0, hasCauser.companion, speciesArg);
             case 5:
-                return new Rule(rule, "rule.goodcroprotation", "hint.goodcroprotation", 1, 1, hasCauser.rotation, new Message("family" + rule.param));
+                return new Rule(rule, 'goodcroprotation', "hint.goodcroprotation", 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
             case 6:
-                return new Rule(rule, "rule.badcroprotation", "hint.badcroprotation", 1, 1, hasCauser.rotation, new Message("family" + rule.param));
+                return new Rule(rule, 'badcroprotation', "hint.badcroprotation", 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
             case 7:
-                return new Rule(rule, "rule.speciesrepetition", "hint.speciesrepetition", 1, rule.param, hasCauser.repetition, rule.param);
+                return new Rule(rule, 'speciesrepetition', "hint.speciesrepetition", 1, rule.param, hasCauser.repetition, rule.param);
             default :
                 throw "No such rule type " + rule.type;
         }
