@@ -1,7 +1,7 @@
 <div class="popover right in fade show">
     <div class="popover-inner">
         <div class="popover-title text-center">
-            {{species.vernacularName}}
+            <span class="btn-lg">{{species.vernacularName}}</span>
             <img class="small-species" ng-src="{{'/static/species/' + species.iconFileName}}"/>
         </div>
 
@@ -11,7 +11,7 @@
         <div class="popover-content" ng-if="!species.item">
             <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
             <br/>
-            <strong>{{'family'|translate}}:</strong><em> {{species.family | translate}}</em>
+            <strong>{{'family'|translate}}:</strong> {{species.family | translate}} - <em>{{species.family.name}}</em>
 
             <div ng-if="species.rules.find('goodcompanion','category') != null">
                 <strong>{{'rule.goodcompanion'|translate}}: </strong>
