@@ -9,7 +9,7 @@ function SpeciesTooltip($log, $timeout, $window, SpeciesService) {
             scope.species = SpeciesService.getAllSpecies()[0];
 
             element.parent().on('mouseenter', 'a', function (event) {
-                $log.log('mouseenter: ', [element, this, event]);
+//                $log.log('mouseenter: ', [element, this, event]);
                 if (this.dataset.speciesid) {
                     var id = +this.dataset.speciesid;
                     showPromise = $timeout(function () {
