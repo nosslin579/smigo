@@ -16,6 +16,7 @@
     <meta name="description" content="A vegetable garden planner.">
     <meta name="author" content="Christian Nilsson">
     <%--<link rel="icon" href="../../favicon.ico">--%>
+    <base href="/">
 
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 
@@ -25,8 +26,8 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/flatly/bootstrap.min.css">
 
     <%--angular--%>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular-route.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
 
     <style>
