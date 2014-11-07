@@ -176,8 +176,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 //                $log.debug('Species:' + vernacularName + ' not addable', search);
                 return false;
             }
-            var species = state.speciesArray.find(vernacularName, 'vernacularName', {ignoreCase: true});
-            return species ? false : true;
+            return state.speciesArray.find(vernacularName, 'vernacularName', {ignoreCase: true}) === null;
         },
         loadSpeciesFromUser: function (userId) {
             $http.get('/rest/species/' + userId)

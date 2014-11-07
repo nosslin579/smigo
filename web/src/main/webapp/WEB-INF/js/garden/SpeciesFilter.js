@@ -1,4 +1,4 @@
-function SpeciesFilter($log, orderByFilter) {
+function SpeciesFilter($log, orderByFilter, translateFilter) {
     return function (speciesArray, query) {
 //        console.time('SpeciesFilter');
 //        console.log('SpeciesFilter', [input, query]);
@@ -17,6 +17,9 @@ function SpeciesFilter($log, orderByFilter) {
                 (s.scientificName.toLowerCase().indexOf(queryLowerCase) === 0 ||
                     s.scientificName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
                 ret.push(s);
+            } else if (s.family && (translateFilter(s.family).toLowerCase().indexOf(queryLowerCase) === 0 ||
+                s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0)) {
+                ret.unshift(s);
             }
         });
 //        console.timeEnd('SpeciesFilter');
