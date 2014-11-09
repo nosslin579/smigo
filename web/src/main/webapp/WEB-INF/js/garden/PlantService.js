@@ -248,13 +248,6 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         },
         createGarden: function (plantDataArray) {
             return new Garden(plantDataArray);
-        },
-        loadGarden: function (garden, username) {
-            return $http.get('/rest/plant/' + username)
-                .then(function (response) {
-                    $log.info('Plants retrieved successfully. Response:', response);
-                    return garden.setPlants(response.data);
-                });
         }
     };
 }

@@ -5,7 +5,10 @@ function WallController($scope, $http, $log, $routeParams, PlantService, GridSer
             $scope.hostUser = response.data;
         });
 
-    $scope.garden = PlantService.getGarden($routeParams.username);
+    $http.get('/rest/plant/' + $routeParams.username)
+        .then(function (response) {
+            $scope.garden = PlantService.createGarden(response.data);
+        });
 
     $scope.getGridSizeCss = GridService.getGridSizeCss;
     $scope.getSquarePositionCss = GridService.getSquarePositionCss;

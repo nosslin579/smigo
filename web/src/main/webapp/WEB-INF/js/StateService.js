@@ -12,7 +12,10 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, PlantServi
 
     $rootScope.$on('current-user-changed', function (event, user) {
         if (user) {
-            PlantService.loadGarden(garden, user.username);
+            $http.get('/rest/plant/' + user.username)
+                .then(function (response) {
+                    garden.setPlants(response.data);
+                });
         } else {
             garden.setPlants([]);
         }
