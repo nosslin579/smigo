@@ -1,6 +1,7 @@
-function MainMenuController(UserService, $scope) {
+function MainMenuController($scope, UserService, StateService) {
+
     $scope.logout = UserService.logout;
-    $scope.userState = UserService.getState();
+    $scope.userState = StateService.getUser();
     $scope.menuIsCollapsed = true;
 }
 

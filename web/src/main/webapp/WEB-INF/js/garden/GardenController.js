@@ -2,7 +2,7 @@ function GardenController($http, $log, $modal, $scope, $filter, StateService, Sp
 
     $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
-    $scope.userState = UserService.getState();
+    $scope.userState = StateService.getUser();
 
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;

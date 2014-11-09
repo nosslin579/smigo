@@ -11,6 +11,7 @@ function translateFilter($rootScope, $log, $http) {
     $rootScope.$on('current-user-changed', function (event, user) {
         $http.get('/rest/translation')
             .then(function (response) {
+                $log.debug('Messages reloaded', [msg, response.data]);
                 msg = response.data;
                 $rootScope.$broadcast('messages-reloaded', msg);
             });
@@ -47,6 +48,7 @@ function translateFilter($rootScope, $log, $http) {
             var param = paramArray[i];
             translatedMessage = translatedMessage.replace('{' + i + '}', param.messageKey ? msg[param.messageKey] : param);
         }
+//        $log.debug('Translate:'+translatedMessage, [msg, message, messageParameter]);
         return translatedMessage;
     };
 }

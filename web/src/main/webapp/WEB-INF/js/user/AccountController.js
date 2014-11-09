@@ -1,6 +1,6 @@
-function AccountController($scope, UserService, $http, $log) {
+function AccountController($scope, $http, $log, StateService, UserService) {
 
-    $scope.userBean = angular.copy(UserService.getState().currentUser);
+    $scope.userBean = angular.copy(StateService.getUser().currentUser);
 
     $http.get('locales').then(function (resopnse) {
         $log.log('Locales retrieved', resopnse);
@@ -18,6 +18,7 @@ function AccountController($scope, UserService, $http, $log) {
         UserService.updateUser(userBean)
             .then(function () {
                 $scope.updateSuccessful = true;
+                $scope.$emit('current-user-changed', userBean);
             })
             .catch(function (response) {
                 $log.error('Update user failed', response);

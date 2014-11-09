@@ -1,68 +1,11 @@
-function UserService($log, $http, $timeout, $rootScope, $q, $location) {
+function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
 
-    var state = {
-            currentUser: initData.user,
-            locales: initData.locales,
-            connection: true
-        },
-        pingCounter = 0;
-    $timeout(pingServer, 480000, false);
-
-    $log.log('UserService', state);
-
-    $rootScope.$on("$routeChangeStart", function (event, next, current) {
-        if (state.currentUser && !state.currentUser.termsOfService) {
-            $log.log('User has not accepted terms of service', state);
-            if (next.templateUrl == "accept-terms-of-service.html") {
-                // already going to #accept, no redirect needed
-            } else {
-                // not going to #accept, we should redirect now
-                $location.path("/accept-terms-of-service");
-            }
-        }
-    });
-
-
-    $rootScope.$on('current-user-changed', function (event, user) {
-        state.currentUser = user;
-    });
-
-    function reloadCurrentUser() {
-        return $http.get('/rest/user')
-            .then(function (resonse) {
-                var currentUser = resonse.data ? resonse.data : null;
-                $rootScope.$broadcast('current-user-changed', currentUser);
-            });
-    }
-
-    function pingServer() {
-        $http.get('ping')
-            .then(function (response) {
-                $log.debug("Ping success nr:" + pingCounter, response);
-                var username = state.currentUser ? state.currentUser.username : undefined;
-                if (username !== response.data.name) {
-                    $log.log('Username mismatch detected', [state, response]);
-                    reloadCurrentUser();
-                }
-                state.connection = true;
-            })
-            .catch(function (response) {
-                $log.warn("Ping fail", response);
-                state.connection = false;
-            });
-        if (pingCounter++ < 100) {
-            $timeout(pingServer, 960000);
-        }
-    }
+    $log.log('UserService');
 
     function updateUser(userBean) {
         return $http.put('/rest/user', userBean)
             .then(function (response) {
                 $log.info('Update user success', [userBean, response]);
-                if (state.currentUser.locale != userBean.locale) {
-                    $rootScope.$broadcast('current-user-changed', userBean);
-                }
-                state.currentUser = userBean;
             });
     }
 
@@ -81,7 +24,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
     }
 
     function login(form, formModel) {
-//        $log.log('Login', [form, formModel]);
+        $log.log('Login', [form, formModel]);
 //        http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
         if (!formModel.username) {
             $log.warn('Possible autocomplete detected, formModel contains no username.');
@@ -101,9 +44,12 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
                 });
             })
             .then(function (response) {
-                $location.path('/garden');
+                return $http.get('/rest/user');
             })
-            .then(reloadCurrentUser)
+            .then(function (response) {
+                $location.path('/garden');
+                $rootScope.$broadcast('current-user-changed', response.data);
+            })
             .catch(function (errorReason) {
                 $log.log('Login failed, reason:', errorReason);
                 form.objectErrors = errorReason.data;
@@ -112,9 +58,6 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
     }
 
     return {
-        getState: function () {
-            return state;
-        },
         register: function (form, formModel) {
             validateForm(form)
                 .then(function () {
@@ -130,10 +73,10 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location) {
                 });
         },
         login: login,
-        acceptTermsOfService: function () {
+        acceptTermsOfService: function (user) {
             $log.log('Handle acceptTermsOfService');
-            state.currentUser.termsOfService = true;
-            updateUser(state.currentUser);
+            user.termsOfService = true;
+            updateUser(user);
             $location.path('/garden');
         },
         logout: function () {
