@@ -144,6 +144,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.get(HOST_URL + "/wall/" + username);
 
         final WebElement plant = d.findElement(By.className("plant"));
+        Thread.sleep(500);
         Assert.assertEquals(plant.getAttribute("alt"), speciesName);
 
     }
