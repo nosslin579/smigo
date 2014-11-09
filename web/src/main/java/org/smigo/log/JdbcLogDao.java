@@ -2,6 +2,7 @@ package org.smigo.log;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -19,6 +20,7 @@ class JdbcLogDao implements LogDao {
     }
 
     @Override
+    @Async
     public void log(LogBean req) {
         String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note,origin,host) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
