@@ -1,5 +1,8 @@
 package org.smigo.species;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SpeciesFormBean {
     private String vernacularName;
     private String scientificName;
