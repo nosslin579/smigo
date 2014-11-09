@@ -1,8 +1,8 @@
-function AddYearModalController($scope, $modalInstance, PlantService, $log) {
+function AddYearModalController($scope, $modalInstance, StateService, $log) {
 
-    $log.log('AddYearModalController', $scope, PlantService.nisse());
+    $log.log('AddYearModalController', $scope);
 
-    var garden = PlantService.nisse();
+    var garden = StateService.getGarden();
     $scope.forwardYear = garden.getAvailableYears().last() + 1;
     $scope.backwardYear = garden.getAvailableYears()[0] - 1;
 

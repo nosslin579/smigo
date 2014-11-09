@@ -1,18 +1,6 @@
-function GardenController($http, $log, $modal, $scope, $filter, PlantService, SpeciesService, UserService, GridService) {
+function GardenController($http, $log, $modal, $scope, $filter, StateService, SpeciesService, UserService, GridService) {
 
-    $scope.$on('current-user-changed', function (event, user) {
-        if (user) {
-            PlantService.getGarden(user.username)
-            $http.get('/rest/plant/' + user.username)
-                .then(function (response) {
-                    garden = new Garden(response.data);
-                });
-        } else {
-            garden = new Garden([]);
-        }
-    });
-
-    $scope.garden = PlantService.nisse();
+    $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
     $scope.userState = UserService.getState();
 
