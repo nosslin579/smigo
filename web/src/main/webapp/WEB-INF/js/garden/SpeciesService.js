@@ -83,8 +83,11 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         this.messageKey = messageKey;
     }
 
-    function Species(vernacularName) {
+    function Species(id, vernacularName) {
+        this.id = id;
         this.vernacularName = vernacularName;
+        this.iconFileName = 'defaulticon.png';
+        this.messageKey = 'msg.species' + id;
     }
 
     function reloadSpecies() {
@@ -109,7 +112,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         addSpecies: function (vernacularName) {
             state.pendingAdd = true;
             var name = vernacularName.capitalize();
-            var species = new Species(name);
+            var species = new Species(null, name);
             $log.log('Adding species:' + vernacularName, state);
             return $http.post('/rest/species', species)
                 .then(function (response) {
@@ -162,7 +165,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             if (species) {
                 return species;
             }
-            var ret = {id: id, iconFileName: 'defaulticon.png'};
+            var ret = new Species(id, '');
             state.speciesArray.push(ret);
             $http.get('/rest/species/' + id)
                 .then(function (response) {

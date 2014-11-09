@@ -4,7 +4,7 @@ function translateFilter($rootScope, $log, $http) {
 
 
     $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
-//        $log.debug("Adding translation", [messageKey,value,msg]);
+        $log.debug("Adding translation", [messageKey, value, msg]);
         msg[messageKey] = value;
     });
 
@@ -39,7 +39,7 @@ function translateFilter($rootScope, $log, $http) {
             translatedMessage = message.messageKey ? msg[message.messageKey] : msg[message];
 
         if (!translatedMessage) {
-            $log.error('Could not translate:', [message, messageParameter]);
+            $log.error('Could not translate:', [msg, message, messageParameter]);
             return '-';
         }
 
