@@ -22,7 +22,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
 
     function augmentSpecies(speciesArray) {
-        $log.info('Augmenting species', speciesArray);
+        $log.info('Augmenting species', [speciesArray]);
         speciesArray.forEach(function (species) {
             species.vernacularName = translateFilter(species);
             species.rules = ruleMap[species.id];
@@ -110,7 +110,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             state.pendingAdd = true;
             var name = vernacularName.capitalize();
             var species = new Species(name);
-            $log.log('Species added:' + vernacularName, state);
+            $log.log('Adding species:' + vernacularName, state);
             return $http.post('/rest/species', species)
                 .then(function (response) {
                     $log.log('Response from post species', response);
@@ -144,9 +144,9 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                         response.data.forEach(function (species) {
                             if (!state.speciesArray.find(species.id, 'id')) {
                                 state.speciesArray.push(species);
+                                augmentSpecies([species]);
                             }
                         });
-                        augmentSpecies(response.data);
                         $log.debug('Response from search ' + queryLowerCase, response);
                     });
             }, 2000);

@@ -1,20 +1,6 @@
 function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
-    var state = {},
-        garden = new Garden([]),
-        updatePlants = {addList: [], removeList: []},
+    var updatePlants = {addList: [], removeList: []},
         updatePlantsPromise;
-
-    updateState(new Garden(initData.plantDataArray));
-
-    $log.log('PlantService', state);
-
-    $rootScope.$on('current-user-changed', function (event, user) {
-        if (user) {
-            reloadPlants();
-        } else {
-            updateState(new Garden([]));
-        }
-    });
 
     $window.addEventListener("beforeunload", function (event) {
         $http.post('/rest/plant', updatePlants);
@@ -120,12 +106,12 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
     }
 
     function Garden(plantDataArray) {
-        var self = this, yearSquareMap = {};
+        var self = this;
 
         function init() {
             if (!plantDataArray || !plantDataArray.length) {
                 var year = new Date().getFullYear();
-                yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
+                self.yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
             }
 
             for (var i = 0; i < plantDataArray.length; i++) {
@@ -133,37 +119,46 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 self.getSquare(plantData.year, plantData.x, plantData.y).setPlant(species);
             }
+
+            self.selectedYear = self.getAvailableYears().last();
             $log.info("Garden created:", self);
         }
 
+        this.yearSquareMap = {};
+
         this.getSquare = function (year, x, y) {
-            if (!yearSquareMap[year]) {
-                yearSquareMap[year] = [];
+            if (!self.yearSquareMap[year]) {
+                self.yearSquareMap[year] = [];
             }
-            for (var i = 0; i < yearSquareMap[year].length; i++) {
-                var square = yearSquareMap[year][i];
+            var squares = self.yearSquareMap[year];
+            for (var i = 0; i < squares.length; i++) {
+                var square = squares[i];
                 if (square.location.x === x && square.location.y === y) {
                     return square;
                 }
             }
             var ret = new Square(new Location(year, x, y));
-            yearSquareMap[year].push(ret);
+            squares.push(ret);
             return ret;
         };
 
         this.getAvailableYears = function () {
-            return Object.keys(yearSquareMap).map(Number).sort()
+            return Object.keys(self.yearSquareMap).map(Number).sort()
         };
 
-        this.getSquares = function (year) {
-            return yearSquareMap[year];
+        this.getSquares = function () {
+            return self.yearSquareMap[self.selectedYear];
         };
 
         this.addYear = function (year) {
-            var newYearSquareArray = [];
-            var copyFromSquareArray = yearSquareMap[getTrailingYear(year)];
+            if (self.yearSquareMap[year]) {
+                throw 'Cant add year that already exists';
+            }
+            var newYearSquareArray = [],
+                trailingYear = garden.getSquares(year - 1) ? year - 1 : self.getAvailableYears().last(),
+                copyFromSquareArray = self.yearSquareMap[trailingYear];
 
-            //add perennial from mostRecentYear
+            //add perennial from trailingYear
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plants, function (plant) {
                     if (!plant.species.annual) {
@@ -173,28 +168,11 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                 });
             });
 
-            yearSquareMap[year] = newYearSquareArray;
+            self.yearSquareMap[year] = newYearSquareArray;
         };
 
         init();
     }
-
-    function selectYear(year) {
-        state.selectedYear = year;
-        state.squares = garden.getSquares(year);
-        state.visibleRemainderSquares = garden.getSquares(year - 1);
-        $log.log('Year selected:' + year, state);
-    }
-
-    function updateState(newGarden) {
-        garden = newGarden;
-        state.availableYears = newGarden.getAvailableYears();
-        state.forwardYear = state.availableYears.last() + 1;
-        state.backwardYear = state.availableYears[0] - 1;
-        selectYear(state.availableYears.last());
-        $log.log('Plants state updated', state);
-    }
-
 
     function sendToServer(plant) {
 
@@ -234,52 +212,33 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         updatePlantsPromise = $timeout(doHttpPost, 3000);
     }
 
-    function reloadPlants() {
-        getGarden()
-            .then(function (garden) {
-                updateState(garden);
-            });
-    }
-
-    function getGarden(username) {
-        var url = '/rest/plant/' + (username ? username : '');
-        return $http.get(url)
-            .then(function (response) {
-                $log.info('Plants retrieved successfully. Response:', response);
-                return new Garden(response.data);
-            });
-    }
-
-    function getTrailingYear(year) {
-        var yearSource = year;
-        if (garden.getSquares(yearSource - 1)) {
-            return yearSource - 1;
-        } else if (garden.getSquares(yearSource + 1)) {
-            return yearSource + 1;
-        } else {
-            return garden.getAvailableYears().last();
-        }
-    }
-
     function addPlant(species, square) {
         throw 'deprecated 1'
     }
 
     return {
-        selectYear: selectYear,
         getState: function () {
-            return state;
+            throw 'use garden instead';//todo
         },
-        addYear: function (year) {
-            garden.addYear(year);
-            updateState(garden);
-            $log.log('Year added:' + year, garden);
+        addYear: function () {
+            throw 'use garden.addyear';//todo
         },
-        addSquare: garden.getSquare,
+        addSquare: function () {
+            throw 'use garden.addsquare';//todo
+        },
         removePlant: function (square) {
             throw 'deprecated 2'
         },
-        getGarden: getGarden
+        getGarden: function (username) {
+            return $http.get('/rest/plant/' + username)
+                .then(function (response) {
+                    $log.info('Plants retrieved successfully. Response:', response);
+                    return new Garden(response.data);
+                });
+        },
+        nisse: function () {
+            return garden;
+        }
     };
 }
 angular.module('smigoModule').factory('PlantService', PlantService);

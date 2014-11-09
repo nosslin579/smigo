@@ -42,8 +42,8 @@
         </div>
         <div id="garden-frame" class="col-xs-9 no-select full-height">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="select-year" ng-class="{active: year == plantsState.selectedYear}" ng-repeat="year in plantsState.availableYears">
-                    <a href="" ng-click="selectYear(year)">
+                <li class="select-year" ng-class="{active: year == garden.selectedYear}" ng-repeat="year in garden.getAvailableYears()">
+                    <a href="" ng-click="garden.selectedYear = year">
                         {{year}}
                     </a>
                 </li>

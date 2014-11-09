@@ -21,8 +21,9 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
 
 
     return {
-        getGridSizeCss: function (squareArrays) {
+        getGridSizeCss: function (garden) {
 //            $log.debug('Grid CSS ', squareArrays);
+            var squareArrays = [garden.yearSquareMap[garden.selectedYear], garden.yearSquareMap[garden.selectedYear - 1]]
             var bounds = getBounds(squareArrays);
             var margin = 48 * 2;
             return {

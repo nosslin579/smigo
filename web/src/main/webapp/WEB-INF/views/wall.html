@@ -7,8 +7,8 @@
             <p>{{hostUser.about}}</p>
 
             <ul class="nav nav-pills">
-                <li ng-repeat="year in plantsState.availableYears" ng-class="{active: year == plantsState.selectedYear}">
-                    <a href="" ng-click="selectYear(year)">{{year}}</a></li>
+                <li ng-repeat="year in garden.getAvailableYears()" ng-class="{active: year == garden.selectedYear}">
+                    <a href="" ng-click="garden.selectedYear = year">{{year}}</a></li>
             </ul>
 
         </div>

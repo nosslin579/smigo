@@ -4,7 +4,7 @@ angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, 
             var showPromise,
                 squareElement = tooltipElement.parent();
 
-            $log.log('square info link', [scope, tooltipElement, attrs]);
+//            $log.log('square info link', [scope, tooltipElement, attrs]);
 
             function showSquareTooltip() {
                 angular.forEach(scope.square.plants, function (plant) {

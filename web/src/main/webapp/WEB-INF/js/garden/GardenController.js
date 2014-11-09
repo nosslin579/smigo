@@ -1,10 +1,21 @@
 function GardenController($http, $log, $modal, $scope, $filter, PlantService, SpeciesService, UserService, GridService) {
 
-    $scope.plantsState = PlantService.getState();
+    $scope.$on('current-user-changed', function (event, user) {
+        if (user) {
+            PlantService.getGarden(user.username)
+            $http.get('/rest/plant/' + user.username)
+                .then(function (response) {
+                    garden = new Garden(response.data);
+                });
+        } else {
+            garden = new Garden([]);
+        }
+    });
+
+    $scope.garden = PlantService.nisse();
     $scope.speciesState = SpeciesService.getState();
     $scope.userState = UserService.getState();
 
-    $scope.selectYear = PlantService.selectYear;
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
@@ -33,15 +44,15 @@ function GardenController($http, $log, $modal, $scope, $filter, PlantService, Sp
         }
         clickEvent.stopPropagation();
     };
-    $scope.onGridClick = function (clickEvent) {
-        $log.log('Grid clicked', [clickEvent, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
+    $scope.onGridClick = function (clickEvent, garden) {
+        $log.log('Grid clicked', [clickEvent, $scope]);
         if (SpeciesService.getState().action == 'add') {
             //http://stackoverflow.com/a/14872192/859514
             var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
             var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
             var x = Math.floor((offsetX - 100000) / 48);
             var y = Math.floor((offsetY - 100000) / 48);
-            PlantService.addSquare(PlantService.getState().selectedYear, x, y).addPlant(SpeciesService.getState().selectedSpecies);
+            garden.getSquare(garden.selectedYear, x, y).addPlant(SpeciesService.getState().selectedSpecies);
         }
         clickEvent.stopPropagation();
     };
