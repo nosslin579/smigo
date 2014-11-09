@@ -1,4 +1,4 @@
-function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
+function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
 
     function Garden(plantDataArray) {
         var gardenSelf = this,
@@ -219,23 +219,7 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
         init(plantDataArray);
     }
 
-    function addPlant(species, square) {
-        throw 'deprecated 1'
-    }
-
     return {
-        getState: function () {
-            throw 'use garden instead';//todo
-        },
-        addYear: function () {
-            throw 'use garden.addyear';//todo
-        },
-        addSquare: function () {
-            throw 'use garden.addsquare';//todo
-        },
-        removePlant: function (square) {
-            throw 'deprecated 2'
-        },
         getGarden: function (username) {
             return $http.get('/rest/plant/' + username)
                 .then(function (response) {
@@ -243,12 +227,9 @@ function PlantService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSer
                     return new Garden(response.data);
                 });
         },
-        nisse: function () {
-            throw 'deprecated 2';
-        },
         createGarden: function (plantDataArray) {
             return new Garden(plantDataArray);
         }
     };
 }
-angular.module('smigoModule').factory('PlantService', PlantService);
+angular.module('smigoModule').factory('GardenService', GardenService);

@@ -1,4 +1,4 @@
-angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, PlantService) {
+angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, GardenService) {
     return {
         link: function link(scope, tooltipElement, attrs) {
             var showPromise,

@@ -30,7 +30,7 @@
         <%@ include file="../js/garden/AddYearModalController.js" %>
         <%@ include file="../js/garden/SpeciesService.js" %>
         <%@ include file="../js/garden/GridService.js" %>
-        <%@ include file="../js/garden/PlantService.js" %>
+        <%@ include file="../js/garden/GardenService.js" %>
         <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
         <%@ include file="../js/garden/SquareInfoDirective.js" %>
 

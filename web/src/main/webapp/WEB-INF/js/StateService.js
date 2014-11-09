@@ -1,6 +1,6 @@
-function StateService($http, $window, $timeout, $rootScope, $q, $log, PlantService) {
+function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenService) {
 
-    var garden = PlantService.createGarden(initData.plantDataArray);
+    var garden = GardenService.createGarden(initData.plantDataArray);
 
     $window.addEventListener("beforeunload", function (event) {
         garden.save();
