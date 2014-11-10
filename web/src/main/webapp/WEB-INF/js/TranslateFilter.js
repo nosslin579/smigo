@@ -1,4 +1,4 @@
-function translateFilter($rootScope, $log, $http) {
+function translateFilter($rootScope, $log, $http, $route) {
     var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
     $log.log('TranslateFilter', [msg]);
 
@@ -14,6 +14,7 @@ function translateFilter($rootScope, $log, $http) {
                 $log.debug('Messages reloaded', [msg, response.data]);
                 msg = response.data;
                 $rootScope.$broadcast('messages-reloaded', msg);
+                $route.reload();
             });
     });
 

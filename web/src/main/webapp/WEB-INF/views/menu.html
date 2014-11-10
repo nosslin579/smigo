@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default" role="navigation" ng-controller="MainMenuController">
-    <div class="container-fluid">
-        <div class="navbar-header">
+    <div class="container-fluid" ng-if="!uglyHackToReloadMenu">
+    <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-click="menuIsCollapsed = !menuIsCollapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
