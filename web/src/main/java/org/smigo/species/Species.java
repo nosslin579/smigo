@@ -20,28 +20,15 @@
  * Email contact christian1195@gmail.com
  */
 
-package kga;
+package org.smigo.species;
 
-import kga.errors.RuleException;
-import kga.rules.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * This represent a species, not the physical plant.
- *
- * @author Christian Nilsson
- */
-public class Species implements Id {
+public class Species {
     private static final Logger log = LoggerFactory.getLogger(Species.class);
 
     private final int id;
-
-    private Set<Rule> rules = new HashSet<>();
 
     private Family family = null;
 
@@ -57,28 +44,6 @@ public class Species implements Id {
 
     public Species(int id) {
         this.id = id;
-    }
-
-    public final Collection<Rule> getRules(Class<?>... ruleTypes) {
-        if (ruleTypes == null || ruleTypes.length == 0)
-            return rules;
-        Collection<Rule> ret = new HashSet<Rule>(rules.size());
-        for (Rule r : rules)
-            for (Class<?> t : ruleTypes)
-                if (t.isInstance(r))
-                    ret.add(r);
-        return ret;
-    }
-
-    public final Collection<Rule> getRules() {
-        return rules;
-    }
-
-    public Rule addRule(Rule r) {
-        if (r == null || r.getHost().getId() != getId())
-            throw new RuleException("Illegal rule: " + r);
-        rules.add(r);
-        return r;
     }
 
     public int getId() {

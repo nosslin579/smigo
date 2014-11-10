@@ -1,7 +1,5 @@
 package org.smigo.plants;
 
-import kga.PlantData;
-
 import java.util.List;
 
 interface PlantDao {

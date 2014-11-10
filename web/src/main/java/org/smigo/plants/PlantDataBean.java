@@ -1,7 +1,5 @@
 package org.smigo.plants;
 
-import kga.PlantData;
-
 import java.io.Serializable;
 
 class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {

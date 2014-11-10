@@ -1,6 +1,6 @@
-package kga;
+package org.smigo.plants;
 
-public interface PlantData extends Location {
+public interface PlantData {
     int getSpeciesId();
 
     int getX();

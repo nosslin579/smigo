@@ -1,8 +1,8 @@
 package org.smigo.user;
 
-import kga.PlantData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.plants.PlantData;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;

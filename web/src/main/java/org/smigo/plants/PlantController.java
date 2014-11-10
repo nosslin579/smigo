@@ -1,6 +1,5 @@
 package org.smigo.plants;
 
-import kga.PlantData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;

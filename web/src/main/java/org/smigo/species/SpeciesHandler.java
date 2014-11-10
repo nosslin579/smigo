@@ -1,7 +1,5 @@
 package org.smigo.species;
 
-import kga.Family;
-import kga.Species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;

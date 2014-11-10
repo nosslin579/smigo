@@ -1,7 +1,6 @@
 package org.smigo.species;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kga.Family;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

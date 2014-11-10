@@ -1,10 +1,7 @@
 package org.smigo.species;
 
-import kga.Family;
-import kga.IdUtil;
-import kga.PlantData;
-import kga.Species;
 import org.smigo.config.Cache;
+import org.smigo.plants.PlantData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,10 +23,11 @@ import java.util.*;
 class JdbcSpeciesDao implements SpeciesDao {
 
     private static final String SELECT = "SELECT\n" +
-            "species.*,\n" +
+            "species.*, families.name AS family_name,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
             "FROM species\n" +
             "LEFT JOIN plants ON species.id = plants.species_id\n" +
+            "LEFT JOIN families ON species.family = families.id\n" +
             "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
             "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
             "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
@@ -47,14 +45,11 @@ class JdbcSpeciesDao implements SpeciesDao {
     private SpeciesViewRowMapper rowMapper;
 
     @Autowired
-    private FamilyDao familyDao;
-
-    @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id");
         this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
-        rowMapper = new SpeciesViewRowMapper(IdUtil.convertToMap(familyDao.getFamilies()));
+        rowMapper = new SpeciesViewRowMapper();
     }
 
     @Override
@@ -150,11 +145,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     private static class SpeciesViewRowMapper implements RowMapper<Species> {
-        private final Map<Integer, Family> familyMap;
-
-        public SpeciesViewRowMapper(Map<Integer, Family> familyMap) {
-            this.familyMap = familyMap;
-        }
 
         @Override
         public Species mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -162,7 +152,7 @@ class JdbcSpeciesDao implements SpeciesDao {
             ret.setScientificName(rs.getString("name"));//todo rename db field
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));
-            ret.setFamily(familyMap.get(rs.getInt("family")));
+            ret.setFamily(new Family(rs.getInt("family"), rs.getString("family_name")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
             return ret;

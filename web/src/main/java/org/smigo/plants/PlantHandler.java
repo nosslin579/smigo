@@ -1,6 +1,5 @@
 package org.smigo.plants;
 
-import kga.PlantData;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.User;
 import org.smigo.user.UserHandler;

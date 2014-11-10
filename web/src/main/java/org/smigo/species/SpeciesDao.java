@@ -1,7 +1,6 @@
 package org.smigo.species;
 
-import kga.PlantData;
-import kga.Species;
+import org.smigo.plants.PlantData;
 
 import java.util.List;
 import java.util.Locale;

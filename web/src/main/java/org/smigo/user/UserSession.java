@@ -1,6 +1,6 @@
 package org.smigo.user;
 
-import kga.PlantData;
+import org.smigo.plants.PlantData;
 
 import java.io.Serializable;
 import java.util.List;

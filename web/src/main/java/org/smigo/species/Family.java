@@ -20,14 +20,14 @@
  * Email contact christian1195@gmail.com
  */
 
-package kga;
+package org.smigo.species;
 
 /**
  * Family is the family of the species in the Linnaean taxonomy.
  *
  * @author Christian Nilsson
  */
-public class Family implements Comparable<Family>, Id {
+public class Family implements Comparable<Family> {
 
     private final int id;
     /**

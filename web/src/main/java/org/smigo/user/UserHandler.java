@@ -1,9 +1,9 @@
 package org.smigo.user;
 
-import kga.PlantData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.config.Props;
+import org.smigo.plants.PlantData;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
