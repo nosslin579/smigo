@@ -77,4 +77,8 @@ public class Family implements Comparable<Family> {
     public int compareTo(Family f) {
         return name.compareTo(f.name);
     }
+
+    public static Family create(int id, String name) {
+        return id == 0 ? null : new Family(id, name);
+    }
 }

@@ -88,6 +88,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         this.vernacularName = vernacularName;
         this.iconFileName = 'defaulticon.png';
         this.messageKey = 'msg.species' + id;
+        this.rules = [];
     }
 
     function reloadSpecies() {
@@ -125,6 +126,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     return $http.get('/rest/species/' + species.id);
                 }).then(function (response) {
                     angular.extend(species, response.data);
+                    $rootScope.$broadcast('new-messages-available', species.messageKey, species.vernacularName);
                 }).catch(function (error) {
                     $log.warn('Could not add species', species, error);
                     state.speciesArray.pop(species);

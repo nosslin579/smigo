@@ -27,7 +27,7 @@ class JdbcSpeciesDao implements SpeciesDao {
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
             "FROM species\n" +
             "LEFT JOIN plants ON species.id = plants.species_id\n" +
-            "LEFT JOIN families ON species.family = families.id\n" +
+            "LEFT JOIN families ON species.family_id = families.id\n" +
             "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
             "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
             "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
@@ -149,10 +149,10 @@ class JdbcSpeciesDao implements SpeciesDao {
         @Override
         public Species mapRow(ResultSet rs, int rowNum) throws SQLException {
             Species ret = new Species(rs.getInt("id"));
-            ret.setScientificName(rs.getString("name"));//todo rename db field
+            ret.setScientificName(rs.getString("scientific_name"));
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));
-            ret.setFamily(new Family(rs.getInt("family"), rs.getString("family_name")));
+            ret.setFamily(Family.create(rs.getInt("family_id"), rs.getString("family_name")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
             return ret;

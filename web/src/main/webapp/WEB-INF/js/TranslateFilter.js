@@ -3,7 +3,7 @@ function translateFilter($rootScope, $log, $http, $route) {
     $log.log('TranslateFilter', [msg]);
 
 
-    $rootScope.$on('newMessagesAvailable', function (event, messageKey, value) {
+    $rootScope.$on('new-messages-available', function (event, messageKey, value) {
         $log.debug("Adding translation", [messageKey, value, msg]);
         msg[messageKey] = value;
     });

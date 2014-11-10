@@ -9,9 +9,14 @@
             {{'msg.itemexplained' | translate}}
         </div>
         <div class="popover-content" ng-if="!species.item">
-            <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
-            <br/>
-            <strong>{{'family'|translate}}:</strong> {{species.family | translate}} - <em>{{species.family.name}}</em>
+            <div ng-if="species.scientificName">
+                <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
+            </div>
+            <div ng-if="species.family">
+                <strong>{{'family'|translate}}:</strong> {{species.family | translate}} -
+                <em>{{species.family.name}}</em>
+            </div>
+
 
             <div ng-if="species.rules.find('goodcompanion','category') != null">
                 <strong>{{'rule.goodcompanion'|translate}}: </strong>
