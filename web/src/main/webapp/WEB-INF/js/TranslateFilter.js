@@ -11,10 +11,12 @@ function translateFilter($rootScope, $log, $http, $route) {
     $rootScope.$on('current-user-changed', function (event, user) {
         $http.get('/rest/translation')
             .then(function (response) {
-                $log.debug('Messages reloaded', [msg, response.data]);
-                msg = response.data;
-                $rootScope.$broadcast('messages-reloaded', msg);
-                $route.reload();
+                if (!angular.equals(msg, response.data)) {
+                    $log.info('Messages reloaded and they differ, firing messages-reloaded', [msg, response.data]);
+                    msg = response.data;
+                    $rootScope.$broadcast('messages-reloaded', msg);
+                    $route.reload();
+                }
             });
     });
 
