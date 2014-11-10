@@ -90,6 +90,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     private void login(String username, String password) throws InterruptedException {
+        Thread.sleep(1000);
         d.findElement(By.id("login-link")).click();
         d.findElement(By.name("username")).clear();
         d.findElement(By.name("username")).sendKeys(username);
@@ -208,7 +209,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertFalse(element.getText().isEmpty());
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void resetPassword() throws InterruptedException {
         final UserBean user = addUser(true);
 
