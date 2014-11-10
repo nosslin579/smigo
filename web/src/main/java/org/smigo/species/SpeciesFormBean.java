@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class SpeciesFormBean {
     private String vernacularName;
     private String scientificName;
-    private int family = 7200;
+    private Integer family;
     private boolean annual = true;
     private boolean item = false;
 
@@ -18,11 +18,11 @@ public class SpeciesFormBean {
         this.scientificName = scientificName;
     }
 
-    public int getFamily() {
+    public Integer getFamily() {
         return family;
     }
 
-    public void setFamily(int family) {
+    public void setFamily(Integer family) {
         this.family = family;
     }
 

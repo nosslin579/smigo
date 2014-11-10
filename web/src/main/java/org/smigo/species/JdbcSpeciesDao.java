@@ -58,7 +58,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("name", species.getScientificName(), Types.VARCHAR);
         s.addValue("item", species.isItem(), Types.BOOLEAN);
         s.addValue("annual", species.isAnnual(), Types.BOOLEAN);
-        s.addValue("family", species.getFamily(), Types.INTEGER);
+        s.addValue("family_id", species.getFamily(), Types.INTEGER);
         s.addValue("creator", userId, Types.INTEGER);
         return insertSpecies.executeAndReturnKey(s).intValue();
     }
