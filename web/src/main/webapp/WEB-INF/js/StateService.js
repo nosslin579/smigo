@@ -48,7 +48,7 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
                 $log.debug("Ping success nr:" + pingCounter, response);
                 var username = user.currentUser ? user.currentUser.username : null;
                 if (username !== response.data.name) {
-                    $log.error('Username mismatch detected', [state, response]);
+                    $log.error('Username mismatch detected', [user, response]);
                 }
             })
             .catch(function (response) {
