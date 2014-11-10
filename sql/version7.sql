@@ -16,3 +16,5 @@ WHERE family_id = 7200;
 
 DELETE FROM families
 WHERE id = 7200;
+
+ALTER TABLE species AUTO_INCREMENT=10200;
