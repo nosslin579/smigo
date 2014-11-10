@@ -37,7 +37,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             this.host = rule.host;
             this.type = rule.type;
             this.category = category;
-            this.hint = {messageKey: hintMessageKey, messageParameter: arg}
+            this.hint = {messageKey: hintMessageKey, messageParameter: arg, category: category}
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
             this.hasCauser = hasCauser;
         }

@@ -178,7 +178,10 @@ body > .angular-view {
     white-space: nowrap;
 }
 
-.square-tooltip-item {
-    margin: 10px;
-    display: inline-block;
+.goodcompanion, .goodcroprotation {
+    color: #618039;
+}
+
+.badcompanion, .badcroprotation, .speciesrepetition {
+    color: #ac2925;
 }

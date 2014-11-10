@@ -1,8 +1,18 @@
-<div class="square-tooltip-item text-center" ng-repeat="p in square.plants">
-    <img ng-src="{{'/static/species/' + p.species.iconFileName}}"/>
+<table class="table table-bordered">
+    <tr>
+        <th ng-repeat="p in square.plants">
+            <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/> {{p.species.vernacularName}}
+        </th>
+    </tr>
 
-    <div>{{p.species.vernacularName}}</div>
-    <div ng-repeat="h in p.hints">
-        {{h|translate}}
-    </div>
-</div>
+    <tr>
+        <td ng-repeat="p in square.plants">
+            <div ng-repeat="h in p.hints | orderBy:'category':true">
+                <span class="glyphicon glyphicon-ok {{h.category}}"></span><span>{{h|translate}}</span>
+            </div>
+            <div ng-if="!p.hints.length">
+                {{'msg.nohints' | translate}}
+            </div>
+        </td>
+    </tr>
+</table>
