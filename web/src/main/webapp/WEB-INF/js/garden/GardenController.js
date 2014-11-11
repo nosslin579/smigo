@@ -1,4 +1,4 @@
-function GardenController($http, $log, $modal, $scope, $filter, StateService, SpeciesService, UserService, GridService) {
+function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService, GridService) {
 
     $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
@@ -25,6 +25,11 @@ function GardenController($http, $log, $modal, $scope, $filter, StateService, Sp
             square.removePlant();
         } else if (SpeciesService.getState().action == 'info') {
             square.showTooltip = !square.showTooltip;
+            if (square.showTooltip) {
+                $timeout(function () {
+                    square.showTooltip = false;
+                }, 3000);
+            }
         } else if (clickEvent.ctrlKey) {
             $log.log('Copy species');
         } else {
