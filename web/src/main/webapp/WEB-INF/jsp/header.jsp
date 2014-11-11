@@ -13,7 +13,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A vegetable garden planner.">
+    <meta name="description" content="Design and plan your vegetable garden and share with friends. Get advice for crop rotation and companion planting. Based on square foot gardening.">
+    <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening.">
     <meta name="author" content="Christian Nilsson">
     <%--<link rel="icon" href="../../favicon.ico">--%>
     <base href="/">
