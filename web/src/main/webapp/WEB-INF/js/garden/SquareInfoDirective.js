@@ -6,18 +6,24 @@ angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, 
 
 //            $log.log('square info link', [scope, tooltipElement, attrs]);
 
-            function showSquareTooltip() {
-                angular.forEach(scope.square.plants, function (plant) {
-                    plant.hints = plant.getHints();
-                });
-                $log.log('square info link', [scope.square]);
-                tooltipElement.show();
-            }
-
             //open popup after 1sec on mouseenter if not already open
             squareElement.bind('mouseenter', function (event) {
                 if (!scope.square.showTooltip) {
-                    showPromise = $timeout(showSquareTooltip, 1000);
+                    showPromise = $timeout(function showSquareTooltip() {
+                            angular.forEach(scope.square.plants, function (plant) {
+                                plant.hints = plant.getHints();
+                            });
+                            $timeout(function () {
+                                var mousePositionInLeftDocumentHalf = (event.pageX > ($(document).width() + $('#species-frame').width()) / 2);
+                                tooltipElement.css('left', mousePositionInLeftDocumentHalf ? -tooltipElement.width() - 24 : 72)
+
+                                var mousePositionInLowerDocumentHalf = (event.pageY > ($(document).height() + 100) / 2);
+                                tooltipElement.css('top', mousePositionInLowerDocumentHalf ? -tooltipElement.height() - 24 : 72)
+                                tooltipElement.show();
+                                $log.log('Showing square info', [scope.square]);
+                            }, 0);
+                        }
+                        , 1000);
                 }
             });
 

@@ -165,8 +165,6 @@ body > .angular-view {
 
 /*############## Square tooltip  #########################*/
 .square-tooltip {
-    top: 48px;
-    left: 48px;
     display: none;
     z-index: 100;
     position: absolute;
