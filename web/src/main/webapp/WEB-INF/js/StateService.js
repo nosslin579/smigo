@@ -6,7 +6,7 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
         },
         pingCounter = 0;
 
-    $timeout(pingServer, 480000, false);
+    $timeout(pingServer, 10000, false);
 
     $window.addEventListener("beforeunload", function (event) {
         garden.save();
