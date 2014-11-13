@@ -9,12 +9,14 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
             ymin: axisLength
         };
         squareArrays.forEach(function (squareArray) {
-            for (var i = 0; i < squareArray.length; i++) {
-                var square = squareArray[i];
-                ret.xmax = Math.max(square.location.x, ret.xmax);
-                ret.ymax = Math.max(square.location.y, ret.ymax);
-                ret.xmin = Math.min(square.location.x, ret.xmin);
-                ret.ymin = Math.min(square.location.y, ret.ymin);
+            if (squareArray) {
+                for (var i = 0; i < squareArray.length; i++) {
+                    var square = squareArray[i];
+                    ret.xmax = Math.max(square.location.x, ret.xmax);
+                    ret.ymax = Math.max(square.location.y, ret.ymax);
+                    ret.xmin = Math.min(square.location.x, ret.xmin);
+                    ret.ymin = Math.min(square.location.y, ret.ymin);
+                }
             }
         });
         return ret;
