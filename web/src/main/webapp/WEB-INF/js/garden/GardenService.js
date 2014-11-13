@@ -218,7 +218,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             }
         };
 
-        this.setplantArray = function (pda) {
+        this.setPlants = function (pda) {
             gardenSelf.yearSquareMap = {};
             updatePlants = {addList: [], removeList: []};
             init(pda);

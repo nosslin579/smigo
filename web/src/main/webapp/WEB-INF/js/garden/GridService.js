@@ -22,12 +22,11 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
 
     return {
         getGridSizeCss: function (garden) {
-            console.time('grid size');
-            var squareArrays = [garden.yearSquareMap[garden.selectedYear], garden.yearSquareMap[garden.selectedYear - 1]]
-            var bounds = getBounds(squareArrays);
+//            console.time('grid size');
+            var bounds = getBounds([garden.yearSquareMap[garden.selectedYear], garden.yearSquareMap[garden.selectedYear - 1]]);
             var margin = 48 * 2;
-            console.timeEnd('grid size');
-            $log.debug('Grid CSS ', bounds, garden);
+//            console.timeEnd('grid size');
+//            $log.debug('Grid CSS ', bounds, garden);
             return {
                 'margin-top': (-100001 + -bounds.ymin * 48 + margin) + 'px',
                 'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',
