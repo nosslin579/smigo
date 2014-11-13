@@ -70,10 +70,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
     .run(function ($rootScope, $log) {
         $log.log("App run", initData);
 
-        $rootScope.getObjectLength = function (obj) {
-            return Object.keys(obj).length;
-        };
-
         /*
          $rootScope.$on('current-user-changed', function (event, user) {
          $log.log('Broadcast: current-user-changed', [event, user]);

@@ -10,12 +10,10 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
         };
         squareArrays.forEach(function (squareArray) {
             angular.forEach(squareArray, function (square, index) {
-                if (Object.keys(square.plants).length) {
-                    ret.xmax = Math.max(square.location.x, ret.xmax);
-                    ret.ymax = Math.max(square.location.y, ret.ymax);
-                    ret.xmin = Math.min(square.location.x, ret.xmin);
-                    ret.ymin = Math.min(square.location.y, ret.ymin);
-                }
+                ret.xmax = Math.max(square.location.x, ret.xmax);
+                ret.ymax = Math.max(square.location.y, ret.ymax);
+                ret.xmin = Math.min(square.location.x, ret.xmin);
+                ret.ymin = Math.min(square.location.y, ret.ymin);
             });
         });
         return ret;
@@ -24,10 +22,12 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
 
     return {
         getGridSizeCss: function (garden) {
-//            $log.debug('Grid CSS ', squareArrays);
+            console.time('grid size');
             var squareArrays = [garden.yearSquareMap[garden.selectedYear], garden.yearSquareMap[garden.selectedYear - 1]]
             var bounds = getBounds(squareArrays);
             var margin = 48 * 2;
+            console.timeEnd('grid size');
+            $log.debug('Grid CSS ', bounds, garden);
             return {
                 'margin-top': (-100001 + -bounds.ymin * 48 + margin) + 'px',
                 'width': (100000 + 47 + bounds.xmax * 48 + margin) + 'px',

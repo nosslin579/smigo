@@ -2,11 +2,11 @@
     <div class="square-container" ng-click="onGridClick($event,garden)" ng-style="getGridSizeCss(garden)">
         <div ng-repeat="s in garden.getSquares()" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
             <div class="square-tooltip" square-info="s" ng-class="{show: s.showTooltip}"></div>
-            <div ng-repeat="p in s.plants">
+            <div ng-repeat="p in s.plantArray">
                 <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant pull-left" alt="{{p.species.vernacularName}}"
-                     ng-class="{'small-species': getObjectLength(s.plants) > 1}"/>
+                     ng-class="{'small-species': s.plantArray.length > 1}"/>
             </div>
         </div>
-        <div ng-repeat="s in garden.yearSquareMap[garden.selectedYear-1]" class="visible-remainder" ng-if="getObjectLength(s.plants) > 0" ng-style="getSquarePositionCss(s)"></div>
+        <div ng-repeat="s in garden.yearSquareMap[garden.selectedYear-1]" class="visible-remainder" ng-if="s.plantArray.length > 0" ng-style="getSquarePositionCss(s)"></div>
     </div>
 </div>

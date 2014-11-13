@@ -10,7 +10,7 @@ angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, 
             squareElement.bind('mouseenter', function (event) {
                 if (!scope.square.showTooltip) {
                     showPromise = $timeout(function showSquareTooltip() {
-                            angular.forEach(scope.square.plants, function (plant) {
+                            angular.forEach(scope.square.plantArray, function (plant) {
                                 plant.hints = plant.getHints();
                             });
                             $timeout(function () {

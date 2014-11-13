@@ -1,12 +1,12 @@
 <table class="table table-bordered">
     <tr>
-        <th ng-repeat="p in square.plants">
+        <th ng-repeat="p in square.plantArray">
             <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/> {{p.species.vernacularName}}
         </th>
     </tr>
 
     <tr>
-        <td ng-repeat="p in square.plants">
+        <td ng-repeat="p in square.plantArray">
             <div ng-repeat="h in p.hints | orderBy:'category':true">
                 <span class="glyphicon glyphicon-ok {{h.category}}"></span><span>{{h|translate}}</span>
             </div>

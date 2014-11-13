@@ -44,13 +44,13 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
         var hasCauser = {
                 companion: function (square) {
-                    return square.plants.hasOwnProperty(rule.param);
+                    return square.containsSpecies(rule.param);
                 },
                 rotation: function (square) {
                     return square.containsFamily(rule.param);
                 },
                 repetition: function (square) {
-                    return square.plants.hasOwnProperty(rule.host);
+                    return square.containsSpecies(rule.host);
                 }
             },
             speciesArg = new Message("msg.species" + rule.param),

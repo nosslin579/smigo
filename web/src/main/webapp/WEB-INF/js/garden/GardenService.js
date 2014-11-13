@@ -14,7 +14,8 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             for (var i = 0; i < pda.length; i++) {
                 var plantData = pda[i];
                 var species = SpeciesService.getSpecies(plantData.speciesId);
-                gardenSelf.getSquare(plantData.year, plantData.x, plantData.y).setPlant(species);
+                var square = gardenSelf.getSquare(plantData.year, plantData.x, plantData.y);
+                square.plantArray.push(new Plant(species, square.location));
             }
 
 
@@ -40,7 +41,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             function doHttpPost() {
                 $http.post('/rest/plant', updatePlants)
                     .then(function (response) {
-                        $log.debug('Plants saved', angular.copy(updatePlants));
+                        $log.debug('plantArray saved', angular.copy(updatePlants));
                         updatePlants.addList = [];
                         updatePlants.removeList = [];
                     })
@@ -123,30 +124,36 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             }
             var squareSelf = this;
             this.location = location;
-            this.plants = {};
-            this.setPlant = function (species) {
-                squareSelf.plants[species.id] = new Plant(species, squareSelf.location);
-            }
+            this.plantArray = [];
             this.addPlant = function (species) {
-                if (!squareSelf.plants[species.id]) {
-                    squareSelf.plants[species.id] = new Plant(species, squareSelf.location);
-                    sendToServer({add: squareSelf.plants[species.id]});
+                if (!squareSelf.plantArray.find(species.id, 'id')) {
+                    squareSelf.plantArray.push(new Plant(species, squareSelf.location));
+                    sendToServer({add: squareSelf.plantArray.last()});
                     $log.debug('Plant added: ' + species.scientificName, squareSelf);
                 }
                 return squareSelf;
             }
             this.removePlant = function () {
                 $log.debug('Removing plant(s)', angular.copy(squareSelf));
-                angular.forEach(squareSelf.plants, function (plant, id) {
+                angular.forEach(squareSelf.plantArray, function (plant, id) {
                     sendToServer({remove: plant});
                 });
-                squareSelf.plants = {};
+                squareSelf.plantArray = [];
             };
 
             this.containsFamily = function (familyId) {
-                for (speciesId in squareSelf.plants) {
-                    var plant = squareSelf.plants[speciesId];
+                for (i in squareSelf.plantArray) {
+                    var plant = squareSelf.plantArray[i];
                     if (plant.species && plant.species.family && plant.species.family.id === familyId) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            this.containsSpecies = function (speciesId) {
+                for (i in squareSelf.plantArray) {
+                    var plant = squareSelf.plantArray[i];
+                    if (plant.species && plant.species.id === speciesId) {
                         return true;
                     }
                 }
@@ -190,7 +197,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
 
             //add perennial from trailingYear
             angular.forEach(copyFromSquareArray, function (square) {
-                angular.forEach(square.plants, function (plant) {
+                angular.forEach(square.plantArray, function (plant) {
                     if (!plant.species.annual) {
                         var newSquare = new Square(new Location(year, plant.location.x, plant.location.y)).addPlant(plant.species);
                         newYearSquareArray.push(newSquare);
@@ -211,7 +218,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             }
         };
 
-        this.setPlants = function (pda) {
+        this.setplantArray = function (pda) {
             gardenSelf.yearSquareMap = {};
             updatePlants = {addList: [], removeList: []};
             init(pda);
@@ -224,7 +231,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
         getGarden: function (username) {
             return $http.get('/rest/plant/' + username)
                 .then(function (response) {
-                    $log.info('Plants retrieved successfully. Response:', response);
+                    $log.info('plantArray retrieved successfully. Response:', response);
                     return new Garden(response.data);
                 });
         },
