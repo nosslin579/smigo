@@ -69,4 +69,16 @@ class JdbcPlantDao implements PlantDao {
                 "DELETE FROM plants WHERE (user_id = " + userId + " AND species_id = :speciesId AND year = :year AND x = :x AND y = :y)",
                 batch);
     }
+
+    @Override
+    public void deletePlant(int userId, PlantData plantData) {
+        String sql = "DELETE FROM plants WHERE (user_id = ? AND species_id = ? AND year = ? AND x = ? AND y = ?)";
+        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY());
+    }
+
+    @Override
+    public void addPlant(int userId, PlantData plantData) {
+        String sql = "INSERT INTO plants(user_id, species_id, year, x, y) VALUES (?,?,?,?,?)";
+        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY());
+    }
 }

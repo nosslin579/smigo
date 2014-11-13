@@ -31,9 +31,15 @@ public class PlantController implements Serializable {
         return plantHandler.getPlants(username);
     }
 
-    @RequestMapping(value = {"/update-garden", "/rest/plant"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/plant"}, method = RequestMethod.POST)
     @ResponseBody
-    public void updateGarden(@RequestBody UpdateGardenBean updateGardenBean, @AuthenticationPrincipal AuthenticatedUser user) {
-        plantHandler.updateGarden(user, updateGardenBean);
+    public void updateGarden(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
+        plantHandler.addPlant(user, plantData);
+    }
+
+    @RequestMapping(value = {"/rest/plant/delete"}, method = RequestMethod.POST)
+    @ResponseBody
+    public void deletePlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
+        plantHandler.deletePlant(user, plantData);
     }
 }

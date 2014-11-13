@@ -8,14 +8,6 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
 
     $timeout(pingServer, 10000, false);
 
-    $window.addEventListener("beforeunload", function (event) {
-        garden.save();
-    });
-
-    $rootScope.$on('user-logout', function () {
-        garden.save();
-    });
-
     $rootScope.$on('current-user-changed', function (event, newUser) {
         if (newUser) {
             $http.get('/rest/plant/' + newUser.username)

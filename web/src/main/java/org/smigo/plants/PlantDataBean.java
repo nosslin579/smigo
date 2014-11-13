@@ -39,6 +39,22 @@ class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializabl
         return year;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setSpeciesId(int speciesId) {
+        this.speciesId = speciesId;
+    }
+
     @Override
     public int compareTo(PlantDataBean p) {
         if (this.year != p.year)

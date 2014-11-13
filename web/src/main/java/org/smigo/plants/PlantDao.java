@@ -11,4 +11,7 @@ interface PlantDao {
 
     void deletePlants(List<? extends PlantData> plants, int userId);
 
+    void deletePlant(int userId, PlantData plantData);
+
+    void addPlant(int userId, PlantData plantData);
 }
