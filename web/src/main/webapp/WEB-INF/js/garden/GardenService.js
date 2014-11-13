@@ -8,7 +8,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
         function init(pda) {
             if (!pda || !pda.length) {
                 var year = new Date().getFullYear();
-                gardenSelf.yearSquareMap[year] = [new Square(new Location(year, 0, 0))];
+                gardenSelf.yearSquareMap[year] = [new Square(new Location(year, 22, 11)), new Square(new Location(year, 0, 0))];
             }
 
             for (var i = 0; i < pda.length; i++) {
@@ -16,6 +16,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 gardenSelf.getSquare(plantData.year, plantData.x, plantData.y).setPlant(species);
             }
+
 
             gardenSelf.selectedYear = gardenSelf.getAvailableYears().last();
             $log.info("Garden created:", gardenSelf);

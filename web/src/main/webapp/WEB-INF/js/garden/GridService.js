@@ -10,10 +10,12 @@ function GridService($http, $window, $timeout, $rootScope, $q, $log) {
         };
         squareArrays.forEach(function (squareArray) {
             angular.forEach(squareArray, function (square, index) {
-                ret.xmax = Math.max(square.location.x, ret.xmax);
-                ret.ymax = Math.max(square.location.y, ret.ymax);
-                ret.xmin = Math.min(square.location.x, ret.xmin);
-                ret.ymin = Math.min(square.location.y, ret.ymin);
+                if (Object.keys(square.plants).length) {
+                    ret.xmax = Math.max(square.location.x, ret.xmax);
+                    ret.ymax = Math.max(square.location.y, ret.ymax);
+                    ret.xmin = Math.min(square.location.x, ret.xmin);
+                    ret.ymin = Math.min(square.location.y, ret.ymin);
+                }
             });
         });
         return ret;
