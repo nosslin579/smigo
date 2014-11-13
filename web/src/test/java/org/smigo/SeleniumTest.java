@@ -126,6 +126,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         UserBean user = userDao.getUser(username);
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getUsername(), username);
+        log.info("Register finished successfully. Username:" + username);
     }
 
     @Test(enabled = true)
@@ -147,6 +148,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final WebElement plant = d.findElement(By.className("plant"));
         Thread.sleep(500);
         Assert.assertEquals(plant.getAttribute("alt"), speciesName);
+        log.info("Add species finished successfully. Username:" + username);
 
     }
 
@@ -175,6 +177,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
         Assert.assertEquals(d.findElements(By.className("select-year")).size(), 3);
         Assert.assertEquals(d.findElements(By.className("plant")).size(), 1);
+        log.info("Add year finished successfully.");
 
     }
 
@@ -197,6 +200,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //login again
         login(username, NEW_PASSWORD);
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        log.info("Change password finished successfully. Username:" + username);
     }
 
     //    @Test
@@ -207,6 +211,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         WebElement element = d.findElement(By.id("bad-credentials"));
         Assert.assertTrue(element.isDisplayed());
         Assert.assertFalse(element.getText().isEmpty());
+        log.info("LoginWrongPassword finished successfully. Username:" + username);
     }
 
     @Test(enabled = false)
@@ -235,6 +240,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //login
         login(user.getUsername(), NEW_PASSWORD);
         Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        log.info("Reset password finished successfully. Username:" + user.getUsername());
     }
 
     @Test(enabled = false)
@@ -291,5 +297,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.name("displayName")).getAttribute("value"), DISPLAY_NAME);
         Assert.assertEquals(new Select(d.findElement(By.name("locale"))).getFirstSelectedOption().getAttribute("value"), "sv");
         Assert.assertEquals(d.findElement(By.name("about")).getAttribute("value"), NON_LATIN_LETTERS);
+        log.info("Update account finished successfully. Username:" + username);
     }
 }
