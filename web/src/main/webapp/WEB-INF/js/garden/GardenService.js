@@ -85,7 +85,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.location = location;
             this.plantArray = [];
             this.addPlant = function (species) {
-                if (!squareSelf.plantArray.find(species.id, 'id')) {
+                if (!squareSelf.containsSpecies(species.id) && squareSelf.plantArray.length <= 4) {
                     var plant = new Plant(species, squareSelf.location);
                     squareSelf.plantArray.push(plant);
                     $http.post('/rest/plant', new PlantData(plant))
