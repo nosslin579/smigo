@@ -5,11 +5,20 @@ function SpeciesTooltip($log, $timeout, $window, SpeciesService) {
         templateUrl: 'species-tooltip.html',
         link: function link(scope, element, attributes) {
             var showPromise;
+
+            //using visibility because need height property
             element.css('visibility', 'hidden');
             scope.species = SpeciesService.getAllSpecies()[0];
 
+            function close() {
+                $timeout.cancel(showPromise);
+                scope.$apply(function () {
+                    element.css('visibility', 'hidden');
+                });
+            };
+
             element.parent().on('mouseenter', 'a', function (event) {
-//                $log.log('mouseenter: ', [element, this, event]);
+//                $log.log('Showing species tooltip: ' + event.originalEvent.type, [element, this, event]);
                 if (this.dataset.speciesid) {
                     var id = +this.dataset.speciesid;
                     showPromise = $timeout(function () {
@@ -34,12 +43,8 @@ function SpeciesTooltip($log, $timeout, $window, SpeciesService) {
                 }
             });
 
-            element.parent().on('mouseleave', 'a', function () {
-                $timeout.cancel(showPromise);
-                scope.$apply(function () {
-                    element.css('visibility', 'hidden');
-                });
-            });
+            element.on('mouseleave', close);
+            element.on('click', '.close, .popover-content', close);
         }
 
     }

@@ -1,8 +1,12 @@
 <div class="popover right in fade show">
     <div class="popover-inner">
         <div class="popover-title text-center">
-            <span class="btn-lg">{{species.vernacularName}}</span>
             <img class="small-species" ng-src="{{'/static/species/' + species.iconFileName}}"/>
+            <strong style="padding-right: 20px;">{{species.vernacularName}}</strong>
+            <button type="button" class="close" style="color: #000">
+                <span>&times;</span>
+            </button>
+
         </div>
 
         <div class="popover-content" ng-if="species.item">
