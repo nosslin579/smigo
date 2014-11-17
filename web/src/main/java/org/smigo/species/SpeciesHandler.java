@@ -3,7 +3,6 @@ package org.smigo.species;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.User;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,7 +41,7 @@ public class SpeciesHandler {
         }
     }
 
-    public List<Species> getSpeciesMap(User user) {
+    public List<Species> getSpeciesMap() {
         return speciesDao.getDefaultSpecies();
     }
 

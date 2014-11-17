@@ -22,8 +22,8 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Species> getSpecies(@AuthenticationPrincipal AuthenticatedUser user) {
-        return speciesHandler.getSpeciesMap(user);
+    public Collection<Species> getSpecies() {
+        return speciesHandler.getSpeciesMap();
     }
 
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)

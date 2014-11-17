@@ -184,12 +184,6 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             return !state.speciesArray.some(function (species) {
                 return species.vernacularName && species.vernacularName.toLocaleLowerCase() === vernacularName.toLowerCase();
             });
-        },
-        loadSpeciesFromUser: function (userId) {
-            $http.get('/rest/species/' + userId)
-                .then(function (response) {
-
-                });
         }
     }
 }
