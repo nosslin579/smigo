@@ -20,6 +20,8 @@ INSERT INTO rules SELECT * FROM nosslin2_db.rules;
 DROP TABLE species;
 CREATE TABLE species LIKE nosslin2_db.species;
 INSERT INTO species SELECT * FROM nosslin2_db.species;
+ALTER TABLE species AUTO_INCREMENT=30200;
+
 
 DROP TABLE species_translation;
 CREATE TABLE species_translation LIKE nosslin2_db.species_translation;
