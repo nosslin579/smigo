@@ -167,7 +167,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             if (species) {
                 return species;
             }
-            var ret = new Species(id, '');
+            var ret = new Species(id, 'id' + id);
             state.speciesArray.push(ret);
             $http.get('/rest/species/' + id)
                 .then(function (response) {

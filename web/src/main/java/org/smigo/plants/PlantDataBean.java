@@ -2,7 +2,7 @@ package org.smigo.plants;
 
 import java.io.Serializable;
 
-class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
+public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
     private int x;
     private int y;
     private int year;

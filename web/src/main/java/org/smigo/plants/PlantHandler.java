@@ -67,4 +67,11 @@ public class PlantHandler {
             userSession.getPlants().remove(plantData);
         }
     }
+
+    public void setPlants(AuthenticatedUser user, List<PlantDataBean> plantData) {
+        if (user == null) {
+            userSession.getPlants().removeAll(userSession.getPlants());
+            userSession.getPlants().addAll(plantData);
+        }
+    }
 }

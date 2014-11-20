@@ -6,8 +6,10 @@ import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class PlantController implements Serializable {
 
     @Autowired
     private PlantHandler plantHandler;
+
+    @InitBinder
+    public void initListBinder(WebDataBinder binder) {
+        binder.setAutoGrowCollectionLimit(10000);
+    }
 
     @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
@@ -41,5 +48,11 @@ public class PlantController implements Serializable {
     @ResponseBody
     public void deletePlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
         plantHandler.deletePlant(user, plantData);
+    }
+
+    @RequestMapping(value = {"/plant/upload"}, method = RequestMethod.POST)
+    public String upload(@Valid UploadBean uploadBean, @AuthenticationPrincipal AuthenticatedUser user) {
+        plantHandler.setPlants(user, uploadBean.getPlants());
+        return "redirect:/";
     }
 }

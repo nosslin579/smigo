@@ -38,7 +38,7 @@ public class AboutController {
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
 
         model.addAttribute("user", userHandler.getUser(user));
-        model.addAttribute("species", speciesHandler.getSpeciesMap(user));
+        model.addAttribute("species", speciesHandler.getSpeciesMap());
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
