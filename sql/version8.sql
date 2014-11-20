@@ -30,6 +30,30 @@ UPDATE plants SET species_id = 10021 WHERE species_id = 202;
 UPDATE plants SET species_id = 10022 WHERE species_id = 203;
 UPDATE plants SET species_id = 10023 WHERE species_id = 204;
 
+UPDATE species_translation SET species_id = 10001 WHERE species_id = 174;
+UPDATE species_translation SET species_id = 10002 WHERE species_id = 176;
+UPDATE species_translation SET species_id = 10003 WHERE species_id = 177;
+UPDATE species_translation SET species_id = 10004 WHERE species_id = 178;
+UPDATE species_translation SET species_id = 10005 WHERE species_id = 179;
+UPDATE species_translation SET species_id = 10006 WHERE species_id = 181;
+UPDATE species_translation SET species_id = 10007 WHERE species_id = 188;
+UPDATE species_translation SET species_id = 10008 WHERE species_id = 189;
+UPDATE species_translation SET species_id = 10009 WHERE species_id = 190;
+UPDATE species_translation SET species_id = 10010 WHERE species_id = 191;
+UPDATE species_translation SET species_id = 10011 WHERE species_id = 192;
+UPDATE species_translation SET species_id = 10012 WHERE species_id = 193;
+UPDATE species_translation SET species_id = 10013 WHERE species_id = 194;
+UPDATE species_translation SET species_id = 10014 WHERE species_id = 195;
+UPDATE species_translation SET species_id = 10015 WHERE species_id = 196;
+UPDATE species_translation SET species_id = 10016 WHERE species_id = 197;
+UPDATE species_translation SET species_id = 10017 WHERE species_id = 198;
+UPDATE species_translation SET species_id = 10018 WHERE species_id = 199;
+UPDATE species_translation SET species_id = 10019 WHERE species_id = 200;
+UPDATE species_translation SET species_id = 10020 WHERE species_id = 201;
+UPDATE species_translation SET species_id = 10021 WHERE species_id = 202;
+UPDATE species_translation SET species_id = 10022 WHERE species_id = 203;
+UPDATE species_translation SET species_id = 10023 WHERE species_id = 204;
+
 UPDATE species SET id = 10001 WHERE id = 174;
 UPDATE species SET id = 10002 WHERE id = 176;
 UPDATE species SET id = 10003 WHERE id = 177;
@@ -68,7 +92,6 @@ INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (136
 
 INSERT INTO species(id,scientific_name,family_id) VALUES (23,'Allium fistulosum',7202);
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (23,'Welsh onion');
-INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (23,'Cebolleta','es');
 
 INSERT INTO species(id,scientific_name,family_id) VALUES (133,'Allium ursinum',7202);
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (133,'Ramsons');
@@ -110,10 +133,6 @@ INSERT INTO species_translation(species_id,vernacular_name) VALUES (148,'Lentil'
 INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (148,'Lenteja','es');
 
 INSERT INTO species(id,scientific_name,family_id) VALUES (144,'Vicia Sativa',7205);
-INSERT INTO species_translation(species_id,vernacular_name) VALUES (144,'Vetch');
-INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (144,'Veza','es');
-
-INSERT INTO species(id,scientific_name,family_id) VALUES (147,'Vicia Sativa',7205);
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (144,'Vetch');
 INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (144,'Veza','es');
 
@@ -166,7 +185,7 @@ INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (130
 
 INSERT INTO species(id,scientific_name,family_id) VALUES (138,'Myosotis sylvatica',7214);
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (138,'Forget-me-not');
-INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (,'','es');
+INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (138,'Nomeolvides','es');
 
 INSERT INTO species(id,scientific_name,family_id) VALUES (151,'Melissa officinalis',7215);
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (151,'Lemon balm');
