@@ -1,4 +1,4 @@
-angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, GardenService) {
+angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, GardenService, isTouchDevice) {
     return {
         link: function link(scope, tooltipElement, attrs) {
             var showPromise,
@@ -7,7 +7,7 @@ angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, 
 //            $log.log('square info link', [scope, tooltipElement, attrs]);
 
             //open popup after 1sec on mouseenter if not already open
-            squareElement.bind('mouseenter', function (event) {
+            function delayedOpen(event) {
                 if (!scope.square.showTooltip) {
                     showPromise = $timeout(function showSquareTooltip() {
                             angular.forEach(scope.square.plantArray, function (plant) {
@@ -25,13 +25,18 @@ angular.module('smigoModule').directive('squareInfo', function ($log, $timeout, 
                         }
                         , 1000);
                 }
-            });
+            }
 
-            //dont show tooltip if pointer leaves before 1sec and hide if leave after 1sec
-            squareElement.bind('mouseleave', function (event) {
+            function close(event) {
                 $timeout.cancel(showPromise);
                 tooltipElement.hide();
-            });
+            }
+
+            if (!isTouchDevice) {
+                squareElement.bind('mouseenter', delayedOpen);
+                squareElement.bind('mouseleave', close);
+            }
+
         },
         templateUrl: 'squareinfo.html',
         scope: {square: '=squareInfo'}
