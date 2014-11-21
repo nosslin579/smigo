@@ -1,5 +1,5 @@
 "use strict";
-angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
+angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
     .config(function ($routeProvider, $logProvider, $provide, $locationProvider) {
         $logProvider.debugEnabled(false);
 
@@ -67,8 +67,8 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
             };
         }]);
     })
-    .run(function ($rootScope, $log) {
-        $log.log("App run", initData);
+    .run(function ($rootScope, $log, isTouchDevice) {
+        $log.log("App run. isTouchDevice:" + isTouchDevice, initData);
 
         /*
          $rootScope.$on('current-user-changed', function (event, user) {
@@ -92,4 +92,5 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
          });
          */
 
-    });
+    })
+    .value('isTouchDevice', !!('ontouchstart' in window));

@@ -1,52 +1,86 @@
-function SpeciesTooltip($log, $timeout, $window, SpeciesService) {
+function SpeciesTooltip($log, $timeout, $window, SpeciesService, isTouchDevice) {
     return {
         restrict: 'A',
         scope: {},
         templateUrl: 'species-tooltip.html',
-        link: function link(scope, element, attributes) {
-            var showPromise;
+        link: function link(scope, tooltipElement, attributes) {
+            var showPromise,
+                speciesFrameElement = tooltipElement.parent();
 
             //using visibility because need height property
-            element.css('visibility', 'hidden');
+            tooltipElement.css('visibility', 'hidden');
+            //avoid scope.species being undefied which may cause errors
             scope.species = SpeciesService.getAllSpecies()[0];
 
-            function close() {
+            function open(event) {
+                event.preventDefault();
+                if (!event.currentTarget.dataset.speciesid) {
+                    return;
+                }
+                var id = +event.currentTarget.dataset.speciesid;
+                scope.species = SpeciesService.getSpecies(id);
+                $timeout(function () {
+                    var ret, marginbottom = 35, marginTop = 50,
+                        height = tooltipElement.children().height(),
+                        bottom = event.pageY + height / 2 + marginbottom,
+                        top = event.pageY - height / 2 + marginTop;
+
+                    if (top < 0) {//off screen at the top
+                        ret = marginTop;
+                    } else if (bottom > $window.innerHeight) {//off screen at the bottom
+                        ret = $window.innerHeight - height - marginbottom;
+                    } else {
+                        ret = event.pageY - height / 2;
+                    }
+                    tooltipElement.css('top', ret + 'px');
+                    tooltipElement.css('visibility', 'visible');
+                }, 0);
+            }
+
+            function cancel() {
                 $timeout.cancel(showPromise);
+            }
+
+            function close(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                cancel();
                 scope.$apply(function () {
-                    element.css('visibility', 'hidden');
+                    tooltipElement.css('visibility', 'hidden');
                 });
             };
 
-            element.parent().on('mouseenter', 'a', function (event) {
-//                $log.log('Showing species tooltip: ' + event.originalEvent.type, [element, this, event]);
-                if (this.dataset.speciesid) {
-                    var id = +this.dataset.speciesid;
-                    showPromise = $timeout(function () {
-                        scope.species = SpeciesService.getSpecies(id);
-                        $timeout(function () {
-                            var ret, marginbottom = 35, marginTop = 50,
-                                height = element.children().height(),
-                                bottom = event.pageY + height / 2 + marginbottom,
-                                top = event.pageY - height / 2 + marginTop;
+            function delayedOpen(event) {
+                $log.log('Showing species tooltip: ' + event.type, [tooltipElement, this, event]);
+                showPromise = $timeout(function () {
+                    open(event);
+                }, 500);
+            }
 
-                            if (top < 0) {//off screen at the top
-                                ret = marginTop;
-                            } else if (bottom > $window.innerHeight) {//off screen at the bottom
-                                ret = $window.innerHeight - height - marginbottom;
-                            } else {
-                                ret = event.pageY - height / 2;
-                            }
-                            element.css('top', ret + 'px');
-                            element.css('visibility', 'visible');
-                        }, 0);
-                    }, 500);
+            function toggle(event) {
+                var selected = $(event.currentTarget).parent().hasClass('active');
+                if (selected && tooltipElement.css('visibility') === 'hidden') {
+                    open(event);
+                } else {
+                    scope.$apply(function () {
+                        tooltipElement.css('visibility', 'hidden');
+                    });
                 }
-            });
+            }
 
-            element.on('mouseleave', close);
-            element.on('click', '.close, .popover-content', close);
+
+            if (isTouchDevice) {
+                /*Touch events*/
+                speciesFrameElement.on('touchstart', 'a', toggle);
+                tooltipElement.on('touchstart', '.close, .popover-content', close);
+            } else {
+                /*Mouse events*/
+                speciesFrameElement.on('mouseenter', 'a', delayedOpen);
+                tooltipElement.on('mouseleave', close);
+                speciesFrameElement.on('mouseleave', 'a', cancel);
+                tooltipElement.on('click', '.close, .popover-content', close);
+            }
         }
-
-    }
+    };
 }
 angular.module('smigoModule').directive('speciesTooltip', SpeciesTooltip);
