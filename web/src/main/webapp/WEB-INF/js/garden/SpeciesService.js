@@ -105,10 +105,11 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         getState: function () {
             return state;
         },
-        selectSpecies: function (species) {
+        selectSpecies: function (species, event) {
+            event && event.preventDefault();
             state.selectedSpecies = species;
             state.action = 'add';
-            $log.log('Species selected:', state);
+            $log.log('Species selected:', state, event);
         },
         addSpecies: function (vernacularName) {
             state.pendingAdd = true;

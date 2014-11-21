@@ -31,8 +31,8 @@
                 <ul class="nav nav-pills nav-stacked">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
-                        ng-click="selectSpecies(s)">
-                        <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
+                        ng-click="selectSpecies(s, $event)">
+                    <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">
