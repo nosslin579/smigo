@@ -6,6 +6,9 @@ CHANGE item item tinyint(1) DEFAULT 0;
 ALTER TABLE species
 CHANGE annual annual tinyint(1) DEFAULT 1;
 
+ALTER TABLE species
+DROP COLUMN vernacularname;
+
 UPDATE plants SET species_id = 10001 WHERE species_id = 174;
 UPDATE plants SET species_id = 10002 WHERE species_id = 176;
 UPDATE plants SET species_id = 10003 WHERE species_id = 177;
