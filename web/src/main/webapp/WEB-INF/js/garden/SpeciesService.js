@@ -135,16 +135,17 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     state.pendingAdd = false;
                 });
         },
-        searchSpecies: function (query) {
-            var queryLowerCase = query.toLocaleLowerCase();
+        searchSpecies: function (sq) {
+            var queryLowerCase = sq.query.toLocaleLowerCase();
             //Cancel search if new search within 2sec
             $timeout.cancel(search.promise);
-            if (!query || query.length <= 2 || search.previous.indexOf(queryLowerCase) != -1) {
+            if (!sq.query || sq.query.length <= 2 || search.previous.indexOf(queryLowerCase) != -1) {
                 return;
             }
+            sq.proccessing = true;
             search.promise = $timeout(function () {
-                $log.debug('Search with query', query);
-                $http.post('/rest/species/search', {query: query})
+                $log.debug('Search with query', sq);
+                $http.post('/rest/species/search', {query: sq.query})
                     .then(function (response) {
                         search.previous.push(queryLowerCase);
                         response.data.forEach(function (species) {
@@ -154,6 +155,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                             }
                         });
                         $log.debug('Response from search ' + queryLowerCase, response);
+                        sq.proccessing = false;
                     });
             }, 2000);
         },

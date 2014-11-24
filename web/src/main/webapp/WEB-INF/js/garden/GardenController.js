@@ -1,5 +1,7 @@
 function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService, GridService) {
 
+    $scope.search = {query: '', proccessing: false};
+
     $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
     $scope.userState = StateService.getUser();
@@ -17,7 +19,7 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
         if (topResult) {
             SpeciesService.selectSpecies(topResult);
         }
-        $scope.speciesQuery = '';
+        $scope.search.query = '';
     };
     $scope.onSquareClick = function (clickEvent, square) {
         $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);

@@ -25,20 +25,20 @@
                     </div>
                 </div>
                 <hr/>
-                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(speciesQuery)">
-                    <input class="form-control full-width" type="text" placeholder="{{'search' | translate}}" ng-model="speciesQuery" ng-change="searchSpecies(speciesQuery)">
+                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query)">
+                    <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" placeholder="{{'search' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)">
                 </form>
                 <ul class="nav nav-pills nav-stacked">
-                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:speciesQuery"
+                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
                     <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
-                    <li ng-if="isSpeciesAddable(speciesQuery) && userState.currentUser">
-                        <a id="add-species-link" href="" ng-click="addSpecies(speciesQuery)">
+                    <li ng-if="isSpeciesAddable(search.query) && userState.currentUser">
+                        <a id="add-species-link" href="" ng-click="addSpecies(search.query)">
                             <span class="glyphicon glyphicon-plus"></span>
-                            {{'msg.add-species' | translate:speciesQuery }}
+                            {{'msg.add-species' | translate:search.query }}
                         </a>
                     </li>
                 </ul>

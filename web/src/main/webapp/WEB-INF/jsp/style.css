@@ -35,6 +35,10 @@ body > .angular-view {
     background-color: transparent;
 }
 
+.loadinggif {
+    background: url('http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif') no-repeat right center;
+}
+
 /* ############### login  ##################################*/
 .social-sprite.facebook {
     background-position: -1px 0;
