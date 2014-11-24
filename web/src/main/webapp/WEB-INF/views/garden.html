@@ -41,6 +41,12 @@
                             {{'msg.add-species' | translate:search.query }}
                         </a>
                     </li>
+                    <li ng-if="speciesState.pendingAdd" class="loadinggif">
+                        <a>
+                            <span class="glyphicon glyphicon-plus"></span>
+                            {{'msg.adding' | translate:search.query }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
