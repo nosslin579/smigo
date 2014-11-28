@@ -36,6 +36,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
+            this.arg = arg;
             this.category = category;
             this.hint = {messageKey: hintMessageKey, messageParameter: arg, category: category}
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
@@ -53,8 +54,8 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     return square.containsSpecies(rule.host);
                 }
             },
-            speciesArg = new Message("msg.species" + rule.param),
-            speciesHost = new Message("msg.species" + rule.host),
+            speciesArg = new Species(rule.param),
+            speciesHost = new Species(rule.host),
             familyArg = new Message("family" + rule.param);
 
         switch (rule.type) {

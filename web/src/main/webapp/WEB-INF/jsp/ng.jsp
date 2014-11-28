@@ -34,6 +34,8 @@
         <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
         <%@ include file="../js/garden/SquareInfoDirective.js" %>
 
+        <%@ include file="../js/species/SpeciesController.js" %>
+
         <%@ include file="../js/user/AcceptTermsOfServiceController.js" %>
         <%@ include file="../js/user/RegisterController.js" %>
         <%@ include file="../js/user/LoginController.js" %>
@@ -77,6 +79,9 @@
 </script>
 <script type="text/ng-template" id="wall.html">
     <%@ include file="../views/wall.html" %>
+</script>
+<script type="text/ng-template" id="species.html">
+    <%@ include file="../views/species.html" %>
 </script>
 <script type="text/ng-template" id="grid.html">
     <%@ include file="../views/grid.html" %>

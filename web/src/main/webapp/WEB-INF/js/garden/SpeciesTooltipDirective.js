@@ -1,4 +1,4 @@
-function SpeciesTooltip($log, $timeout, $window, SpeciesService, isTouchDevice) {
+function SpeciesTooltip($log, $timeout, $window, $location, SpeciesService, isTouchDevice) {
     return {
         restrict: 'A',
         scope: {},
@@ -68,17 +68,16 @@ function SpeciesTooltip($log, $timeout, $window, SpeciesService, isTouchDevice) 
                 }
             }
 
-
             if (isTouchDevice) {
                 /*Touch events*/
                 speciesFrameElement.on('touchstart', 'a', toggle);
-                tooltipElement.on('touchstart', '.close, .popover-content', close);
+                tooltipElement.on('touchstart', '.close', close);
             } else {
                 /*Mouse events*/
                 speciesFrameElement.on('mouseenter', 'a', delayedOpen);
                 tooltipElement.on('mouseleave', close);
                 speciesFrameElement.on('mouseleave', 'a', cancel);
-                tooltipElement.on('click', '.close, .popover-content', close);
+                tooltipElement.on('click', '.close', close);
             }
         }
     };
