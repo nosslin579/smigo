@@ -97,6 +97,9 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 return squareSelf;
             }
             this.removePlant = function () {
+                if (squareSelf.plantArray.length === 0) {
+                    return;
+                }
                 var plant = squareSelf.plantArray.pop();
                 $http.post('/rest/plant/delete', new PlantData(plant))
                     .catch(function (response) {
