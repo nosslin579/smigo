@@ -49,7 +49,7 @@ function translateFilter($rootScope, $log, $http, $route) {
 
         for (var i = 0; i < paramArray.length; i++) {
             var param = paramArray[i];
-            translatedMessage = translatedMessage.replace('{' + i + '}', param.messageKey ? msg[param.messageKey] : param);
+            translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param.messageKey ? msg[param.messageKey] : param);
         }
 //        $log.debug('Translate:'+translatedMessage, [msg, message, messageParameter]);
         return translatedMessage;
