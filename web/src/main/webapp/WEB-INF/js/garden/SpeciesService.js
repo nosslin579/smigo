@@ -36,6 +36,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
+            this.tags = rule.tags;
             this.arg = arg;
             this.category = category;
             this.hint = {messageKey: hintMessageKey, messageParameter: arg, category: category}
@@ -61,12 +62,6 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         switch (rule.type) {
             case 0:
                 return new Rule(rule, 'goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, speciesArg);
-            case 1:
-                return new Rule(rule, 'goodcompanion', 'hint.fightdisease', 0, 0, hasCauser.companion, speciesArg);
-            case 2:
-                return new Rule(rule, 'goodcompanion', "hint.repelpest", 0, 0, hasCauser.companion, speciesArg);
-            case 3:
-                return new Rule(rule, 'goodcompanion', "hint.improvesflavor", 0, 0, hasCauser.companion, speciesArg);
             case 4:
                 return new Rule(rule, 'badcompanion', "hint.badcompanion", 0, 0, hasCauser.companion, speciesArg);
             case 5:

@@ -22,6 +22,7 @@
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
                 <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                <small ng-repeat="t in r.tags"> - {{'msg.tag'+t|translate}}</small>
             </li>
         </ul>
     </div>
