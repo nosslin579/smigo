@@ -1,0 +1,29 @@
+<div class="container big-text">
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="page-header">
+                <h1>
+                    {{'rule'|translate}}
+                </h1>
+            </div>
+            <div>
+                <strong>{{'type'|translate}}: </strong>{{rule | translate}}
+            </div>
+            <div>
+                <strong>{{'general.species'|translate}}: </strong>{{host | translate}}
+            </div>
+            <div>
+                <strong>{{'msg.companion'|translate}}: </strong>{{rule.arg | translate}}
+            </div>
+            <h3>{{'msg.impact' | translate}}</h3>
+            <ul>
+                <li ng-repeat="t in rule.tags">
+                    {{'msg.tag'+t|translate}}
+                </li>
+            </ul>
+            <button class="btn btn-default btn-sm" ng-click="requestFeature('add-impact')">{{'add'|translate}}</button>
+
+
+        </div>
+    </div>
+</div>

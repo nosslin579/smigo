@@ -1,4 +1,4 @@
-<div class="container" style="font-size: 18px">
+<div class="container big-text">
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8">
             <div class="page-header">
@@ -28,10 +28,11 @@
             <div ng-if="species.rules.find('goodcompanion','category') != null">
                 <strong>{{'rule.goodcompanion'|translate}}</strong> -
                 <span>{{'rule.goodcompanion.expl'|translate:species}}</span>
-                <ul class="subtle-link">
+                <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
-                        <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
                         <small ng-repeat="t in r.tags"> - {{'msg.tag'+t|translate}}</small>
+                        <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
                     </li>
                 </ul>
             </div>

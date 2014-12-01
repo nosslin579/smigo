@@ -38,6 +38,10 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'species.html',
                 controller: 'SpeciesController'
             }).
+            when('/rule/:id', {
+                templateUrl: 'rule.html',
+                controller: 'RuleController'
+            }).
             when('/accept-terms-of-service', {
                 templateUrl: 'accept-terms-of-service.html',
                 controller: 'AcceptTermsOfServiceController'

@@ -32,16 +32,17 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
     function createRule(rule) {
 
-        function Rule(rule, category, hintMessageKey, yearsBackMin, yearsBackMax, hasCauser, arg) {
+        function Rule(rule, category, yearsBackMin, yearsBackMax, hasCauser, arg) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
             this.tags = rule.tags;
             this.arg = arg;
             this.category = category;
-            this.hint = {messageKey: hintMessageKey, messageParameter: arg, category: category}
+            this.hint = {messageKey: 'hint.' + category, messageParameter: arg, category: category}
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
             this.hasCauser = hasCauser;
+            this.messageKey = 'rule.' + category;
         }
 
         var hasCauser = {
@@ -61,15 +62,15 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
         switch (rule.type) {
             case 0:
-                return new Rule(rule, 'goodcompanion', 'hint.goodcompanion', 0, 0, hasCauser.companion, speciesArg);
+                return new Rule(rule, 'goodcompanion', 0, 0, hasCauser.companion, speciesArg);
             case 4:
-                return new Rule(rule, 'badcompanion', "hint.badcompanion", 0, 0, hasCauser.companion, speciesArg);
+                return new Rule(rule, 'badcompanion', 0, 0, hasCauser.companion, speciesArg);
             case 5:
-                return new Rule(rule, 'goodcroprotation', "hint.goodcroprotation", 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
+                return new Rule(rule, 'goodcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
             case 6:
-                return new Rule(rule, 'badcroprotation', "hint.badcroprotation", 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
+                return new Rule(rule, 'badcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
             case 7:
-                return new Rule(rule, 'speciesrepetition', "hint.speciesrepetition", 1, rule.param, hasCauser.repetition, rule.param);
+                return new Rule(rule, 'speciesrepetition', 1, rule.param, hasCauser.repetition, rule.param);
             default :
                 throw "No such rule type " + rule.type;
         }
@@ -183,6 +184,16 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             return !state.speciesArray.some(function (species) {
                 return species.vernacularName && species.vernacularName.toLocaleLowerCase() === vernacularName.toLowerCase();
             });
+        },
+        getRule: function (id) {
+            for (var i = 0; i < state.speciesArray.length; i++) {
+                var species = state.speciesArray[i];
+                for (var j = 0; j < species.rules.length; j++) {
+                    if (species.rules[j].id === id) {
+                        return species.rules[j];
+                    }
+                }
+            }
         }
     }
 }

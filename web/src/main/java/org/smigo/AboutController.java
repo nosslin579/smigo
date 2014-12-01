@@ -32,7 +32,10 @@ public class AboutController {
     @Autowired
     private SpeciesHandler speciesHandler;
 
-    @RequestMapping(value = {"/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*"}, method = RequestMethod.GET)
+    @RequestMapping(value = {
+            "/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*",
+            "/rule/*"
+    }, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
