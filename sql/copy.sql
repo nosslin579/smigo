@@ -31,13 +31,13 @@ DROP TABLE users;
 CREATE TABLE users LIKE nosslin2_db.users;
 INSERT INTO users SELECT * FROM nosslin2_db.users;
 
-DROP TABLE rules_x_tags;
-CREATE TABLE rules_x_tags LIKE nosslin2_db.rules_x_tags;
-INSERT INTO rules_x_tags SELECT * FROM nosslin2_db.rules_x_tags;
+DROP TABLE rules_x_impacts;
+CREATE TABLE rules_x_impacts LIKE nosslin2_db.rules_x_impacts;
+INSERT INTO rules_x_impacts SELECT * FROM nosslin2_db.rules_x_impacts;
 
-DROP TABLE tags;
-CREATE TABLE tags LIKE nosslin2_db.tags;
-INSERT INTO tags SELECT * FROM nosslin2_db.tags;
+DROP TABLE impacts;
+CREATE TABLE impacts LIKE nosslin2_db.impacts;
+INSERT INTO impacts SELECT * FROM nosslin2_db.impacts;
 
 DROP TABLE visitlog;
 CREATE TABLE visitlog LIKE nosslin2_db.visitlog;

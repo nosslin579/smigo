@@ -36,7 +36,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
-            this.tags = rule.tags;
+            this.impacts = rule.impacts;
             this.arg = arg;
             this.category = category;
             this.hint = {messageKey: 'hint.' + category, messageParameter: arg, category: category}

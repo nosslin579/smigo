@@ -9,14 +9,14 @@ public class RuleBean {
     private final int host;
     private final int type;
     private final int param;
-    private final List<Integer> tags;
+    private final List<Integer> impacts;
 
-    public RuleBean(int id, int host, int type, int param, List<Integer> tags) {
+    public RuleBean(int id, int host, int type, int param, List<Integer> impacts) {
         this.id = id;
         this.host = host;
         this.type = type;
         this.param = param;
-        this.tags = tags;
+        this.impacts = impacts;
     }
 
     public int getId() {
@@ -35,11 +35,11 @@ public class RuleBean {
         return param;
     }
 
-    public List<Integer> getTags() {
-        return tags;
+    public List<Integer> getImpacts() {
+        return impacts;
     }
 
-    public static RuleBean create(int id, int host, int type, int causerSpecies, int causerFamily, int gap, List<Integer> tags) {
+    public static RuleBean create(int id, int host, int type, int causerSpecies, int causerFamily, int gap, List<Integer> impacts) {
         int param = 0;
         if (type == 0 || type == 4) {
             param = causerSpecies;
@@ -51,8 +51,8 @@ public class RuleBean {
             throw new IllegalArgumentException("No rule with type" + type);
         }
 
-        final List<Integer> tagsNotNull = tags == null ? Collections.emptyList() : Collections.unmodifiableList(tags);
+        final List<Integer> impactsNotNull = impacts == null ? Collections.emptyList() : Collections.unmodifiableList(impacts);
 
-        return new RuleBean(id, host, type, param, tagsNotNull);
+        return new RuleBean(id, host, type, param, impactsNotNull);
     }
 }
