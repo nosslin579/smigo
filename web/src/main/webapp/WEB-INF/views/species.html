@@ -1,60 +1,73 @@
-<div class="container subtle-link" style="font-size: 18px">
-    <div class="page-header">
-    <h1>
-            <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
-            {{species.vernacularName}}
-        </h1>
-    </div>
-    <div ng-if="species.item">
-        {{'msg.itemexplained' | translate}}
-    </div>
+<div class="container" style="font-size: 18px">
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="page-header">
+                <h1>
+                    <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
+                    {{species.vernacularName}}
+                </h1>
+            </div>
+            <div ng-if="species.item">
+                {{'msg.itemexplained' | translate}}
+            </div>
 
-    <div ng-if="species.scientificName">
-        <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
-    </div>
-    <div ng-if="species.family">
-        <strong>{{'family'|translate}}:</strong> {{species.family | translate}} - <em>{{species.family.name}}</em>
-    </div>
+            <div ng-if="species.scientificName">
+                <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
+            </div>
+            <div ng-if="species.family">
+                <strong>{{'family'|translate}}:</strong> {{species.family | translate}} -
+                <em>{{species.family.name}}</em>
+            </div>
 
-    <div ng-if="species.rules.find('goodcompanion','category') != null">
-        <strong>{{'rule.goodcompanion'|translate}}</strong> -
-        <span>{{'rule.goodcompanion.expl'|translate:species}}</span>
-        <ul>
-            <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
-                <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
-                <small ng-repeat="t in r.tags"> - {{'msg.tag'+t|translate}}</small>
-            </li>
-        </ul>
-    </div>
+            <p>
 
-    <div ng-if="species.rules.find('badcompanion','category') != null">
-        <strong>{{'rule.badcompanion'|translate}}</strong> - <span>{{'rule.badcompanion.expl'|translate:species}}</span>
-        <ul>
-            <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
-                <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
-            </li>
-        </ul>
-    </div>
-    <div ng-if="species.rules.find('goodcroprotation','category') != null">
-        <strong>{{'rule.goodcroprotation'|translate}}</strong>
-        <ul>
-            <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
-                {{r.hint.messageParameter[1] | translate}}
-            </li>
-        </ul>
-    </div>
-    <div ng-if="species.rules.find('badcroprotation','category') != null">
-        <strong>{{'rule.badcroprotation'|translate}}</strong>
-        <ul>
-            <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
-                {{r.hint.messageParameter | translate}}
-            </li>
-        </ul>
-    </div>
-    <div ng-if="species.rules.find('speciesrepetition','category') != null">
-        <strong>{{'rule.croprotation'|translate}}</strong>
-        <ul>
-            <li>{{'rule.speciesrepetition' | translate:species.rules.find('speciesrepetition','category').hint.messageParameter}}</li>
-        </ul>
+            <h3>{{'rules'|translate}}
+                <button class="btn btn-default btn-xs pull-right" ng-click="requestFeature('add-rule')">{{'rule.add'|translate}}</button>
+            </h3>
+
+            <div ng-if="species.rules.find('goodcompanion','category') != null">
+                <strong>{{'rule.goodcompanion'|translate}}</strong> -
+                <span>{{'rule.goodcompanion.expl'|translate:species}}</span>
+                <ul class="subtle-link">
+                    <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
+                        <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <small ng-repeat="t in r.tags"> - {{'msg.tag'+t|translate}}</small>
+                    </li>
+                </ul>
+            </div>
+
+            <div ng-if="species.rules.find('badcompanion','category') != null">
+                <strong>{{'rule.badcompanion'|translate}}</strong> -
+                <span>{{'rule.badcompanion.expl'|translate:species}}</span>
+                <ul class="subtle-link">
+                    <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
+                        <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="species.rules.find('goodcroprotation','category') != null">
+                <strong>{{'rule.goodcroprotation'|translate}}</strong>
+                <ul class="subtle-link">
+                    <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
+                        {{r.hint.messageParameter[1] | translate}}
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="species.rules.find('badcroprotation','category') != null">
+                <strong>{{'rule.badcroprotation'|translate}}</strong>
+                <ul class="subtle-link">
+                    <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
+                        {{r.hint.messageParameter | translate}}
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="species.rules.find('speciesrepetition','category') != null">
+                <strong>{{'rule.croprotation'|translate}}</strong>
+                <ul>
+                    <li>{{'rule.speciesrepetition' | translate:species.rules.find('speciesrepetition','category').hint.messageParameter}}</li>
+                </ul>
+            </div>
+            </p>
+        </div>
     </div>
 </div>
