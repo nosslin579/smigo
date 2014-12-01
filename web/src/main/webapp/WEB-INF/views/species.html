@@ -40,9 +40,10 @@
             <div ng-if="species.rules.find('badcompanion','category') != null">
                 <strong>{{'rule.badcompanion'|translate}}</strong> -
                 <span>{{'rule.badcompanion.expl'|translate:species}}</span>
-                <ul class="subtle-link">
+                <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
-                        <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
                     </li>
                 </ul>
             </div>
