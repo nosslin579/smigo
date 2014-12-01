@@ -24,12 +24,11 @@ function translateFilter($rootScope, $log, $http, $route) {
      * Param can be resolved from either message or messageParameter.
      */
     function getParameter(message, messageParameter) {
-        if (message.messageParameter) {
-            return message.messageParameter instanceof Array ? message.messageParameter : [message.messageParameter];
-        } else if (messageParameter) {
-            return [messageParameter];
+        if (!message.messageParameter && !messageParameter) {
+            return [];
         }
-        return [];
+        var param = message.messageParameter ? message.messageParameter : messageParameter;
+        return param instanceof Array ? param : [param];
     }
 
     return function (message, messageParameter) {
@@ -51,7 +50,7 @@ function translateFilter($rootScope, $log, $http, $route) {
             var param = paramArray[i];
             translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param.messageKey ? msg[param.messageKey] : param);
         }
-//        $log.debug('Translate:'+translatedMessage, [msg, message, messageParameter]);
+//        $log.debug('Translate:'+translatedMessage, [msg, message, messageParameter,paramArray]);
         return translatedMessage;
     };
 }

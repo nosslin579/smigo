@@ -26,8 +26,7 @@
             </h3>
 
             <div ng-if="species.rules.find('goodcompanion','category') != null">
-                <strong>{{'rule.goodcompanion'|translate}}</strong> -
-                <span>{{'rule.goodcompanion.expl'|translate:species}}</span>
+                <strong>{{'rule.goodcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
                         <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
@@ -38,8 +37,7 @@
             </div>
 
             <div ng-if="species.rules.find('badcompanion','category') != null">
-                <strong>{{'rule.badcompanion'|translate}}</strong> -
-                <span>{{'rule.badcompanion.expl'|translate:species}}</span>
+                <strong>{{'rule.badcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
                         <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
