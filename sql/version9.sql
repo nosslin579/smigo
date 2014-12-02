@@ -1,3 +1,10 @@
+ALTER TABLE rules
+DROP COLUMN displaybydefault;
+ALTER TABLE rules
+DROP COLUMN public;
+ALTER TABLE rules
+DROP COLUMN creator;
+
 CREATE TABLE rules_x_impacts (
   rule_id INT NOT NULL,
   impact_id  INT NOT NULL
