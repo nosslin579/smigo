@@ -45,6 +45,8 @@
         <%@ include file="../js/user/UserService.js" %>
         <%@ include file="../js/user/RequestPasswordLinkController.js" %>
 
+        <%@ include file="../js/forum/ForumController.js" %>
+
         <%@ include file="../js/wall/WallController.js" %>
         <%@ include file="../js/wall/WallService.js" %>
 

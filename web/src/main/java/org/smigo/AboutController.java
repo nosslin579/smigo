@@ -34,7 +34,7 @@ public class AboutController {
 
     @RequestMapping(value = {
             "/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*",
-            "/rule/*"
+            "/rule/*", "/forum"
     }, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);

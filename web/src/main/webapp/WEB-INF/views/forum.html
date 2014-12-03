@@ -1,0 +1,47 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="page-header text-center">
+                <h1>
+                    {{'msg.forum'|translate}}
+                </h1>
+            </div>
+
+            <div>
+                <form name="addMessageForm" role="form" ng-submit="addMessage(addMessageForm,message)" novalidate="">
+                    <div class="has-error">
+                        <span ng-repeat="error in objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
+                    </div>
+
+                    <!--#### Text ####-->
+                    <div class="form-group">
+                        <textarea type="text" name="text" class="form-control" ng-model="message.text"/>
+                        <span ng-show="addMessageForm.content.$invalid" class="help-block">{{'invliad'}}</span>
+                    </div>
+
+                    <!--#### Save button ####-->
+                    <div class="form-group">
+                        <button id="submit-account-button" type="submit" class="btn btn-default">{{'save' | translate}}</button>
+                    </div>
+
+                </form>
+            </div>
+            <hr/>
+
+            <div ng-repeat="m in messages">
+                <div>
+                    <div>
+                        <a href="/wall/{{m.submitter}}">{{m.submitter}}</a> {{m.createdate}}
+                    </div>
+                    <div>
+                        {{m.text}}
+                    </div>
+                </div>
+                <hr/>
+
+            </div>
+        </div>
+    </div>
+
+</div>

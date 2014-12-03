@@ -34,6 +34,10 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'wall.html',
                 controller: 'WallController'
             }).
+            when('/forum', {
+                templateUrl: 'forum.html',
+                controller: 'ForumController'
+            }).
             when('/species/:id', {
                 templateUrl: 'species.html',
                 controller: 'SpeciesController'
