@@ -34,3 +34,12 @@ INSERT INTO rules_x_impacts (rule_id, impact_id) SELECT rule_id,2 FROM rules WHE
 INSERT INTO rules_x_impacts (rule_id, impact_id) SELECT rule_id,3 FROM rules WHERE rules.type = 3;
 UPDATE rules SET type = 0 WHERE type IN (1,2,3);
 
+CREATE TABLE messages (
+  id                INT           NOT NULL AUTO_INCREMENT,
+  text              VARCHAR(4000) NOT NULL,
+  submitter_user_id INT           NOT NULL,
+  location          VARCHAR(10),
+  visible           BOOL DEFAULT 0,
+  createdate        TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
