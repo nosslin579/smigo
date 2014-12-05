@@ -1,4 +1,4 @@
-<div class="container big-text">
+<div class="container">
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8">
             <div class="page-header">
@@ -29,7 +29,7 @@
                 <strong>{{'rule.goodcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
-                        <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <a  href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
                         <small ng-repeat="i in r.impacts"> - {{'msg.impact'+i|translate}}</small>
                         <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
                     </li>
@@ -40,14 +40,14 @@
                 <strong>{{'rule.badcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
-                        <a class="subtle-link" href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                        <a  href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
                         <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
                     </li>
                 </ul>
             </div>
             <div ng-if="species.rules.find('goodcroprotation','category') != null">
                 <strong>{{'rule.goodcroprotation'|translate}}</strong>
-                <ul class="subtle-link">
+                <ul >
                     <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
                         {{r.hint.messageParameter[1] | translate}}
                     </li>
@@ -55,7 +55,7 @@
             </div>
             <div ng-if="species.rules.find('badcroprotation','category') != null">
                 <strong>{{'rule.badcroprotation'|translate}}</strong>
-                <ul class="subtle-link">
+                <ul >
                     <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
                         {{r.hint.messageParameter | translate}}
                     </li>

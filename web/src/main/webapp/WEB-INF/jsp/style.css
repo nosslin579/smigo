@@ -40,15 +40,6 @@ body > .angular-view {
     cursor: progress;
 }
 
-.subtle-link a,
-a.subtle-link {
-    color: #2C3E50;
-}
-
-.big-text {
-    font-size: 17px;
-}
-
 /* ############### login  ##################################*/
 .social-sprite.facebook {
     background-position: -1px 0;
