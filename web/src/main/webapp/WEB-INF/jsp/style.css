@@ -6,11 +6,11 @@ body,
 }
 
 body > .angular-view {
-    /*81 px is height of navbar including margin*/
-    height: calc(100% - 81px);
-    height: -webkit-calc(100% - 81px);
-    height: -moz-calc(100% - 81px);
-    height: -o-calc(100% - 81px);
+    /*87 px is height of navbar including margin*/
+    height: calc(100% - 87px);
+    height: -webkit-calc(100% - 87px);
+    height: -moz-calc(100% - 87px);
+    height: -o-calc(100% - 87px);
 }
 
 .no-select {
@@ -20,10 +20,6 @@ body > .angular-view {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.full-width {
-    width: 100% !important;
 }
 
 .social-sprite {
