@@ -23,6 +23,7 @@
                     <!--#### Save button ####-->
                     <div class="form-group">
                         <button id="submit-account-button" type="submit" class="btn btn-default">{{'save' | translate}}</button>
+                        <img ng-if="addMessageForm.pendingAddMessage" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
                     </div>
 
                 </form>
@@ -41,6 +42,8 @@
                 <hr/>
 
             </div>
+            <button class="btn btn-default" ng-class="{disabled:pendingGetMore}" ng-click="getMoreMessages(messages,pagination)">{{'msg.more'|translate}}</button>
+            <img ng-if="pendingGetMore" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
         </div>
     </div>
 

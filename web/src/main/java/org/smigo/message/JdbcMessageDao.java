@@ -24,7 +24,9 @@ class JdbcMessageDao implements MessageDao {
             "messages.createdate  \n" +
             "FROM messages\n" +
             "LEFT JOIN users ON users.id = messages.submitter_user_id\n" +
-            "WHERE location = ?;\n";
+            "WHERE location = ?\n" +
+            "ORDER BY createdate DESC\n" +
+            "LIMIT ?,?;";
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -38,9 +40,9 @@ class JdbcMessageDao implements MessageDao {
     }
 
     @Override
-    public List<Message> getMessage(String location) {
+    public List<Message> getMessage(String location, int from, int size) {
         final String sql = String.format(SELECT);
-        return jdbcTemplate.query(sql, new Object[]{location}, new RowMapper<Message>() {
+        return jdbcTemplate.query(sql, new Object[]{location, from, size}, new RowMapper<Message>() {
             @Override
             public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Message(rs.getInt("id"), rs.getString("text"), rs.getString("username"), rs.getDate("createdate"));

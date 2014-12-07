@@ -6,10 +6,7 @@ import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,8 +21,8 @@ public class MessageController implements Serializable {
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<Message> getMessages() {
-        return messageHandler.getMessages();
+    public List<Message> getMessages(@RequestParam Integer page, @RequestParam Integer size) {
+        return messageHandler.getMessages(page, size);
     }
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.POST)

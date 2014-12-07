@@ -11,8 +11,9 @@ public class MessageHandler {
     @Autowired
     private MessageDao messageDao;
 
-    public List<Message> getMessages() {
-        return messageDao.getMessage("wall");
+    public List<Message> getMessages(Integer page, Integer size) {
+        int from = page * size;
+        return messageDao.getMessage("wall", from, size);
     }
 
     public int addMessage(Message message, AuthenticatedUser user) {
