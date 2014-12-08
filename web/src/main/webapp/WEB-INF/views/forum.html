@@ -8,7 +8,7 @@
                 </h1>
             </div>
 
-            <div>
+            <div ng-if="user.currentUser">
                 <form name="addMessageForm" role="form" ng-submit="addMessage(addMessageForm,message)" novalidate="">
                     <div class="has-error">
                         <span ng-repeat="error in objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>

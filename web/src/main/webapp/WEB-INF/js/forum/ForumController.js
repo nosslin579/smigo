@@ -6,6 +6,7 @@ function ForumController($scope, $http, $log, StateService, UserService) {
         size: 20,
     }
     $scope.pendingGetMore = true;
+    $scope.user = StateService.getUser();
 
     $http.get('/rest/message', {params: $scope.pagination})
         .then(function (response) {
