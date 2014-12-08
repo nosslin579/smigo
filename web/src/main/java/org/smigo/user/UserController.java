@@ -124,7 +124,7 @@ public class UserController {
             result.addError(new ObjectError("resetPassword", "Update password failed"));
             return "resetpasswordform.jsp";
         }
-        return "redirect:/#login";
+        return "redirect:/login";
     }
 
 
