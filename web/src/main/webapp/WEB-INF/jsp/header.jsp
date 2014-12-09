@@ -33,6 +33,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-touch.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
 
+    <%--other--%>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <style>
         <%@ include file="bootstrap.min.css" %>
         <%@ include file="style.css" %>

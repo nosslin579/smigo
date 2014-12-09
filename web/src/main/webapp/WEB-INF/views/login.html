@@ -1,5 +1,5 @@
 <div class="container">
-<div class="page-header text-center">
+    <div class="page-header text-center">
         <h1>{{viewModel.pageMessageKey | translate}}</h1>
     </div>
 
@@ -80,6 +80,10 @@
                     <div ng-if="loginOrRegisterform.passwordagain.$dirty">
                         <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>
                     </div>
+                </div>
+
+                <div class="form-group" ng-if="viewModel.register">
+                    <div id="recaptcha"></div>
                 </div>
 
                 <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.submitted}">

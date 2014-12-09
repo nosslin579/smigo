@@ -16,6 +16,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -127,5 +128,10 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES_ID));
         cacheManager.setCaches(concurrentMapCacheArrayList);
         return cacheManager;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

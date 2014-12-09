@@ -1,4 +1,4 @@
-function RegisterController($scope, UserService) {
+function RegisterController($scope, $timeout, UserService) {
     $scope.viewModel = {
         register: true,
         usernameMin: 5,
@@ -17,6 +17,14 @@ function RegisterController($scope, UserService) {
 
     $scope.submitLoginOrRegisterForm = UserService.register;
     $scope.requestFeature = UserService.requestFeature;
+
+
+    $timeout(function renderCaptcha() {
+        grecaptcha.render('recaptcha', {
+            sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
+        });
+    },2000);
+
 
 }
 
