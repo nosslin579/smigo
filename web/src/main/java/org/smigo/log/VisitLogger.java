@@ -17,7 +17,7 @@ public class VisitLogger extends HandlerInterceptorAdapter {
     public static final String NOTE_ATTRIBUTE = "LogVisitNote";
 
     @Autowired
-    private LogDao logDao;
+    private LogHandler logHandler;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -30,24 +30,7 @@ public class VisitLogger extends HandlerInterceptorAdapter {
             throws Exception {
         final long start = (Long) request.getAttribute(REQUEST_TIMER);
         log.info("Request finished in " + (System.nanoTime() - start) + "ns which is " + (System.nanoTime() - start) / 1000000 + "ms");
-        String requestedURL = request.getRequestURL().toString();
-        LogBean logBean = LogBean.create(request, response);
-
-        StringBuilder s = new StringBuilder("Logging request>");
-        s.append(logBean.toString());
-        s.append(" Auth type:");
-        s.append(request.getAuthType());
-        s.append(" Principal:");
-        s.append(request.getUserPrincipal());
-        s.append(" Headers:");
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            s.append(headerName).append("=").append(request.getHeader(headerName)).append(" - ");
-        }
-
-        log.info(s.toString());
-        logDao.log(logBean);
+        logHandler.log(request,response);
     }
 
 }
