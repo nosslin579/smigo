@@ -136,8 +136,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         login(username, PASSWORD);
         //add species
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
+        Thread.sleep(5000);
         d.findElement(By.id("add-species-link")).click();
-        w.until(ExpectedConditions.presenceOfElementLocated(By.linkText(speciesName)));
+        Thread.sleep(5000);
         d.findElement(By.className("square")).click();
         Thread.sleep(5000);
 
