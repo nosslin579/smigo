@@ -20,7 +20,7 @@ function RegisterController($scope, $timeout, UserService) {
 
 
     $timeout(function renderCaptcha() {
-        grecaptcha.render('recaptcha', {
+        $scope.widgetId = grecaptcha.render('recaptcha', {
             sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
         });
     },2000);

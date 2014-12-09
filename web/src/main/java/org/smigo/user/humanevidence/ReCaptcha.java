@@ -38,7 +38,7 @@ public @interface ReCaptcha {
 
         @Override
         public boolean isValid(String reCaptcha, ConstraintValidatorContext constraintValidatorContext) {
-            return reCaptchaHandler.verifyCaptchaChallenge(reCaptcha);
+            return reCaptcha != null && !reCaptcha.isEmpty() && reCaptchaHandler.verifyCaptchaChallenge(reCaptcha);
         }
     }
 }

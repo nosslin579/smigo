@@ -42,7 +42,7 @@
         <div class="col-sm-5 col-sm-offset-2">
             <h3>{{'msg.usesmigoaccount' | translate}}</h3>
 
-            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)">
+            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel,widgetId)">
                 <div class="has-error">
                     <span ng-repeat="error in loginOrRegisterform.objectErrors" id="{{error.objectName}}" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
