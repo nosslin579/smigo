@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
@@ -14,9 +16,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcUserDao implements UserDao {
@@ -118,7 +118,13 @@ public class JdbcUserDao implements UserDao {
             String username = rs.getString("username");
             String password = rs.getString("password");
             int id = rs.getInt("id");
-            return new AuthenticatedUser(id, username, password);
+            boolean verifiedHuman = rs.getInt("decidetime") > 10000;
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(Authority.USER);
+            if (verifiedHuman) {
+                authorities.add(Authority.HUMAN);
+            }
+            return new AuthenticatedUser(id, username, password, authorities);
         }
     }
 
