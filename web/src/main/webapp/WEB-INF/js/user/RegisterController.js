@@ -19,11 +19,15 @@ function RegisterController($scope, $timeout, UserService) {
     $scope.requestFeature = UserService.requestFeature;
 
 
-    $timeout(function renderCaptcha() {
+    var renderCaptchaPromise = $timeout(function renderCaptcha() {
         $scope.widgetId = grecaptcha.render('recaptcha', {
             sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
         });
-    },2000);
+    }, 2000);
+
+    $scope.$on('$destroy', function () {
+        $timeout.cancel(renderCaptchaPromise);
+    });
 
 
 }

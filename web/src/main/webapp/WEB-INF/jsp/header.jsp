@@ -34,7 +34,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
 
     <%--other--%>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="//www.google.com/recaptcha/api.js?render=explicit" async defer></script>
 
     <style>
         <%@ include file="bootstrap.min.css" %>
