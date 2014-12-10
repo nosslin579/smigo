@@ -116,6 +116,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("passwordagain")).clear();
         d.findElement(By.name("passwordagain")).sendKeys(PASSWORD);
         d.findElement(By.name("termsOfService")).click();
+        Thread.sleep(2000);
         d.findElement(By.id("submit-login-register-form")).click();
 
         w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
