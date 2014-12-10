@@ -1,5 +1,6 @@
 package org.smigo.user.humanevidence;
 
+import org.smigo.config.Props;
 import org.smigo.user.RegisterFormBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +30,8 @@ public @interface ReCaptcha {
     class CaptchaValidator implements ConstraintValidator<ReCaptcha, String> {
 
         @Autowired
+        private Props props;
+        @Autowired
         private ReCaptchaHandler reCaptchaHandler;
 
         @Override
@@ -38,6 +41,9 @@ public @interface ReCaptcha {
 
         @Override
         public boolean isValid(String reCaptcha, ConstraintValidatorContext constraintValidatorContext) {
+            if (props.isDev() && reCaptcha.isEmpty()) {
+                return true;
+            }
             return reCaptcha != null && !reCaptcha.isEmpty() && reCaptchaHandler.verifyCaptchaChallenge(reCaptcha);
         }
     }

@@ -40,13 +40,17 @@ public class DevelopmentConfiguration {
         return new UserAdaptiveMessageSource(1);
     }
 
-
     @Bean
     public Props props() {
         return new Props() {
             @Override
             public String getResetUrl() {
                 return "http://localhost:8080/login-reset/";
+            }
+
+            @Override
+            public boolean isDev() {
+                return true;
             }
         };
     }

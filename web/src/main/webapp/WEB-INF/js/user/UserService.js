@@ -24,7 +24,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
     }
 
     function login(form, formModel) {
-        $log.log('Login', [form, formModel]);
+//        $log.log('Login', [form, formModel]);
 //        http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
         if (!formModel.username) {
             $log.warn('Possible autocomplete detected, formModel contains no username.');
