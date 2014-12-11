@@ -136,6 +136,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
+        Thread.sleep(5000);
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
         Thread.sleep(5000);
         d.findElement(By.id("add-species-link")).click();
@@ -289,6 +290,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
 
         d.findElement(By.id("logout-link")).click();
+
+        Thread.sleep(1000);
         login(username, PASSWORD);
 
         d.findElement(By.id("account-link")).click();
