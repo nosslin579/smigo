@@ -30,12 +30,6 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-
-    @Bean
-    public HostEnvironmentInfo hostEnvironmentInfo() {
-        return new HostEnvironmentInfo(EnvironmentProfile.PRODUCTION, false, "/home/nosslin2/public_html/pic/");
-    }
-
     @Bean
     public MessageSource messageSource() {
         log.debug("getMessageSource");

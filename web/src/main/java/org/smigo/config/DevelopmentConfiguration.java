@@ -30,11 +30,6 @@ public class DevelopmentConfiguration {
     }
 
     @Bean
-    public HostEnvironmentInfo hostEnvironmentInfo() {
-        return new HostEnvironmentInfo(EnvironmentProfile.DEVELOPMENT, true, "/home/nosslin2/");
-    }
-
-    @Bean
     public MessageSource messageSource() {
         log.debug("getMessageSource");
         return new UserAdaptiveMessageSource(1);
