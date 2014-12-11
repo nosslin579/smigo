@@ -16,6 +16,7 @@
     <meta name="description" content="Design and plan your vegetable garden and share with friends. Get advice for crop rotation and companion planting. Based on square foot gardening.">
     <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening.">
     <meta name="author" content="Christian Nilsson">
+    <%--<meta name="referrer" content="never">--%>
     <%--<link rel="icon" href="../../favicon.ico">--%>
     <base href="/">
 

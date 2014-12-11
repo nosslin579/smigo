@@ -1,9 +1,9 @@
 package org.smigo.user.humanevidence;
 
 import org.smigo.config.Props;
-import org.smigo.user.RegisterFormBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -32,7 +32,9 @@ public @interface ReCaptcha {
         @Autowired
         private Props props;
         @Autowired
-        private ReCaptchaHandler reCaptchaHandler;
+        private HumanEvidenceHandler humanEvidenceHandler;
+        @Autowired
+        private HttpServletRequest request;
 
         @Override
         public void initialize(ReCaptcha reCaptcha) {
@@ -41,10 +43,11 @@ public @interface ReCaptcha {
 
         @Override
         public boolean isValid(String reCaptcha, ConstraintValidatorContext constraintValidatorContext) {
-            if (props.isDev() && reCaptcha.isEmpty()) {
+            //Dev may bypass captcha by leaving it empty
+            if (props.isDev() && reCaptcha != null && reCaptcha.isEmpty()) {
                 return true;
             }
-            return reCaptcha != null && !reCaptcha.isEmpty() && reCaptchaHandler.verifyCaptchaChallenge(reCaptcha);
+            return humanEvidenceHandler.isVerifiedHuman(request) || reCaptcha != null && !reCaptcha.isEmpty() && humanEvidenceHandler.verifyCaptchaChallenge(reCaptcha);
         }
     }
 }

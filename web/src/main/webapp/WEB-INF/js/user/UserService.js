@@ -61,7 +61,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
         register: function (form, formModel, widgetId) {
             validateForm(form)
                 .then(function () {
-                    formModel.reCaptcha = grecaptcha.getResponse(widgetId);
+                    formModel.reCaptcha = widgetId ? grecaptcha.getResponse(widgetId) : null;
                     $log.log('Registering');
                     return $http.post('/rest/user', formModel);
                 })

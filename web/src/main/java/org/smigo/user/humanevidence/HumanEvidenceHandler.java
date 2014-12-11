@@ -1,16 +1,14 @@
 package org.smigo.user.humanevidence;
 
-import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class ReCaptchaHandler {
+public class HumanEvidenceHandler {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -21,4 +19,9 @@ public class ReCaptchaHandler {
         final ReCaptchaResponse body = response.getBody();
         return body.isSuccess();
     }
+
+    public boolean isVerifiedHuman(HttpServletRequest request) {
+        return (System.currentTimeMillis() - request.getSession().getCreationTime()) > 5000;
+    }
+
 }
