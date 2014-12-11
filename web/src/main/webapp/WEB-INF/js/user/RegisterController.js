@@ -1,4 +1,4 @@
-function RegisterController($scope, $timeout, UserService) {
+function RegisterController($scope, $location, $http, UserService) {
     $scope.viewModel = {
         register: true,
         usernameMin: 5,
@@ -19,17 +19,14 @@ function RegisterController($scope, $timeout, UserService) {
     $scope.requestFeature = UserService.requestFeature;
 
 
-    var renderCaptchaPromise = $timeout(function renderCaptcha() {
-        $scope.widgetId = grecaptcha.render('recaptcha', {
-            sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
+    $http.get('/rpc/showcaptcha/')
+        .then(function renderCaptch(response) {
+            if (response.data && $location.path() === '/register') {
+                $scope.widgetId = grecaptcha.render('recaptcha', {
+                    sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
+                });
+            }
         });
-    }, 2000);
-
-    $scope.$on('$destroy', function () {
-        $timeout.cancel(renderCaptchaPromise);
-    });
-
-
 }
 
 angular.module('smigoModule').controller('RegisterController', RegisterController);
