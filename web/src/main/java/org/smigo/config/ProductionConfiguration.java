@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
@@ -15,6 +16,7 @@ import java.beans.PropertyVetoException;
 
 @Configuration
 @Profile(EnvironmentProfile.PRODUCTION)
+@PropertySource({"classpath:default.properties", "classpath:prod.properties"})
 public class ProductionConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -35,16 +37,4 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
         log.debug("getMessageSource");
         return new UserAdaptiveMessageSource(-1);
     }
-
-    @Bean
-    public Props props() {
-        return new Props() {
-            @Override
-            public String getResetUrl() {
-                return "http://smigo.org/login-reset/";
-            }
-        };
-    }
-
-
 }

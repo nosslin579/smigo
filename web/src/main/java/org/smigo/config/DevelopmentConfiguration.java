@@ -8,12 +8,14 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
 @Profile(EnvironmentProfile.DEVELOPMENT)
+@PropertySource({"classpath:default.properties", "classpath:dev.properties"})
 public class DevelopmentConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -34,20 +36,4 @@ public class DevelopmentConfiguration {
         log.debug("getMessageSource");
         return new UserAdaptiveMessageSource(1);
     }
-
-    @Bean
-    public Props props() {
-        return new Props() {
-            @Override
-            public String getResetUrl() {
-                return "http://localhost:8080/login-reset/";
-            }
-
-            @Override
-            public boolean isDev() {
-                return true;
-            }
-        };
-    }
-
 }

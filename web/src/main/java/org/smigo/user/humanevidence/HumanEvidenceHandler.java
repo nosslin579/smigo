@@ -1,6 +1,7 @@
 package org.smigo.user.humanevidence;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -12,6 +13,8 @@ public class HumanEvidenceHandler {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Value("${sessionAgeLimitToSkipCaptcha}")
+    private int sessionAgeLimitToSkipCaptcha;
 
     public boolean verifyCaptchaChallenge(String reCaptchaChallange) {
         final String url = "https://www.google.com/recaptcha/api/siteverify?secret=6LeO6_4SAAAAAIFH-JaSHoekHiENVkHGfZv4uxvQ&response=" + reCaptchaChallange;//&remoteip=user_ip_address";
@@ -21,7 +24,8 @@ public class HumanEvidenceHandler {
     }
 
     public boolean isVerifiedHuman(HttpServletRequest request) {
-        return (System.currentTimeMillis() - request.getSession().getCreationTime()) > 5000;
+        final long sessionAge = System.currentTimeMillis() - request.getSession().getCreationTime();
+        return sessionAge > sessionAgeLimitToSkipCaptcha;
     }
 
 }

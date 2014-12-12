@@ -2,10 +2,10 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.config.Props;
 import org.smigo.plants.PlantData;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,8 +42,8 @@ public class UserHandler {
     private PlantHandler plantHandler;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private Props props;
+    @Value("${resetPasswordUrl}")
+    private String resetPasswordUrl;
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
@@ -89,7 +89,7 @@ public class UserHandler {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject("Smigo reset password");
-        simpleMailMessage.setText("Click link to reset password. " + props.getResetUrl() + id);
+        simpleMailMessage.setText("Click link to reset password. " + resetPasswordUrl + id);
         javaMailSender.send(simpleMailMessage);
     }
 
