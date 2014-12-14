@@ -58,6 +58,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button id="submit-account-button" type="submit" class="btn btn-default">{{'save' | translate}}</button>
+                <img ng-if="accountDetailsForm.pendingSave" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>
 
@@ -122,6 +123,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button id="submit-password-button" type="submit" class="btn btn-default">{{'changepassword' | translate}}</button>
+                <img ng-if="passwordForm.pendingSave" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>
 

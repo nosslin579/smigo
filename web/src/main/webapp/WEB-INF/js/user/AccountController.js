@@ -9,6 +9,7 @@ function AccountController($scope, $http, $log, StateService, UserService) {
 
     $scope.submitAccountDetailsForm = function (form, userBean) {
         $log.log('Submit ', [form, userBean]);
+        form.pendingSave = true;
         $scope.updateSuccessful = false;
         $scope.objectErrors = [];
         if (form.$invalid) {
@@ -17,12 +18,14 @@ function AccountController($scope, $http, $log, StateService, UserService) {
         }
         UserService.updateUser(userBean)
             .then(function () {
+                form.pendingSave = false;
                 $scope.updateSuccessful = true;
                 $scope.$emit('current-user-changed', userBean);
             })
             .catch(function (response) {
                 $log.error('Update user failed', response);
                 $scope.objectErrors = response.data;
+                form.pendingSave = false;
             });
     };
 }
