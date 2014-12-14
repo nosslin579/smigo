@@ -206,7 +206,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         log.info("Change password finished successfully. Username:" + username);
     }
 
-    //    @Test
     @Test(enabled = true)
     public void loginWrongPassword() throws InterruptedException {
         final String username = addUser();
@@ -214,6 +213,20 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         WebElement element = d.findElement(By.id("bad-credentials"));
         Assert.assertTrue(element.isDisplayed());
         Assert.assertFalse(element.getText().isEmpty());
+        log.info("LoginWrongPassword finished successfully. Username:" + username);
+    }
+
+    @Test(enabled = true)
+    public void addMessage() throws InterruptedException {
+        final String username = addUser();
+        login(username, PASSWORD);
+        d.findElement(By.id("forum-link")).click();
+        d.findElement(By.tagName("textarea")).sendKeys(NON_LATIN_LETTERS);
+        Thread.sleep(2000);
+        d.findElement(By.id("submit-account-button")).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(d.getPageSource().contains(NON_LATIN_LETTERS));
+        Assert.assertEquals(d.findElements(By.partialLinkText(username)).size(), 1);
         log.info("LoginWrongPassword finished successfully. Username:" + username);
     }
 

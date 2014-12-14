@@ -32,12 +32,10 @@
 
             <div ng-repeat="m in messages">
                 <div>
-                    <div>
-                        <a href="/wall/{{m.submitter}}">{{m.submitter}}</a> {{m.createdate}}
-                    </div>
-                    <div>
-                        {{m.text}}
-                    </div>
+                    <a href="/wall/{{m.submitter}}">{{m.submitter}}</a> {{m.createdate}}
+                </div>
+                <div>
+                    {{m.text}}
                 </div>
                 <hr/>
 

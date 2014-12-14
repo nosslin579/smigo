@@ -3,7 +3,6 @@ package org.smigo.message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.Authority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,7 +29,7 @@ public class MessageController implements Serializable {
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public int addMessage(@RequestBody Message message, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
-        if (user == null || !user.getAuthorities().contains(Authority.HUMAN)) {
+        if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return 0;
         }
