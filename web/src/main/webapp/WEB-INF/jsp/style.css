@@ -5,6 +5,10 @@ body,
     height: 100%
 }
 
+.full-width {
+    width: 100% !important;
+}
+
 body > .angular-view {
     /*87 px is height of navbar including margin*/
     height: calc(100% - 87px);
