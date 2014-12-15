@@ -1,6 +1,6 @@
 function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
 
-    function Garden(plantDataArray) {
+    function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
 
         function init(pda) {
@@ -18,6 +18,11 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
 
 
             gardenSelf.selectedYear = gardenSelf.getAvailableYears().last();
+            if (!mutable) {
+                gardenSelf.getSquare = function () {
+                    return new Square(new Location(0, 0, 0));
+                };
+            }
             $log.info("Garden created:", gardenSelf);
         }
 
@@ -85,7 +90,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.location = location;
             this.plantArray = [];
             this.addPlant = function (species) {
-                if (!squareSelf.containsSpecies(species.id) && squareSelf.plantArray.length <= 4) {
+                if (!squareSelf.containsSpecies(species.id) && squareSelf.plantArray.length <= 4 && mutable) {
                     var plant = new Plant(species, squareSelf.location);
                     squareSelf.plantArray.push(plant);
                     $http.post('/rest/plant', new PlantData(plant))
@@ -97,7 +102,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 return squareSelf;
             }
             this.removePlant = function () {
-                if (squareSelf.plantArray.length === 0) {
+                if (squareSelf.plantArray.length === 0 || mutable) {
                     return;
                 }
                 var plant = squareSelf.plantArray.pop();
@@ -107,6 +112,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                     });
                 $log.debug('Removed plant', plant, new PlantData(plant));
             };
+
 
             this.containsFamily = function (familyId) {
                 for (i in squareSelf.plantArray) {
@@ -185,15 +191,8 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
     }
 
     return {
-        getGarden: function (username) {
-            return $http.get('/rest/plant/' + username)
-                .then(function (response) {
-                    $log.info('plantArray retrieved successfully. Response:', response);
-                    return new Garden(response.data);
-                });
-        },
-        createGarden: function (plantDataArray) {
-            return new Garden(plantDataArray);
+        createGarden: function (plantDataArray, mutable) {
+            return new Garden(plantDataArray, mutable);
         }
     };
 }

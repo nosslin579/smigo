@@ -29,10 +29,10 @@
         <%@ include file="../js/garden/GardenController.js" %>
         <%@ include file="../js/garden/AddYearModalController.js" %>
         <%@ include file="../js/garden/SpeciesService.js" %>
-        <%@ include file="../js/garden/GridService.js" %>
         <%@ include file="../js/garden/GardenService.js" %>
         <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
         <%@ include file="../js/garden/SquareInfoDirective.js" %>
+        <%@ include file="../js/garden/GridDirective.js" %>
 
         <%@ include file="../js/species/SpeciesController.js" %>
         <%@ include file="../js/species/RuleController.js" %>

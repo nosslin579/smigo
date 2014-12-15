@@ -1,6 +1,6 @@
 function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenService) {
 
-    var garden = GardenService.createGarden(initData.plantDataArray),
+    var garden = GardenService.createGarden(initData.plantDataArray, true),
         user = {
             currentUser: initData.user,
         },

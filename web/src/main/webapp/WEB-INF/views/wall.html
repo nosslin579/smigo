@@ -1,5 +1,5 @@
 <div class="container-fluid full-height" ng-if="garden">
-<div class="row full-height">
+    <div class="row full-height">
         <div class="col-sm-3">
             <h2>{{hostUser.username}}</h2>
 
@@ -12,7 +12,7 @@
             </ul>
 
         </div>
-        <div class="col-sm-9 view-grid-wrapper full-height" ng-include="'grid.html'">
+        <div class="col-sm-9 view-grid-wrapper full-height" so-grid="garden">
         </div>
     </div>
 </div>

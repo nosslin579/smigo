@@ -1,6 +1,6 @@
 <div class="peephole">
-    <div class="square-container" ng-click="onGridClick($event,garden)" ng-style="getGridSizeCss(garden)">
-        <div ng-repeat="s in garden.getSquares()" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
+    <div class="square-container" ng-style="getGridSizeCss(garden)">
+    <div ng-repeat="s in garden.getSquares()" class="square" ng-style="getSquarePositionCss(s)" ng-click="onSquareClick($event, s)">
             <div class="square-tooltip" square-info="s" ng-class="{show: s.showTooltip}"></div>
             <div ng-repeat="p in s.plantArray">
                 <img ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant pull-left" alt="{{p.species.vernacularName}}"

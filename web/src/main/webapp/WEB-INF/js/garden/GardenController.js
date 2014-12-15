@@ -1,4 +1,4 @@
-function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService, GridService) {
+function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService) {
 
     $scope.search = {query: '', proccessing: false};
 
@@ -10,8 +10,6 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
     $scope.isSpeciesAddable = SpeciesService.isSpeciesAddable;
-    $scope.getGridSizeCss = GridService.getGridSizeCss;
-    $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 
     $scope.selectedSpeciesFromTopResult = function (query) {
         $log.log('Setting species from', query);
@@ -20,36 +18,6 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
             SpeciesService.selectSpecies(topResult);
         }
         $scope.search.query = '';
-    };
-    $scope.onSquareClick = function (clickEvent, square) {
-        $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
-        if (clickEvent.shiftKey || SpeciesService.getState().action == 'delete') {
-            square.removePlant();
-        } else if (SpeciesService.getState().action == 'info') {
-            square.showTooltip = !square.showTooltip;
-            if (square.showTooltip) {
-                $timeout(function () {
-                    square.showTooltip = false;
-                }, 3000);
-            }
-        } else if (clickEvent.ctrlKey) {
-            $log.log('Copy species');
-        } else {
-            square.addPlant(SpeciesService.getState().selectedSpecies);
-        }
-        clickEvent.stopPropagation();
-    };
-    $scope.onGridClick = function (clickEvent, garden) {
-        $log.log('Grid clicked', [clickEvent, $scope]);
-        if (SpeciesService.getState().action == 'add') {
-            //http://stackoverflow.com/a/14872192/859514
-            var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
-            var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
-            var x = Math.floor((offsetX - 100000) / 48);
-            var y = Math.floor((offsetY - 100000) / 48);
-            garden.getSquare(garden.selectedYear, x, y).addPlant(SpeciesService.getState().selectedSpecies);
-        }
-        clickEvent.stopPropagation();
     };
     $scope.openAddYearModal = function () {
         $modal.open({

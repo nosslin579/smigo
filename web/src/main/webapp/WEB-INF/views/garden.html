@@ -32,7 +32,7 @@
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
-                    <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
+                        <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(search.query) && userState.currentUser">
@@ -68,10 +68,10 @@
                 </li>
                 <li ng-if="userState.currentUser.username">
                     <a href="/wall/{{userState.currentUser.username}}">
-                    <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
+                        <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
                 </li>
             </ul>
-            <div class="edit-grid-wrapper" ng-include="'grid.html'"></div>
+            <div class="edit-grid-wrapper" so-grid="garden"></div>
         </div>
     </div>
 </div>

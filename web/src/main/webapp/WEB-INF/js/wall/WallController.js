@@ -1,4 +1,4 @@
-function WallController($scope, $http, $log, $routeParams, GardenService, GridService, WallService) {
+function WallController($scope, $http, $log, $routeParams, GardenService, WallService) {
 
     $http.get('/rest/user/' + $routeParams.username)
         .then(function (response) {
@@ -7,11 +7,9 @@ function WallController($scope, $http, $log, $routeParams, GardenService, GridSe
 
     $http.get('/rest/plant/' + $routeParams.username)
         .then(function (response) {
-            $scope.garden = GardenService.createGarden(response.data);
+            $scope.garden = GardenService.createGarden(response.data, false);
         });
 
-    $scope.getGridSizeCss = GridService.getGridSizeCss;
-    $scope.getSquarePositionCss = GridService.getSquarePositionCss;
 }
 
 angular.module('smigoModule').controller('WallController', WallController);
