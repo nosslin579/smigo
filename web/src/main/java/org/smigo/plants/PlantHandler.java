@@ -21,19 +21,6 @@ public class PlantHandler {
     @Autowired
     private UserHandler userHandler;
 
-    public void updateGarden(User user, UpdateGardenBean updateGardenBean) {
-        if (updateGardenBean.getAddList().isEmpty() && updateGardenBean.getRemoveList().isEmpty()) {
-            return;
-        }
-        if (user != null) {
-            plantDao.addPlants(updateGardenBean.getAddList(), user.getId());
-            plantDao.deletePlants(updateGardenBean.getRemoveList(), user.getId());
-        } else {
-            userSession.getPlants().removeAll(updateGardenBean.getRemoveList());
-            userSession.getPlants().addAll(updateGardenBean.getAddList());
-        }
-    }
-
     public List<PlantData> getPlants(String username) {
         return plantDao.getPlants(username);
     }
