@@ -33,7 +33,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                 }
 
 //            console.time('grid size');
-                var bounds = getBounds([garden.yearSquareMap[garden.selectedYear], garden.yearSquareMap[garden.selectedYear - 1]]);
+                var bounds = getBounds([garden.yearSquareMap[garden.selectedYear], garden.getTrailingSquares()]);
                 var margin = 48 * 2;
 //            console.timeEnd('grid size');
                 $log.log('Grid CSS ', bounds, garden);

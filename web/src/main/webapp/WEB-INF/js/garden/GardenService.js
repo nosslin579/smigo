@@ -175,6 +175,17 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
         this.getSquares = function () {
             return gardenSelf.yearSquareMap[gardenSelf.selectedYear];
         };
+        this.getTrailingSquares = function () {
+            return gardenSelf.yearSquareMap[gardenSelf.getTrailingYear()];
+        };
+        this.getTrailingYear = function () {
+            var availableYears = gardenSelf.getAvailableYears();
+            if (availableYears.indexOf(gardenSelf.selectedYear - 1) !== -1) {
+                return gardenSelf.selectedYear - 1;
+            } else if (availableYears.indexOf(gardenSelf.selectedYear + 1) !== -1) {
+                return gardenSelf.selectedYear + 1;
+            }
+        };
 
         this.addYear = function (year) {
             if (gardenSelf.yearSquareMap[year]) {

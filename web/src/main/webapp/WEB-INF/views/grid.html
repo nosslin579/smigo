@@ -7,6 +7,6 @@
                      ng-class="{'small-species': s.plantArray.length > 1}"/>
             </div>
         </div>
-        <div ng-repeat="s in garden.yearSquareMap[garden.selectedYear-1]" class="visible-remainder" ng-if="s.plantArray.length > 0" ng-style="getSquarePositionCss(s)"></div>
+        <div ng-repeat="s in garden.getTrailingSquares()" class="visible-remainder" ng-if="s.plantArray.length > 0" ng-style="getSquarePositionCss(s)"></div>
     </div>
 </div>
