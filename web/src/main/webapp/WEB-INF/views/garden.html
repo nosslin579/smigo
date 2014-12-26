@@ -7,20 +7,23 @@
                 <div class="btn-group btn-group-justified">
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
-                                ng-click="speciesState.action = 'info'" title="{{'msg.view-square.description' | translate}}">
-                            <span class="glyphicon glyphicon-info-sign"></span><span class="hidden-xs hidden-sm"> {{'msg.view-square.title' | translate}}</span>
+                                ng-click="speciesState.action = 'info'" title="{{'msg.view-square.title' | translate}}"
+                                tooltip="{{'msg.view-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                            <span class="glyphicon glyphicon-info-sign"></span><span class="visible-lg-inline"> {{'msg.view-square.title' | translate}}</span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-success': speciesState.action == 'add'}"
-                                ng-click="speciesState.action = 'add'" title="{{'msg.add-square.description' | translate}}">
-                            <span class="glyphicon glyphicon-plus-sign"></span><span class="hidden-xs hidden-sm"> {{'msg.add-square.title' | translate}}</span>
+                                ng-click="speciesState.action = 'add'" title="{{'msg.add-square.title' | translate}}"
+                                tooltip="{{'msg.add-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                            <span class="glyphicon glyphicon-plus-sign"></span><span class="visible-lg-inline"> {{'msg.add-square.title' | translate}}</span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
-                                ng-click="speciesState.action = 'delete'" title="{{'msg.deletesquare.description' | translate}}">
-                            <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'msg.deletesquare.title' | translate}}</span>
+                                ng-click="speciesState.action = 'delete'" title="{{'msg.deletesquare.title' | translate}}"
+                                tooltip="{{'msg.deletesquare.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                        <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'msg.deletesquare.title' | translate}}</span>
                         </button>
                     </div>
                 </div>
