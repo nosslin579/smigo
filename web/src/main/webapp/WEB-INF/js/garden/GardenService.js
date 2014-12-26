@@ -89,8 +89,15 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             var squareSelf = this;
             this.location = location;
             this.plantArray = [];
+            this.togglePlant = function (species) {
+                if (squareSelf.containsSpecies(species.id)) {
+                    squareSelf.removePlant(species);
+                } else {
+                    squareSelf.addPlant(species);
+                }
+            };
             this.addPlant = function (species) {
-                if (!squareSelf.containsSpecies(species.id) && squareSelf.plantArray.length <= 4 && mutable) {
+                if (squareSelf.plantArray.length <= 4 && mutable) {
                     var plant = new Plant(species, squareSelf.location);
                     squareSelf.plantArray.push(plant);
                     $http.post('/rest/plant', new PlantData(plant))
@@ -99,18 +106,27 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                         });
                     $log.debug('Plant added: ' + species.scientificName, squareSelf);
                 }
-                return squareSelf;
-            }
-            this.removePlant = function () {
-                if (squareSelf.plantArray.length === 0 || mutable) {
+            };
+            this.removePlant = function (species) {
+                if (squareSelf.plantArray.length === 0 || !mutable) {
                     return;
                 }
-                var plant = squareSelf.plantArray.pop();
-                $http.post('/rest/plant/delete', new PlantData(plant))
+                var removeObj = {};
+                if (species) {
+                    squareSelf.plantArray.forEach(function removePlantIter(plant, index, array) {
+                        if (species.id === plant.species.id) {
+                            this.plant = array.splice(index, 1)[0];
+                        }
+                    }, removeObj);
+                } else {
+                    removeObj.plant = squareSelf.plantArray.pop();
+                }
+
+                $http.post('/rest/plant/delete', new PlantData(removeObj.plant))
                     .catch(function (response) {
-                        squareSelf.plantArray.push(plant);
+                        squareSelf.plantArray.push(removeObj.plant);
                     });
-                $log.debug('Removed plant', plant, new PlantData(plant));
+                $log.debug('Removed plant', removeObj.plant, new PlantData(removeObj.plant));
             };
 
 

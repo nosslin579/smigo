@@ -58,7 +58,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                 } else if (clickEvent.ctrlKey) {
                     $log.log('Copy species');
                 } else {
-                    square.addPlant(SpeciesService.getState().selectedSpecies);
+                    square.togglePlant(SpeciesService.getState().selectedSpecies);
                 }
                 clickEvent.stopPropagation();
             };
