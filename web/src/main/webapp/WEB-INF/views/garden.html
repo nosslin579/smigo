@@ -35,7 +35,7 @@
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
-                        <a href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
+                        <a class="select-species-link" href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <li ng-if="isSpeciesAddable(search.query) && userState.currentUser">

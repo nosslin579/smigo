@@ -5,7 +5,7 @@ function SpeciesTooltip($log, $timeout, $window, $location, SpeciesService, isTo
         templateUrl: 'species-tooltip.html',
         link: function link(scope, tooltipElement, attributes) {
             var showPromise,
-                speciesFrameElement = tooltipElement.parent();
+                gardenPageElement = tooltipElement.parent();
 
             //using visibility because need height property
             tooltipElement.css('visibility', 'hidden');
@@ -70,13 +70,13 @@ function SpeciesTooltip($log, $timeout, $window, $location, SpeciesService, isTo
 
             if (isTouchDevice) {
                 /*Touch events*/
-                speciesFrameElement.on('touchstart', 'a', toggle);
+                gardenPageElement.on('touchstart', 'a.select-species-link', toggle);
                 tooltipElement.on('touchstart', '.close', close);
             } else {
                 /*Mouse events*/
-                speciesFrameElement.on('mouseenter', 'a', delayedOpen);
+                gardenPageElement.on('mouseenter', 'a.select-species-link', delayedOpen);
                 tooltipElement.on('mouseleave', close);
-                speciesFrameElement.on('mouseleave', 'a', cancel);
+                gardenPageElement.on('mouseleave', 'a.select-species-link', cancel);
                 tooltipElement.on('click', '.close', close);
             }
         }
