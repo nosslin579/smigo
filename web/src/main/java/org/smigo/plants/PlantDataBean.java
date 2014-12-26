@@ -20,7 +20,7 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
 
     @Override
     public String toString() {
-        return "Plant " + year + ", " + y + ", " + x + ", " + speciesId;
+        return "{Plant:" + year + ", " + y + ", " + x + ", " + speciesId + "}";
     }
 
     public int getSpeciesId() {
