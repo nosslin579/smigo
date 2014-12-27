@@ -31,7 +31,7 @@
         <%@ include file="../js/garden/SpeciesService.js" %>
         <%@ include file="../js/garden/GardenService.js" %>
         <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
-        <%@ include file="../js/garden/SquareInfoDirective.js" %>
+        <%@ include file="../js/garden/SquareDirective.js" %>
         <%@ include file="../js/garden/GridDirective.js" %>
 
         <%@ include file="../js/species/SpeciesController.js" %>
@@ -78,7 +78,7 @@
     <%@ include file="../views/species-tooltip.html" %>
 </script>
 <script type="text/ng-template" id="squareinfo.html">
-    <%@ include file="../views/squareinfo.html" %>
+    <%@ include file="../views/square.html" %>
 </script>
 <script type="text/ng-template" id="wall.html">
     <%@ include file="../views/wall.html" %>

@@ -44,28 +44,10 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                     'margin-left': (-100001 + -bounds.xmin * 48 + margin) + 'px'
                 };
             }
-            scope.onSquareClick = function onSquareClick(clickEvent, square) {
-                $log.log('Square clicked', [clickEvent, square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
-                if (clickEvent.shiftKey || SpeciesService.getState().action == 'delete') {
-                    square.removePlant();
-                } else if (SpeciesService.getState().action == 'info') {
-                    square.showTooltip = !square.showTooltip;
-                    if (square.showTooltip) {
-                        $timeout(function () {
-                            square.showTooltip = false;
-                        }, 3000);
-                    }
-                } else if (clickEvent.ctrlKey) {
-                    $log.log('Copy species');
-                } else {
-                    square.togglePlant(SpeciesService.getState().selectedSpecies);
-                }
-                clickEvent.stopPropagation();
-            };
 
             element.find('.square-container').on('click', function (clickEvent) {
                 $log.log('Grid clicked', [clickEvent]);
-                if (SpeciesService.getState().action == 'add') {
+                if (SpeciesService.getState().action === 'add') {
                     //http://stackoverflow.com/a/14872192/859514
                     var offsetX = clickEvent.clientX - $(clickEvent.target).offset().left;
                     var offsetY = clickEvent.clientY - $(clickEvent.target).offset().top;
