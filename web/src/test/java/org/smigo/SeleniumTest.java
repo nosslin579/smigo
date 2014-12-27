@@ -44,6 +44,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String HOST_URL = "http://localhost:8080";
     private static final int NUMBER_OF_SPECIES = 83;
 
+    private static final By SQUARE = By.className("square-content");
+
     @Autowired
     private UserDao userDao;
 
@@ -158,7 +160,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     @Test(enabled = true)
     public void addYear() {
         //add default species
-        d.findElement(By.className("square")).click();
+        d.findElement(SQUARE).click();
 
         //add year
         d.findElement(By.id("add-year-link")).click();
@@ -166,7 +168,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
         Assert.assertEquals(d.findElements(By.className("select-year")).size(), 2);
-        Assert.assertEquals(d.findElement(By.className("square-container")).findElements(By.tagName("div")).size(), 1);
 
 
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");

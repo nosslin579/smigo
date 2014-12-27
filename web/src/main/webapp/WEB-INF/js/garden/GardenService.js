@@ -199,7 +199,8 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             angular.forEach(copyFromSquareArray, function (square) {
                 angular.forEach(square.plantArray, function (plant) {
                     if (!plant.species.annual) {
-                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y)).addPlant(plant.species);
+                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y));
+                        newSquare.addPlant(plant.species);
                         newYearSquareArray.push(newSquare);
                     }
                 });
