@@ -12,7 +12,7 @@
     <title>Smigo - <spring:message code="general.smigoslogan"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="Design and plan your vegetable garden and share with friends. Get advice for crop rotation and companion planting. Based on square foot gardening.">
     <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening.">
     <meta name="author" content="Christian Nilsson">
@@ -34,7 +34,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-touch.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
 
-<%--other--%>
+    <%--other--%>
     <script src="//www.google.com/recaptcha/api.js?render=explicit" async defer></script>
 
     <style>
