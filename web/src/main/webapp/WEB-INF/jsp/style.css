@@ -162,7 +162,7 @@ body > .angular-view {
     overflow: auto;
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 20px;
     top: 0;
     right: 0;
     margin: 0;

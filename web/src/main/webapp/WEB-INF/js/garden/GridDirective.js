@@ -34,7 +34,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
 
 //            console.time('grid size');
                 var bounds = getBounds([garden.yearSquareMap[garden.selectedYear], garden.getTrailingSquares()]);
-                var margin = 48 * 2;
+                var margin = 48 * (scope.mutable ? 2 : 0);
 //            console.timeEnd('grid size');
 //                $log.log('Grid CSS ', bounds, garden);
                 return {
@@ -45,7 +45,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                 };
             }
 
-            element.find('.square-container').on('click', function (clickEvent) {
+            scope.mutable && element.find('.square-container').on('click', function (clickEvent) {
                 $log.log('Grid clicked', [clickEvent]);
                 if (SpeciesService.getState().action === 'add') {
                     //http://stackoverflow.com/a/14872192/859514
@@ -60,6 +60,6 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
             });
         },
         templateUrl: 'grid.html',
-        scope: {garden: '=soGrid'}
+        scope: {garden: '=soGrid', editable: '=soGridEditable'}
     }
 });
