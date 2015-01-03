@@ -139,14 +139,6 @@ body > .angular-view {
 }
 */
 
-/*Mozilla gird background*/
-@-moz-document url-prefix() {
-    .square-container {
-        background-image: none !important;
-        background: rgba(198, 221, 198, 0.2);
-    }
-}
-
 .square-container {
     background-position: 40px 40px;
     background-image: url('/static/icon/gridbackground.png');
