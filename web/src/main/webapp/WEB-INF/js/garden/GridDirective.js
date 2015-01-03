@@ -60,6 +60,6 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
             });
         },
         templateUrl: 'grid.html',
-        scope: {garden: '=soGrid', editable: '=soGridEditable'}
+        scope: {garden: '=soGrid', mutable: '=soGridMutable'}
     }
 });
