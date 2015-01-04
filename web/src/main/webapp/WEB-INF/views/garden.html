@@ -107,20 +107,21 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-xs-6 hidden-xs">
-                    <ul class="nav nav-pills navbar-right">
+                <div class="col-xs-offset-1 col-sm-offset-0 col-xs-5 dropdown" dropdown ng-if="userState.currentUser.username">
+                    <a href="/share" class="btn btn-default btn-sm pull-right dropdown-toggle text-uppercase" dropdown-toggle>
+                        <span class="glyphicon glyphicon-share-alt"></span> {{'msg.share' | translate}}</a>
+                    <ul class="dropdown-menu pull-right">
                         <li facebook ng-model="userState.currentUser.username">
                         </li>
                         <li twitter ng-model="userState.currentUser.username">
                         </li>
-                        <li ng-if="userState.currentUser.username">
+                        <li>
                             <a href="/wall/{{userState.currentUser.username}}">
-                                <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
+                                <span class="glyphicon glyphicon-link"></span>&nbsp;{{'msg.link'|translate}}</a>
                         </li>
                     </ul>
                 </div>
+                <div class="edit-grid-wrapper" so-grid="garden" so-grid-mutable="true"></div>
             </div>
-            <div class="edit-grid-wrapper" so-grid="garden" so-grid-mutable="true"></div>
         </div>
     </div>
-</div>
