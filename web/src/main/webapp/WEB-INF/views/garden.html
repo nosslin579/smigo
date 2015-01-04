@@ -23,7 +23,7 @@
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
                                 ng-click="speciesState.action = 'delete'" title="{{'msg.deletesquare.title' | translate}}"
                                 tooltip="{{'msg.deletesquare.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
-                        <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'msg.deletesquare.title' | translate}}</span>
+                            <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'msg.deletesquare.title' | translate}}</span>
                         </button>
                     </div>
                 </div>
@@ -54,26 +54,72 @@
             </div>
         </div>
         <div id="garden-frame" class="col-xs-9 no-select full-height">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="select-year" ng-class="{active: year == garden.selectedYear}" ng-repeat="year in garden.getAvailableYears()">
-                    <a href="" ng-click="garden.selectedYear = year">
-                        {{year}}
-                    </a>
-                </li>
-                <li>
-                    <a id="add-year-link" href="" ng-click="openAddYearModal()">
-                        <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
-                    </a>
-                </li>
-                <li facebook ng-model="userState.currentUser.username">
-                </li>
-                <li twitter ng-model="userState.currentUser.username">
-                </li>
-                <li ng-if="userState.currentUser.username">
-                    <a href="/wall/{{userState.currentUser.username}}">
-                        <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
-                </li>
-            </ul>
+            <div class="row">
+                <div class="col-xs-6">
+                    <ul class="nav nav-pills" role="tablist">
+
+                        <!--#### Select previous year ####-->
+                        <li class="hidden-xs" ng-class="{disabled:!garden.yearSquareMap[garden.selectedYear-1]}">
+                            <a ng-if="garden.yearSquareMap[garden.selectedYear-1]" href="" ng-click="garden.selectedYear = garden.selectedYear - 1">
+                                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                            </a>
+                            <a ng-if="!garden.yearSquareMap[garden.selectedYear-1]">
+                                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                            </a>
+                        </li>
+
+                        <!--#### Year selector ####-->
+                        <li class="dropdown" dropdown>
+                            <a href="" class="dropdown-toggle" dropdown-toggle>
+                                {{garden.selectedYear}}<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="select-year" ng-class="{active: year == garden.selectedYear}" ng-repeat="year in garden.getAvailableYears()">
+                                    <a href="" ng-click="garden.selectedYear = year">
+                                        {{year}}
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <!--#### Add year link 1 ####-->
+                                <li>
+                                    <a href="" ng-click="openAddYearModal()">
+                                        {{'addyear' | translate}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!--#### Select next year ####-->
+                        <li class="hidden-xs" ng-class="{disabled:!garden.yearSquareMap[garden.selectedYear+1]}">
+                            <a ng-if="garden.yearSquareMap[garden.selectedYear+1]" href="" ng-click="garden.selectedYear = garden.selectedYear + 1">
+                                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                            </a>
+                            <a ng-if="!garden.yearSquareMap[garden.selectedYear+1]">
+                                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                            </a>
+                        </li>
+
+                        <!--#### Add year link 2 ####-->
+                        <li class="hidden-xs hidden-sm">
+                            <a id="add-year-link" href="" ng-click="openAddYearModal()">
+                                <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-6 hidden-xs">
+                    <ul class="nav nav-pills navbar-right">
+                        <li facebook ng-model="userState.currentUser.username">
+                        </li>
+                        <li twitter ng-model="userState.currentUser.username">
+                        </li>
+                        <li ng-if="userState.currentUser.username">
+                            <a href="/wall/{{userState.currentUser.username}}">
+                                <span class="glyphicon glyphicon-link" style="color: gray;"></span>&nbsp;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="edit-grid-wrapper" so-grid="garden" so-grid-mutable="true"></div>
         </div>
     </div>
