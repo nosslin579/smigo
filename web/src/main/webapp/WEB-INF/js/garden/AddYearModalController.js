@@ -3,8 +3,12 @@ function AddYearModalController($scope, $modalInstance, StateService, $log) {
     $log.log('AddYearModalController', $scope);
 
     var garden = StateService.getGarden();
-    $scope.forwardYear = garden.getAvailableYears().last() + 1;
-    $scope.backwardYear = garden.getAvailableYears()[0] - 1;
+
+    var last = garden.getAvailableYears().last();
+    $scope.forwardYear = garden.yearSquareMap[last].length !== 0 ? (last + 1) : false;
+
+    var first = garden.getAvailableYears()[0];
+    $scope.backwardYear = garden.yearSquareMap[first].length !== 0 ? (first - 1) : false;
 
     $scope.addYear = function (year) {
         garden.addYear(year);

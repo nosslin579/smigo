@@ -5,12 +5,12 @@
     <h4 class="modal-title">{{'addyear'|translate}}</h4>
 </div>
 <div class="modal-body">
-    <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" ng-click="addYear(forwardYear)">
-        {{forwardYear}}
+    <button id="add-forward-year-button" type="button" class="btn btn-lg btn-default btn-block" ng-click="addYear(forwardYear)" ng-if="forwardYear">
+    {{forwardYear}}
     </button>
     <hr/>
-    <button type="button" class="btn btn-lg btn-default btn-block" ng-click="addYear(backwardYear)">
-        {{backwardYear}}
+    <button type="button" class="btn btn-lg btn-default btn-block" ng-click="addYear(backwardYear)" ng-if="backwardYear">
+    {{backwardYear}}
     </button>
 </div>
 <div class="modal-footer">
