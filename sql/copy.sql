@@ -40,6 +40,8 @@ CREATE TABLE impacts LIKE nosslin2_db.impacts;
 INSERT INTO impacts SELECT * FROM nosslin2_db.impacts;
 
 DROP TABLE messages;
+CREATE TABLE messages LIKE nosslin2_db.messages;
+INSERT INTO messages SELECT * FROM nosslin2_db.messages;
 
 DROP TABLE visitlog;
 CREATE TABLE visitlog LIKE nosslin2_db.visitlog;
