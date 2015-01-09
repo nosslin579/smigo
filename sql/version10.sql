@@ -1,2 +1,5 @@
 DELETE FROM rules
 WHERE rule_id = 265;
+
+ALTER TABLE users
+MODIFY COLUMN about VARCHAR(4000);
