@@ -92,10 +92,10 @@
 
         <!--#### New password ####-->
         <div class="form-group" ng-class="{'has-error':passwordForm.newPassword.$invalid && passwordForm.newPassword.$dirty}">
-            <label for="new-password-input" class="col-sm-2 control-label">{{'password' | translate}}</label>
+            <label for="new-password-input" class="col-sm-2 control-label">{{'msg.newpassword' | translate}}</label>
 
             <div class="col-sm-10">
-                <input type="password" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'password' | translate}}"
+                <input type="password" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'msg.newpassword' | translate}}"
                        ng-model="passwordBean.newPassword" ng-required="true" ng-minlength="6">
 
                 <div ng-if="passwordForm.newPassword.$dirty">
