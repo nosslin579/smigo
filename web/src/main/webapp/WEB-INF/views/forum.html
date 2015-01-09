@@ -40,7 +40,9 @@
                 <hr/>
 
             </div>
-            <button class="btn btn-default" ng-class="{disabled:pendingGetMore}" ng-click="getMoreMessages(messages,pagination)">{{'msg.more'|translate}}</button>
+            <button class="btn btn-default" ng-if="hasMoreMessages" ng-class="{disabled:pendingGetMore}" ng-click="getMoreMessages(messages,pagination)">
+                {{'msg.more'|translate}}
+            </button>
             <img ng-if="pendingGetMore" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
         </div>
     </div>

@@ -12,6 +12,7 @@ function ForumController($scope, $http, $log, StateService, UserService) {
         .then(function (response) {
             $scope.messages = response.data;
             $scope.pendingGetMore = false;
+            $scope.hasMoreMessages = $scope.messages.length === $scope.pagination.size;
         });
 
     $scope.getMoreMessages = function getMoreMessages(messages, pagination) {
@@ -22,6 +23,7 @@ function ForumController($scope, $http, $log, StateService, UserService) {
             .then(function (response) {
                 messages.push.apply(messages, response.data);
                 $scope.pendingGetMore = false;
+                $scope.hasMoreMessages = response.data === pagination.size;
             });
     };
 
