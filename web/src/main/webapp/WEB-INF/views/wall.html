@@ -1,9 +1,9 @@
 <div class="container-fluid full-height" ng-if="garden">
     <div class="row full-height">
-        <div class="col-sm-3">
-            <h2>{{hostUser.username}}</h2>
-
+        <div class="col-lg-3">
             <h3>{{hostUser.displayName}}</h3>
+            <h5>{{hostUser.username}}</h5>
+
             <p>{{hostUser.about}}</p>
 
             <ul class="nav nav-pills">
@@ -12,7 +12,7 @@
             </ul>
 
         </div>
-        <div class="col-sm-9 view-grid-wrapper full-height" so-grid="garden" so-grid-mutable="false">
+        <div class="col-lg-9 view-grid-wrapper full-height" so-grid="garden" so-grid-mutable="false">
         </div>
     </div>
 </div>
