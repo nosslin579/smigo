@@ -293,7 +293,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         d.findElement(By.id("account-link")).click();
 
-        Assert.assertEquals(d.findElements(By.tagName("input")).size(), 6);
+        Assert.assertEquals(d.findElements(By.tagName("input")).size(), 5);
 
         d.findElement(By.name("email")).sendKeys(username + EMAIL_PROVIDER);
         d.findElement(By.name("displayName")).sendKeys(DISPLAY_NAME);
