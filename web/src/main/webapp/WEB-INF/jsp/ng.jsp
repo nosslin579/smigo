@@ -37,7 +37,6 @@
         <%@ include file="../js/species/SpeciesController.js" %>
         <%@ include file="../js/species/RuleController.js" %>
 
-        <%@ include file="../js/user/AcceptTermsOfServiceController.js" %>
         <%@ include file="../js/user/RegisterController.js" %>
         <%@ include file="../js/user/LoginController.js" %>
         <%@ include file="../js/user/AccountController.js" %>

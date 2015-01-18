@@ -74,12 +74,6 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
                 });
         },
         login: login,
-        acceptTermsOfService: function (user) {
-            $log.log('Handle acceptTermsOfService');
-            user.termsOfService = true;
-            updateUser(user);
-            $location.path('/garden');
-        },
         logout: function () {
             $rootScope.$broadcast('user-logout');
             $http.get('logout')

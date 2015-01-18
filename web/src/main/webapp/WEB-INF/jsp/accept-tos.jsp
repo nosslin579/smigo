@@ -28,7 +28,6 @@
                 <form:checkbox path="termsOfService"/>
                 <spring:message code="msg.agreetos"/>
             </form:label>
-            <form:errors path="termsOfService" cssClass="errorblock"/>
         </div>
         <button type="submit" class="btn btn-default"><spring:message code="ok"/></button>
     </form:form>

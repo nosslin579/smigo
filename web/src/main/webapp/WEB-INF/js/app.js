@@ -46,10 +46,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'rule.html',
                 controller: 'RuleController'
             }).
-            when('/accept-terms-of-service', {
-                templateUrl: 'accept-terms-of-service.html',
-                controller: 'AcceptTermsOfServiceController'
-            }).
             when('/garden', {redirectTo: '/'}).
             when('/beta', {redirectTo: '/'}).
             when('/_=_', {redirectTo: '/'}).
