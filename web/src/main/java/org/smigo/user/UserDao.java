@@ -27,4 +27,6 @@ public interface UserDao {
     void deleteOpenId(String openIdUrl);
 
     void updatePassword(int userId, String encodedPassword);
+
+    UserDetails getUserDetails(int userId);
 }

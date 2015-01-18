@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -60,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.loginProcessingUrl("/login");
         formLogin.successHandler(customAuthenticationSuccessHandler);
         formLogin.failureHandler(customAuthenticationFailureHandler);
+
+        http.apply(new SpringSocialConfigurer());
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();
         rememberMe.userDetailsService(customUserDetailsService);

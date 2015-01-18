@@ -1,12 +1,12 @@
 package org.smigo.user;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
 
-import java.util.Collections;
 import java.util.List;
 
-public class AuthenticatedUser extends org.springframework.security.core.userdetails.User implements User {
+public class AuthenticatedUser extends SocialUser implements User, SocialUserDetails {
     private final int id;
 
     public AuthenticatedUser(int id, String username, String password, List<GrantedAuthority> authorities) {
@@ -18,4 +18,8 @@ public class AuthenticatedUser extends org.springframework.security.core.userdet
         return id;
     }
 
+    @Override
+    public String getUserId() {
+        return String.valueOf(id);
+    }
 }

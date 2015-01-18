@@ -52,6 +52,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
             }).
             when('/garden', {redirectTo: '/'}).
             when('/beta', {redirectTo: '/'}).
+            when('/_=_', {redirectTo: '/'}).
             otherwise({templateUrl: '404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {

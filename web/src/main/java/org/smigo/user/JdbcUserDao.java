@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
@@ -16,7 +14,10 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcUserDao implements UserDao {
@@ -112,19 +113,19 @@ public class JdbcUserDao implements UserDao {
         jdbcTemplate.update(sql, args, types);
     }
 
+    @Override
+    public UserDetails getUserDetails(int userId) {
+        final String sql = String.format(SELECT, "id");
+        return jdbcTemplate.queryForObject(sql, new Object[]{userId}, new UserDetailsRowMapper());
+    }
+
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
         @Override
         public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
             String username = rs.getString("username");
             String password = rs.getString("password");
             int id = rs.getInt("id");
-            boolean verifiedHuman = rs.getInt("decidetime") > 10000;
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(Authority.USER);
-            if (verifiedHuman) {
-                authorities.add(Authority.HUMAN);
-            }
-            return new AuthenticatedUser(id, username, password, authorities);
+            return new AuthenticatedUser(id, username, password, Collections.singletonList(Authority.USER));
         }
     }
 
