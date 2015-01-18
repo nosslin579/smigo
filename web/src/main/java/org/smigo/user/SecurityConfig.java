@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.social.security.SpringSocialConfigurer;
@@ -31,13 +30,15 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private EmptyAuthenticationSuccessHandler emptyAuthenticationSuccessHandler;
+    @Autowired
     public DataSource dataSource;
     @Autowired
     private UserDetailsService customUserDetailsService;
     @Autowired
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
     @Autowired
-    private LogoutSuccessHandler customLogoutSuccessHandler;
+    private EmptyLogoutSuccessHandler emptyLogoutSuccessHandler;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.loginPage("/login");
         formLogin.loginProcessingUrl("/login");
         formLogin.failureHandler(customAuthenticationFailureHandler);
+        formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         http.apply(new SpringSocialConfigurer());
 
@@ -67,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         rememberMe.tokenRepository(persistentTokenRepository());
 
         LogoutConfigurer<HttpSecurity> logout = http.logout();
-        logout.logoutSuccessHandler(customLogoutSuccessHandler);
+        logout.logoutSuccessHandler(emptyLogoutSuccessHandler);
         logout.invalidateHttpSession(true);
         logout.logoutUrl("/logout");
 
