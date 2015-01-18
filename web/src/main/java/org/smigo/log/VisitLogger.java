@@ -7,13 +7,12 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 public class VisitLogger extends HandlerInterceptorAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final String REQUEST_TIMER = "request-timer";
+    public static final String REQUEST_TIMER = "request-timer";
     public static final String NOTE_ATTRIBUTE = "LogVisitNote";
 
     @Autowired
@@ -28,8 +27,6 @@ public class VisitLogger extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-        final long start = (Long) request.getAttribute(REQUEST_TIMER);
-        log.info("Request finished in " + (System.nanoTime() - start) + "ns which is " + (System.nanoTime() - start) / 1000000 + "ms");
         logHandler.log(request,response);
     }
 

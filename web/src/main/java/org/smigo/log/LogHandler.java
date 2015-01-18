@@ -34,6 +34,8 @@ public class LogHandler {
             s.append(headerName).append("=").append(request.getHeader(headerName)).append(" - ");
         }
 
+        final long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
+        s.append(" Request finished in " + (System.nanoTime() - start) + "ns which is " + (System.nanoTime() - start) / 1000000 + "ms");
         log.info(s.toString());
         logDao.log(logBean);
 
