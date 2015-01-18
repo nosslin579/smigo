@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-public class AboutController {
+public class HomeController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
