@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -31,8 +30,6 @@ import javax.sql.DataSource;
 @EnableWebMvcSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
     @Autowired
     public DataSource dataSource;
     @Autowired
@@ -59,7 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         FormLoginConfigurer<HttpSecurity> formLogin = http.formLogin();
         formLogin.loginPage("/login");
         formLogin.loginProcessingUrl("/login");
-        formLogin.successHandler(customAuthenticationSuccessHandler);
         formLogin.failureHandler(customAuthenticationFailureHandler);
 
         http.apply(new SpringSocialConfigurer());
@@ -69,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         rememberMe.key("MjYvVCDYOplXAWq");
         rememberMe.tokenValiditySeconds(Integer.MAX_VALUE);
         rememberMe.tokenRepository(persistentTokenRepository());
-        rememberMe.authenticationSuccessHandler(customAuthenticationSuccessHandler);
 
         LogoutConfigurer<HttpSecurity> logout = http.logout();
         logout.logoutSuccessHandler(customLogoutSuccessHandler);
@@ -84,7 +79,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         openidLogin.loginProcessingUrl("/login-openid");
         openidLogin.authenticationUserDetailsService(authenticationUserDetailsService());
         openidLogin.permitAll();
-        openidLogin.successHandler(customAuthenticationSuccessHandler);
         openidLogin.defaultSuccessUrl("/");
 //      openidLogin.attributeExchange("https://www.google.com/.*").attribute("axContactEmail").type("http://axschema.org/contact/email").required(true);
     }

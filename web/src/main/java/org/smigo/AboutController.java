@@ -8,6 +8,7 @@ import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
+import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ public class AboutController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
+    private UserSession userSession;
+    @Autowired
     private UserHandler userHandler;
     @Autowired
     private UserAdaptiveMessageSource messageSource;
@@ -37,6 +40,9 @@ public class AboutController {
             "/rule/*", "/forum"
     }, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
+        if (user != null && !userSession.getUser().isTermsOfService()) {
+            return "redirect:/accept-termsofservice";
+        }
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
 
