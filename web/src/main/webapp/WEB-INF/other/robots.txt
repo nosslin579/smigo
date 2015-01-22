@@ -6,6 +6,7 @@ Allow: /garden
 Allow: /help
 Allow: /login
 Allow: /register
+Allow: /forum
 
 Allow: /*.css$
 Allow: /*.js$
