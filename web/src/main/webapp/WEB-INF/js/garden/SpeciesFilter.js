@@ -9,10 +9,9 @@ function SpeciesFilter($log, orderByFilter, translateFilter) {
         var ret = [];
         var queryLowerCase = query.toLowerCase();
         angular.forEach(speciesArray, function (s) {
-            if (s.vernacularName &&
-                (s.vernacularName.toLowerCase().indexOf(queryLowerCase) === 0 ||
-                    s.vernacularName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
-                ret.unshift(s);
+            var vernacularIndex = s.vernacularName.toLowerCase().indexOf(queryLowerCase);
+            if (s.vernacularName && vernacularIndex !== -1) {
+                vernacularIndex === 0 ? ret.unshift(s) : ret.push(s);
             } else if (s.scientificName &&
                 (s.scientificName.toLowerCase().indexOf(queryLowerCase) === 0 ||
                     s.scientificName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
