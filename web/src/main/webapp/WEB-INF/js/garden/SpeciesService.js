@@ -136,6 +136,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             var queryLowerCase = sq.query.toLocaleLowerCase();
             //Cancel search if new search within 2sec
             $timeout.cancel(search.promise);
+            sq.proccessing = false;
             if (!sq.query || sq.query.length <= 2 || search.previous.indexOf(queryLowerCase) != -1) {
                 return;
             }
