@@ -14,10 +14,9 @@ function SpeciesTooltip($log, $timeout, $window, $location, SpeciesService, isTo
 
             function open(event) {
                 event.preventDefault();
-                if (!event.currentTarget.dataset.speciesid) {
-                    return;
-                }
-                var id = +event.currentTarget.dataset.speciesid;
+
+                var id = +event.currentTarget.getAttribute('data-speciesid'); //dataset.speciesid doesn't work on IE10
+
                 scope.species = SpeciesService.getSpecies(id);
                 $timeout(function () {
                     var ret, marginbottom = 35, marginTop = 50,
