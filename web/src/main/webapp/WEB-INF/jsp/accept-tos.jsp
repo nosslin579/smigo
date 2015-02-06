@@ -3,8 +3,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="header.jsp"/>
-
+<jsp:include page="header.jsp">
+    <jsp:param name="noCrawl" value="true"/>
+</jsp:include>
 
 <body>
 <div class="container">
