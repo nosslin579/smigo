@@ -31,8 +31,16 @@
             </form:label>
         </div>
         <button type="submit" class="btn btn-default"><spring:message code="ok"/></button>
+        <a href="#" onclick="logout()" class="btn btn-default"><spring:message code="cancel"/></a>
     </form:form>
 </div>
+<script>
+    function logout() {
+        $.post('/logout').then(function redirect() {
+            window.location.href = "/";
+        });
+    }
+</script>
 </body>
 
 <jsp:include page="footer.jsp"/>
