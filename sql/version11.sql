@@ -57,3 +57,6 @@ INSERT INTO species(id,scientific_name,family_id,iconfilename) VALUES (155,'Papa
 INSERT INTO species_translation(species_id,vernacular_name) VALUES (155,'Poppy');
 INSERT INTO species_translation(species_id,vernacular_name,language) VALUES (155,'Opio / Adormidera','es');
 
+ALTER TABLE visitlog
+ADD COLUMN querystring VARCHAR(256);
+

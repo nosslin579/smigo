@@ -22,7 +22,7 @@ class JdbcLogDao implements LogDao {
     @Override
     @Async
     public void log(LogBean req) {
-        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note,origin,host) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note,origin,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
                 req.getSessionAge(),
                 req.getHttpStatus(),
@@ -36,7 +36,8 @@ class JdbcLogDao implements LogDao {
                 req.getIp(),
                 req.getNote(),
                 req.getOrigin(),
-                req.getHost()};
+                req.getHost(),
+                req.getQueryString()};
         int[] types = new int[args.length];
         Arrays.fill(types, Types.VARCHAR);
         types[0] = Types.INTEGER;
