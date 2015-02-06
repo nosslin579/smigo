@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
+import java.util.Map;
 
 @Component
 public class LogHandler {
@@ -27,6 +28,10 @@ public class LogHandler {
         s.append(request.getAuthType());
         s.append(" Principal:");
         s.append(request.getUserPrincipal());
+        s.append(" Parameters:");
+        for (Map.Entry<String, String[]> p : request.getParameterMap().entrySet()) {
+            s.append(p.getKey()).append("=").append(p.getValue()).append(" ");
+        }
         s.append(" Headers:");
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
