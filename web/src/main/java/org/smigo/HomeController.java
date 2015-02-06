@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -39,7 +40,7 @@ public class HomeController {
             "/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*",
             "/rule/*", "/forum"
     }, method = RequestMethod.GET)
-    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
+    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user, HttpServletRequest request) {
         if (user != null && !userSession.getUser().isTermsOfService()) {
             return "redirect:/accept-termsofservice";
         }
@@ -51,7 +52,16 @@ public class HomeController {
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
+        model.addAttribute("hasEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
         return "ng.jsp";
+    }
+
+    @RequestMapping(value = {
+            "/", "/help", "/login", "/register", "/forum"
+    }, method = RequestMethod.GET, params = "_escaped_fragment_")
+    public String getGarden(@RequestParam String _escaped_fragment_, HttpServletRequest request) {
+        final String jsp = request.getServletPath().equals("/") ? "/root" : request.getServletPath();
+        return "escaped_fragment" + jsp + ".jsp";
     }
 
 
