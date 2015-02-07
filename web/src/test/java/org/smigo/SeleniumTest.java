@@ -35,7 +35,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String NON_LATIN_LETTERS = "Şehirde güzel köpek леп пас у граду 在城里漂亮的狗 سگ خوب در شهر";
     private static final String EMAIL_PROVIDER = "@mailinator.com";
     private static final String DISPLAY_NAME = "Tomte Nisse";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "qwerty";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
     private static final String SPECIES_NAME = "Frango Salada";
@@ -100,6 +100,37 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("password")).sendKeys(password);
         d.findElement(By.id("submit-login-register-form")).click();
         Thread.sleep(2000);
+    }
+
+    @Test(enabled = true)
+    public void registerWithFacebook() throws Exception {
+        //add default species
+        userDao.deleteUserConnection(1375958496052051l);
+        d.findElement(By.className("square")).click();
+
+        d.findElement(By.id("register-link")).click();
+        d.findElement(By.partialLinkText("Facebook")).click();
+        //login at facebook
+        d.findElement(By.name("email")).sendKeys("ubgcvsa_dinglesky_1423300619@tfbnw.net");
+        d.findElement(By.name("pass")).sendKeys(PASSWORD);
+        d.findElement(By.name("login")).click();
+        //accept tos
+        d.findElement(By.name("termsOfService")).click();
+        d.findElement(By.tagName("button")).click();
+
+        final WebElement plant = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+        Assert.assertEquals(plant.getTagName(), "img");
+        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+
+        d.findElement(By.id("logout-link")).click();
+        Thread.sleep(3000);
+
+        d.findElement(By.id("login-link")).click();
+        d.findElement(By.partialLinkText("Facebook")).click();
+
+        final WebElement plant2 = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
+        Assert.assertEquals(plant2.getTagName(), "img");
+        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
     }
 
     @Test(enabled = true)

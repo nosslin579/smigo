@@ -119,6 +119,12 @@ public class JdbcUserDao implements UserDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{userId}, new UserDetailsRowMapper());
     }
 
+    @Override
+    public void deleteUserConnection(long providerUserId) {
+        String sql = "DELETE FROM UserConnection WHERE providerUserId = ?";
+        jdbcTemplate.update(sql, new Object[]{providerUserId}, new int[]{Types.VARCHAR});
+    }
+
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
         @Override
         public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
