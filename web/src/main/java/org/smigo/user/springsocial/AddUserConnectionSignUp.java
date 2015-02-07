@@ -1,6 +1,7 @@
 package org.smigo.user.springsocial;
 
 import org.smigo.user.RegisterFormBean;
+import org.smigo.user.UserBean;
 import org.smigo.user.UserHandler;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -23,6 +24,13 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
         user.setUsername("user" + String.valueOf(System.currentTimeMillis() - NOT_SO_RANDOM_POINT_IN_TIME));
         user.setTermsOfService(false);
         final int id = userHandler.createUser(user, Locale.ENGLISH);
+
+        final UserBean userBean = new UserBean();
+        userBean.setEmail(connection.fetchUserProfile().getEmail());
+        userBean.setDisplayName(connection.fetchUserProfile().getName());
+        userBean.setLocale(Locale.ENGLISH);
+        userHandler.updateUser(id, userBean);
+
         return String.valueOf(id);
     }
 }

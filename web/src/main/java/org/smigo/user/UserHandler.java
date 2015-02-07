@@ -124,6 +124,10 @@ public class UserHandler {
         userDao.updateUser(user.getId(), userBean);
     }
 
+    public void updateUser(int userId, UserBean userBean) {
+        userDao.updateUser(userId, userBean);
+    }
+
     public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
         String resetKey = resetFormBean.getResetKey();
         ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
