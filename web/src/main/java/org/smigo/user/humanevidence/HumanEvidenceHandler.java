@@ -15,9 +15,12 @@ public class HumanEvidenceHandler {
     private RestTemplate restTemplate;
     @Value("${sessionAgeLimitToSkipCaptcha}")
     private int sessionAgeLimitToSkipCaptcha;
+    @Value("${googleRecaptchaSecretKey}")
+    private String googleRecaptchaSecretKey;
 
     public boolean verifyCaptchaChallenge(String reCaptchaChallange) {
-        final String url = "https://www.google.com/recaptcha/api/siteverify?secret=6LeO6_4SAAAAAIFH-JaSHoekHiENVkHGfZv4uxvQ&response=" + reCaptchaChallange;//&remoteip=user_ip_address";
+        final String url = "https://www.google.com/recaptcha/api/siteverify?secret=" + googleRecaptchaSecretKey +
+                "&response=" + reCaptchaChallange;//&remoteip=user_ip_address";
         final ResponseEntity<ReCaptchaResponse> response = restTemplate.getForEntity(url, ReCaptchaResponse.class);
         final ReCaptchaResponse body = response.getBody();
         return body.isSuccess();

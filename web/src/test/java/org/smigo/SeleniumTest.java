@@ -291,32 +291,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         log.info("Reset password finished successfully. Username:" + user.getUsername());
     }
 
-    @Test(enabled = false)
-    public void registerWithOpenId() throws InterruptedException {
-        userDao.deleteOpenId("https://www.google.com/accounts/o8/id?id=AItOawk7toFbMCzMKq-beo_Rjbo-QASKPaX1tBo");
-
-        d.get(HOST_URL);
-        d.findElement(By.className("square")).click();
-        Thread.sleep(2000);
-
-        d.findElement(By.id("login-link")).click();
-        d.findElement(By.id("googleOpenId")).submit();
-        d.findElement(By.id("Email")).sendKeys("smigo.org@gmail.com");
-        d.findElement(By.id("Passwd")).sendKeys("lstN09LLrZZx");
-        d.findElement(By.id("signIn")).click();
-        d.findElement(By.id("accept-terms-of-service-button")).click();
-
-        w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
-        Assert.assertTrue(d.findElement(By.className("plant")).getAttribute("src").endsWith("species/1.png"));
-        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
-
-        d.findElement(By.id("logout-link")).click();
-        d.findElement(By.id("login-link")).click();
-        d.findElement(By.id("googleOpenId")).submit();
-        Assert.assertTrue(d.findElement(By.className("plant")).getAttribute("src").endsWith("species/1.png"));
-
-    }
-
     @Test(enabled = true)
     public void updateAccount() throws InterruptedException {
         final String username = addUser();

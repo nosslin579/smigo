@@ -1,9 +1,11 @@
 package org.smigo.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyOverrideConfigurer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -28,6 +30,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -40,6 +44,31 @@ import java.util.Properties;
 public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${mailSenderUsername}")
+    private String mailSenderUsername;
+    @Value("${mailSenderPassword}")
+    private String mailSenderPassword;
+    @Value("${mailSenderHost}")
+    private String mailSenderHost;
+
+    @Value("${databaseUser}")
+    private String databaseUser;
+    @Value("${databasePassword}")
+    private String databasePassword;
+    @Value("${databaseUrl}")
+    private String databaseUrl;
+
+    @Bean(name = "dataSource")
+    public DataSource getDataSource() throws PropertyVetoException {
+        ComboPooledDataSource ds = new ComboPooledDataSource();
+        ds.setDriverClass("com.mysql.jdbc.Driver");
+        ds.setUser(databaseUser);
+        ds.setPassword(databasePassword);
+        ds.setJdbcUrl(databaseUrl);
+        ds.setIdleConnectionTestPeriod(160);
+        return ds;
+    }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -96,9 +125,9 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     public MailSender javaMailSender() {
         log.debug("javaMailSender");
         final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setUsername("smigo.org@gmail.com");
-        javaMailSender.setPassword("lstN09LLrZZx");
-        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setUsername(mailSenderUsername);
+        javaMailSender.setPassword(mailSenderPassword);
+        javaMailSender.setHost(mailSenderHost);
         javaMailSender.setPort(587);
         javaMailSender.setProtocol("smtp");
         javaMailSender.setJavaMailProperties(new Properties() {

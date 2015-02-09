@@ -1,6 +1,5 @@
 package org.smigo.config;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -10,26 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
-import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
-
 @Configuration
 @Profile(EnvironmentProfile.DEVELOPMENT)
-@PropertySource({"classpath:default.properties", "classpath:dev.properties"})
+@PropertySource({"classpath:default.properties", "classpath:dev.properties", "classpath:local.properties"})
 public class DevelopmentConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Bean(name = "dataSource")
-    public DataSource getDataSource() throws PropertyVetoException {
-        ComboPooledDataSource ds = new ComboPooledDataSource();
-        ds.setDriverClass("com.mysql.jdbc.Driver");
-        ds.setUser("nosslin2_dev");
-        ds.setPassword("MC7TCz8Dp5inukeJ6z");
-        ds.setJdbcUrl("jdbc:mysql://198.38.82.101/nosslin2_stage4");
-        ds.setIdleConnectionTestPeriod(160);
-        return ds;
-    }
 
     @Bean
     public MessageSource messageSource() {
