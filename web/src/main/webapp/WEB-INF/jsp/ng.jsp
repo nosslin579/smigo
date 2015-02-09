@@ -76,7 +76,7 @@
 <script type="text/ng-template" id="species-tooltip.html">
     <%@ include file="../views/species-tooltip.html" %>
 </script>
-<script type="text/ng-template" id="squareinfo.html">
+<script type="text/ng-template" id="square.html">
     <%@ include file="../views/square.html" %>
 </script>
 <script type="text/ng-template" id="wall.html">
