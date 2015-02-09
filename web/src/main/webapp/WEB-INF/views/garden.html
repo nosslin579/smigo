@@ -113,6 +113,12 @@
                     <ul class="dropdown-menu pull-right">
                         <li facebook ng-model="userState.currentUser.username">
                         </li>
+                        <li>
+                            <a href="http://www.reddit.com/submit?url=http://smigo.org/wall/{{userState.currentUser.username}}&title=This is my garden planning. Tell me what you think." target="_blank"><span class="social-sprite reddit"></span>&nbsp;Reddit</a>
+                        </li>
+                        <li>
+                            <a href="https://plus.google.com/share?url=http://smigo.org/wall/{{userState.currentUser.username}}" target="_blank"><span class="social-sprite google"></span>&nbsp;Google</a>
+                        </li>
                         <li twitter ng-model="userState.currentUser.username">
                         </li>
                         <li>
