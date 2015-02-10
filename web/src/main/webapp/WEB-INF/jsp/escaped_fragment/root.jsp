@@ -2,16 +2,17 @@
 <jsp:include page="../header.jsp"/>
 <jsp:include page="nav.jsp"/>
 
+
 <div ng-view="" class="angular-view ng-scope">
     <div class="container-fluid full-height ng-scope">
         <div class="row full-height">
-            <div species-tooltip="" class="species-tooltip hidden-xs ng-isolate-scope" style="visibility: hidden; top: 348px;">
+            <div species-tooltip="" class="species-tooltip hidden-xs ng-isolate-scope" style="visibility: visible; top: 379px;">
                 <div class="popover right in fade show">
                     <div class="popover-inner">
                         <div class="popover-title text-center">
                             <h4>
-                                <img class="small-species" ng-src="/static/species/13.png" src="/static/species/13.png">
-                                <a href="/species/13"><strong style="padding-right: 20px;" class="ng-binding">Brussels sprouts</strong></a>
+                                <img class="small-species" ng-src="/static/species/17.png" src="/static/species/17.png">
+                                <a href="/species/17"><strong style="padding-right: 20px;" class="ng-binding">Cabbage</strong></a>
                                 <button type="button" class="close" style="color: #000;padding: 0px 10px 10px 10px;">
                                     <span>×</span>
                                 </button>
@@ -24,7 +25,7 @@
                         <div class="popover-content ng-scope" ng-if="!species.item">
                             <!-- ngIf: species.scientificName -->
                             <div ng-if="species.scientificName" class="ng-scope">
-                                <strong class="ng-binding">Scientific Name:</strong><em class="ng-binding"> Brassica oleracea var. gemmifera</em>
+                                <strong class="ng-binding">Scientific Name:</strong><em class="ng-binding"> Brassica oleracea var. capitata</em>
                             </div>
                             <!-- end ngIf: species.scientificName -->
                             <!-- ngIf: species.family -->
@@ -39,25 +40,25 @@
                             <div ng-if="species.rules.find('goodcompanion','category') != null" class="ng-scope">
                                 <strong class="ng-binding">Good companions: </strong>
                                 <!-- ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Rosemary,
+                    Mint,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Onion,
+                    Nasturtium,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Chamomile,
+                    Geranium,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
                     Celery,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
                     Beetroot,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Geranium,
+                    Rosemary,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Nasturtium,
+                    Chard,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Mint,
+                    Chamomile,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
                     Dill,
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' --><span ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" class="ng-binding ng-scope">
-                    Chard
+                    Onion
                 </span><!-- end ngRepeat: r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host' -->
                             </div>
                             <!-- end ngIf: species.rules.find('goodcompanion','category') != null -->
@@ -146,7 +147,7 @@
                             <a class="select-species-link ng-binding" href="" data-speciesid="13">Brussels sprouts</a>
                         </li>
                         <!-- end ngRepeat: s in speciesState.speciesArray | speciesFilter:search.query -->
-                        <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" ng-class="{active: speciesState.selectedSpecies.id === s.id &amp;&amp; speciesState.action == 'add'}" ng-click="selectSpecies(s, $event)" class="ng-scope">
+                        <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" ng-class="{active: speciesState.selectedSpecies.id === s.id &amp;&amp; speciesState.action == 'add'}" ng-click="selectSpecies(s, $event)" class="ng-scope active">
                             <a class="select-species-link ng-binding" href="" data-speciesid="17">Cabbage</a>
                         </li>
                         <!-- end ngRepeat: s in speciesState.speciesArray | speciesFilter:search.query -->
@@ -154,7 +155,7 @@
                             <a class="select-species-link ng-binding" href="" data-speciesid="30">Capsicum</a>
                         </li>
                         <!-- end ngRepeat: s in speciesState.speciesArray | speciesFilter:search.query -->
-                        <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" ng-class="{active: speciesState.selectedSpecies.id === s.id &amp;&amp; speciesState.action == 'add'}" ng-click="selectSpecies(s, $event)" class="ng-scope active">
+                        <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" ng-class="{active: speciesState.selectedSpecies.id === s.id &amp;&amp; speciesState.action == 'add'}" ng-click="selectSpecies(s, $event)" class="ng-scope">
                             <a class="select-species-link ng-binding" href="" data-speciesid="28">Carrot</a>
                         </li>
                         <!-- end ngRepeat: s in speciesState.speciesArray | speciesFilter:search.query -->
@@ -424,4 +425,5 @@
         </div>
     </div>
 </div>
+
 <jsp:include page="../footer.jsp"/>

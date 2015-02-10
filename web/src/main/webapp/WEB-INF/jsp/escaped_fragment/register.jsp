@@ -12,10 +12,10 @@
                 <h3 class="ng-binding">Use another account</h3>
 
                 <div>
-                    <a ng-click="requestFeature('google-sign-in')" href="" class="list-group-item"><span class="social-sprite google" style="margin-right: 10px;"></span>Google</a>
                     <a onclick="$('#facebookSignin').submit()" href="" class="list-group-item"><span class="social-sprite facebook" style="margin-right: 10px;"></span>Facebook</a>
-                    <a ng-click="requestFeature('twitter-sign-in')" href="" class="list-group-item"><span class="social-sprite twitter" style="margin-right: 10px;"></span>Twitter</a>
                     <a onclick="$('#yahooOpenId').submit()" href="" class="list-group-item"><span class="social-sprite yahoo" style="margin-right: 10px;"></span>Yahoo</a>
+                    <a ng-click="requestFeature('google-sign-in')" href="" class="list-group-item"><span class="social-sprite google" style="margin-right: 10px;"></span>Google</a>
+                    <a ng-click="requestFeature('twitter-sign-in')" href="" class="list-group-item"><span class="social-sprite twitter" style="margin-right: 10px;"></span>Twitter</a>
                 </div>
 
                 <form name="fb_signin" id="facebookSignin" action="/auth/facebook" method="POST" class="ng-pristine ng-valid">
