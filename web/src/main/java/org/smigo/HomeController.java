@@ -53,6 +53,7 @@ public class HomeController {
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
         model.addAttribute("hasEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
+        model.addAttribute("noCrawl", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+"));
         return "ng.jsp";
     }
 

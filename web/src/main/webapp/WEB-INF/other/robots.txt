@@ -3,6 +3,7 @@ Disallow: /rest
 Disallow: /rest/*
 Disallow: /account
 Disallow: /static/*
+Disallow: /static/tos.html
 Allow: /garden
 Allow: /help
 Allow: /login

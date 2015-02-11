@@ -19,7 +19,7 @@
     <c:if test="${hasEscapeFragment}">
         <meta name="fragment" content="!">
     </c:if>
-    <c:if test="${param.noCrawl}">
+    <c:if test="${param.noCrawl || noCrawl}">
         <meta name="robots" content="noindex">
     </c:if>
     <%--<meta name="referrer" content="never">--%>
