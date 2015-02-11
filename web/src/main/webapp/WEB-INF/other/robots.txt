@@ -1,14 +1,18 @@
 User-agent: *
-Disallow: /rest
-Disallow: /rest/*
-Disallow: /account
-Disallow: /static/*
-Disallow: /static/tos.html
 Allow: /garden
 Allow: /help
 Allow: /login
 Allow: /register
 Allow: /forum
+Allow: /static/sitemap.xml
+Allow: /static/version-history.html
+
+
+Disallow: /rest
+Disallow: /rest/*
+Disallow: /account
+Disallow: /static/*
+Disallow: /static/tos.html
 
 Allow: /*.css$
 Allow: /*.js$
