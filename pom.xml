@@ -23,6 +23,34 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.8</version>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <addSvnKeyWords>false</addSvnKeyWords>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>first</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                            <configuration>
+                                <licenseName>lgpl_v3</licenseName>
+                                <organizationName>Christian Nilsson</organizationName>
+                                <inceptionYear>2015</inceptionYear>
+                                <projectName>Smigo</projectName>
+                                <roots>
+                                    <root>src/main/java</root>
+                                    <root>src/test/java</root>
+                                </roots>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
