@@ -38,7 +38,7 @@ public class HomeController {
 
     @RequestMapping(value = {
             "/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*",
-            "/rule/*", "/forum"
+            "/rule/*", "/forum", "/request-password-link"
     }, method = RequestMethod.GET)
     public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user, HttpServletRequest request) {
         if (user != null && !userSession.getUser().isTermsOfService()) {
@@ -53,7 +53,7 @@ public class HomeController {
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
         model.addAttribute("hasEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
-        model.addAttribute("noCrawl", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+"));
+        model.addAttribute("noCrawl", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+|/request-password-link"));
         return "ng.jsp";
     }
 
