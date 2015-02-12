@@ -89,7 +89,7 @@
                         <label for="termsOfService" class="checkbox ng-binding">
                             <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required="" class="ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-parse">
                             I agree to the terms of service
-                            <a target="_blank" href="/static/tos.html" class="ng-binding">Terms of Service</a>
+                            <a target="_blank" href="/static/terms-of-service.html" class="ng-binding">Terms of Service</a>
                         </label>
                         <span ng-show="loginOrRegisterform.termsOfService.$error.required &amp;&amp; loginOrRegisterform.submitted" class="help-block ng-binding ng-hide">Required</span>
                     </div>

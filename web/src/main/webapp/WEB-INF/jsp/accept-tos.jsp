@@ -16,7 +16,7 @@
     </div>
 
     <div class="embed-responsive embed-responsive-4by3">
-        <iframe class="embed-responsive-item" src="/static/tos.html"></iframe>
+        <iframe class="embed-responsive-item" src="/static/terms-of-service.html"></iframe>
     </div>
 
     <c:url value="/accept-termsofservice" var="actionUrl"/>

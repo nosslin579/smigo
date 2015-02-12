@@ -13,6 +13,7 @@ Disallow: /rest/*
 Disallow: /account
 Disallow: /static/*
 Disallow: /static/tos.html
+Disallow: /static/terms-of-service.html
 
 Allow: /*.css$
 Allow: /*.js$
