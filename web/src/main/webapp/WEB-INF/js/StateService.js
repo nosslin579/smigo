@@ -21,19 +21,6 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
         }
     });
 
-
-    $rootScope.$on("$routeChangeStart", function (event, next, current) {
-        if (user.currentUser && !user.currentUser.termsOfService) {
-            $log.log('User has not accepted terms of service', state);
-            if (next.templateUrl == "accept-terms-of-service.html") {
-                // already going to #accept, no redirect needed
-            } else {
-                // not going to #accept, we should redirect now
-                $location.path("/accept-terms-of-service");
-            }
-        }
-    });
-
     function pingServer() {
         $http.get('ping')
             .then(function (response) {
