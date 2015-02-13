@@ -7,6 +7,11 @@
     <jsp:param name="noCrawl" value="true"/>
 </jsp:include>
 
+<jsp:include page="nav-simple.jsp">
+    <jsp:param name="showLogout" value="true"/>
+</jsp:include>
+
+
 <body>
 <div class="container">
     <div class="page-header text-center">
@@ -31,16 +36,9 @@
             </form:label>
         </div>
         <button type="submit" class="btn btn-default"><spring:message code="ok"/></button>
-        <a href="#" onclick="logout()" class="btn btn-default"><spring:message code="cancel"/></a>
+        <a href="/logout2" class="btn btn-default"><spring:message code="cancel"/></a>
     </form:form>
 </div>
-<script>
-    function logout() {
-        $.post('/logout').then(function redirect() {
-            window.location.href = "/";
-        });
-    }
-</script>
 </body>
 
 <jsp:include page="footer.jsp"/>

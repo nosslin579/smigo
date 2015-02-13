@@ -38,6 +38,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -178,4 +180,9 @@ public class UserController {
         };
     }
 
+    @RequestMapping(value = {"/logout2"}, method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) throws ServletException {
+        request.logout();
+        return "redirect:/hasta-luego";
+    }
 }

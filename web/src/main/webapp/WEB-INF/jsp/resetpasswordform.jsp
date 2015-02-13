@@ -5,6 +5,10 @@
 
 <jsp:include page="header.jsp"/>
 
+<jsp:include page="nav-simple.jsp">
+    <jsp:param name="showLogout" value="false"/>
+</jsp:include>
+
 
 <body>
 <div class="container">

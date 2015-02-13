@@ -59,6 +59,6 @@ public class AcceptTermsofServiceController {
         userBean.setLocale(locale);
         userDao.updateUser(user.getId(), userBean);
 
-        return "redirect:/";
+        return "redirect:/garden";
     }
 }
