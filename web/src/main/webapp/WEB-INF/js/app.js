@@ -26,9 +26,12 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'login.html',
                 controller: 'RegisterController'
             }).
-            when('/', {
+            when('/garden', {
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
+            }).
+            when('/', {
+                templateUrl: 'home.html',
             }).
             when('/wall/:username', {
                 templateUrl: 'wall.html',
@@ -46,9 +49,8 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'rule.html',
                 controller: 'RuleController'
             }).
-            when('/garden', {redirectTo: '/'}).
             when('/beta', {redirectTo: '/'}).
-            when('/_=_', {redirectTo: '/'}).
+            when('/_=_', {redirectTo: '/garden'}).
             otherwise({templateUrl: '404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {

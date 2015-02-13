@@ -64,6 +64,9 @@
 <script type="text/ng-template" id="garden.html">
     <%@ include file="../views/garden.html" %>
 </script>
+<script type="text/ng-template" id="home.html">
+    <%@ include file="../views/home.html" %>
+</script>
 <script type="text/ng-template" id="help.html">
     <%@ include file="../views/help.html" %>
 </script>

@@ -37,7 +37,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -79,11 +78,9 @@ public class HomeController {
         return "ng.jsp";
     }
 
-    @RequestMapping(value = {
-            "/", "/help", "/login", "/register", "/forum"
-    }, method = RequestMethod.GET, params = "_escaped_fragment_")
-    public String getGarden(@RequestParam String _escaped_fragment_, HttpServletRequest request) {
-        final String jsp = request.getServletPath().equals("/") ? "/root" : request.getServletPath();
+    @RequestMapping(value = {"/", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET, params = "_escaped_fragment_")
+    public String getGarden(HttpServletRequest request) {
+        final String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
         return "escaped_fragment" + jsp + ".jsp";
     }
 
