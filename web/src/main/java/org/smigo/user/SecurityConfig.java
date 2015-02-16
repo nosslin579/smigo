@@ -86,7 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();
         rememberMe.userDetailsService(customUserDetailsService);
-        rememberMe.key("MjYvVCDYOplXAWq");
         rememberMe.tokenValiditySeconds(Integer.MAX_VALUE);
         rememberMe.tokenRepository(persistentTokenRepository());
 
