@@ -1,4 +1,4 @@
-function RegisterController($scope, $location, $http, UserService) {
+function RegisterController($timeout, $scope, $location, $http, UserService) {
     $scope.viewModel = {
         register: true,
         usernameMin: 5,
@@ -19,7 +19,11 @@ function RegisterController($scope, $location, $http, UserService) {
     $scope.requestFeature = UserService.requestFeature;
 
 
-    $http.get('/rpc/showcaptcha/')
+    //todo this should be a directive
+    $timeout(angular.noop, 1000)
+        .then(function () {
+            return $http.get('/rpc/showcaptcha/');
+        })
         .then(function renderCaptch(response) {
             if (response.data && $location.path() === '/register') {
                 $scope.widgetId = grecaptcha.render('recaptcha', {
