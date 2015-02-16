@@ -33,7 +33,7 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
             .catch(function (response) {
                 $log.warn("Ping fail", response);
             });
-        if (pingCounter++ < 100) {
+        if (pingCounter++ < 50) {
             $timeout(pingServer, 960000);
         }
     }
