@@ -16,10 +16,10 @@
     <meta name="description" content="Design and plan your vegetable garden and share with friends. Get advice for crop rotation and companion planting. Based on square foot gardening.">
     <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening.">
     <meta name="author" content="Christian Nilsson">
-    <c:if test="${hasEscapeFragment}">
+    <c:if test="${addEscapeFragment}">
         <meta name="fragment" content="!">
     </c:if>
-    <c:if test="${param.noCrawl || noCrawl}">
+    <c:if test="${param.addRobotsNoIndex || addRobotsNoIndex}">
         <meta name="robots" content="noindex">
     </c:if>
     <%--<meta name="referrer" content="never">--%>

@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <jsp:include page="header.jsp">
-    <jsp:param name="noCrawl" value="true"/>
+    <jsp:param name="addRobotsNoIndex" value="true"/>
 </jsp:include>
 
 <jsp:include page="nav-simple.jsp">

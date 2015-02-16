@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:include page="header.jsp">
-    <jsp:param name="noCrawl" value="true"/>
+    <jsp:param name="addRobotsNoIndex" value="true"/>
 </jsp:include>
 
 <body>

@@ -73,8 +73,8 @@ public class HomeController {
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
-        model.addAttribute("hasEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
-        model.addAttribute("noCrawl", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+|/request-password-link"));
+        model.addAttribute("addEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
+        model.addAttribute("addRobotsNoIndex", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+|/request-password-link"));
         return "ng.jsp";
     }
 
