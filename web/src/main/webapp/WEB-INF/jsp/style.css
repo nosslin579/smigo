@@ -180,3 +180,12 @@ body > .angular-view {
 .badcompanion, .badcroprotation, .speciesrepetition {
     color: #ac2925;
 }
+
+/*############## footer  #########################*/
+footer {
+    font-size: 12px;
+}
+
+footer a {
+    color: #3c3422;
+}
