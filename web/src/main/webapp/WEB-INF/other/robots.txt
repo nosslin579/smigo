@@ -26,3 +26,6 @@ Disallow: /static/version-history.html
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.png$
+
+
+sitemap: http://smigo.org/static/sitemap.xml
