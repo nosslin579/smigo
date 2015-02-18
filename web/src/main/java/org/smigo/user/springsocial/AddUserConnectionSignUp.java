@@ -22,17 +22,13 @@ package org.smigo.user.springsocial;
  * #L%
  */
 
-import org.smigo.user.RegisterFormBean;
+import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserBean;
 import org.smigo.user.UserHandler;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 
-import java.util.Locale;
-
 class AddUserConnectionSignUp implements ConnectionSignUp {
-
-    public static final long NOT_SO_RANDOM_POINT_IN_TIME = 1411140042351l;
 
     private final UserHandler userHandler;
 
@@ -42,17 +38,11 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
 
     @Override
     public String execute(Connection<?> connection) {
-        final RegisterFormBean user = new RegisterFormBean();
-        user.setUsername("user" + String.valueOf(System.currentTimeMillis() - NOT_SO_RANDOM_POINT_IN_TIME));
-        user.setTermsOfService(false);
-        final int id = userHandler.createUser(user, Locale.ENGLISH);
-
-        final UserBean userBean = new UserBean();
+        final AuthenticatedUser createdUser = userHandler.createUser();
+        final UserBean userBean = userHandler.getUser(createdUser);
         userBean.setEmail(connection.fetchUserProfile().getEmail());
         userBean.setDisplayName(connection.fetchUserProfile().getName());
-        userBean.setLocale(Locale.ENGLISH);
-        userHandler.updateUser(id, userBean);
-
-        return String.valueOf(id);
+        userHandler.updateUser(createdUser.getId(), userBean);
+        return String.valueOf(createdUser.getId());
     }
 }

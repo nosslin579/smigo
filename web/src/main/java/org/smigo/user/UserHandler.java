@@ -36,6 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -50,6 +51,8 @@ public class UserHandler {
 
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private LocaleResolver localeResolver;
     @Autowired
     private UserSession userSession;
     @Autowired
@@ -69,9 +72,19 @@ public class UserHandler {
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
-    public void createUser(RegisterFormBean user, String identityUrl, Locale locale) {
-        final int userId = createUser(user, locale);
-        userDao.addOpenId(userId, identityUrl);
+    public AuthenticatedUser createUser() {
+        for (int tries = 0; tries < 5; tries++) {
+            String username = "user" + (int) (Math.random() * 1000000);
+            final List<UserDetails> userDetails = userDao.getUserDetails(username);
+            if (userDetails.size() == 0) {
+                final Locale locale = localeResolver.resolveLocale(request);
+                final RegisterFormBean newUser = new RegisterFormBean();
+                newUser.setUsername(username);
+                final int id = createUser(newUser, locale);
+                return new AuthenticatedUser(id, username, "");
+            }
+        }
+        throw new IllegalStateException("Tried 5 times and could not find a free username");
     }
 
     public int createUser(RegisterFormBean user, Locale locale) {

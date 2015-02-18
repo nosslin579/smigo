@@ -36,7 +36,6 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,7 +152,7 @@ public class JdbcUserDao implements UserDao {
             String username = rs.getString("username");
             String password = rs.getString("password");
             int id = rs.getInt("id");
-            return new AuthenticatedUser(id, username, password, Collections.singletonList(Authority.USER));
+            return new AuthenticatedUser(id, username, password);
         }
     }
 

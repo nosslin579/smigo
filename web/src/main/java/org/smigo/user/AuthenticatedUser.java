@@ -22,17 +22,16 @@ package org.smigo.user;
  * #L%
  */
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.social.security.SocialUser;
 import org.springframework.social.security.SocialUserDetails;
 
-import java.util.List;
+import java.util.Collections;
 
 public class AuthenticatedUser extends SocialUser implements User, SocialUserDetails {
     private final int id;
 
-    public AuthenticatedUser(int id, String username, String password, List<GrantedAuthority> authorities) {
-        super(username, password, authorities);
+    public AuthenticatedUser(int id, String username, String password) {
+        super(username, password, Collections.singletonList(Authority.USER));
         this.id = id;
     }
 
