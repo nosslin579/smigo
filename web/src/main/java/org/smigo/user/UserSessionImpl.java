@@ -59,4 +59,9 @@ public class UserSessionImpl implements UserSession {
     public UserBean getUser() {
         return user;
     }
+
+    @Override
+    public boolean needToAcceptedTermsOfService() {
+        return user.getUsername() != null && !user.isTermsOfService();
+    }
 }

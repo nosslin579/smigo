@@ -35,4 +35,6 @@ public interface UserSession extends Serializable {
     void setUser(UserBean user);
 
     UserBean getUser();
+
+    boolean needToAcceptedTermsOfService();
 }

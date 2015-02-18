@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -57,28 +58,42 @@ public class HomeController {
     @Autowired
     private SpeciesHandler speciesHandler;
 
-    @RequestMapping(value = {
-            "/", "/garden", "/hasta-luego", "/help", "/login", "/register", "/wall/*", "/beta", "/account", "/species/*",
-            "/rule/*", "/forum", "/request-password-link"
-    }, method = RequestMethod.GET)
-    public String getGarden(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user, HttpServletRequest request) {
-        if (user != null && !userSession.getUser().isTermsOfService()) {
-            return "redirect:/accept-termsofservice";
-        }
+    @ModelAttribute
+    public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
-
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getSpeciesMap());
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
-        model.addAttribute("addEscapeFragment", request.getServletPath().matches("/help|/forum|/login|/register|/"));
-        model.addAttribute("addRobotsNoIndex", request.getServletPath().matches("/account|/wall.+|/species.+|/rule.+|/request-password-link"));
+    }
+
+
+    @RequestMapping(value = {"/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)
+    public String getGarden(Model model) {
+        if (userSession.needToAcceptedTermsOfService()) {
+            return "redirect:/accept-termsofservice";
+        }
+        model.addAttribute("addRobotsNoIndex", true);
         return "ng.jsp";
     }
 
-    @RequestMapping(value = {"/", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET, params = "_escaped_fragment_")
+    @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET)
+    public String getFrontpage(Model model, HttpServletRequest request) {
+        if (userSession.needToAcceptedTermsOfService()) {
+            return "redirect:/accept-termsofservice";
+        }
+        final String path = request.getServletPath().replace("/", "");
+        final String page = path.isEmpty() ? "front" : path;
+        model.addAttribute("addEscapeFragment", true);
+        model.addAttribute("msgTitle", "msg.concat.title." + page);
+        model.addAttribute("msgDescription", "msg.concat.metadescription." + page);
+        return "ng.jsp";
+    }
+
+
+    @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET, params = "_escaped_fragment_")
     public String getGarden(HttpServletRequest request) {
         final String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
         return "escaped_fragment" + jsp + ".jsp";

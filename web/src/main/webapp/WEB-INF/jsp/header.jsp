@@ -9,11 +9,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Smigo - <spring:message code="general.smigoslogan"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="Design and plan your vegetable garden and share with friends. Get advice for crop rotation and companion planting. Based on square foot gardening.">
+    <title><spring:message code="${msgTitle}"/></title>
+    <meta name="description" content="<spring:message code="${msgDescription}"/>">
     <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening layout design">
     <meta name="author" content="Christian Nilsson">
     <c:if test="${addEscapeFragment}">
