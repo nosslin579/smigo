@@ -24,7 +24,6 @@ package org.smigo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.log.VisitLogger;
 import org.smigo.plants.PlantHandler;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
@@ -97,22 +96,5 @@ public class HomeController {
     public String getGarden(HttpServletRequest request) {
         final String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
         return "escaped_fragment" + jsp + ".jsp";
-    }
-
-
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String error(Model model, HttpServletRequest request) {
-        final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
-        final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
-        final Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        final String note = (String) request.getAttribute(VisitLogger.NOTE_ATTRIBUTE);
-        log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode, exception);
-        String exMsg = exception == null ? "" : exception.getClass().getName() + ":" + exception.getMessage();
-        String uriMsg = uri == null ? "" : "Uri:" + uri;
-        String noteMsg = note == null ? "" : note;
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteMsg + "," + exMsg + "," + uriMsg);
-        model.addAttribute("statusCode", statusCode);
-        return "error.jsp";
-
     }
 }
