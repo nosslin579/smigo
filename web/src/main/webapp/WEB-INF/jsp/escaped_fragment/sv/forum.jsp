@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<jsp:include page="../header.jsp"/>
+<jsp:include page="../../header.jsp"/>
 <jsp:include page="nav.jsp"/>
+
 <div ng-view="" class="angular-view ng-scope">
     <div class="container ng-scope">
 
@@ -41,25 +42,25 @@
                     <footer>
                         <div class="row">
                             <div class="col-sm-offset-1 col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">About</div>
-                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Source code</a><br>
-                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Terms of Service</a><br>
-                                <a href="/help" class="ng-binding">Help</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Om</div>
+                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Källkod</a><br>
+                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Användaravtal</a><br>
+                                <a href="/help" class="ng-binding">Hjälp</a><br>
                                 <a href="/forum" class="ng-binding">Forum</a><br>
                             </div>
                             <div class="col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">Contact</div>
+                                <div style="text-decoration: underline;" class="ng-binding">Kontakt</div>
                                 <a href="http://www.reddit.com/r/smigo" target="_blank">Reddit</a><br>
                                 <a href="https://www.facebook.com/smigogarden" target="_blank">Facebook</a><br>
                                 <a href="https://www.twitter.com/smigogarden" target="_blank">Twitter</a><br>
                                 <a href="http://se.linkedin.com/pub/christian-nilsson/3b/798/a5b/" target="_blank">Linkedin</a><br>
                             </div>
                             <div class="col-xs-4 col-xs-3">
-                                <div style="text-decoration: underline;" class="ng-binding">Links</div>
-                                <a href="http://en.wikipedia.org/wiki/Companion_planting" target="_blank" class="ng-binding">Companion planting</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Square_foot_gardening" target="_blank" class="ng-binding">Square foot gardening</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Länkar</div>
+                                <a href="http://stud.epsilon.slu.se/5256/" target="_blank" class="ng-binding">Samodling</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/V%C3%A4xelbruk" target="_blank" class="ng-binding">Växelbruk</a><br>
                                 <a href="http://sourceforge.net/projects/kitchengarden" target="_blank" class="ng-binding">Kitchen garden aid</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Crop_rotation" target="_blank" class="ng-binding">Crop rotation</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/Gr%C3%B6nsaksland" target="_blank" class="ng-binding">Grönsaksland</a><br>
                             </div>
                         </div>
                         <div class="row" style="margin: 16px;">
@@ -71,4 +72,4 @@
         </div>
     </div>
 </div>
-<jsp:include page="footer.jsp"/>
+<jsp:include page="../footer.jsp"/>

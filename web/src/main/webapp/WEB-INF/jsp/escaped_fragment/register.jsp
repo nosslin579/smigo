@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <jsp:include page="../header.jsp"/>
 <jsp:include page="nav.jsp"/>
+
 <div ng-view="" class="angular-view ng-scope">
     <div class="container ng-scope">
         <div class="page-header text-center">
@@ -89,7 +90,7 @@
                         <label for="termsOfService" class="checkbox ng-binding">
                             <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required="" class="ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-parse">
                             I agree to the terms of service
-                            <a target="_blank" href="/static/terms-of-service.html" class="ng-binding">Terms of Service</a>
+                            <a target="_blank" href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Terms of Service</a>
                         </label>
                         <span ng-show="loginOrRegisterform.termsOfService.$error.required &amp;&amp; loginOrRegisterform.submitted" class="help-block ng-binding ng-hide">Required</span>
                     </div>
@@ -106,6 +107,44 @@
             </div>
         </div>
 
+        <!-- ngInclude: 'footer.html' -->
+        <div ng-include="'footer.html'" class="ng-scope">
+            <hr style="border-top-color:#B8B8B8;margin-top: 100px" class="ng-scope">
+
+            <div class="row ng-scope">
+                <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+                    <footer>
+                        <div class="row">
+                            <div class="col-sm-offset-1 col-xs-4">
+                                <div style="text-decoration: underline;" class="ng-binding">About</div>
+                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Source code</a><br>
+                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Terms of Service</a><br>
+                                <a href="/help" class="ng-binding">Help</a><br>
+                                <a href="/forum" class="ng-binding">Forum</a><br>
+                            </div>
+                            <div class="col-xs-4">
+                                <div style="text-decoration: underline;" class="ng-binding">Contact</div>
+                                <a href="http://www.reddit.com/r/smigo" target="_blank">Reddit</a><br>
+                                <a href="https://www.facebook.com/smigogarden" target="_blank">Facebook</a><br>
+                                <a href="https://www.twitter.com/smigogarden" target="_blank">Twitter</a><br>
+                                <a href="http://se.linkedin.com/pub/christian-nilsson/3b/798/a5b/" target="_blank">Linkedin</a><br>
+                            </div>
+                            <div class="col-xs-4 col-xs-3">
+                                <div style="text-decoration: underline;" class="ng-binding">Links</div>
+                                <a href="http://en.wikipedia.org/wiki/Companion_planting" target="_blank" class="ng-binding">Companion planting</a><br>
+                                <a href="http://en.wikipedia.org/wiki/Square_foot_gardening" target="_blank" class="ng-binding">Square foot gardening</a><br>
+                                <a href="http://sourceforge.net/projects/kitchengarden" target="_blank" class="ng-binding">Kitchen garden aid</a><br>
+                                <a href="http://en.wikipedia.org/wiki/Crop_rotation" target="_blank" class="ng-binding">Crop rotation</a><br>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 16px;">
+                            <div class="text-center">Copyright (C) 2011-2015 Christian Nilsson - christian1195@gmail.com</div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<jsp:include page="../footer.jsp"/>
+
+<jsp:include page="footer.jsp"/>

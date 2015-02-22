@@ -58,7 +58,7 @@ public class HomeController {
     private SpeciesHandler speciesHandler;
 
     @ModelAttribute
-    public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
+    public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user, HttpServletRequest request) {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
         model.addAttribute("user", userHandler.getUser(user));
@@ -66,6 +66,11 @@ public class HomeController {
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
+
+        final String path = request.getServletPath().replace("/", "");
+        final String page = path.isEmpty() ? "front" : path;
+        model.addAttribute("msgTitle", "msg.concat.title." + page);
+        model.addAttribute("msgDescription", "msg.concat.metadescription." + page);
     }
 
 
@@ -79,22 +84,22 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET)
-    public String getFrontpage(Model model, HttpServletRequest request) {
+    public String getFrontpage(Model model) {
         if (userSession.needToAcceptedTermsOfService()) {
             return "redirect:/accept-termsofservice";
         }
-        final String path = request.getServletPath().replace("/", "");
-        final String page = path.isEmpty() ? "front" : path;
         model.addAttribute("addEscapeFragment", true);
-        model.addAttribute("msgTitle", "msg.concat.title." + page);
-        model.addAttribute("msgDescription", "msg.concat.metadescription." + page);
         return "ng.jsp";
     }
 
 
     @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET, params = "_escaped_fragment_")
-    public String getGarden(HttpServletRequest request) {
-        final String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
+    public String getGarden(HttpServletRequest request, Locale locale, Model model) {
+        String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
+        if (locale.equals(new Locale("sv"))) {
+            jsp = "/sv" + jsp;
+        }
+        model.addAttribute("addEscapeFragment", true);
         return "escaped_fragment" + jsp + ".jsp";
     }
 }

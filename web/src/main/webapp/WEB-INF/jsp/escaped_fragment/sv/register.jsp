@@ -1,16 +1,16 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<jsp:include page="../header.jsp"/>
+<jsp:include page="../../header.jsp"/>
 <jsp:include page="nav.jsp"/>
 
 <div ng-view="" class="angular-view ng-scope">
     <div class="container ng-scope">
         <div class="page-header text-center">
-            <h1 class="ng-binding">Login</h1>
+            <h1 class="ng-binding">Registrera</h1>
         </div>
 
         <div class="row">
             <div class="col-sm-5">
-                <h3 class="ng-binding">Use another account</h3>
+                <h3 class="ng-binding">Använd ett externt konto</h3>
 
                 <div>
                     <a onclick="$('#facebookSignin').submit()" href="" class="list-group-item"><span class="social-sprite facebook" style="margin-right: 10px;"></span>Facebook</a>
@@ -43,57 +43,66 @@
                         <input required="" placeholder="https://openid.net/" class="form-control" id="openid-url" type="text" size="30" name="openid_identifier">
                     </div>
                     <div class="form-group">
-                        <button name="submit" type="submit" class="btn btn-default ng-binding">Login</button>
+                        <button name="submit" type="submit" class="btn btn-default ng-binding">Registrera</button>
                     </div>
                 </form>
             </div>
 
             <div class="col-sm-5 col-sm-offset-2">
-                <h3 class="ng-binding">Use a Smigo account</h3>
+                <h3 class="ng-binding">Använd ett Smigo konto</h3>
 
-                <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel,widgetId)" class="ng-pristine ng-valid ng-valid-required ng-valid-pattern ng-valid-minlength ng-valid-parse ng-valid-maxlength">
+                <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel,widgetId)" class="ng-pristine ng-invalid ng-invalid-required ng-valid-pattern ng-valid-minlength ng-valid-maxlength ng-invalid-equals ng-valid-parse">
                     <div class="has-error">
                         <!-- ngRepeat: error in loginOrRegisterform.objectErrors -->
                     </div>
 
                     <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid &amp;&amp; (loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted)}">
-                        <label for="username" class="ng-binding">Username</label>
-                        <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required ng-valid-pattern ng-valid-minlength ng-valid-parse ng-valid-maxlength" id="username" name="username" placeholder="Username" ng-model="formModel.username" ng-required="true" ng-minlength="0" ng-maxlength="999" ng-pattern="/.+/" required="required">
+                        <label for="username" class="ng-binding">Användarnamn</label>
+                        <input type="text" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-pattern ng-valid-minlength ng-valid-maxlength" id="username" name="username" placeholder="Användarnamn" ng-model="formModel.username" ng-required="true" ng-minlength="5" ng-maxlength="40" ng-pattern="/^[\w]+$/" required="required">
 
                         <!-- ngIf: loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted -->
                     </div>
 
                     <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid &amp;&amp; (loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted)}">
-                        <label for="password" class="ng-binding">Password</label>
-                        <input type="password" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required ng-valid-minlength ng-valid-parse" id="password" name="password" placeholder="Password" ng-model="formModel.password" ng-required="true" ng-minlength="0" required="required">
+                        <label for="password" class="ng-binding">Lösenord</label>
+                        <input type="password" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength" id="password" name="password" placeholder="Lösenord" ng-model="formModel.password" ng-required="true" ng-minlength="6" required="required">
 
                         <!-- ngIf: loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted -->
                     </div>
 
                     <!-- ngIf: viewModel.register -->
+                    <div class="form-group ng-scope" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.passwordagain.$invalid &amp;&amp; loginOrRegisterform.passwordagain.$dirty}">
+                        <label for="password-again" class="ng-binding">Upprepa lösenord</label>
+                        <input type="password" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-equals" id="password-again" name="passwordagain" placeholder="Upprepa lösenord" ng-model="passwordAgain" equals="">
+
+                        <!-- ngIf: loginOrRegisterform.passwordagain.$dirty -->
+                    </div>
+                    <!-- end ngIf: viewModel.register -->
 
                     <!-- ngIf: viewModel.register -->
+                    <div class="form-group ng-scope" ng-if="viewModel.register">
+                        <div id="recaptcha"></div>
+                    </div>
+                    <!-- end ngIf: viewModel.register -->
 
                     <!-- ngIf: viewModel.register -->
+                    <div class="form-group checkbox ng-scope" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid &amp;&amp; loginOrRegisterform.submitted}">
+                        <label for="termsOfService" class="checkbox ng-binding">
+                            <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required="" class="ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-parse">
+                            Jag godkänner användaravtalet
+                            <a target="_blank" href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Användaravtal</a>
+                        </label>
+                        <span ng-show="loginOrRegisterform.termsOfService.$error.required &amp;&amp; loginOrRegisterform.submitted" class="help-block ng-binding ng-hide">Obligatoriskt</span>
+                    </div>
+                    <!-- end ngIf: viewModel.register -->
 
                     <!-- ngIf: viewModel.login -->
-                    <div class="form-group checkbox ng-scope" ng-if="viewModel.login">
-                        <label for="remember-me" class="checkbox ng-binding">
-                            <input type="checkbox" id="remember-me" name="remember-me" ng-model="formModel['remember-me']" class="ng-pristine ng-untouched ng-valid">
-                            Remember me
-                        </label>
-                    </div>
-                    <!-- end ngIf: viewModel.login -->
 
-                    <button type="submit" class="btn btn-default ng-binding" ng-class="{disabled: loginOrRegisterform.processing}" id="submit-login-register-form">Login</button>
+                    <button type="submit" class="btn btn-default ng-binding" ng-class="{disabled: loginOrRegisterform.processing}" id="submit-login-register-form">Registrera</button>
                     <!-- ngIf: loginOrRegisterform.processing -->
                 </form>
 
                 <!-- ngIf: viewModel.login -->
-                <div ng-if="viewModel.login" class="ng-scope">
-                    <a id="request-password-link" class="pull-right ng-binding" href="/request-password-link">Forgot your password?</a>
-                </div>
-                <!-- end ngIf: viewModel.login -->
 
             </div>
         </div>
@@ -107,25 +116,25 @@
                     <footer>
                         <div class="row">
                             <div class="col-sm-offset-1 col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">About</div>
-                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Source code</a><br>
-                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Terms of Service</a><br>
-                                <a href="/help" class="ng-binding">Help</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Om</div>
+                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Källkod</a><br>
+                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Användaravtal</a><br>
+                                <a href="/help" class="ng-binding">Hjälp</a><br>
                                 <a href="/forum" class="ng-binding">Forum</a><br>
                             </div>
                             <div class="col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">Contact</div>
+                                <div style="text-decoration: underline;" class="ng-binding">Kontakt</div>
                                 <a href="http://www.reddit.com/r/smigo" target="_blank">Reddit</a><br>
                                 <a href="https://www.facebook.com/smigogarden" target="_blank">Facebook</a><br>
                                 <a href="https://www.twitter.com/smigogarden" target="_blank">Twitter</a><br>
                                 <a href="http://se.linkedin.com/pub/christian-nilsson/3b/798/a5b/" target="_blank">Linkedin</a><br>
                             </div>
                             <div class="col-xs-4 col-xs-3">
-                                <div style="text-decoration: underline;" class="ng-binding">Links</div>
-                                <a href="http://en.wikipedia.org/wiki/Companion_planting" target="_blank" class="ng-binding">Companion planting</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Square_foot_gardening" target="_blank" class="ng-binding">Square foot gardening</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Länkar</div>
+                                <a href="http://stud.epsilon.slu.se/5256/" target="_blank" class="ng-binding">Samodling</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/V%C3%A4xelbruk" target="_blank" class="ng-binding">Växelbruk</a><br>
                                 <a href="http://sourceforge.net/projects/kitchengarden" target="_blank" class="ng-binding">Kitchen garden aid</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Crop_rotation" target="_blank" class="ng-binding">Crop rotation</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/Gr%C3%B6nsaksland" target="_blank" class="ng-binding">Grönsaksland</a><br>
                             </div>
                         </div>
                         <div class="row" style="margin: 16px;">
@@ -138,4 +147,4 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="../footer.jsp"/>

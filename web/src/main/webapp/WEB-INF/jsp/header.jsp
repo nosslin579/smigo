@@ -18,6 +18,8 @@
     <meta name="author" content="Christian Nilsson">
     <c:if test="${addEscapeFragment}">
         <meta name="fragment" content="!">
+        <link rel="alternate" hreflang="sv" href="http://sv.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
+        <link rel="alternate" hreflang="en" href="http://en.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
     </c:if>
     <c:if test="${param.addRobotsNoIndex || addRobotsNoIndex}">
         <meta name="robots" content="noindex">

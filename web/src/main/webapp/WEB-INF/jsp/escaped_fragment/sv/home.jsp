@@ -1,27 +1,27 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<jsp:include page="../header.jsp"/>
+<jsp:include page="../../header.jsp"/>
 <jsp:include page="nav.jsp"/>
 
 <div ng-view="" class="angular-view ng-scope">
     <div class="jumbotron ng-scope" style="text-align: center;">
         <div class="container">
 
-            <h1 class="ng-binding">Garden planning</h1>
+            <h1 class="ng-binding">Trädgårdsplanering</h1>
             <p class="ng-binding">
-                Smigo is a free and simple vegetable garden planner where you can design a layout of your garden online, assist with companion planting and crop rotation. Free, open source and easy to use. Support for all platforms including iOS, iPhone, iPad, Android, Windows and Mac.
+                Smigo är ett gratis och enkelt program för att planera din köksträdgård och som hjälper dig med samodling och växelbruk. Webbaserat, öppen källkod och lätt att använda. Stödjer alla operativsystem inklusive iOS, iPhone, iPad, Android, Windows och Mac.
             </p>
-            <p><a class="btn btn-primary btn-lg ng-binding" href="/garden" role="button">Try it now</a></p>
+            <p><a class="btn btn-primary btn-lg ng-binding" href="/garden" role="button">Prova nu</a></p>
         </div>
     </div>
     <div class="container ng-scope">
         <div class="row">
             <div class="col-md-4">
                 <h2 class="ng-binding">Online</h2>
-                <p class="ng-binding">No need to download or install software. Smigo is web based app that works on all platforms. The only thing you need is a computer, a phone or a tablet with internet connection.</p>
+                <p class="ng-binding">Du behöver inte ladda ner eller installera något. Smigo är en webbapplikation och du använder din webbläsare. Det enda du behöver är en dator eller surfplatta med internetuppkoppling.</p>
             </div>
             <div class="col-md-4">
-                <h2 class="ng-binding">The planner</h2>
-                <p class="ng-binding">Design a layout plan of your kitchen garden. Choose from hundredes of vegetables in our database or add your own with one easy click. As you add more beds, the grid expands. Smigo works great with square foot gardening.</p>
+                <h2 class="ng-binding">Planering</h2>
+                <p class="ng-binding">Rita en layout av din grönsakodling. Välj mellan hundratals växter i våran databas eller lägg till egna med ett enkelt klick. Rutnätet expanderar allteftersom du lägger till plantor. Smigo funkar utmärkt med "Odla i kvadrat" (square foot gardening).</p>
             </div>
             <div class="col-md-4">
                 <img ng-src="/static/icon/snapshot.png" alt="vegetable garden layout" class="img-rounded full-width" src="/static/icon/snapshot.png">
@@ -33,10 +33,10 @@
                 <img ng-src="/static/icon/kitchengarden.jpg" alt="kitchen garden" class="img-rounded full-width" src="/static/icon/kitchengarden.jpg">
             </div>
             <div class="col-md-8">
-                <h2 class="ng-binding">Free</h2>
-                <p class="ng-binding">Free and Open Source so you can view the source code to this app, add your own changes and participate in the developement. Code available at
+                <h2 class="ng-binding">Gratis</h2>
+                <p class="ng-binding">Gratis och med öppen källkod så du kan följa och bidra till utvecklingen av programmet. Koden finns på
                     <a href="https://github.com/nosslin579/smigo">Github</a></p>
-                <p class="ng-binding">Available in other languages like Spanish, German and Swedish. Partially translated to French, Romanian and Czech.</p>
+                <p class="ng-binding">Tillgänglig på flera andra språk så som engelska, spanska och tyska.</p>
             </div>
         </div>
         <!-- ngInclude: 'footer.html' -->
@@ -48,25 +48,25 @@
                     <footer>
                         <div class="row">
                             <div class="col-sm-offset-1 col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">About</div>
-                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Source code</a><br>
-                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Terms of Service</a><br>
-                                <a href="/help" class="ng-binding">Help</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Om</div>
+                                <a href="https://github.com/nosslin579/smigo" class="ng-binding">Källkod</a><br>
+                                <a href="/static/terms-of-service.html" rel="nofollow" class="ng-binding">Användaravtal</a><br>
+                                <a href="/help" class="ng-binding">Hjälp</a><br>
                                 <a href="/forum" class="ng-binding">Forum</a><br>
                             </div>
                             <div class="col-xs-4">
-                                <div style="text-decoration: underline;" class="ng-binding">Contact</div>
+                                <div style="text-decoration: underline;" class="ng-binding">Kontakt</div>
                                 <a href="http://www.reddit.com/r/smigo" target="_blank">Reddit</a><br>
                                 <a href="https://www.facebook.com/smigogarden" target="_blank">Facebook</a><br>
                                 <a href="https://www.twitter.com/smigogarden" target="_blank">Twitter</a><br>
                                 <a href="http://se.linkedin.com/pub/christian-nilsson/3b/798/a5b/" target="_blank">Linkedin</a><br>
                             </div>
                             <div class="col-xs-4 col-xs-3">
-                                <div style="text-decoration: underline;" class="ng-binding">Links</div>
-                                <a href="http://en.wikipedia.org/wiki/Companion_planting" target="_blank" class="ng-binding">Companion planting</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Square_foot_gardening" target="_blank" class="ng-binding">Square foot gardening</a><br>
+                                <div style="text-decoration: underline;" class="ng-binding">Länkar</div>
+                                <a href="http://stud.epsilon.slu.se/5256/" target="_blank" class="ng-binding">Samodling</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/V%C3%A4xelbruk" target="_blank" class="ng-binding">Växelbruk</a><br>
                                 <a href="http://sourceforge.net/projects/kitchengarden" target="_blank" class="ng-binding">Kitchen garden aid</a><br>
-                                <a href="http://en.wikipedia.org/wiki/Crop_rotation" target="_blank" class="ng-binding">Crop rotation</a><br>
+                                <a href="http://sv.wikipedia.org/wiki/Gr%C3%B6nsaksland" target="_blank" class="ng-binding">Grönsaksland</a><br>
                             </div>
                         </div>
                         <div class="row" style="margin: 16px;">
@@ -79,4 +79,4 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="../footer.jsp"/>
