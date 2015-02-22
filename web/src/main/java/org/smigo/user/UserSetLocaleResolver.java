@@ -53,6 +53,13 @@ public class UserSetLocaleResolver implements LocaleResolver {
         if (user.getLocale() != null) {
             return user.getLocale();
         }
+
+        final String subdomain = req.getServerName().split("\\.")[0];
+        final Locale localeFromURL = new Locale(subdomain);
+        if (Language.contains(localeFromURL)) {
+            return localeFromURL;
+        }
+
         final Set<String> availableLocales = Language.getTransalationMap().keySet();
         for (Locale locale : Collections.list(req.getLocales())) {
             if (Language.contains(locale)) {
