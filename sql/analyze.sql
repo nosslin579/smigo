@@ -2,15 +2,16 @@ SHOW PROCESSLIST;
 
 SELECT
   users.username,
+  users.locale,
   id,
   regtime,
   decidetime,
   users.createdate,
   requests,
   sessions,
-  count(IF(year = 2013, 1, NULL)) AS y2013,
+  count(IF(year = 2015, 1, NULL)) AS y2015,
   count(IF(year = 2014, 1, NULL)) AS y2014,
-  count(IF(year = 2015, 1, NULL)) AS y2015
+  count(IF(year = 2013, 1, NULL)) AS y2013
 FROM nosslin2_db.users
   LEFT JOIN nosslin2_db.plants ON plants.user_id = users.id
   LEFT JOIN (SELECT
