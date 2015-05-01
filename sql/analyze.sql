@@ -22,3 +22,11 @@ FROM nosslin2_db.users
              GROUP BY username) AS r ON r.username = users.username
 GROUP BY id
 ORDER BY id DESC;
+
+SELECT
+  referer,count(referer)
+FROM nosslin2_db.visitlog
+  WHERE createdate > '2015-01-01'
+GROUP BY referer
+ORDER BY count(referer) DESC
+LIMIT 200;
