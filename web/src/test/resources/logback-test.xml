@@ -11,7 +11,7 @@
         <file>/home/nosslin2/_java/smigo/dump/smigo-test.log</file>
         <append>false</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{35} - %msg%n</pattern>
+            <pattern>%d{mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
 
