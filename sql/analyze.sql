@@ -37,6 +37,12 @@ GROUP BY referer
 ORDER BY count(referer) DESC
 LIMIT 200;
 
+SELECT
+  *
+FROM nosslin2_db.visitlog
+  WHERE createdate > '2015-01-01' AND httpstatus = 500
+ORDER BY createdate DESC
+LIMIT 200;
 
 SELECT species.id, u.username, def.vernacular_name, numofplants
 FROM nosslin2_db.species
