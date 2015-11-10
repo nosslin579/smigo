@@ -23,6 +23,7 @@ package org.smigo.user;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,6 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
     @Autowired
     private EmptyLogoutSuccessHandler emptyLogoutSuccessHandler;
+    @Value("${postSignInUrl}")
+    private String postSignInUrl;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -83,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
-        springSocialConfigurer.postLoginUrl("/garden");
+        springSocialConfigurer.postLoginUrl(postSignInUrl);
         http.apply(springSocialConfigurer);
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();

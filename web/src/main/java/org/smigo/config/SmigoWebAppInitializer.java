@@ -32,8 +32,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -67,18 +65,16 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
         for (Map.Entry<Object, Object> prop : System.getProperties().entrySet()) {
             log.info("System prop:" + prop.toString());
         }
-        final String profile;
-        try {
-            InitialContext initialContext = new InitialContext();
-            profile = (String) initialContext.lookup("java:comp/env/profile");
-        } catch (NamingException e) {
-            throw new RuntimeException("Could not find profile", e);
+
+        final String profile = System.getProperty("spring.profiles.active");
+        if (profile == null) {
+            throw new IllegalArgumentException("System property spring.profiles.active not set.");
         }
+        log.info("Starting with profile " + profile);
 
         WebApplicationContext context = new AnnotationConfigWebApplicationContext() {{
             register(SmigoWebMvcConfiguration.class);
-            setDisplayName("Nissepisse");
-            getEnvironment().setActiveProfiles(profile);
+            setDisplayName("SomeRandomName");
         }};
 
 
