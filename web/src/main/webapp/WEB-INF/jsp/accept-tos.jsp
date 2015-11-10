@@ -7,9 +7,7 @@
     <jsp:param name="addRobotsNoIndex" value="true"/>
 </jsp:include>
 
-<jsp:include page="nav-simple.jsp">
-    <jsp:param name="showLogout" value="true"/>
-</jsp:include>
+<jsp:include page="nav-top.jsp"/>
 
 
 <body>

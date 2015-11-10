@@ -30,9 +30,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'garden.html',
                 controller: 'GardenController'
             }).
-            when('/', {
-                templateUrl: 'home.html',
-            }).
             when('/wall/:username', {
                 templateUrl: 'wall.html',
                 controller: 'WallController'
@@ -50,6 +47,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 controller: 'RuleController'
             }).
             when('/beta', {redirectTo: '/'}).
+            //facebook adds #_=_ to URL after login
             when('/_=_', {redirectTo: '/garden'}).
             otherwise({templateUrl: '404.html'});
 

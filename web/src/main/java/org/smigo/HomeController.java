@@ -74,7 +74,7 @@ public class HomeController {
     }
 
 
-    @RequestMapping(value = {"/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)
     public String getGarden(Model model) {
         if (userSession.needToAcceptedTermsOfService()) {
             return "redirect:/accept-termsofservice";
@@ -83,23 +83,8 @@ public class HomeController {
         return "ng.jsp";
     }
 
-    @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getFrontpage(Model model) {
-        if (userSession.needToAcceptedTermsOfService()) {
-            return "redirect:/accept-termsofservice";
-        }
-        model.addAttribute("addEscapeFragment", true);
-        return "ng.jsp";
-    }
-
-
-    @RequestMapping(value = {"/", "/garden", "/help", "/login", "/register", "/forum"}, method = RequestMethod.GET, params = "_escaped_fragment_")
-    public String getGarden(HttpServletRequest request, Locale locale, Model model) {
-        String jsp = request.getServletPath().equals("/") ? "/home" : request.getServletPath();
-        if (locale.equals(new Locale("sv"))) {
-            jsp = "/sv" + jsp;
-        }
-        model.addAttribute("addEscapeFragment", true);
-        return "escaped_fragment" + jsp + ".jsp";
+        return "home.jsp";
     }
 }

@@ -8,7 +8,7 @@
 <jsp:include page="header.jsp"/>
 <body ng-app="smigoModule">
 
-<%@ include file="../views/menu.html" %>
+<%@ include file="../views/nav-top.html" %>
 
 <div ng-view class="angular-view"></div>
 
@@ -64,9 +64,6 @@
 <script type="text/ng-template" id="garden.html">
     <%@ include file="../views/garden.html" %>
 </script>
-<script type="text/ng-template" id="home.html">
-    <%@ include file="../views/home.html" %>
-</script>
 <script type="text/ng-template" id="help.html">
     <%@ include file="../views/help.html" %>
 </script>
@@ -92,7 +89,7 @@
     <%@ include file="../views/hasta-luego.html" %>
 </script>
 <script type="text/ng-template" id="footer.html" charset="UTF-8">
-    <%@ include file="../views/footer.html" %>
+    <jsp:include page="nav-bottom.jsp"/>
 </script>
 
 </body>

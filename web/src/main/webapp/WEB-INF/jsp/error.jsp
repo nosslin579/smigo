@@ -12,7 +12,7 @@
             Error:<c:out value="${statusCode}"/>
         </h1>
 
-        <h3><a href="<c:url value="/"/>">Back to Smigo</a></h3>
+        <h3><a href="<c:url value="/"/>" target="_self">Smigo</a></h3>
     </div>
 
 </div>

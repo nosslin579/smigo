@@ -11,14 +11,7 @@ Allow: /static/sitemap.xml
 Disallow: /accept-termsofservice
 Disallow: /error
 Disallow: /request-password-link
-Disallow: /rpc
-Disallow: /rest
-Disallow: /rest/*
 Disallow: /account
-Disallow: /static/icon/
-Disallow: /static/icon/*
-Disallow: /static/species/
-Disallow: /static/species/*
 Disallow: /static/tos.html
 Disallow: /static/terms-of-service.html
 Disallow: /static/version-history.html

@@ -82,7 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.failureHandler(customAuthenticationFailureHandler);
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
-        http.apply(new SpringSocialConfigurer());
+        final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
+        springSocialConfigurer.postLoginUrl("/garden");
+        http.apply(springSocialConfigurer);
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();
         rememberMe.userDetailsService(customUserDetailsService);

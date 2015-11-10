@@ -9,19 +9,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title><spring:message code="${msgTitle}"/></title>
-    <meta name="description" content="<spring:message code="${msgDescription}"/>">
-    <meta name="keywords" content="kitchen vegetable garden crop rotation companion planting square foot gardening layout design">
-    <meta name="author" content="Christian Nilsson">
-    <c:if test="${addEscapeFragment}">
-        <meta name="fragment" content="!">
-        <link rel="alternate" hreflang="x-default" href="http://smigo.org${requestScope['javax.servlet.forward.request_uri']}">
-        <link rel="alternate" hreflang="sv" href="http://sv.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
-        <link rel="alternate" hreflang="en" href="http://en.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
-    </c:if>
+    <jsp:include page="head-common.jsp"/>
+
     <c:if test="${param.addRobotsNoIndex || addRobotsNoIndex}">
         <meta name="robots" content="noindex">
     </c:if>
@@ -30,11 +19,7 @@
     <base href="/">
 
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script>
-        if (!window.jQuery) {
-            document.write('<script src="/static/jquery-2.1.3.min.js"><\/script>');
-        }
-    </script>
+    <script>window.jQuery || document.write('<script src="/static/jquery-2.1.3.min.js">\x3C/script>')</script>
 
     <%--bootstrap and styling--%>
     <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">--%>
