@@ -32,6 +32,8 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -66,15 +68,13 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
             log.info("System prop:" + prop.toString());
         }
 
-        final String profile = System.getProperty("spring.profiles.active");
-        if (profile == null) {
-            throw new IllegalArgumentException("System property spring.profiles.active not set.");
-        }
+        final String profile = getProfile();
         log.info("Starting with profile " + profile);
 
         WebApplicationContext context = new AnnotationConfigWebApplicationContext() {{
             register(SmigoWebMvcConfiguration.class);
             setDisplayName("SomeRandomName");
+            getEnvironment().setActiveProfiles(profile);
         }};
 
 
@@ -90,5 +90,14 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
         DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", dispatcherServlet);
         dispatcher.addMapping("/");
+    }
+
+    private String getProfile() {
+        try {
+            InitialContext initialContext = new InitialContext();
+            return (String) initialContext.lookup("java:comp/env/profile");
+        } catch (NamingException e) {
+            throw new RuntimeException("Could not find profile", e);
+        }
     }
 }

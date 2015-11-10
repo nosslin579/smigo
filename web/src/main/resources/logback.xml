@@ -3,7 +3,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>/home/nosslin2/weblogs/smigo.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>/hej/weblogs/smigo.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 365 days' worth of history -->
             <maxHistory>365</maxHistory>
