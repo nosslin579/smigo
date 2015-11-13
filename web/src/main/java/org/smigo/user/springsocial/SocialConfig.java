@@ -53,8 +53,8 @@ public class SocialConfig implements SocialConfigurer {
     private DataSource dataSource;
     @Autowired
     private UserHandler userHandler;
-    @Value("${postSignInUrl}")
-    private String postSignInUrl;
+    @Value("${baseUrl}")
+    private String baseUrl;
     @Value("${facebookAppId}")
     private String facebookAppId;
     @Value("${facebookAppSecret}")
@@ -92,7 +92,7 @@ public class SocialConfig implements SocialConfigurer {
         });
         providerSignInController.setSignUpUrl("/accept-termsofservice");
         providerSignInController.setSignInUrl("/login");
-        providerSignInController.setPostSignInUrl(postSignInUrl);
+        providerSignInController.setPostSignInUrl(baseUrl + "/garden");
         return providerSignInController;
     }
 }

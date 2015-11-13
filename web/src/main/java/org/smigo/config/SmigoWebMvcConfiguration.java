@@ -73,6 +73,8 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     private String mailSenderPassword;
     @Value("${mailSenderHost}")
     private String mailSenderHost;
+    @Value("${mailSenderPort}")
+    private Integer mailSenderPort;
 
     @Value("${databaseUser}")
     private String databaseUser;
@@ -144,7 +146,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         javaMailSender.setUsername(mailSenderUsername);
         javaMailSender.setPassword(mailSenderPassword);
         javaMailSender.setHost(mailSenderHost);
-        javaMailSender.setPort(587);
+        javaMailSender.setPort(mailSenderPort);
         javaMailSender.setProtocol("smtp");
         javaMailSender.setJavaMailProperties(new Properties() {
             {

@@ -62,8 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
     @Autowired
     private EmptyLogoutSuccessHandler emptyLogoutSuccessHandler;
-    @Value("${postSignInUrl}")
-    private String postSignInUrl;
+    @Value("${baseUrl}")
+    private String baseUrl;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
-        springSocialConfigurer.postLoginUrl(postSignInUrl);
+        springSocialConfigurer.postLoginUrl(baseUrl + "/garden");
         http.apply(springSocialConfigurer);
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();

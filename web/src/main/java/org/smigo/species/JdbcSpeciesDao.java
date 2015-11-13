@@ -99,8 +99,8 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public List<Species> searchSpecies(String query, Locale locale) {
-        final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR name LIKE ?";
-        return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query});
+        final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR families.name LIKE ? OR scientific_name LIKE ?";
+        return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query, query});
     }
 
     @Override

@@ -67,8 +67,8 @@ public class UserHandler {
     private PlantHandler plantHandler;
     @Autowired
     private UserDao userDao;
-    @Value("${resetPasswordUrl}")
-    private String resetPasswordUrl;
+    @Value("${baseUrl}")
+    private String baseUrl;
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
@@ -124,7 +124,7 @@ public class UserHandler {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
         simpleMailMessage.setSubject("Smigo reset password");
-        simpleMailMessage.setText("Click link to reset password. " + resetPasswordUrl + id);
+        simpleMailMessage.setText("Click link to reset password. " + baseUrl + "/login-reset/" + id);
         javaMailSender.send(simpleMailMessage);
     }
 
