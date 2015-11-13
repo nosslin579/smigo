@@ -46,7 +46,7 @@
         <div class="col-sm-5 col-sm-offset-2">
             <h3>{{'msg.usesmigoaccount' | translate}}</h3>
 
-            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel,widgetId)">
+            <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)">
                 <div class="has-error">
                     <span ng-repeat="error in loginOrRegisterform.objectErrors" id="{{error.objectName}}" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
@@ -84,10 +84,6 @@
                     <div ng-if="loginOrRegisterform.passwordagain.$dirty">
                         <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>
                     </div>
-                </div>
-
-                <div class="form-group" ng-if="viewModel.register">
-                    <div id="recaptcha"></div>
                 </div>
 
                 <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.submitted}">

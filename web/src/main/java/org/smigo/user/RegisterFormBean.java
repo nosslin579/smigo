@@ -24,7 +24,6 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.humanevidence.ReCaptcha;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.Locale;
@@ -43,9 +42,6 @@ public class RegisterFormBean {
     private boolean termsOfService;
 
     private Locale locale = Locale.ENGLISH;
-
-    @ReCaptcha
-    private String reCaptcha;
 
     public RegisterFormBean() {
     }
@@ -91,11 +87,4 @@ public class RegisterFormBean {
         this.locale = locale;
     }
 
-    public String getReCaptcha() {
-        return reCaptcha;
-    }
-
-    public void setReCaptcha(String reCaptcha) {
-        this.reCaptcha = reCaptcha;
-    }
 }

@@ -17,20 +17,6 @@ function RegisterController($timeout, $scope, $location, $http, UserService) {
 
     $scope.submitLoginOrRegisterForm = UserService.register;
     $scope.requestFeature = UserService.requestFeature;
-
-
-    //todo this should be a directive
-    $timeout(angular.noop, 1000)
-        .then(function () {
-            return $http.get('/rpc/showcaptcha/');
-        })
-        .then(function renderCaptch(response) {
-            if (response.data && $location.path() === '/register') {
-                $scope.widgetId = grecaptcha.render('recaptcha', {
-                    sitekey: '6LeO6_4SAAAAACgz20mK-j47nP8wJULuMci06Cej'
-                });
-            }
-        });
 }
 
 angular.module('smigoModule').controller('RegisterController', RegisterController);
