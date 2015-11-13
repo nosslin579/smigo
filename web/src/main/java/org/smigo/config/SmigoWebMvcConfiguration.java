@@ -23,7 +23,7 @@ package org.smigo.config;
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
@@ -83,13 +83,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() throws PropertyVetoException {
-        ComboPooledDataSource ds = new ComboPooledDataSource();
-        ds.setDriverClass("com.mysql.jdbc.Driver");
-        ds.setUser(databaseUser);
-        ds.setPassword(databasePassword);
-        ds.setJdbcUrl(databaseUrl);
-        ds.setIdleConnectionTestPeriod(160);
-        return ds;
+        return JdbcConnectionPool.create(databaseUrl, databaseUser, databasePassword);
     }
 
     @Override

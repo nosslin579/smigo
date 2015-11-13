@@ -60,7 +60,7 @@ class JdbcRuleDao implements RuleDao {
         return jdbcTemplate.query(SELECT, new RowMapper<RuleBean>() {
             @Override
             public RuleBean mapRow(ResultSet rs, int rowNum) throws SQLException {
-                final int id = rs.getInt("rule_id");
+                final int id = rs.getInt("id");
                 final int host = rs.getInt("host");
                 final int type = rs.getInt("type");
                 final int causerSpecies = rs.getInt("causer"); //todo rename to causerspecies
