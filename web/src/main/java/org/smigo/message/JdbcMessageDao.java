@@ -58,7 +58,7 @@ class JdbcMessageDao implements MessageDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insert = new SimpleJdbcInsert(dataSource).withTableName("messages").usingGeneratedKeyColumns("id");
+        this.insert = new SimpleJdbcInsert(dataSource).withTableName("messages").usingGeneratedKeyColumns("id").usingColumns("text", "submitter_user_id", "location");
     }
 
     @Override

@@ -54,7 +54,7 @@ public class JdbcUserDao implements UserDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insert = new SimpleJdbcInsert(dataSource).withTableName("users").usingGeneratedKeyColumns("id");
+        this.insert = new SimpleJdbcInsert(dataSource).withTableName("users").usingGeneratedKeyColumns("id").usingColumns("username", "locale", "termsofservice", "email", "displayname", "decidetime", "about", "password");
         this.insertOpenId = new SimpleJdbcInsert(dataSource).withTableName("openid").usingGeneratedKeyColumns("id");
     }
 
@@ -63,7 +63,6 @@ public class JdbcUserDao implements UserDao {
         final Map map = objectMapper.convertValue(user, Map.class);
         map.put("decidetime", decideTime);
         map.put("password", encodedPassword);
-        map.put("enabled", true);
         Number newId = insert.executeAndReturnKey(map);
         return newId.intValue();
     }
