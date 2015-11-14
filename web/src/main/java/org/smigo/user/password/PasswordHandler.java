@@ -59,6 +59,7 @@ class PasswordHandler {
 
 
     public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
+        //todo add result to visitlog
         String resetKey = resetFormBean.getResetKey();
         ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
 
