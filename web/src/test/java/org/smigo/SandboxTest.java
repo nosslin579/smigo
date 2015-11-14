@@ -32,6 +32,14 @@ public class SandboxTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    public void testAdd1() throws Exception {
+//        final File file = new File("/tmp/asdf.txt");
+//        final boolean newFile = file.createNewFile();
+//        FileUtils.writeStringToFile(file, "as1df", Charset.defaultCharset());
+        final String https = "asdf http://qwer".replaceAll(".+\\s", "");
+        Assert.assertEquals(https, "http://qwer");
+
+    }
     public void testAdd() throws Exception {
         log.trace("trace");
         log.debug("debug");

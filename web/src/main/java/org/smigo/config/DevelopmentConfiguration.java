@@ -22,6 +22,7 @@ package org.smigo.config;
  * #L%
  */
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -29,6 +30,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.mail.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 @Configuration
 @Profile(EnvironmentProfile.DEVELOPMENT)
@@ -36,9 +42,31 @@ public class DevelopmentConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    public static final File MAIL_FILE = new File("/tmp/mail.txt");
+
+
     @Bean
     public MessageSource messageSource() {
         log.debug("getMessageSource");
         return new UserAdaptiveMessageSource(1);
+    }
+
+    @Bean
+    public MailSender javaMailSender() {
+        return new MailSender() {
+            @Override
+            public void send(SimpleMailMessage simpleMessage) throws MailException {
+                try {
+                    FileUtils.writeStringToFile(MAIL_FILE, simpleMessage.getText(), Charset.defaultCharset());
+                } catch (IOException e) {
+                    throw new MailSendException("Error sending email to " + simpleMessage.getFrom(), e);
+                }
+            }
+
+            @Override
+            public void send(SimpleMailMessage[] simpleMessages) throws MailException {
+                throw new MailPreparationException("Method not supported");
+            }
+        };
     }
 }

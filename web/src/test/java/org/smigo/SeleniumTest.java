@@ -22,6 +22,7 @@ package org.smigo;
  * #L%
  */
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +32,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.config.DevelopmentConfiguration;
 import org.smigo.user.RegisterFormBean;
 import org.smigo.user.UserBean;
 import org.smigo.user.UserDao;
@@ -288,8 +290,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         log.info("LoginWrongPassword finished successfully. Username:" + username);
     }
 
-    @Test(enabled = false)
-    public void resetPassword() throws InterruptedException {
+    @Test(enabled = true)
+    public void resetPassword() throws Exception {
         final UserBean user = addUser(true);
 
         d.findElement(By.id("login-link")).click();
@@ -302,12 +304,11 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-info")));
 
         //Check email
-        d.get("http://mailinator.com/inbox.jsp?to=" + user.getUsername());
-        d.findElement(By.className("message")).findElement(By.tagName("a")).click();
-        d.switchTo().frame(1).findElement(By.className("mailview")).findElement(By.tagName("a")).click();
+        final String mail = FileUtils.readFileToString(DevelopmentConfiguration.MAIL_FILE);
+        final String resetUrl = mail.replaceAll(".+(?=http)", "");
+        d.get(resetUrl);
 
         //Set new password
-        d.switchTo().window((String) d.getWindowHandles().toArray()[1]);
         d.findElement(By.name("password")).sendKeys(NEW_PASSWORD);
         d.findElement(By.tagName("button")).click();
 

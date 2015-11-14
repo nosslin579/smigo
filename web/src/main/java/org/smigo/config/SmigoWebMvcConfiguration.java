@@ -39,8 +39,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
@@ -56,7 +54,6 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
@@ -66,15 +63,6 @@ import java.util.Properties;
 public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${mailSenderUsername}")
-    private String mailSenderUsername;
-    @Value("${mailSenderPassword}")
-    private String mailSenderPassword;
-    @Value("${mailSenderHost}")
-    private String mailSenderHost;
-    @Value("${mailSenderPort}")
-    private Integer mailSenderPort;
 
     @Value("${databaseUser}")
     private String databaseUser;
@@ -138,23 +126,6 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
 //        customEditorConfigurer.setPropertyEditorRegistrars(new PropertyEditorRegistrar[]{new CustomPropertyEditorRegistrar()});
 //        return customEditorConfigurer;
 //    }
-
-    @Bean
-    public MailSender javaMailSender() {
-        log.debug("javaMailSender");
-        final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setUsername(mailSenderUsername);
-        javaMailSender.setPassword(mailSenderPassword);
-        javaMailSender.setHost(mailSenderHost);
-        javaMailSender.setPort(mailSenderPort);
-        javaMailSender.setProtocol("smtp");
-        javaMailSender.setJavaMailProperties(new Properties() {
-            {
-                setProperty("mail.smtp.starttls.enable", "true");
-            }
-        });
-        return javaMailSender;
-    }
 
     @Bean
     public ObjectMapper objectMapper() {
