@@ -51,6 +51,4 @@ public interface UserDao {
     void updatePassword(int userId, String encodedPassword);
 
     UserDetails getUserDetails(int userId);
-
-    void deleteUserConnection(long providerUserId);
 }

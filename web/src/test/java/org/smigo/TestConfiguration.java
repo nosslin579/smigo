@@ -72,6 +72,11 @@ public class TestConfiguration {
     }
 
     @Bean
+    public TestDao testDao() {
+        return new JdbcTestDao();
+    }
+
+    @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }

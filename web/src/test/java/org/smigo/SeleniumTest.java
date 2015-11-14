@@ -54,6 +54,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    private static final String FACEBOOK_LOGIN = "ubgcvsa_dinglesky_1423300619@tfbnw.net";
     private static final String NON_LATIN_LETTERS = "Şehirde güzel köpek леп пас у граду 在城里漂亮的狗 سگ خوب در شهر";
     private static final String EMAIL_PROVIDER = "@mailinator.com";
     private static final String DISPLAY_NAME = "Tomte Nisse";
@@ -70,6 +71,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private TestDao testDao;
 
     private WebDriver d;
     private WebDriverWait w;
@@ -127,13 +130,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     @Test(enabled = true)
     public void registerWithFacebook() throws Exception {
         //add default species
-        userDao.deleteUserConnection(1375958496052051l);
+        testDao.deleteUserConnection(1375958496052051l);
+        testDao.removeEmail(FACEBOOK_LOGIN);
         d.findElement(By.className("square")).click();
 
         d.findElement(By.id("register-link")).click();
         d.findElement(By.partialLinkText("Facebook")).click();
         //login at facebook
-        d.findElement(By.name("email")).sendKeys("ubgcvsa_dinglesky_1423300619@tfbnw.net");
+        d.findElement(By.name("email")).sendKeys(FACEBOOK_LOGIN);
         d.findElement(By.name("pass")).sendKeys(PASSWORD);
         d.findElement(By.name("login")).click();
         //accept tos
