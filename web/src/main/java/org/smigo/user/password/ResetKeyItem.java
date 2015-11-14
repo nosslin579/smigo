@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.password;
 
 /*
  * #%L

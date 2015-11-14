@@ -28,22 +28,15 @@ import org.smigo.plants.PlantData;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class UserHandler {
@@ -56,21 +49,13 @@ public class UserHandler {
     @Autowired
     private UserSession userSession;
     @Autowired
-    protected AuthenticationManager authenticationManager;
-    @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private MailSender javaMailSender;
-    @Autowired
-    private PersistentTokenRepository tokenRepository;
     @Autowired
     private PlantHandler plantHandler;
     @Autowired
     private UserDao userDao;
     @Value("${baseUrl}")
     private String baseUrl;
-
-    private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
 
     public AuthenticatedUser createUser() {
         for (int tries = 0; tries < 5; tries++) {
@@ -98,34 +83,6 @@ public class UserHandler {
         List<PlantData> plants = userSession.getPlants();
         plantHandler.addPlants(plants, userId);
         return userId;
-    }
-
-    public void updatePassword(AuthenticatedUser username, String newPassword) {
-        final String encodedPassword = passwordEncoder.encode(newPassword);
-        userDao.updatePassword(username.getId(), encodedPassword);
-        tokenRepository.removeUserTokens(username.getUsername());
-    }
-
-    public void sendResetPasswordEmail(String email) {
-        log.info("Sending reset email to: " + email);
-        log.info("Size of resetKeyMap:" + resetKeyMap.size());
-        final String id = UUID.randomUUID().toString();
-
-        for (String s : resetKeyMap.keySet()) {
-            ResetKeyItem resetKeyItem = resetKeyMap.get(s);
-            if (resetKeyItem != null && email.equals(resetKeyItem.getEmail()) && resetKeyItem.isValid()) {
-                log.warn("Multiple occurrence of email in resetPasswordMap" + resetKeyItem);
-                resetKeyItem.invalidate();
-            }
-        }
-
-        resetKeyMap.put(id, new ResetKeyItem(id, email));
-
-        final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email);
-        simpleMailMessage.setSubject("Smigo reset password");
-        simpleMailMessage.setText("Click link to reset password. " + baseUrl + "/login-reset/" + id);
-        javaMailSender.send(simpleMailMessage);
     }
 
     public void acceptTermsOfService(AuthenticatedUser principal) {
@@ -163,31 +120,4 @@ public class UserHandler {
         userDao.updateUser(userId, userBean);
     }
 
-    public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
-        String resetKey = resetFormBean.getResetKey();
-        ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
-
-        if (resetKeyItem == null) {
-            log.warn("No valid resetPasswordKey found" + resetFormBean);
-            return false;
-        }
-
-        if (!resetKeyItem.isValid()) {
-            log.info("Reset key has expired." + resetFormBean);
-            return false;
-        }
-
-        String email = resetKeyItem.getEmail();
-        List<UserDetails> users = userDao.getUserByEmail(email);
-        if (users.isEmpty()) {
-            log.warn("No such email:" + email);
-            return false;
-        }
-
-        AuthenticatedUser user = (AuthenticatedUser) users.get(0);
-        String password = resetFormBean.getPassword();
-        updatePassword(user, password);
-        resetKeyItem.invalidate();
-        return true;
-    }
 }

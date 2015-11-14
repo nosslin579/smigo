@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.password;
 
 /*
  * #%L
@@ -22,14 +22,11 @@ package org.smigo.user;
  * #L%
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
+import javax.validation.constraints.Size;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -40,9 +37,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = CurrentPassword.CurrentPasswordValidator.class)
 @Documented
-public @interface CurrentPassword {
+@Size(min = 6)
+@Constraint(validatedBy = NewPassword.NullValidator.class)
+public @interface NewPassword {
 
     String message() default "invalid";
 
@@ -50,28 +48,13 @@ public @interface CurrentPassword {
 
     Class<? extends Payload>[] payload() default {};
 
-    class CurrentPasswordValidator implements ConstraintValidator<CurrentPassword, String> {
+    class NullValidator implements ConstraintValidator<NewPassword, Object> {
 
-        @Autowired
-        private UserDao userDao;
-        @Autowired
-        private UserHandler userHandler;
-        @Autowired
-        private PasswordEncoder passwordEncoder;
-
-
-        public void initialize(CurrentPassword constraintAnnotation) {
+        public void initialize(NewPassword constraintAnnotation) {
         }
 
-        public boolean isValid(String rawPassword, ConstraintValidatorContext constraintContext) {
-            AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
-            UserDetails userDetails = userDao.getUserDetails(authenticatedUser.getUsername()).get(0);
-            final String password = userDetails.getPassword();
-            //user who signed up via openid has empty string as password
-            if (password.isEmpty()) {
-                return rawPassword.isEmpty();
-            }
-            return passwordEncoder.matches(rawPassword, password);
+        public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
+            return object != null;
         }
 
     }

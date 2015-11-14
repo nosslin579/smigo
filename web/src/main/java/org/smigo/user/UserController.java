@@ -31,7 +31,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -73,17 +72,6 @@ public class UserController {
         binder.registerCustomEditor(Locale.class, new LocaleEditor());
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-    @ResponseBody
-    public List<ObjectError> changePassword(@RequestBody @Valid PasswordFormBean passwordFormBean, BindingResult result,
-                                            @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
-        if (result.hasErrors()) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            return result.getAllErrors();
-        }
-        userHandler.updatePassword(user, passwordFormBean.getNewPassword());
-        return Collections.emptyList();
-    }
 
     @RequestMapping(value = "/rest/user", method = RequestMethod.GET)
     @ResponseBody
@@ -125,32 +113,6 @@ public class UserController {
         userHandler.updateUser(userBean, user);
         return Collections.emptyList();
     }
-
-    @RequestMapping(value = "/request-password-link", method = RequestMethod.POST)
-    @ResponseBody
-    public void requestPasswordLink(@RequestBody RequestPasswordLinkFormBean bean) {
-        userHandler.sendResetPasswordEmail(bean.getEmail());
-    }
-
-    @RequestMapping(value = "/login-reset/{resetKey}", method = RequestMethod.GET)
-    public String getResetForm(@PathVariable String resetKey, Model model) {
-        model.addAttribute(new ResetKeyPasswordFormBean(resetKey));
-        return "resetpasswordform.jsp";
-    }
-
-    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
-    public String setPassword(@Valid ResetKeyPasswordFormBean resetFormBean, BindingResult result) {
-        if (result.hasErrors()) {
-            return "resetpasswordform.jsp";
-        }
-        boolean success = userHandler.setPassword(resetFormBean);
-        if (!success) {
-            result.addError(new ObjectError("resetPassword", "Update password failed"));
-            return "resetpasswordform.jsp";
-        }
-        return "redirect:/login";
-    }
-
 
     @RequestMapping(value = "/locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -24,6 +24,7 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.password.NewPassword;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.Locale;
