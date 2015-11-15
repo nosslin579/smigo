@@ -24,8 +24,8 @@ package org.smigo.user.password;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.MailHandler;
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.MailHandler;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
