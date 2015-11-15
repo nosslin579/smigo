@@ -24,12 +24,11 @@ package org.smigo.user.password;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.MailHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -47,11 +46,11 @@ class PasswordHandler {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private MailSender javaMailSender;
-    @Autowired
     private PersistentTokenRepository tokenRepository;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MailHandler emailHandler;
     @Value("${baseUrl}")
     private String baseUrl;
 
@@ -59,24 +58,25 @@ class PasswordHandler {
 
 
     public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
-        //todo add result to visitlog
         String resetKey = resetFormBean.getResetKey();
         ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
 
         if (resetKeyItem == null) {
-            log.warn("No valid resetPasswordKey found" + resetFormBean);
+            log.warn("No valid resetPasswordKey found. Reset password not possible. " + resetFormBean);
             return false;
         }
 
         if (!resetKeyItem.isValid()) {
-            log.info("Reset key has expired." + resetFormBean);
+            log.info("Reset key has expired. Reset password not possible. " + resetKeyItem);
+            emailHandler.sendAdminNotification("Reset password failed - key expired", resetKeyItem.toString());
             return false;
         }
 
         String email = resetKeyItem.getEmail();
         List<UserDetails> users = userDao.getUserByEmail(email);
         if (users.isEmpty()) {
-            log.warn("No such email:" + email);
+            log.warn("User with this email not found. Reset password not possible. " + resetKeyItem);
+            emailHandler.sendAdminNotification("Reset password failed - email not found", email);
             return false;
         }
 
@@ -84,6 +84,7 @@ class PasswordHandler {
         String password = resetFormBean.getPassword();
         updatePassword(user, password);
         resetKeyItem.invalidate();
+        log.info("Password successfully reset by: " + user);
         return true;
     }
 
@@ -93,26 +94,32 @@ class PasswordHandler {
         tokenRepository.removeUserTokens(username.getUsername());
     }
 
-    public void sendResetPasswordEmail(String email) {
-        log.info("Sending reset email to: " + email);
+    public void sendResetPasswordEmail(String emailAddress) {
+        log.info("Sending reset email to: " + emailAddress);
         log.info("Size of resetKeyMap:" + resetKeyMap.size());
-        final String id = UUID.randomUUID().toString();
 
-        for (String s : resetKeyMap.keySet()) {
-            ResetKeyItem resetKeyItem = resetKeyMap.get(s);
-            if (resetKeyItem != null && email.equals(resetKeyItem.getEmail()) && resetKeyItem.isValid()) {
-                log.warn("Multiple occurrence of email in resetPasswordMap" + resetKeyItem);
-                resetKeyItem.invalidate();
+        final String subject = "reset password";
+
+        List<UserDetails> users = userDao.getUserByEmail(emailAddress);
+        if (users.isEmpty()) {
+            final String text = "Can not reset password. No user with email " + emailAddress;
+            emailHandler.sendClientMessage(emailAddress, subject, text);
+        } else {
+
+            final String id = UUID.randomUUID().toString();
+
+            for (String s : resetKeyMap.keySet()) {
+                ResetKeyItem resetKeyItem = resetKeyMap.get(s);
+                if (resetKeyItem != null && emailAddress.equals(resetKeyItem.getEmail()) && resetKeyItem.isValid()) {
+                    log.warn("Multiple occurrence of email in resetPasswordMap" + resetKeyItem);
+                    resetKeyItem.invalidate();
+                }
             }
+
+            resetKeyMap.put(id, new ResetKeyItem(id, emailAddress));
+            final String text = "Click link to reset password. " + baseUrl + "/login-reset/" + id;
+            emailHandler.sendClientMessage(emailAddress, subject, text);
         }
-
-        resetKeyMap.put(id, new ResetKeyItem(id, email));
-
-        final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email);
-        simpleMailMessage.setSubject("Smigo reset password");
-        simpleMailMessage.setText("Click link to reset password. " + baseUrl + "/login-reset/" + id);
-        javaMailSender.send(simpleMailMessage);
     }
 
 

@@ -44,7 +44,7 @@ class ResetKeyItem {
     }
 
     public boolean isValid() {
-        return pristine && ((createDate + TimeUnit.MINUTES.toMillis(15)) > System.currentTimeMillis());
+        return pristine && ((createDate + TimeUnit.HOURS.toMillis(24)) > System.currentTimeMillis());
     }
 
     @Override

@@ -319,6 +319,23 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test(enabled = true)
+    public void resetPasswordNonexistentEmail() throws Exception {
+        final String emailAddress = "asdf@mailinator.com";
+        d.findElement(By.id("login-link")).click();
+
+        //Reset
+        d.findElement(By.id("request-password-link")).click();
+        d.findElement(By.name("email")).clear();
+        d.findElement(By.name("email")).sendKeys(emailAddress);
+        d.findElement(By.id("submit-request-button")).submit();
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-info")));
+
+        //Check email
+        final String mail = FileUtils.readFileToString(DevelopmentConfiguration.MAIL_FILE);
+        Assert.assertEquals(mail, "Can not reset password. No user with email " + emailAddress);
+    }
+
+    @Test(enabled = true)
     public void updateAccount() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);
