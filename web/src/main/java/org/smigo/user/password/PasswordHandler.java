@@ -54,38 +54,27 @@ class PasswordHandler {
     @Value("${baseUrl}")
     private String baseUrl;
 
-    private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<String, ResetKeyItem>();
+    private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<>();
 
+    public PasswordHandler() {
+        resetKeyMap.put("expiredKey", new ResetKeyItem("", "test@localhost"));
+    }
 
-    public boolean setPassword(ResetKeyPasswordFormBean resetFormBean) {
+    public Map<String, ResetKeyItem> getResetKeyMap() {
+        return resetKeyMap;
+    }
+
+    void setPassword(ResetKeyPasswordFormBean resetFormBean) {
         String resetKey = resetFormBean.getResetKey();
         ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
-
-        if (resetKeyItem == null) {
-            log.warn("No valid resetPasswordKey found. Reset password not possible. " + resetFormBean);
-            return false;
-        }
-
-        if (!resetKeyItem.isValid()) {
-            log.info("Reset key has expired. Reset password not possible. " + resetKeyItem);
-            emailHandler.sendAdminNotification("Reset password failed - key expired", resetKeyItem.toString());
-            return false;
-        }
-
         String email = resetKeyItem.getEmail();
         List<UserDetails> users = userDao.getUserByEmail(email);
-        if (users.isEmpty()) {
-            log.warn("User with this email not found. Reset password not possible. " + resetKeyItem);
-            emailHandler.sendAdminNotification("Reset password failed - email not found", email);
-            return false;
-        }
 
         AuthenticatedUser user = (AuthenticatedUser) users.get(0);
         String password = resetFormBean.getPassword();
         updatePassword(user, password);
-        resetKeyItem.invalidate();
+        resetKeyItem.setPristine(false);
         log.info("Password successfully reset by: " + user);
-        return true;
     }
 
     public void updatePassword(AuthenticatedUser username, String newPassword) {
@@ -105,19 +94,10 @@ class PasswordHandler {
             final String text = "Can not reset password. No user with email " + emailAddress;
             emailHandler.sendClientMessage(emailAddress, subject, text);
         } else {
-
-            final String id = UUID.randomUUID().toString();
-
-            for (String s : resetKeyMap.keySet()) {
-                ResetKeyItem resetKeyItem = resetKeyMap.get(s);
-                if (resetKeyItem != null && emailAddress.equals(resetKeyItem.getEmail()) && resetKeyItem.isValid()) {
-                    log.warn("Multiple occurrence of email in resetPasswordMap" + resetKeyItem);
-                    resetKeyItem.invalidate();
-                }
-            }
-
+            final String id = UUID.randomUUID().toString().replaceAll("-", "");
             resetKeyMap.put(id, new ResetKeyItem(id, emailAddress));
-            final String text = "Click link to reset password. " + baseUrl + "/login-reset/" + id;
+
+            final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. " + baseUrl + "/login-reset/" + id;
             emailHandler.sendClientMessage(emailAddress, subject, text);
         }
     }

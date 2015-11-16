@@ -22,8 +22,6 @@ package org.smigo.user.password;
  * #L%
  */
 
-import java.util.concurrent.TimeUnit;
-
 class ResetKeyItem {
     private final String id;
     private final String email;
@@ -43,8 +41,16 @@ class ResetKeyItem {
         return email;
     }
 
-    public boolean isValid() {
-        return pristine && ((createDate + TimeUnit.HOURS.toMillis(24)) > System.currentTimeMillis());
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public boolean isPristine() {
+        return pristine;
+    }
+
+    public void setPristine(boolean pristine) {
+        this.pristine = pristine;
     }
 
     @Override
@@ -55,9 +61,5 @@ class ResetKeyItem {
                 ", createDate=" + createDate +
                 ", pristine=" + pristine +
                 '}';
-    }
-
-    public void invalidate() {
-        this.pristine = false;
     }
 }

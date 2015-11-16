@@ -311,10 +311,19 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //Set new password
         d.findElement(By.name("password")).sendKeys(NEW_PASSWORD);
         d.findElement(By.tagName("button")).click();
+        Assert.assertEquals(d.getCurrentUrl(), HOST_URL + "/login");
 
         //login
         login(user.getUsername(), NEW_PASSWORD);
-        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        d.findElement(By.id("logout-link")).click();
+
+        //reset password again with same key
+        d.get(resetUrl);
+        d.findElement(By.name("password")).sendKeys(PASSWORD);
+        d.findElement(By.tagName("button")).click();
+        Assert.assertEquals(d.getCurrentUrl(), HOST_URL + "/reset-password");
+        Assert.assertTrue(d.getPageSource().contains("Key already used"));
+
         log.info("Reset password finished successfully. Username:" + user.getUsername());
     }
 

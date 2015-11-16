@@ -22,10 +22,8 @@ package org.smigo.user.password;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 class ResetKeyPasswordFormBean {
-    @NotNull
+    @ValidResetKeyItem
     private String resetKey;
     @NewPassword
     private String password;

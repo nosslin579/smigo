@@ -99,11 +99,7 @@ public class PasswordController {
         if (result.hasErrors()) {
             return "resetpasswordform.jsp";
         }
-        boolean success = userHandler.setPassword(resetFormBean);
-        if (!success) {
-            result.addError(new ObjectError("resetPassword", "Update password failed"));
-            return "resetpasswordform.jsp";
-        }
+        userHandler.setPassword(resetFormBean);
         return "redirect:/login";
     }
 
