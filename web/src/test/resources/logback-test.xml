@@ -7,14 +7,6 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/home/nosslin2/_java/smigo/dump/smigo-test.log</file>
-        <append>false</append>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <logger name="org.smigo" level="TRACE"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.apache.coyote" level="INFO"/>
@@ -23,7 +15,6 @@
 
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>
