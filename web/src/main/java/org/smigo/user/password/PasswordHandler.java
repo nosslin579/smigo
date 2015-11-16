@@ -56,10 +56,6 @@ class PasswordHandler {
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<>();
 
-    public PasswordHandler() {
-        resetKeyMap.put("expiredKey", new ResetKeyItem("", "test@localhost"));
-    }
-
     public Map<String, ResetKeyItem> getResetKeyMap() {
         return resetKeyMap;
     }
