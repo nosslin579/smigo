@@ -3,7 +3,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:include page="header.jsp"/>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset password - Smigo</title>
+    <jsp:include page="head-common.jsp"/>
+    <meta name="robots" content="noindex">
+</head>
 
 <jsp:include page="nav-top.jsp"/>
 
@@ -31,5 +37,4 @@
     </form:form>
 </div>
 </body>
-
-<jsp:include page="footer.jsp"/>
+</html>

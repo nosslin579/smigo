@@ -7,18 +7,8 @@ Allow: /register
 Allow: /forum
 Allow: /static/sitemap.xml
 
-
-Disallow: /accept-termsofservice
-Disallow: /error
-Disallow: /request-password-link
-Disallow: /account
-Disallow: /static/tos.html
-Disallow: /static/terms-of-service.html
-Disallow: /static/version-history.html
-
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.png$
-
 
 sitemap: http://smigo.org/static/sitemap.xml

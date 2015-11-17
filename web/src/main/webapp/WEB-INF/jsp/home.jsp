@@ -1,17 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<!DOCTYPE html>
 <html>
 <head>
+    <title><spring:message code="msg.concat.title.front"/></title>
+    <meta name="description" content="<spring:message code="msg.concat.metadescription.front"/>">
     <jsp:include page="head-common.jsp"/>
     <link rel="alternate" hreflang="x-default" href="http://smigo.org/">
     <link rel="alternate" hreflang="sv" href="http://sv.smigo.org/">
     <link rel="alternate" hreflang="en" href="http://en.smigo.org/">
 
-    <style>
-        <%@ include file="bootstrap.min.css" %>
-        <%@ include file="style.css" %>
-    </style>
 </head>
 <body>
 

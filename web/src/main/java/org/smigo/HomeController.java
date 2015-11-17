@@ -73,18 +73,16 @@ public class HomeController {
         model.addAttribute("msgDescription", "msg.concat.metadescription." + page);
     }
 
-
     @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)
     public String getGarden(Model model) {
         if (userSession.needToAcceptedTermsOfService()) {
             return "redirect:/accept-termsofservice";
         }
-        model.addAttribute("addRobotsNoIndex", true);
         return "ng.jsp";
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String getFrontpage(Model model) {
+    public String getFrontPage(Model model) {
         return "home.jsp";
     }
 }

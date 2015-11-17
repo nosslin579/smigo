@@ -2,10 +2,35 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://smigo.org/jsp/functions" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title><spring:message code="${msgTitle}"/></title>
+    <meta name="description" content="<spring:message code="${msgDescription}"/>">
 
-<jsp:include page="header.jsp"/>
+    <jsp:include page="head-common.jsp"/>
+
+    <%--<link rel="icon" href="../../favicon.ico">--%>
+    <base href="/">
+
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/static/jquery-2.1.3.min.js">\x3C/script>')</script>
+
+    <%--bootstrap and styling--%>
+    <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">--%>
+    <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">--%>
+    <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/flatly/bootstrap.min.css">--%>
+    <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/sandstone/bootstrap.min.css">--%>
+
+    <%--angular--%>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-touch.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+
+</head>
+
 <body ng-app="smigoModule">
 
 <%@ include file="../views/nav-top.html" %>
@@ -93,5 +118,4 @@
 </script>
 
 </body>
-
-<jsp:include page="footer.jsp"/>
+</html>
