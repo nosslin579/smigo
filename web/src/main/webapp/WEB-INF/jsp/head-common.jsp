@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="author" content="Christian Nilsson">
 
+<link rel="alternate" hreflang="x-default" href="http://smigo.org/">
+<link rel="alternate" hreflang="sv" href="http://sv.smigo.org/">
+<link rel="alternate" hreflang="en" href="http://en.smigo.org/">
+
 <style>
     <%@ include file="bootstrap.min.css" %>
     <%@ include file="style.css" %>
