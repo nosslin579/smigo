@@ -93,7 +93,7 @@ class PasswordHandler {
             final String id = UUID.randomUUID().toString().replaceAll("-", "");
             resetKeyMap.put(id, new ResetKeyItem(id, emailAddress));
 
-            final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. " + baseUrl + "/login-reset/" + id;
+            final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. " + baseUrl + "/reset-password/" + id;
             emailHandler.sendClientMessage(emailAddress, subject, text);
         }
     }

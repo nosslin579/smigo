@@ -87,10 +87,9 @@ public class PasswordController {
         userHandler.sendResetPasswordEmail(bean.getEmail());
     }
 
-    @RequestMapping(value = "/login-reset/{resetKey}", method = RequestMethod.GET)
+    @RequestMapping(value = "/reset-password/{resetKey}", method = RequestMethod.GET)
     public String getResetForm(@PathVariable String resetKey, Model model, HttpServletResponse response) {
         model.addAttribute(new ResetKeyPasswordFormBean(resetKey));
-        response.setStatus(404);
         return "resetpasswordform.jsp";
     }
 
