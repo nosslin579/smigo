@@ -88,6 +88,7 @@ class PasswordHandler {
         List<UserDetails> users = userDao.getUserByEmail(emailAddress);
         if (users.isEmpty()) {
             final String text = "Can not reset password. No user with email " + emailAddress;
+            emailHandler.sendAdminNotification("no email for password reset", text);
             emailHandler.sendClientMessage(emailAddress, subject, text);
         } else {
             final String id = UUID.randomUUID().toString().replaceAll("-", "");

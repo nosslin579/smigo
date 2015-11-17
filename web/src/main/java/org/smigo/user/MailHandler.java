@@ -40,7 +40,7 @@ public class MailHandler {
     public void sendAdminNotification(String subject, String text) {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(notifierEmail);
-        simpleMailMessage.setSubject("[SMIGO]" + subject);
+        simpleMailMessage.setSubject("[SMIGO] " + subject);
         simpleMailMessage.setText(text);
         mailSender.send(simpleMailMessage);
     }
