@@ -68,9 +68,8 @@ public class HomeController {
         model.addAttribute("rules", speciesHandler.getRules());
 
         final String path = request.getServletPath().replace("/", "");
-        final String page = path.isEmpty() ? "front" : path;
-        model.addAttribute("msgTitle", "msg.concat.title." + page);
-        model.addAttribute("msgDescription", "msg.concat.metadescription." + page);
+        model.addAttribute("msgTitle", "msg.concat.title." + path);
+        model.addAttribute("msgDescription", "msg.concat.metadescription." + path);
     }
 
     @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Terms of Service - Smigo</title>
+    <title>Accept Terms of Service - Smigo</title>
     <jsp:include page="head-common.jsp"/>
     <meta name="robots" content="noindex">
 </head>
