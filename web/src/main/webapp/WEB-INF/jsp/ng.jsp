@@ -6,8 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="${msgTitle}"/></title>
-    <meta name="description" content="<spring:message code="${msgDescription}"/>">
+    <title><spring:message code="${msgTitle}" arguments="${titleArg}"/></title>
+    <meta name="description" content="<spring:message code="${msgDescription}" arguments="${descriptionArg}"/>">
 
     <jsp:include page="head-common.jsp"/>
 

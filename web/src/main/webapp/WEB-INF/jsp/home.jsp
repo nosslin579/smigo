@@ -4,8 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="msg.concat.title.front"/></title>
-    <meta name="description" content="<spring:message code="msg.concat.metadescription.front"/>">
+    <title><spring:message code="msg.title.front"/></title>
+    <meta name="description" content="<spring:message code="msg.metadescription.front"/>">
     <jsp:include page="head-common.jsp"/>
     <link rel="alternate" hreflang="x-default" href="http://smigo.org/">
     <link rel="alternate" hreflang="sv" href="http://sv.smigo.org/">

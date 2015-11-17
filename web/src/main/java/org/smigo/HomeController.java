@@ -35,6 +35,7 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -58,7 +59,7 @@ public class HomeController {
     private SpeciesHandler speciesHandler;
 
     @ModelAttribute
-    public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user, HttpServletRequest request) {
+    public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
         model.addAttribute("user", userHandler.getUser(user));
@@ -66,21 +67,44 @@ public class HomeController {
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
-
-        final String path = request.getServletPath().replace("/", "");
-        model.addAttribute("msgTitle", "msg.concat.title." + path);
-        model.addAttribute("msgDescription", "msg.concat.metadescription." + path);
     }
 
-    @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/wall/*", "/account", "/species/*", "/rule/*", "/request-password-link"}, method = RequestMethod.GET)
-    public String getGarden(Model model) {
+    @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/account", "/request-password-link"}, method = RequestMethod.GET)
+    public String getGarden(Model model, HttpServletRequest request) {
         if (userSession.needToAcceptedTermsOfService()) {
             return "redirect:/accept-termsofservice";
         }
+        final String path = request.getServletPath().replace("/", "");
+        model.addAttribute("msgTitle", "msg.concat.title." + path);
+        model.addAttribute("msgDescription", "msg.concat.metadescription." + path);
         return "ng.jsp";
     }
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/wall/{userName}"}, method = RequestMethod.GET)
+    public String getWall(@PathVariable String userName, Model model) {
+        model.addAttribute("msgTitle", "msg.title.wall");
+        model.addAttribute("titleArg", userName);
+        return "ng.jsp";
+    }
+
+    @RequestMapping(value = {"/species/{id}"}, method = RequestMethod.GET)
+    public String getSpecies(@PathVariable int id, Model model, Locale locale) {
+        model.addAttribute("msgTitle", "msg.title.species");
+        model.addAttribute("msgDescription", "msg.metadescription.species");
+        Object translation = ((Map) model.asMap().get("messages")).get("msg.species" + id);
+        model.addAttribute("titleArg", translation);
+        model.addAttribute("descriptionArg", translation);
+        return "ng.jsp";
+    }
+
+    @RequestMapping(value = {"/rule/{id}"}, method = RequestMethod.GET)
+    public String getRule(@PathVariable int id, Model model, Locale locale) {
+        model.addAttribute("msgTitle", "msg.title.rule");
+        model.addAttribute("titleArg", id);
+        return "ng.jsp";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getFrontPage(Model model) {
         return "home.jsp";
     }
