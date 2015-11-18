@@ -11,7 +11,6 @@
 
     <jsp:include page="head-common.jsp"/>
 
-    <%--<link rel="icon" href="../../favicon.ico">--%>
     <base href="/">
 
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>

@@ -10,6 +10,9 @@
 <link rel="alternate" hreflang="sv" href="http://sv.smigo.org/">
 <link rel="alternate" hreflang="en" href="http://en.smigo.org/">
 
+<%--http://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh--%>
+<link rel="icon" href="/static/species/28.png?v=6">
+
 <style>
     <%@ include file="bootstrap.min.css" %>
     <%@ include file="style.css" %>
