@@ -22,7 +22,7 @@
             <p>
 
             <h3>{{'rules'|translate}}
-                <button class="btn btn-default btn-xs pull-right" ng-click="requestFeature('add-rule')">{{'rule.add'|translate}}</button>
+            <button class="btn btn-default btn-xs" ng-click="requestFeature('add-rule')">{{'add'|translate}}</button>
             </h3>
 
             <div ng-if="species.rules.find('goodcompanion','category') != null">
@@ -30,8 +30,7 @@
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
                         <a  href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
-                        <small ng-repeat="i in r.impacts"> - {{'msg.impact'+i|translate}}</small>
-                        <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
+                        <a class="text-muted" href="/rule/{{r.id}}" title="{{'edit' | translate}}"><span class="glyphicon glyphicon-edit"></span></a>
                     </li>
                 </ul>
             </div>
@@ -41,7 +40,7 @@
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
                         <a  href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
-                        <a class="btn btn-default btn-xs text-lowercase pull-right" href="/rule/{{r.id}}">{{'edit' | translate}}</a>
+                        <a class="text-muted" href="/rule/{{r.id}}" title="{{'edit' | translate}}"><span class="glyphicon glyphicon-edit"></span></a>
                     </li>
                 </ul>
             </div>
