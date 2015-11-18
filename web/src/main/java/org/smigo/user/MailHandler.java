@@ -37,11 +37,11 @@ public class MailHandler {
     private String notifierEmail;
 
 
-    public void sendAdminNotification(String subject, String text) {
+    public void sendAdminNotification(String subject, Object text) {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(notifierEmail);
         simpleMailMessage.setSubject("[SMIGO] " + subject);
-        simpleMailMessage.setText(text);
+        simpleMailMessage.setText(text.toString());
         mailSender.send(simpleMailMessage);
     }
 

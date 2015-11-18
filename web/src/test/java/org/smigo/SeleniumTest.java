@@ -287,7 +287,6 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(2000);
         Assert.assertTrue(d.getPageSource().contains(NON_LATIN_LETTERS));
         Assert.assertEquals(d.findElements(By.partialLinkText(username)).size(), 1);
-        log.info("LoginWrongPassword finished successfully. Username:" + username);
     }
 
     @Test(enabled = true)

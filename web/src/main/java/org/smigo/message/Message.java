@@ -71,4 +71,14 @@ public class Message {
     public void setCreatedate(Date createdate) {
         this.createdate = createdate;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", submitter='" + submitter + '\'' +
+                ", createdate=" + createdate +
+                '}';
+    }
 }
