@@ -12,7 +12,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/garden"><spring:message code="garden"/></a></li>
                 <li><a href="/forum" id="forum-link"><spring:message code="msg.forum"/></a></li>
-                <li><a href="/help"><spring:message code="help"/></a></li>
+                <li><a href="/help" target="_self"><spring:message code="help"/></a></li>
                 <sec:authorize access="isAnonymous()">
                     <li><a href="/register" id="register-link"><spring:message code="msg.account.register"/></a></li>
                     <li><a href="/login" id="login-link"><spring:message code="account.login"/></a></li>

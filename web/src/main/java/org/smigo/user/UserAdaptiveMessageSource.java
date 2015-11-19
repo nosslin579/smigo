@@ -23,8 +23,6 @@ package org.smigo.user;
  */
 
 import org.slf4j.LoggerFactory;
-import org.smigo.species.SpeciesHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
@@ -35,9 +33,6 @@ import java.util.Map;
 public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSource implements MessageSource {
 
     private final org.slf4j.Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private SpeciesHandler speciesHandler;
 
     public UserAdaptiveMessageSource(int cacheSeconds) {
         super();

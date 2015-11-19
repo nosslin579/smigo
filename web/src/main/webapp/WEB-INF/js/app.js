@@ -15,9 +15,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
             when('/hasta-luego', {
                 templateUrl: 'hasta-luego.html'
             }).
-            when('/help', {
-                templateUrl: 'help.html'
-            }).
             when('/login', {
                 templateUrl: 'login.html',
                 controller: 'LoginController'

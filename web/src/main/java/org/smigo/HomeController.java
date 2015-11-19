@@ -69,7 +69,7 @@ public class HomeController {
         model.addAttribute("rules", speciesHandler.getRules());
     }
 
-    @RequestMapping(value = {"/garden", "/help", "/login", "/register", "/forum", "/hasta-luego", "/account", "/request-password-link"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/garden", "/login", "/register", "/forum", "/hasta-luego", "/account", "/request-password-link"}, method = RequestMethod.GET)
     public String getGarden(Model model, HttpServletRequest request) {
         if (userSession.needToAcceptedTermsOfService()) {
             return "redirect:/accept-termsofservice";
@@ -78,6 +78,11 @@ public class HomeController {
         model.addAttribute("msgTitle", "msg.concat.title." + path);
         model.addAttribute("msgDescription", "msg.concat.metadescription." + path);
         return "ng.jsp";
+    }
+
+    @RequestMapping(value = "/help", method = RequestMethod.GET)
+    public String getHelp(Model model, HttpServletRequest request) {
+        return "help.jsp";
     }
 
     @RequestMapping(value = {"/wall/{userName}"}, method = RequestMethod.GET)

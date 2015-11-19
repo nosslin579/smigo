@@ -88,9 +88,6 @@
 <script type="text/ng-template" id="garden.html">
     <%@ include file="../views/garden.html" %>
 </script>
-<script type="text/ng-template" id="help.html">
-    <%@ include file="../views/help.html" %>
-</script>
 <script type="text/ng-template" id="login.html">
     <%@ include file="../views/login.html" %>
 </script>

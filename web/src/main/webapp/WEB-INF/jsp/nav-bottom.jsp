@@ -11,7 +11,7 @@
                     <div style="text-decoration: underline;"><spring:message code="about"/></div>
                     <a href="https://github.com/nosslin579/smigo"><spring:message code="msg.sourccode"/></a><br/>
                     <a href="/static/terms-of-service.html" rel="nofollow"><spring:message code="termsofservice"/></a><br/>
-                    <a href="/help"><spring:message code="help"/></a><br/>
+                    <a href="/help" target="_self"><spring:message code="help"/></a><br/>
                     <a href="/forum"><spring:message code="msg.forum"/></a><br/>
                 </div>
                 <div class="col-xs-4">
