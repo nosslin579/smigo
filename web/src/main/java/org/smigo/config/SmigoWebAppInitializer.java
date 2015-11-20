@@ -36,7 +36,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -86,10 +86,20 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
         servletContext.addListener(new RequestContextListener());
         servletContext.addListener(new ContextLoaderListener(context));
 
+        //http://stackoverflow.com/questions/4811877/share-session-data-between-2-subdomains
+        servletContext.getSessionCookieConfig().setDomain(getDomain());
 
-        DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", dispatcherServlet);
-        dispatcher.addMapping("/");
+        servletContext.addServlet("dispatcher", new DispatcherServlet(context)).addMapping("/");
+    }
+
+    private String getDomain() {
+        try {
+            InitialContext initialContext = new InitialContext();
+            final URL url = (URL) initialContext.lookup("java:comp/env/baseUrl");
+            return "." + url.getHost();
+        } catch (NamingException e) {
+            throw new RuntimeException("Could not find base url", e);
+        }
     }
 
     private String getProfile() {

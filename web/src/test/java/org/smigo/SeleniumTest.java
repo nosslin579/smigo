@@ -66,7 +66,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String SPECIES_NAME = "Frango Salada";
     private static final String SCIENTIFIC_NAME = "Frangus Saladus";
     private static final String ITEM_NAME = "Sand";
-    private static final String HOST_URL = "http://localhost:8080";
+    private static final String HOST_URL = "http://lh.smigo.org:8080";
     private static final int NUMBER_OF_SPECIES = 83;
 
     private static final By SQUARE = By.className("square-content");
