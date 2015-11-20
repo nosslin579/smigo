@@ -32,9 +32,4 @@ public interface UserSession extends Serializable {
 
     List<PlantData> getPlants();
 
-    void setUser(UserBean user);
-
-    UserBean getUser();
-
-    boolean needToAcceptedTermsOfService();
 }

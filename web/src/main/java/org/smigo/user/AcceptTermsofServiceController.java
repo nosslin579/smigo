@@ -37,9 +37,7 @@ import java.util.Locale;
 public class AcceptTermsofServiceController {
 
     @Autowired
-    private UserSession userSession;
-    @Autowired
-    private UserDao userDao;
+    private UserHandler userHandler;
 
     @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.GET)
     public String acceptTermsOfService(Model model) {
@@ -53,12 +51,7 @@ public class AcceptTermsofServiceController {
         if (result.hasErrors()) {
             return "accept-tos.jsp";
         }
-
-        final UserBean userBean = userSession.getUser();
-        userBean.setTermsOfService(true);
-        userBean.setLocale(locale);
-        userDao.updateUser(user.getId(), userBean);
-
+        userHandler.acceptTermsOfService(user);
         return "redirect:/garden";
     }
 }

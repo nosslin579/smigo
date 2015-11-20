@@ -71,9 +71,6 @@ public class HomeController {
 
     @RequestMapping(value = {"/garden", "/login", "/register", "/forum", "/hasta-luego", "/account", "/request-password-link"}, method = RequestMethod.GET)
     public String getGarden(Model model, HttpServletRequest request) {
-        if (userSession.needToAcceptedTermsOfService()) {
-            return "redirect:/accept-termsofservice";
-        }
         final String path = request.getServletPath().replace("/", "");
         model.addAttribute("msgTitle", "msg.concat.title." + path);
         model.addAttribute("msgDescription", "msg.concat.metadescription." + path);

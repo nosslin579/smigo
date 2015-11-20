@@ -38,7 +38,6 @@ public class UserSessionImpl implements UserSession {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private List<PlantData> plants = new ArrayList<PlantData>();
-    private UserBean user = new UserBean();
 
     @Override
     public List<PlantData> getPlants() {
@@ -46,22 +45,8 @@ public class UserSessionImpl implements UserSession {
     }
 
     @Override
-    public void setUser(UserBean user) {
-        this.user = user;
-    }
-
-    @Override
     public String toString() {
         return "UserSessionImpl";
     }
 
-    @Override
-    public UserBean getUser() {
-        return user;
-    }
-
-    @Override
-    public boolean needToAcceptedTermsOfService() {
-        return user.getUsername() != null && !user.isTermsOfService();
-    }
 }

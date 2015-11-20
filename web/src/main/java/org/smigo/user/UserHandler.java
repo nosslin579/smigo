@@ -112,7 +112,6 @@ public class UserHandler {
     }
 
     public void updateUser(UserBean userBean, AuthenticatedUser user) {
-        userSession.setUser(userBean);
         userDao.updateUser(user.getId(), userBean);
     }
 

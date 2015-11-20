@@ -30,6 +30,7 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
@@ -45,13 +46,16 @@ public class UserSetLocaleResolver implements LocaleResolver {
     private static final Logger log = LoggerFactory.getLogger(UserSetLocaleResolver.class);
 
     @Autowired
-    private UserSession userSession;
+    private UserDao userDao;
 
     @Override
     public Locale resolveLocale(HttpServletRequest req) {
-        UserBean user = userSession.getUser();
-        if (user.getLocale() != null) {
-            return user.getLocale();
+        final Principal userPrincipal = req.getUserPrincipal();
+        if (userPrincipal != null) {
+            UserBean user = userDao.getUser(userPrincipal.getName());
+            if (user.getLocale() != null) {
+                return user.getLocale();
+            }
         }
 
         final String subdomain = req.getServerName().split("\\.")[0];
