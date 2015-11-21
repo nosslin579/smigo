@@ -41,5 +41,6 @@
         <a href="/logout2" class="btn btn-default"><spring:message code="cancel"/></a>
     </form:form>
 </div>
+<jsp:include page="nav-bottom.jsp"/>
 </body>
 </html>

@@ -47,8 +47,6 @@ class EmptyAuthenticationSuccessHandler implements AuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-//        if (authentication instanceof OpenIDAuthenticationToken || authentication instanceof RememberMeAuthenticationToken) {
-//            response.sendRedirect("");
-//        }
+        log.info("Successful authentication by " + authentication.getPrincipal());
     }
 }

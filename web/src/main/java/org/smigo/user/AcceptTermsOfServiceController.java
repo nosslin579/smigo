@@ -34,15 +34,18 @@ import javax.validation.Valid;
 import java.util.Locale;
 
 @Controller
-public class AcceptTermsofServiceController {
+public class AcceptTermsOfServiceController {
 
     @Autowired
     private UserHandler userHandler;
 
     @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.GET)
-    public String acceptTermsOfService(Model model) {
-        model.addAttribute(new AcceptTermsOfService());
-        return "accept-tos.jsp";
+    public String acceptTermsOfService(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+        if (true || user != null && !userHandler.getUser(user).isTermsOfService()) {
+            model.addAttribute(new AcceptTermsOfService());
+            return "accept-tos.jsp";
+        }
+        return "redirect:/garden";
     }
 
     @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.POST)

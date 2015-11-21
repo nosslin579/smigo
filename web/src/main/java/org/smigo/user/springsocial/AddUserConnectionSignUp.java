@@ -38,6 +38,7 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
 
     @Override
     public String execute(Connection<?> connection) {
+        //todo if mail already exist do not create user
         final AuthenticatedUser createdUser = userHandler.createUser();
         final UserBean userBean = userHandler.getUser(createdUser);
         userBean.setEmail(connection.fetchUserProfile().getEmail());
