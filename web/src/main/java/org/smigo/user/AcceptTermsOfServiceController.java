@@ -41,7 +41,7 @@ public class AcceptTermsOfServiceController {
 
     @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.GET)
     public String acceptTermsOfService(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
-        if (true || user != null && !userHandler.getUser(user).isTermsOfService()) {
+        if (user != null && !userHandler.getUser(user).isTermsOfService()) {
             model.addAttribute(new AcceptTermsOfService());
             return "accept-tos.jsp";
         }

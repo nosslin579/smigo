@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Accept Terms of Service - Smigo</title>
+    <title><spring:message code="termsofservice"/> - Smigo</title>
     <jsp:include page="head-common.jsp"/>
     <meta name="robots" content="noindex">
 </head>
@@ -18,7 +18,7 @@
 <div class="container">
     <div class="page-header text-center">
         <h1>
-            Smigo - <spring:message code="termsofservice"/>
+            <spring:message code="termsofservice"/>
         </h1>
     </div>
 
