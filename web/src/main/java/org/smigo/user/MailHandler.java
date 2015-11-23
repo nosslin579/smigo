@@ -28,6 +28,8 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class MailHandler {
 
@@ -35,6 +37,11 @@ public class MailHandler {
     private MailSender mailSender;
     @Value("${notifierEmail}")
     private String notifierEmail;
+
+    @PostConstruct
+    public void sendStartupAdminNotification() {
+        sendAdminNotification("Server started", "Server started");
+    }
 
 
     public void sendAdminNotification(String subject, Object text) {
