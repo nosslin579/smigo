@@ -25,16 +25,16 @@ package org.smigo.user.springsocial;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserBean;
 import org.smigo.user.UserHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
+import org.springframework.stereotype.Component;
 
+@Component
 class AddUserConnectionSignUp implements ConnectionSignUp {
 
-    private final UserHandler userHandler;
-
-    public AddUserConnectionSignUp(UserHandler userHandler) {
-        this.userHandler = userHandler;
-    }
+    @Autowired
+    private UserHandler userHandler;
 
     @Override
     public String execute(Connection<?> connection) {
