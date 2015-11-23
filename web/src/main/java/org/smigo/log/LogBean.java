@@ -150,6 +150,8 @@ class LogBean {
                 ", origin='" + origin + '\'' +
                 ", httpStatus=" + httpStatus +
                 ", sessionAge=" + sessionAge +
+                ", queryString='" + queryString + '\'' +
+                ", host='" + host + '\'' +
                 '}';
     }
 
@@ -161,6 +163,8 @@ class LogBean {
         return httpStatus;
     }
 
+
+    //todo remove host
     public String getHost() {
         return host;
     }

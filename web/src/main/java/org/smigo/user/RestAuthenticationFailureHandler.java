@@ -25,7 +25,6 @@ package org.smigo.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.log.VisitLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,6 +46,8 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private MailHandler mailHandler;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
@@ -60,8 +61,8 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
         String responseBody = objectMapper.writeValueAsString(errors);
         response.getWriter().append(responseBody);
 
-        final String note = "Authentication Failure:" + request.getParameter("username") + exception.getMessage();
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
-        log.info("Authentication Failure " + exception);
+        final String note = "Authentication Failure:" + request.getParameter("username") + exception;
+        log.info(note);
+        mailHandler.sendAdminNotification("authentication failure", note);
     }
 }

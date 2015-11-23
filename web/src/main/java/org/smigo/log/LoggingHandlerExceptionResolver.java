@@ -24,6 +24,8 @@ package org.smigo.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.MailHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -36,11 +38,16 @@ import javax.servlet.http.HttpServletResponse;
 public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver, PriorityOrdered {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    @Autowired
+    private MailHandler mailHandler;
+
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.error("Error during request(Inside Spring MVC). Handler:" + handler, ex);
+        final LogBean logBean = LogBean.create(request, response);
+        log.error("Error during request(Inside Spring MVC). Handler:" + handler + logBean, ex);
         if (ex != null) {
             final String note = ex.getClass().getName() + ":" + ex.getMessage();
+            mailHandler.sendAdminNotification("error during request inside Spring MVC", note + "\n" + logBean);
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         }
         return null;

@@ -26,6 +26,9 @@ package org.smigo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
+import org.smigo.user.MailHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ErrorController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private MailHandler mailHandler;
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public String error(Model model, HttpServletRequest request) {
@@ -49,6 +55,10 @@ public class ErrorController {
         String noteMsg = note == null ? "" : note;
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, noteMsg + "," + exMsg + "," + uriMsg);
         model.addAttribute("statusCode", statusCode);
+
+        if (statusCode != HttpStatus.NOT_FOUND.value()) {
+            mailHandler.sendAdminNotification("error during request outside Spring MVC", uri + " - " + exMsg);
+        }
         return "error.jsp";
     }
 }
