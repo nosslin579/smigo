@@ -70,6 +70,7 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
         props.setProperty("mail.smtp.starttls.enable", "true");
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.ssl.enable", "true");
+        //todo set correct trust http://stackoverflow.com/questions/4894954/how-to-ignore-server-cert-error-in-javamail
         props.setProperty("mail.smtp.ssl.trust", "*");
 
         ret.setJavaMailProperties(props);
