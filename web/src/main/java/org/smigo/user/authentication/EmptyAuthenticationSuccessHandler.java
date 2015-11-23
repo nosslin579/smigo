@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.authentication;
 
 /*
  * #%L
@@ -24,16 +24,22 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationListener;
-import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @Component
-public class AuthenticationSuccessListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
+class EmptyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
-    public void onApplicationEvent(InteractiveAuthenticationSuccessEvent event) {
-        log.info("Login successful, event:" + event + ", token:" + event.getSource().getClass().getSimpleName());
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+        log.info("Successful authentication by " + authentication.getPrincipal());
     }
 }

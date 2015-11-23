@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.authentication;
 
 /*
  * #%L
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class EmptyLogoutSuccessHandler implements LogoutSuccessHandler {
+class EmptyLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 

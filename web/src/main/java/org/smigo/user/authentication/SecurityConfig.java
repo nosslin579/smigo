@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.authentication;
 
 /*
  * #%L
@@ -38,7 +38,6 @@ import org.springframework.security.config.annotation.web.configurers.openid.Ope
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -53,21 +52,25 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private AuthenticationUserDetailsService<OpenIDAuthenticationToken> openIdUserDetailsService;
+    @Autowired
     private EmptyAuthenticationSuccessHandler emptyAuthenticationSuccessHandler;
     @Autowired
     public DataSource dataSource;
     @Autowired
     private UserDetailsService customUserDetailsService;
     @Autowired
-    private AuthenticationFailureHandler customAuthenticationFailureHandler;
+    private AuthenticationFailureHandler restAuthenticationFailureHandler;
     @Autowired
     private EmptyLogoutSuccessHandler emptyLogoutSuccessHandler;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Value("${baseUrl}")
     private String baseUrl;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         FormLoginConfigurer<HttpSecurity> formLogin = http.formLogin();
         formLogin.loginPage("/login");
         formLogin.loginProcessingUrl("/login");
-        formLogin.failureHandler(customAuthenticationFailureHandler);
+        formLogin.failureHandler(restAuthenticationFailureHandler);
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
@@ -105,21 +108,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         OpenIDLoginConfigurer<HttpSecurity> openidLogin = http.openidLogin();
         openidLogin.loginPage("/login");
         openidLogin.loginProcessingUrl("/login-openid");
-        openidLogin.authenticationUserDetailsService(authenticationUserDetailsService());
+        openidLogin.authenticationUserDetailsService(openIdUserDetailsService);
         openidLogin.permitAll();
         openidLogin.defaultSuccessUrl("/accept-termsofservice");
 //      openidLogin.attributeExchange("https://www.google.com/.*").attribute("axContactEmail").type("http://axschema.org/contact/email").required(true);
-    }
-
-    //todo convert to component
-    @Bean
-    public AuthenticationUserDetailsService<OpenIDAuthenticationToken> authenticationUserDetailsService() {
-        return new OpenIdUserDetailsService();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean

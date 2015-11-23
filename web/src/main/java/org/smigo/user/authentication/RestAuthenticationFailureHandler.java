@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.authentication;
 
 /*
  * #%L
@@ -25,6 +25,7 @@ package org.smigo.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
+class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired

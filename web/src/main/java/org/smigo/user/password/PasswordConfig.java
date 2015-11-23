@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.password;
 
 /*
  * #%L
@@ -22,11 +22,16 @@ package org.smigo.user;
  * #L%
  */
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class Authority {
+@Configuration
+public class PasswordConfig {
 
-    public static final GrantedAuthority HUMAN = new SimpleGrantedAuthority("human");
-    public static final GrantedAuthority USER = new SimpleGrantedAuthority("user");
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

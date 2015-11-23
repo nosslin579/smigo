@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.user.authentication;
 
 /*
  * #%L
@@ -22,29 +22,26 @@ package org.smigo.user;
  * #L%
  */
 
+import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
+@Service
+public class UsernameUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserHandler userHandler;
     @Autowired
     private UserDao userDao;
 
     @Override
-    public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-        final List<UserDetails> userDetails = userDao.getUserDetails(token);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        final List<UserDetails> userDetails = userDao.getUserDetails(username);
         if (userDetails.isEmpty()) {
-            final AuthenticatedUser createdUser = userHandler.createUser();
-            final int userId = createdUser.getId();
-            userDao.addOpenId(userId, token.getIdentityUrl());
-            return userDao.getUserDetails(userId);
+            throw new UsernameNotFoundException("User not found:" + username);
         }
         return userDetails.get(0);
     }

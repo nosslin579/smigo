@@ -22,6 +22,7 @@ package org.smigo.user;
  * #L%
  */
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.security.SocialUser;
 import org.springframework.social.security.SocialUserDetails;
 
@@ -31,7 +32,7 @@ public class AuthenticatedUser extends SocialUser implements User, SocialUserDet
     private final int id;
 
     public AuthenticatedUser(int id, String username, String password) {
-        super(username, password, Collections.singletonList(Authority.USER));
+        super(username, password, Collections.singletonList(new SimpleGrantedAuthority("user")));
         this.id = id;
     }
 
