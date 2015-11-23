@@ -15,6 +15,7 @@
     </parent>
 
     <build>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
