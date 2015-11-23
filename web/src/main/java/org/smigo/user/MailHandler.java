@@ -35,6 +35,8 @@ public class MailHandler {
 
     @Autowired
     private MailSender mailSender;
+    @Value("${mailSenderUsername}")
+    private String mailSenderUsername;
     @Value("${notifierEmail}")
     private String notifierEmail;
 
@@ -47,6 +49,7 @@ public class MailHandler {
     public void sendAdminNotification(String subject, Object text) {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(notifierEmail);
+        simpleMailMessage.setFrom(mailSenderUsername);
         simpleMailMessage.setSubject("[SMIGO] " + subject);
         simpleMailMessage.setText(text.toString());
         mailSender.send(simpleMailMessage);
@@ -55,6 +58,7 @@ public class MailHandler {
     public void sendClientMessage(String emailAddress, String subject, String text) {
         final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailAddress);
+        simpleMailMessage.setFrom(mailSenderUsername);
         simpleMailMessage.setSubject("Smigo " + subject);
         simpleMailMessage.setText(text);
         mailSender.send(simpleMailMessage);

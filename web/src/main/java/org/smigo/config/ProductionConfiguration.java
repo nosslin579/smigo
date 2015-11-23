@@ -53,24 +53,26 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public MessageSource messageSource() {
-        log.debug("getMessageSource");
+        log.debug("MessageSource init");
         return new UserAdaptiveMessageSource(-1);
     }
 
     @Bean
     public MailSender javaMailSender() {
-        log.debug("javaMailSender");
-        final JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setUsername(mailSenderUsername);
-        javaMailSender.setPassword(mailSenderPassword);
-        javaMailSender.setHost(mailSenderHost);
-        javaMailSender.setPort(mailSenderPort);
-        javaMailSender.setProtocol("smtp");
-        javaMailSender.setJavaMailProperties(new Properties() {
-            {
-                setProperty("mail.smtp.starttls.enable", "true");
-            }
-        });
-        return javaMailSender;
+        log.debug("JavaMailSender init");
+        final JavaMailSenderImpl ret = new JavaMailSenderImpl();
+        ret.setUsername(mailSenderUsername);
+        ret.setPassword(mailSenderPassword);
+        ret.setHost(mailSenderHost);
+        ret.setPort(mailSenderPort);
+
+        final Properties props = new Properties();
+        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.smtp.auth", "true");
+        props.setProperty("mail.smtp.ssl.enable", "true");
+        props.setProperty("mail.smtp.ssl.trust", "*");
+
+        ret.setJavaMailProperties(props);
+        return ret;
     }
 }
