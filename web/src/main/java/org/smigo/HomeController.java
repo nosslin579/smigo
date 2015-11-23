@@ -77,11 +77,6 @@ public class HomeController {
         return "ng.jsp";
     }
 
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public String getHelp(Model model, HttpServletRequest request) {
-        return "help.jsp";
-    }
-
     @RequestMapping(value = {"/wall/{userName}"}, method = RequestMethod.GET)
     public String getWall(@PathVariable String userName, Model model) {
         model.addAttribute("msgTitle", "msg.title.wall");
@@ -104,10 +99,5 @@ public class HomeController {
         model.addAttribute("msgTitle", "msg.title.rule");
         model.addAttribute("titleArg", id);
         return "ng.jsp";
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getFrontPage(Model model) {
-        return "home.jsp";
     }
 }

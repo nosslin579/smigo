@@ -95,6 +95,8 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
+        registry.addViewController("/").setViewName("home.jsp");
+        registry.addViewController("/help").setViewName("help.jsp");
     }
 
     @Bean
