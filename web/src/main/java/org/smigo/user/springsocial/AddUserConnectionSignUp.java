@@ -24,26 +24,42 @@ package org.smigo.user.springsocial;
 
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserBean;
+import org.smigo.user.UserDao;
 import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 class AddUserConnectionSignUp implements ConnectionSignUp {
 
     @Autowired
     private UserHandler userHandler;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public String execute(Connection<?> connection) {
-        //todo if mail already exist do not create user
-        final AuthenticatedUser createdUser = userHandler.createUser();
-        final UserBean userBean = userHandler.getUser(createdUser);
-        userBean.setEmail(connection.fetchUserProfile().getEmail());
+        final String email = connection.fetchUserProfile().getEmail();
+        final AuthenticatedUser user = getUserDetails(email);
+
+        final UserBean userBean = userDao.getUser(user.getUsername());
+        userBean.setEmail(email);
         userBean.setDisplayName(connection.fetchUserProfile().getName());
-        userHandler.updateUser(createdUser.getId(), userBean);
-        return String.valueOf(createdUser.getId());
+        userHandler.updateUser(user.getId(), userBean);
+
+        return String.valueOf(user.getId());
+    }
+
+    private AuthenticatedUser getUserDetails(String email) {
+        final List<UserDetails> userByEmail = userDao.getUserByEmail(email);
+        if (userByEmail.isEmpty()) {
+            return userHandler.createUser();
+        }
+        return (AuthenticatedUser) userByEmail.iterator().next();
     }
 }
