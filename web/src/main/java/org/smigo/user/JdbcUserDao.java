@@ -77,9 +77,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<? extends UserBean> getUsersByUsername(String username) {
+    public List<User> getUsersByUsername(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.query(sql, new Object[]{username}, mapper);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), username);
     }
 
     @Override

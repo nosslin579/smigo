@@ -32,7 +32,7 @@ public interface UserDao {
 
     void addOpenId(int userId, String identityUrl);
 
-    List<? extends UserBean> getUsersByUsername(String username);
+    List<? extends User> getUsersByUsername(String username);
 
     User getUserById(int id);
 
