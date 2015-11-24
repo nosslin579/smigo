@@ -26,10 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
@@ -64,15 +64,22 @@ class PasswordHandler {
         String resetKey = resetFormBean.getResetKey();
         ResetKeyItem resetKeyItem = resetKeyMap.get(resetKey);
         String email = resetKeyItem.getEmail();
-        List<UserDetails> users = userDao.getUserByEmail(email);
+        List<User> users = userDao.getUsersByEmail(email);
 
-        AuthenticatedUser user = (AuthenticatedUser) users.get(0);
+        User user = users.get(0);
         String password = resetFormBean.getPassword();
         updatePassword(user, password);
         resetKeyItem.setPristine(false);
         log.info("Password successfully reset by: " + user);
     }
 
+    public void updatePassword(User user, String newPassword) {
+        final String encodedPassword = passwordEncoder.encode(newPassword);
+        userDao.updatePassword(user.getId(), encodedPassword);
+        tokenRepository.removeUserTokens(user.getUsername());
+    }
+
+    @Deprecated
     public void updatePassword(AuthenticatedUser username, String newPassword) {
         final String encodedPassword = passwordEncoder.encode(newPassword);
         userDao.updatePassword(username.getId(), encodedPassword);
@@ -85,7 +92,7 @@ class PasswordHandler {
 
         final String subject = "reset password";
 
-        List<UserDetails> users = userDao.getUserByEmail(emailAddress);
+        List<User> users = userDao.getUsersByEmail(emailAddress);
         if (users.isEmpty()) {
             final String text = "Can not reset password. No user with email " + emailAddress;
             emailHandler.sendAdminNotification("no email for password reset", text);

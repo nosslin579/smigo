@@ -36,7 +36,7 @@ public interface UserDao {
 
     User getUserById(int id);
 
-    List<UserDetails> getUserByEmail(String email);
+    List<User> getUsersByEmail(String email);
 
     List<User> getUserDetails(OpenIDAuthenticationToken token);
 

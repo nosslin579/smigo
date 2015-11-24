@@ -83,9 +83,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<UserDetails> getUserByEmail(String email) {
+    public List<User> getUsersByEmail(String email) {
         final String sql = String.format(SELECT, "email");
-        return jdbcTemplate.query(sql, new UserDetailsRowMapper(), email);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email);
     }
 
     @Override

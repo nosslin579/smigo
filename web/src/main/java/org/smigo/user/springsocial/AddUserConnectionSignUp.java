@@ -22,12 +22,8 @@ package org.smigo.user.springsocial;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserBean;
-import org.smigo.user.UserDao;
-import org.smigo.user.UserHandler;
+import org.smigo.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.stereotype.Component;
@@ -56,10 +52,11 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
     }
 
     private AuthenticatedUser getUserDetails(String email) {
-        final List<UserDetails> userByEmail = userDao.getUserByEmail(email);
-        if (userByEmail.isEmpty()) {
+        final List<User> users = userDao.getUsersByEmail(email);
+        if (users.isEmpty()) {
             return userHandler.createUser();
         }
-        return (AuthenticatedUser) userByEmail.iterator().next();
+        final User user = users.iterator().next();
+        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword());
     }
 }

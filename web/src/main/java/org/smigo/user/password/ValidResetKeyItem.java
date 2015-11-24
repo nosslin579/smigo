@@ -24,9 +24,9 @@ package org.smigo.user.password;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -75,9 +75,8 @@ public @interface ValidResetKeyItem {
             }
 
             String email = resetKeyItem.getEmail();
-            List<UserDetails> users = userDao.getUserByEmail(email);
+            List<User> users = userDao.getUsersByEmail(email);
             if (users.isEmpty()) {
-                //Should be never persist resetKeyItem if no user found
                 log.error("This can not happened. User with this email not found. Reset password not possible. " + resetKeyItem);
                 return false;
             }
