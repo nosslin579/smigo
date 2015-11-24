@@ -33,9 +33,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.config.DevelopmentConfiguration;
-import org.smigo.user.RegisterFormBean;
 import org.smigo.user.User;
-import org.smigo.user.UserBean;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -104,21 +102,16 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         return addUser(false).getUsername();
     }
 
-    private UserBean addUser(boolean addEmail) {
-        final RegisterFormBean registerFormBean = new RegisterFormBean();
+    private User addUser(boolean addEmail) {
+        User ret = new User();
+        ret.setLocale(Locale.ENGLISH);
+        ret.setTermsOfService(true);
+        ret.setPassword(HASHPW);
         final String username = "selenium" + System.currentTimeMillis();
-        registerFormBean.setUsername(username);
-        registerFormBean.setTermsOfService(true);
-        registerFormBean.setPassword(HASHPW);
-        int id = userDao.addUser(registerFormBean, HASHPW, 0);
-
-        final User userById = userDao.getUserById(id);
-        userById.setEmail(addEmail ? username + EMAIL_PROVIDER : null);
-        userById.setTermsOfService(true);
-        userById.setLocale(Locale.ENGLISH);
-        userDao.updateUser(userById);
-
-        return UserBean.create(userById);
+        ret.setUsername(username);
+        ret.setEmail(addEmail ? username + EMAIL_PROVIDER : null);
+        userDao.addUser(ret);
+        return ret;
     }
 
     private void login(String username, String password) throws InterruptedException {
@@ -294,7 +287,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     @Test(enabled = true)
     public void resetPassword() throws Exception {
-        final UserBean user = addUser(true);
+        final User user = addUser(true);
 
         d.findElement(By.id("login-link")).click();
 

@@ -22,7 +22,6 @@ package org.smigo.user.springsocial;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.smigo.user.UserHandler;
@@ -56,8 +55,7 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
     private User getUserCreateIfNotFound(String email) {
         final List<User> users = userDao.getUsersByEmail(email);
         if (users.isEmpty()) {
-            final AuthenticatedUser user = userHandler.createUser();
-            return userDao.getUserById(user.getId());
+            return userHandler.createUser();
         }
         return users.iterator().next();
     }

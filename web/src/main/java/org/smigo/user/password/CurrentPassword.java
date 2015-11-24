@@ -70,10 +70,6 @@ public @interface CurrentPassword {
             AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
             User user = userDao.getUsersByUsername(authenticatedUser.getUsername()).get(0);
             final String password = user.getPassword();
-            //user who signed up via openid has empty string as password
-            if (password.isEmpty()) {
-                return rawPassword.isEmpty();
-            }
             return passwordEncoder.matches(rawPassword, password);
         }
 

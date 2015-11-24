@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
@@ -54,12 +55,8 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int addUser(RegisterFormBean user, String encodedPassword, long decideTime) {
-        final Map map = objectMapper.convertValue(user, Map.class);
-        map.put("decidetime", decideTime);
-        map.put("password", encodedPassword);
-        Number newId = insert.executeAndReturnKey(map);
-        return newId.intValue();
+    public int addUser(User user) {
+        return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(user)).intValue();
     }
 
     @Override

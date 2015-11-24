@@ -56,32 +56,40 @@ public class UserHandler {
     @Value("${baseUrl}")
     private String baseUrl;
 
-    public AuthenticatedUser createUser() {
+    public User createUser() {
         for (int tries = 0; tries < 5; tries++) {
             String username = "user" + (int) (Math.random() * 1000000);
             final List<User> users = userDao.getUsersByUsername(username);
             if (users.size() == 0) {
                 final Locale locale = localeResolver.resolveLocale(request);
-                final RegisterFormBean newUser = new RegisterFormBean();
-                newUser.setUsername(username);
-                final int id = createUser(newUser, locale);
-                return new AuthenticatedUser(id, username, "");
+                return createUser(username, null, locale, false);
             }
         }
         throw new IllegalStateException("Tried 5 times and could not find a free username");
     }
 
-    public int createUser(RegisterFormBean user, Locale locale) {
+    public User createUser(RegisterFormBean user, Locale locale) {
+        final String encoded = passwordEncoder.encode(user.getPassword());
+        return createUser(user.getUsername(), encoded, locale, user.isTermsOfService());
+    }
+
+    public User createUser(String username, String password, Locale locale, boolean tos) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
-        final String rawPassword = user.getPassword();
-        final String encoded = rawPassword.isEmpty() ? "" : passwordEncoder.encode(rawPassword);
-        user.setLocale(locale);
-        final int userId = userDao.addUser(user, encoded, decideTime);
+
+        User newUser = new User();
+        newUser.setLocale(locale);
+        newUser.setTermsOfService(tos);
+        newUser.setDecideTime((int) decideTime);
+        newUser.setEnabled(true);
+        newUser.setPassword(password);
+        newUser.setUsername(username);
+        final int userId = userDao.addUser(newUser);
+        newUser.setId(userId);
 
         //save plants
         List<PlantData> plants = userSession.getPlants();
         plantHandler.addPlants(plants, userId);
-        return userId;
+        return newUser;
     }
 
     public void acceptTermsOfService(AuthenticatedUser authenticatedUser) {

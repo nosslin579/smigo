@@ -47,10 +47,10 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
         final List<User> users = userDao.getUsersByOpenIDAuthenticationToken(token);
         if (users.isEmpty()) {
-            final AuthenticatedUser createdUser = userHandler.createUser();
+            final User createdUser = userHandler.createUser();
             final int userId = createdUser.getId();
             userDao.addOpenId(userId, token.getIdentityUrl());
-            return createdUser;
+            return new AuthenticatedUser(userId, createdUser.getUsername(), "");
         }
         final User user = users.get(0);
         return new AuthenticatedUser(user.getId(), user.getUsername(), "");
