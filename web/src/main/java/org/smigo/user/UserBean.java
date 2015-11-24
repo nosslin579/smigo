@@ -55,14 +55,14 @@ public class UserBean implements Serializable {
     public UserBean() {
     }
 
-
-    public UserBean(String username, String displayName, String email, String about, Locale locale) {
+    public UserBean(String username, String displayName, String email, String about, Locale locale, boolean termsOfService) {
         this.displayName = displayName;
         this.username = username;
         this.email = email;
         this.about = about;
         this.locale = locale;
-        log.debug("Create user instance " + this.toString());
+        this.termsOfService = termsOfService;
+        log.debug("Create UserBean instance " + this.toString());
     }
 
     @Override
@@ -126,6 +126,6 @@ public class UserBean implements Serializable {
     }
 
     public static UserBean create(User user) {
-        return new UserBean(user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale());
+        return new UserBean(user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale(), user.isTermsOfService());
     }
 }

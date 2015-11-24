@@ -111,8 +111,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         registerFormBean.setTermsOfService(true);
         registerFormBean.setPassword(HASHPW);
         int id = userDao.addUser(registerFormBean, HASHPW, 0);
-        UserBean user = new UserBean(username, "", username + EMAIL_PROVIDER, "", Locale.ENGLISH);
-        user.setTermsOfService(true);
+        UserBean user = new UserBean(username, "", username + EMAIL_PROVIDER, "", Locale.ENGLISH, true);
         if (addEmail) {
             userDao.updateUser(id, user);
         }
