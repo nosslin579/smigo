@@ -38,7 +38,7 @@ public interface UserDao {
 
     List<User> getUsersByEmail(String email);
 
-    List<User> getUserDetails(OpenIDAuthenticationToken token);
+    List<User> getUsersByOpenIDAuthenticationToken(OpenIDAuthenticationToken token);
 
     void updateUser(int id, UserBean user);
 

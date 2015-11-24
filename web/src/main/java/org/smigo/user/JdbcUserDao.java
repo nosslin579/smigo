@@ -89,7 +89,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getUserDetails(OpenIDAuthenticationToken token) {
+    public List<User> getUsersByOpenIDAuthenticationToken(OpenIDAuthenticationToken token) {
         final String sql = "SELECT users.id, username FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), token.getIdentityUrl());
     }
