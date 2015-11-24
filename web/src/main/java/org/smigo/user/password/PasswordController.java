@@ -30,7 +30,7 @@ import org.smigo.user.UserAdaptiveMessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

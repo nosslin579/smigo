@@ -31,7 +31,7 @@ import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
