@@ -22,7 +22,6 @@ package org.smigo.user;
  * #L%
  */
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 
 import java.util.List;
@@ -48,5 +47,4 @@ public interface UserDao {
 
     void updatePassword(int userId, String encodedPassword);
 
-    UserDetails getUserDetails(int userId);
 }

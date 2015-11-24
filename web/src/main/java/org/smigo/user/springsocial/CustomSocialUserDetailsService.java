@@ -22,6 +22,8 @@ package org.smigo.user.springsocial;
  * #L%
  */
 
+import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -38,6 +40,7 @@ class CustomSocialUserDetailsService implements SocialUserDetailsService {
 
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException {
-        return (SocialUserDetails) userDao.getUserDetails(Integer.parseInt(userId));
+        final User user = userDao.getUserById(Integer.parseInt(userId));
+        return new AuthenticatedUser(user.getId(), user.getUsername(), "");
     }
 }

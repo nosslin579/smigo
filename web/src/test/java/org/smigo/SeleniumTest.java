@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.config.DevelopmentConfiguration;
 import org.smigo.user.RegisterFormBean;
+import org.smigo.user.User;
 import org.smigo.user.UserBean;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,9 +186,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(src.size(), 1);
 
 
-        UserBean user = userDao.getUser(username);
-        Assert.assertNotNull(user);
-        Assert.assertEquals(user.getUsername(), username);
+        List<User> user = userDao.getUsersByUsername(username);
+        Assert.assertEquals(user.size(), 1);
+        Assert.assertEquals(user.get(0).getUsername(), username);
         log.info("Register finished successfully. Username:" + username);
     }
 
