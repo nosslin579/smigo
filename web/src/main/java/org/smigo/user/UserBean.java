@@ -124,4 +124,8 @@ public class UserBean implements Serializable {
     public void setTermsOfService(boolean termsOfService) {
         this.termsOfService = termsOfService;
     }
+
+    public static UserBean create(User user) {
+        return new UserBean(user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale());
+    }
 }

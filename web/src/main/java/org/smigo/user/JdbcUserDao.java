@@ -26,16 +26,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +42,6 @@ public class JdbcUserDao implements UserDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
-    private final RowMapper<UserBean> mapper = new UserBeanRowMapper();
 
     @Autowired
     public ObjectMapper objectMapper;
@@ -103,12 +97,6 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public UserBean getUser(String username) {
-        final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.queryForObject(sql, new Object[]{username}, mapper);
-    }
-
-    @Override
     public void deleteOpenId(String openIdUrl) {
         String sql = "DELETE FROM openid WHERE identity_url = ?";
         jdbcTemplate.update(sql, new Object[]{openIdUrl}, new int[]{Types.VARCHAR});
@@ -126,30 +114,5 @@ public class JdbcUserDao implements UserDao {
     public User getUserById(int id) {
         final String sql = String.format(SELECT, "id");
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), id);
-    }
-
-    private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
-        @Override
-        public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String username = rs.getString("username");
-            String password = rs.getString("password");
-            int id = rs.getInt("id");
-            return new AuthenticatedUser(id, username, password);
-        }
-    }
-
-
-    private static class UserBeanRowMapper implements RowMapper<UserBean> {
-        @Override
-        public UserBean mapRow(ResultSet rs, int rowNum) throws SQLException {
-            UserBean ret = new UserBean();
-            ret.setTermsOfService(rs.getBoolean("termsofservice"));
-            ret.setAbout(rs.getString("about"));
-            ret.setUsername(rs.getString("username"));
-            ret.setDisplayName(rs.getString("displayname"));
-            ret.setEmail(rs.getString("email"));
-            ret.setLocale(StringUtils.parseLocaleString(rs.getString("locale")));
-            return ret;
-        }
     }
 }

@@ -41,9 +41,9 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
     @Override
     public String execute(Connection<?> connection) {
         final String email = connection.fetchUserProfile().getEmail();
-        final AuthenticatedUser user = getUserDetails(email);
+        final User user = getUserCreateIfNotFound(email);
 
-        final UserBean userBean = userDao.getUser(user.getUsername());
+        final UserBean userBean = UserBean.create(user);
         userBean.setEmail(email);
         userBean.setDisplayName(connection.fetchUserProfile().getName());
         userHandler.updateUser(user.getId(), userBean);
@@ -51,12 +51,12 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
         return String.valueOf(user.getId());
     }
 
-    private AuthenticatedUser getUserDetails(String email) {
+    private User getUserCreateIfNotFound(String email) {
         final List<User> users = userDao.getUsersByEmail(email);
         if (users.isEmpty()) {
-            return userHandler.createUser();
+            final AuthenticatedUser user = userHandler.createUser();
+            return userDao.getUserById(user.getId());
         }
-        final User user = users.iterator().next();
-        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword());
+        return users.iterator().next();
     }
 }

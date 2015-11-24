@@ -84,22 +84,23 @@ public class UserHandler {
         return userId;
     }
 
-    public void acceptTermsOfService(AuthenticatedUser principal) {
-        UserBean user = userDao.getUser(principal.getUsername());
+    public void acceptTermsOfService(AuthenticatedUser authenticatedUser) {
+        User user = userDao.getUserById(authenticatedUser.getId());
         user.setTermsOfService(true);
-        userDao.updateUser(principal.getId(), user);
+        UserBean userBean = UserBean.create(user);
+        userDao.updateUser(authenticatedUser.getId(), userBean);
     }
 
     public PublicInfoUserBean getUserPublicInfo(String username) {
-        final UserBean user = userDao.getUser(username);
-        return new PublicInfoUserBean(user);
+        final List<User> user = userDao.getUsersByUsername(username);
+        return user.isEmpty() ? null : new PublicInfoUserBean(user.get(0));
     }
 
     public UserBean getUser(AuthenticatedUser user) {
         if (user == null) {
             return null;
         }
-        return userDao.getUser(user.getUsername());
+        return UserBean.create(userDao.getUserById(user.getId()));
     }
 
     public AuthenticatedUser getCurrentUser() {

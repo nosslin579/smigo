@@ -52,7 +52,7 @@ public class UserSetLocaleResolver implements LocaleResolver {
     public Locale resolveLocale(HttpServletRequest req) {
         final Principal userPrincipal = req.getUserPrincipal();
         if (userPrincipal != null) {
-            UserBean user = userDao.getUser(userPrincipal.getName());
+            User user = userDao.getUsersByUsername(userPrincipal.getName()).get(0);
             if (user.getLocale() != null) {
                 return user.getLocale();
             }

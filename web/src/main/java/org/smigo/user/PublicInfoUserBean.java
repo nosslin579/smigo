@@ -29,10 +29,10 @@ public class PublicInfoUserBean {
 
     private String about;
 
-    public PublicInfoUserBean(UserBean userBean) {
-        this.displayName = userBean.getDisplayName();
-        this.username = userBean.getUsername();
-        this.about = userBean.getAbout();
+    public PublicInfoUserBean(User user) {
+        this.displayName = user.getDisplayName();
+        this.username = user.getUsername();
+        this.about = user.getAbout();
     }
 
     public String getDisplayName() {
