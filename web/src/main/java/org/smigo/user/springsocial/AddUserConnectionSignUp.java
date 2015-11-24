@@ -22,7 +22,10 @@ package org.smigo.user.springsocial;
  * #L%
  */
 
-import org.smigo.user.*;
+import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
+import org.smigo.user.UserDao;
+import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -41,12 +44,11 @@ class AddUserConnectionSignUp implements ConnectionSignUp {
     @Override
     public String execute(Connection<?> connection) {
         final String email = connection.fetchUserProfile().getEmail();
-        final User user = getUserCreateIfNotFound(email);
 
-        final UserBean userBean = UserBean.create(user);
-        userBean.setEmail(email);
-        userBean.setDisplayName(connection.fetchUserProfile().getName());
-        userHandler.updateUser(user.getId(), userBean);
+        final User user = getUserCreateIfNotFound(email);
+        user.setEmail(email);
+        user.setDisplayName(connection.fetchUserProfile().getName());
+        userDao.updateUser(user);
 
         return String.valueOf(user.getId());
     }

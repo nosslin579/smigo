@@ -24,7 +24,6 @@ package org.smigo.user.password;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
 import org.smigo.user.User;
 import org.smigo.user.UserDao;
@@ -68,22 +67,17 @@ class PasswordHandler {
 
         User user = users.get(0);
         String password = resetFormBean.getPassword();
-        updatePassword(user, password);
+        updatePassword(user.getId(), password);
         resetKeyItem.setPristine(false);
         log.info("Password successfully reset by: " + user);
     }
 
-    public void updatePassword(User user, String newPassword) {
+    public void updatePassword(int userId, String newPassword) {
+        final User user = userDao.getUserById(userId);
         final String encodedPassword = passwordEncoder.encode(newPassword);
-        userDao.updatePassword(user.getId(), encodedPassword);
+        user.setPassword(encodedPassword);
+        userDao.updateUser(user);
         tokenRepository.removeUserTokens(user.getUsername());
-    }
-
-    @Deprecated
-    public void updatePassword(AuthenticatedUser username, String newPassword) {
-        final String encodedPassword = passwordEncoder.encode(newPassword);
-        userDao.updatePassword(username.getId(), encodedPassword);
-        tokenRepository.removeUserTokens(username.getUsername());
     }
 
     public void sendResetPasswordEmail(String emailAddress) {

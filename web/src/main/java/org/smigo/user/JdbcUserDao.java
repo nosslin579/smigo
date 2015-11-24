@@ -89,24 +89,16 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public void updateUser(int id, UserBean user) {
-        String sql = "UPDATE users SET email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ? WHERE id = ?";
-        Object[] args = {user.getEmail(), user.isTermsOfService(), user.getAbout(), user.getLocale(), user.getDisplayName(), id};
-        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
-        jdbcTemplate.update(sql, args, types);
-    }
-
-    @Override
     public void deleteOpenId(String openIdUrl) {
         String sql = "DELETE FROM openid WHERE identity_url = ?";
         jdbcTemplate.update(sql, new Object[]{openIdUrl}, new int[]{Types.VARCHAR});
     }
 
     @Override
-    public void updatePassword(int userId, String encodedPassword) {
-        String sql = "UPDATE users SET password = ? WHERE id = ?";
-        Object[] args = {encodedPassword, userId};
-        int[] types = {Types.VARCHAR, Types.INTEGER};
+    public void updateUser(User u) {
+        String sql = "UPDATE users SET email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ?, password = ? WHERE id = ?";
+        Object[] args = {u.getEmail(), u.isTermsOfService(), u.getAbout(), u.getLocale(), u.getDisplayName(), u.getPassword(), u.getId()};
+        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(sql, args, types);
     }
 

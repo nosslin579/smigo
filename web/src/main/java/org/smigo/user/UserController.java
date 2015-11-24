@@ -110,7 +110,7 @@ public class UserController {
             return result.getAllErrors();
         }
         log.info("Updating user: " + userBean.toString());
-        userHandler.updateUser(userBean, user);
+        userHandler.updateUser(user.getId(), userBean);
         return Collections.emptyList();
     }
 

@@ -111,11 +111,14 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         registerFormBean.setTermsOfService(true);
         registerFormBean.setPassword(HASHPW);
         int id = userDao.addUser(registerFormBean, HASHPW, 0);
-        UserBean user = new UserBean(username, "", username + EMAIL_PROVIDER, "", Locale.ENGLISH, true);
-        if (addEmail) {
-            userDao.updateUser(id, user);
-        }
-        return user;
+
+        final User userById = userDao.getUserById(id);
+        userById.setEmail(addEmail ? username + EMAIL_PROVIDER : null);
+        userById.setTermsOfService(true);
+        userById.setLocale(Locale.ENGLISH);
+        userDao.updateUser(userById);
+
+        return UserBean.create(userById);
     }
 
     private void login(String username, String password) throws InterruptedException {

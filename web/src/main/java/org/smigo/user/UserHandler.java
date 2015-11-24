@@ -87,8 +87,7 @@ public class UserHandler {
     public void acceptTermsOfService(AuthenticatedUser authenticatedUser) {
         User user = userDao.getUserById(authenticatedUser.getId());
         user.setTermsOfService(true);
-        UserBean userBean = UserBean.create(user);
-        userDao.updateUser(authenticatedUser.getId(), userBean);
+        userDao.updateUser(user);
     }
 
     public PublicInfoUserBean getUserPublicInfo(String username) {
@@ -111,12 +110,12 @@ public class UserHandler {
         return null;
     }
 
-    public void updateUser(UserBean userBean, AuthenticatedUser user) {
-        userDao.updateUser(user.getId(), userBean);
-    }
-
     public void updateUser(int userId, UserBean userBean) {
-        userDao.updateUser(userId, userBean);
+        final User user = userDao.getUserById(userId);
+        user.setAbout(userBean.getAbout());
+        user.setDisplayName(userBean.getDisplayName());
+        user.setEmail(userBean.getEmail());
+        user.setLocale(userBean.getLocale());
+        userDao.updateUser(user);
     }
-
 }

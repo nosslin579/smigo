@@ -77,7 +77,7 @@ public class PasswordController {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
-        userHandler.updatePassword(user, passwordFormBean.getNewPassword());
+        userHandler.updatePassword(user.getId(), passwordFormBean.getNewPassword());
         return Collections.emptyList();
     }
 

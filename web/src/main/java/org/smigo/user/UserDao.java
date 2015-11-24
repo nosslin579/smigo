@@ -39,10 +39,8 @@ public interface UserDao {
 
     List<User> getUsersByOpenIDAuthenticationToken(OpenIDAuthenticationToken token);
 
-    void updateUser(int id, UserBean user);
-
     void deleteOpenId(String openIdUrl);
 
-    void updatePassword(int userId, String encodedPassword);
+    void updateUser(User user);
 
 }
