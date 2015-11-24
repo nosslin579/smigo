@@ -23,10 +23,10 @@ package org.smigo.user.password;
  */
 
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.Constraint;
@@ -68,8 +68,8 @@ public @interface CurrentPassword {
 
         public boolean isValid(String rawPassword, ConstraintValidatorContext constraintContext) {
             AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
-            UserDetails userDetails = userDao.getUserDetails(authenticatedUser.getUsername()).get(0);
-            final String password = userDetails.getPassword();
+            User user = userDao.getUsersByUsername(authenticatedUser.getUsername()).get(0);
+            final String password = user.getPassword();
             //user who signed up via openid has empty string as password
             if (password.isEmpty()) {
                 return rawPassword.isEmpty();

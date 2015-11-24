@@ -29,7 +29,6 @@ import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
@@ -60,8 +59,8 @@ public class UserHandler {
     public AuthenticatedUser createUser() {
         for (int tries = 0; tries < 5; tries++) {
             String username = "user" + (int) (Math.random() * 1000000);
-            final List<UserDetails> userDetails = userDao.getUserDetails(username);
-            if (userDetails.size() == 0) {
+            final List<User> users = userDao.getUsersByUsername(username);
+            if (users.size() == 0) {
                 final Locale locale = localeResolver.resolveLocale(request);
                 final RegisterFormBean newUser = new RegisterFormBean();
                 newUser.setUsername(username);

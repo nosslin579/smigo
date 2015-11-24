@@ -32,7 +32,7 @@ public interface UserDao {
 
     void addOpenId(int userId, String identityUrl);
 
-    List<? extends User> getUsersByUsername(String username);
+    List<User> getUsersByUsername(String username);
 
     User getUserById(int id);
 
@@ -41,8 +41,6 @@ public interface UserDao {
     List<User> getUsersByOpenIDAuthenticationToken(OpenIDAuthenticationToken token);
 
     void updateUser(int id, UserBean user);
-
-    List<UserDetails> getUserDetails(String username);
 
     UserBean getUser(String name);
 

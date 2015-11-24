@@ -22,6 +22,8 @@ package org.smigo.user.authentication;
  * #L%
  */
 
+import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,10 +41,11 @@ public class UsernameUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final List<UserDetails> userDetails = userDao.getUserDetails(username);
+        final List<User> userDetails = userDao.getUsersByUsername(username);
         if (userDetails.isEmpty()) {
             throw new UsernameNotFoundException("User not found:" + username);
         }
-        return userDetails.get(0);
+        final User user = userDetails.get(0);
+        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword());
     }
 }
