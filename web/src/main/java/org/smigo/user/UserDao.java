@@ -34,11 +34,11 @@ public interface UserDao {
 
     List<? extends UserBean> getUsersByUsername(String username);
 
-    UserBean getUserById(int id);
+    User getUserById(int id);
 
     List<UserDetails> getUserByEmail(String email);
 
-    List<UserDetails> getUserDetails(OpenIDAuthenticationToken token);
+    List<User> getUserDetails(OpenIDAuthenticationToken token);
 
     void updateUser(int id, UserBean user);
 

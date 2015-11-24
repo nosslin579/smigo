@@ -23,6 +23,7 @@ package org.smigo.user.authentication;
  */
 
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,14 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
 
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-        final List<UserDetails> userDetails = userDao.getUserDetails(token);
-        if (userDetails.isEmpty()) {
+        final List<User> users = userDao.getUserDetails(token);
+        if (users.isEmpty()) {
             final AuthenticatedUser createdUser = userHandler.createUser();
             final int userId = createdUser.getId();
             userDao.addOpenId(userId, token.getIdentityUrl());
             return userDao.getUserDetails(userId);
         }
-        return userDetails.get(0);
+        final User user = users.get(0);
+        return new AuthenticatedUser(user.getId(), user.getUsername(), "");
     }
 }

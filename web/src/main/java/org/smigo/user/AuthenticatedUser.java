@@ -28,7 +28,7 @@ import org.springframework.social.security.SocialUserDetails;
 
 import java.util.Collections;
 
-public class AuthenticatedUser extends SocialUser implements User, SocialUserDetails {
+public class AuthenticatedUser extends SocialUser implements SocialUserDetails {
     private final int id;
 
     public AuthenticatedUser(int id, String username, String password) {

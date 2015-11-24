@@ -24,7 +24,6 @@ package org.smigo.plants;
 
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.User;
 import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class PlantHandler {
         return plantDao.getPlants(username);
     }
 
-    public List<PlantData> getPlants(User user) {
+    public List<PlantData> getPlants(AuthenticatedUser user) {
         if (user != null) {
             return plantDao.getPlants(user.getId());
         } else {

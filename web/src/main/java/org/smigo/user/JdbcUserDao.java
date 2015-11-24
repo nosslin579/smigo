@@ -24,6 +24,7 @@ package org.smigo.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -82,21 +83,15 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public UserBean getUserById(int id) {
-        final String sql = String.format(SELECT, "id");
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, mapper);
-    }
-
-    @Override
     public List<UserDetails> getUserByEmail(String email) {
         final String sql = String.format(SELECT, "email");
         return jdbcTemplate.query(sql, new UserDetailsRowMapper(), email);
     }
 
     @Override
-    public List<UserDetails> getUserDetails(OpenIDAuthenticationToken token) {
-        final String sql = "SELECT users.id,username,password FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
-        return jdbcTemplate.query(sql, new UserDetailsRowMapper(), token.getIdentityUrl());
+    public List<User> getUserDetails(OpenIDAuthenticationToken token) {
+        final String sql = "SELECT users.id, username FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), token.getIdentityUrl());
     }
 
     @Override
@@ -139,6 +134,12 @@ public class JdbcUserDao implements UserDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{userId}, new UserDetailsRowMapper());
     }
 
+    @Override
+    public User getUserById(int id) {
+        final String sql = String.format(SELECT, "id");
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(), id);
+    }
+
     private static class UserDetailsRowMapper implements RowMapper<UserDetails> {
         @Override
         public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -163,6 +164,4 @@ public class JdbcUserDao implements UserDao {
             return ret;
         }
     }
-
-
 }
