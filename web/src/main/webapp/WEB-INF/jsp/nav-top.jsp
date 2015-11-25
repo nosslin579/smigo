@@ -10,7 +10,7 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-right-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/garden"><spring:message code="garden"/></a></li>
+                <li><a href="/garden-planner"><spring:message code="garden"/></a></li>
                 <li><a href="/forum" id="forum-link"><spring:message code="msg.forum"/></a></li>
                 <li><a href="/help" target="_self"><spring:message code="help"/></a></li>
                 <sec:authorize access="isAnonymous()">

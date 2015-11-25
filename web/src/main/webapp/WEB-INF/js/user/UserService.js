@@ -47,7 +47,7 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
                 return $http.get('/rest/user');
             })
             .then(function (response) {
-                $location.path('/garden');
+                $location.path('/garden-planner');
                 $rootScope.$broadcast('current-user-changed', response.data);
             })
             .catch(function (errorReason) {

@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /$
-Allow: /garden
+Allow: /garden-planner
 Allow: /help
 Allow: /login
 Allow: /register

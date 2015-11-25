@@ -45,7 +45,7 @@ public class AcceptTermsOfServiceController {
             model.addAttribute(new AcceptTermsOfService());
             return "accept-tos.jsp";
         }
-        return "redirect:/garden";
+        return "redirect:/garden-planner";
     }
 
     @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.POST)
@@ -55,6 +55,6 @@ public class AcceptTermsOfServiceController {
             return "accept-tos.jsp";
         }
         userHandler.acceptTermsOfService(user);
-        return "redirect:/garden";
+        return "redirect:/garden-planner";
     }
 }

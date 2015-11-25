@@ -85,8 +85,8 @@
 </script>
 
 <%--########## ng views ##############--%>
-<script type="text/ng-template" id="garden.html">
-    <%@ include file="../views/garden.html" %>
+<script type="text/ng-template" id="garden-planner.html">
+    <%@ include file="../views/garden-planner.html" %>
 </script>
 <script type="text/ng-template" id="login.html">
     <%@ include file="../views/login.html" %>

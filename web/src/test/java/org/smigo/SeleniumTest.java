@@ -90,7 +90,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void goHome() {
         d.manage().deleteCookieNamed("JSESSIONID");
         d.manage().deleteCookieNamed("remember-me");
-        d.get(HOST_URL + "/garden");
+        d.get(HOST_URL + "/garden-planner");
     }
 
     @AfterClass

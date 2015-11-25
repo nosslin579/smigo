@@ -37,6 +37,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -99,6 +100,7 @@ public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
         registry.addViewController("/help").setViewName("help.jsp");
+        registry.addRedirectViewController("/garden", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
     }
 
     @Bean

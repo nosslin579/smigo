@@ -23,8 +23,8 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 templateUrl: 'login.html',
                 controller: 'RegisterController'
             }).
-            when('/garden', {
-                templateUrl: 'garden.html',
+            when('/garden-planner', {
+                templateUrl: 'garden-planner.html',
                 controller: 'GardenController'
             }).
             when('/wall/:username', {
@@ -44,8 +44,9 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
                 controller: 'RuleController'
             }).
             when('/beta', {redirectTo: '/'}).
+            when('/garden', {redirectTo: 'garden-planner'}).
             //facebook adds #_=_ to URL after login
-            when('/_=_', {redirectTo: '/garden'}).
+            when('/_=_', {redirectTo: '/garden-planner'}).
             otherwise({templateUrl: '404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {

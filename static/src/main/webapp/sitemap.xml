@@ -6,9 +6,9 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>http://smigo.org/garden</loc>
+        <loc>http://smigo.org/garden-planner</loc>
         <changefreq>monthly</changefreq>
-        <priority>0.2</priority>
+        <priority>0.5</priority>
     </url>
     <url>
         <loc>http://smigo.org/forum</loc>
