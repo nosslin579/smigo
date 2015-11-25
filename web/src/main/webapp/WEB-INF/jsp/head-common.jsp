@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="author" content="Christian Nilsson">
 
-<link rel="alternate" hreflang="x-default" href="http://smigo.org/">
-<link rel="alternate" hreflang="sv" href="http://sv.smigo.org/">
-<link rel="alternate" hreflang="en" href="http://en.smigo.org/">
+<link rel="alternate" hreflang="x-default" href="http://smigo.org${requestScope['javax.servlet.forward.request_uri']}">
+<link rel="alternate" hreflang="sv" href="http://sv.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
+<link rel="alternate" hreflang="en" href="http://en.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 
 <%--http://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh--%>
 <link rel="icon" href="/static/species/28.png?v=6">
