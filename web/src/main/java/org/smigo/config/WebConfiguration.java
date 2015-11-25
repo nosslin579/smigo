@@ -60,7 +60,7 @@ import java.util.List;
 @EnableCaching
 @EnableAsync
 @EnableScheduling
-public class SmigoWebMvcConfiguration extends WebMvcConfigurerAdapter {
+public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

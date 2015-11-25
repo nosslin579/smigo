@@ -40,7 +40,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map;
 
-public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitializer {
+public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -72,7 +72,7 @@ public class SmigoWebAppInitializer extends AbstractSecurityWebApplicationInitia
         log.info("Starting with profile " + profile);
 
         WebApplicationContext context = new AnnotationConfigWebApplicationContext() {{
-            register(SmigoWebMvcConfiguration.class);
+            register(WebConfiguration.class);
             setDisplayName("SomeRandomName");
             getEnvironment().setActiveProfiles(profile);
         }};
