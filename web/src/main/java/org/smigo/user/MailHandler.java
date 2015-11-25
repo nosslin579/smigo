@@ -24,17 +24,20 @@ package org.smigo.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Component
 public class MailHandler {
 
     @Autowired
-    private MailSender mailSender;
+    private JavaMailSenderImpl mailSender;
     @Value("${mailSenderUsername}")
     private String mailSenderUsername;
     @Value("${notifierEmail}")
@@ -53,6 +56,16 @@ public class MailHandler {
         simpleMailMessage.setSubject("[SMIGO] " + subject);
         simpleMailMessage.setText(text.toString());
         mailSender.send(simpleMailMessage);
+    }
+
+    public void sendAdminNotificationHtml(String subject, String text) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setText(text, true);
+        helper.setTo(notifierEmail);
+        helper.setFrom(mailSenderUsername);
+        helper.setSubject("[SMIGO] " + subject);
+        mailSender.send(message);
     }
 
     public void sendClientMessage(String emailAddress, String subject, String text) {

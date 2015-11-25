@@ -22,20 +22,27 @@ package org.smigo.log;
  * #L%
  */
 
+import com.google.inject.internal.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class LogHandler {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private MailHandler mailHandler;
     @Autowired
     private LogDao logDao;
 
@@ -65,6 +72,49 @@ public class LogHandler {
         s.append(" Request finished in " + (System.nanoTime() - start) + "ns which is " + (System.nanoTime() - start) / 1000000 + "ms");
         log.info(s.toString());
         logDao.log(logBean);
+    }
 
+    @Scheduled(cron = "0 0 12 * * FRI")
+    public void sendWeeklyReport() throws MessagingException {
+        StringBuilder mail = new StringBuilder();
+        mail.append("<html><body>");
+
+        mail.append("<h1>Weekly report</h1>");
+
+        mail.append("<table>");
+        mail.append("<tr><td>Available processors</td><td>").append(Runtime.getRuntime().availableProcessors()).append("</td></tr>");
+        mail.append("<tr><td>Free memory</td><td>").append(Runtime.getRuntime().freeMemory()).append("</td></tr>");
+        mail.append("<tr><td>Max memory</td><td>").append(Runtime.getRuntime().maxMemory()).append("</td></tr>");
+        mail.append("<tr><td>Total memory</td><td>").append(Runtime.getRuntime().totalMemory()).append("</td></tr>");
+        mail.append("</table>");
+
+        mail.append(getHtmlTable(logDao.getUserReport(), "User"));
+        mail.append(getHtmlTable(logDao.getReferrerReport(), "Referrer"));
+        mail.append(getHtmlTable(logDao.getSpeciesReport(), "Species"));
+        mail.append(getHtmlTable(logDao.getSpeciesTranslationReport(), "Species translation"));
+        mail.append(getHtmlTable(logDao.getActivityReport(), "Activity"));
+        mail.append("</body></html>");
+        mailHandler.sendAdminNotificationHtml("weekly report", mail.toString());
+    }
+
+    private String getHtmlTable(List<Map<String, Object>> tableRows, String header) {
+        StringBuilder ret = new StringBuilder();
+        List<String> columnNames = Lists.newArrayList(tableRows.iterator().next().keySet());
+        ret.append("<h1>").append(header).append("</h1>");
+        ret.append("<table border='1'>");
+        ret.append("<tr>");
+        for (String tableHeader : columnNames) {
+            ret.append("<th>").append(tableHeader).append("</th>");
+        }
+        ret.append("</tr>");
+        for (Map<String, Object> row : tableRows) {
+            ret.append("<tr>");
+            for (String column : columnNames) {
+                ret.append("<td>").append(row.get(column)).append("</td>");
+            }
+            ret.append("</tr>");
+        }
+        ret.append("</table>");
+        return ret.toString();
     }
 }

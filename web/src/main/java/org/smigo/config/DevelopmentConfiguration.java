@@ -23,6 +23,7 @@ package org.smigo.config;
  */
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.UserAdaptiveMessageSource;
@@ -30,8 +31,14 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.mail.*;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailPreparationException;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -42,7 +49,7 @@ public class DevelopmentConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public static final File MAIL_FILE = new File("/tmp/mail.txt");
+    public static final File MAIL_FILE = new File("/tmp/mail.html");
 
 
     @Bean
@@ -52,14 +59,29 @@ public class DevelopmentConfiguration {
     }
 
     @Bean
-    public MailSender javaMailSender() {
-        return new MailSender() {
+    public JavaMailSenderImpl javaMailSender() {
+        return new JavaMailSenderImpl() {
+            @Override
+            public String getDefaultEncoding() {
+                return "UTF-8";
+            }
+
             @Override
             public void send(SimpleMailMessage simpleMessage) throws MailException {
                 try {
                     FileUtils.writeStringToFile(MAIL_FILE, simpleMessage.getText(), Charset.defaultCharset());
                 } catch (IOException e) {
                     throw new MailSendException("Error sending email to " + simpleMessage.getFrom(), e);
+                }
+            }
+
+            @Override
+            public void send(MimeMessage mimeMessage) throws MailException {
+                try {
+                    final String s = IOUtils.toString(mimeMessage.getInputStream());
+                    FileUtils.writeStringToFile(MAIL_FILE, s, Charset.defaultCharset());
+                } catch (IOException | MessagingException e) {
+                    throw new MailSendException("Error sending email: " + mimeMessage.toString(), e);
                 }
             }
 

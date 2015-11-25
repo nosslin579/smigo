@@ -22,6 +22,19 @@ package org.smigo.log;
  * #L%
  */
 
+import java.util.List;
+import java.util.Map;
+
 interface LogDao {
     void log(LogBean logBean);
+
+    List<Map<String, Object>> getUserReport();
+
+    List<Map<String, Object>> getReferrerReport();
+
+    List<Map<String, Object>> getSpeciesReport();
+
+    List<Map<String, Object>> getSpeciesTranslationReport();
+
+    List<Map<String, Object>> getActivityReport();
 }

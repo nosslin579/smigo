@@ -30,7 +30,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -58,13 +57,14 @@ public class ProductionConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public MailSender javaMailSender() {
+    public JavaMailSenderImpl javaMailSender() {
         log.debug("JavaMailSender init");
         final JavaMailSenderImpl ret = new JavaMailSenderImpl();
         ret.setUsername(mailSenderUsername);
         ret.setPassword(mailSenderPassword);
         ret.setHost(mailSenderHost);
         ret.setPort(mailSenderPort);
+        ret.setDefaultEncoding("UTF-8");
 
         final Properties props = new Properties();
         props.setProperty("mail.smtp.starttls.enable", "true");

@@ -30,6 +30,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 class JdbcLogDao implements LogDao {
@@ -65,5 +67,110 @@ class JdbcLogDao implements LogDao {
         types[0] = Types.INTEGER;
         types[1] = Types.INTEGER;
         jdbcTemplate.update(sql, args, types);
+    }
+
+    @Override
+    public List<Map<String, Object>> getUserReport() {
+        String sql = "" +
+                "SELECT" +
+                "  users.username," +
+                "  users.locale," +
+                "  id," +
+                "  decidetime," +
+                "  users.createdate," +
+                "  requests," +
+                "  sessions," +
+                "  p.plants AS plants," +
+                "  p.yearfrom  AS fromyear," +
+                "  p.yearto  AS toyear," +
+                "  speciescreated " +
+                "FROM users" +
+                "  LEFT JOIN (SELECT" +
+                "               user_id," +
+                "               count(*)  AS plants," +
+                "               min(year) AS yearfrom," +
+                "               max(year) AS yearto" +
+                "             FROM plants " +
+                "             GROUP BY user_id) AS p ON p.user_id = users.id" +
+                "  LEFT JOIN (SELECT" +
+                "               username," +
+                "               count(*)                  AS requests," +
+                "               count(DISTINCT sessionid) AS sessions" +
+                "             FROM visitlog" +
+                "             GROUP BY username) AS r ON r.username = users.username" +
+                "  LEFT JOIN (SELECT" +
+                "               creator AS speciescreator," +
+                "               count(creator) AS speciescreated" +
+                "             FROM species" +
+                "             GROUP BY creator) AS sc ON sc.speciescreator = users.id " +
+                "WHERE current_timestamp() < dateadd('MONTH',1,createdate) " +
+                "ORDER BY id DESC " +
+                "LIMIT 200;";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getReferrerReport() {
+        String sql = "" +
+                "SELECT" +
+                "  referer,count(referer) " +
+                "FROM visitlog " +
+                "WHERE current_timestamp() < dateadd('MONTH',1,createdate) " +
+                "GROUP BY referer " +
+                "ORDER BY count(referer) DESC " +
+                "LIMIT 200;";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getSpeciesReport() {
+        String sql = "SELECT " +
+                "  species.id, " +
+                "  u.username AS creator, " +
+                "  numofplants, " +
+                "  group_concat(DISTINCT def.vernacular_name SEPARATOR ' ') AS name, " +
+                "  group_concat(DISTINCT def.language SEPARATOR ' ') AS language,  " +
+                "  group_concat(DISTINCT def.country SEPARATOR ' ') AS country, " +
+                "  u.LOCALE " +
+                "FROM species " +
+                "  LEFT JOIN species_translation def ON def.species_id = species.id " +
+                "  LEFT JOIN users u ON u.id = species.creator " +
+                "  LEFT JOIN (SELECT " +
+                "               species_id, " +
+                "               count(species_id) AS numofplants " +
+                "             FROM plants " +
+                "             GROUP BY species_id) AS pc ON pc.species_id = species.id " +
+                "GROUP BY species.id " +
+                "ORDER BY id DESC " +
+                "LIMIT 100; ";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getSpeciesTranslationReport() {
+        String sql = "SELECT " +
+                "  vernacular_name, " +
+                "  count(DISTINCT species_id) AS repetition, " +
+                "  group_concat(language)     AS language, " +
+                "  group_concat(country)      AS country, " +
+                "  group_concat(species_id)   AS species " +
+                "FROM species_translation " +
+                "GROUP BY vernacular_name " +
+                "ORDER BY repetition DESC " +
+                "LIMIT 20; ";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getActivityReport() {
+        String sql = "SELECT * " +
+                "FROM visitlog " +
+                "WHERE createdate < dateadd('DAY', 8, current_timestamp()) AND sessionid != '' AND note != '' AND referer != '' " +
+                "ORDER BY createdate DESC " +
+                "LIMIT 500;";
+        return jdbcTemplate.queryForList(sql);
     }
 }
