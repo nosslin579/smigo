@@ -62,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler restAuthenticationFailureHandler;
     @Autowired
-    private EmptyLogoutSuccessHandler emptyLogoutSuccessHandler;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     @Value("${baseUrl}")
     private String baseUrl;
@@ -98,9 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         rememberMe.tokenRepository(persistentTokenRepository());
 
         LogoutConfigurer<HttpSecurity> logout = http.logout();
-        logout.logoutSuccessHandler(emptyLogoutSuccessHandler);
         logout.invalidateHttpSession(true);
         logout.logoutUrl("/logout");
+        logout.logoutSuccessUrl("/welcome-back");
 
         CsrfConfigurer<HttpSecurity> csrf = http.csrf();
         csrf.disable();

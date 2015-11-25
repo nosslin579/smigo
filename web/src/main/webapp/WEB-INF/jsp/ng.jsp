@@ -106,9 +106,6 @@
 <script type="text/ng-template" id="grid.html">
     <%@ include file="../views/grid.html" %>
 </script>
-<script type="text/ng-template" id="hasta-luego.html">
-    <%@ include file="../views/hasta-luego.html" %>
-</script>
 <script type="text/ng-template" id="footer.html" charset="UTF-8">
     <jsp:include page="nav-bottom.jsp"/>
 </script>

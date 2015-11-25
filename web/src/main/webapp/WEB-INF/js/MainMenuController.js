@@ -7,7 +7,6 @@ function MainMenuController($log, $scope, $timeout, UserService, StateService) {
         }, 0);
     });
 
-    $scope.logout = UserService.logout;
     $scope.userState = StateService.getUser();
     $scope.menuIsCollapsed = true;
 }

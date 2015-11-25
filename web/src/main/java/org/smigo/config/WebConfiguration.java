@@ -100,7 +100,10 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
         registry.addViewController("/help").setViewName("help.jsp");
+        registry.addViewController("/welcome-back").setViewName("welcome-back.jsp");
         registry.addRedirectViewController("/garden", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/hasta-luego", "/welcome-back").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/beta", "/").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
     }
 
     @Bean

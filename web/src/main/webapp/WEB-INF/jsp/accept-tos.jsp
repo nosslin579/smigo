@@ -38,7 +38,7 @@
             </form:label>
         </div>
         <button type="submit" class="btn btn-default"><spring:message code="ok"/></button>
-        <a href="/logout2" class="btn btn-default"><spring:message code="cancel"/></a>
+        <a href="/logout" class="btn btn-default"><spring:message code="cancel"/></a>
     </form:form>
 </div>
 <jsp:include page="nav-bottom.jsp"/>

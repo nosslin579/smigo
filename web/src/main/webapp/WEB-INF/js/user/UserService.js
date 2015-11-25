@@ -73,17 +73,6 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
                 });
         },
         login: login,
-        logout: function () {
-            $rootScope.$broadcast('user-logout');
-            $http.get('logout')
-                .then(function () {
-                    $rootScope.$broadcast('current-user-changed', null);
-                    $location.path('/hasta-luego');
-                })
-                .catch(function (data, status, headers, config) {
-                    $log.error('Logout failed', data, status, headers, config);
-                });
-        },
         updateUser: updateUser,
         requestFeature: function (feature) {
             $http.post('/rest/log/feature', {feature: feature});
