@@ -75,6 +75,6 @@ public class PlantController implements Serializable {
     @RequestMapping(value = {"/plant/upload"}, method = RequestMethod.POST)
     public String upload(@Valid UploadBean uploadBean, @AuthenticationPrincipal AuthenticatedUser user) {
         plantHandler.setPlants(user, uploadBean.getPlants());
-        return "redirect:/";
+        return "redirect:/garden-planner";
     }
 }
