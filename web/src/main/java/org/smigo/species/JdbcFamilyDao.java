@@ -22,7 +22,6 @@ package org.smigo.species;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,9 +38,6 @@ import java.util.List;
 class JdbcFamilyDao implements FamilyDao {
     private static final String SELECT = "SELECT * FROM families";
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {

@@ -22,7 +22,6 @@ package org.smigo.user;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,9 +42,6 @@ public class JdbcUserDao implements UserDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {

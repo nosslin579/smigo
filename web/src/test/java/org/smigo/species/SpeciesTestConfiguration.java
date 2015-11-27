@@ -22,7 +22,6 @@ package org.smigo.species;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyOverrideConfigurer;
@@ -68,11 +67,6 @@ public class SpeciesTestConfiguration {
     @Bean
     public FamilyDao familyDao() {
         return new JdbcFamilyDao();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
     }
 
 }
