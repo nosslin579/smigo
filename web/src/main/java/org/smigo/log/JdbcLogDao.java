@@ -166,11 +166,11 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public List<Map<String, Object>> getActivityReport() {
-        String sql = "SELECT * " +
-                "FROM visitlog " +
-                "WHERE createdate < dateadd('DAY', 8, current_timestamp()) AND sessionid != '' AND note != '' AND referer != '' " +
-                "ORDER BY createdate DESC " +
-                "LIMIT 500;";
+        String sql = "SELECT *\n" +
+                "FROM visitlog\n" +
+                "WHERE CREATEDATE < dateadd('DAY', 8, current_timestamp()) AND httpstatus != 404 AND (sessionid != '' OR note != '')\n" +
+                "ORDER BY createdate DESC;" +
+                "LIMIT 800;";
         return jdbcTemplate.queryForList(sql);
     }
 }

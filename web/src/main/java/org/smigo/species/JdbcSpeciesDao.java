@@ -90,7 +90,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Cacheable(value = Cache.SPECIES)
     public List<Species> getDefaultSpecies() {
         //Unknown, Hemp, Concrete and Sand is never display by default
-        return querySpeciesForList("species.id NOT IN (99,87,102,115)", 50, Locale.ENGLISH, new Object[]{});
+        return querySpeciesForList("species.id NOT IN (99,87,102,115)", 50, Locale.ROOT, new Object[]{});
     }
 
     @Override
