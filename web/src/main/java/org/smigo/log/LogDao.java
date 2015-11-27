@@ -37,4 +37,6 @@ interface LogDao {
     List<Map<String, Object>> getSpeciesTranslationReport();
 
     List<Map<String, Object>> getActivityReport();
+
+    List<Map<String, Object>> getLastActivity();
 }

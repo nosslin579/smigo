@@ -168,9 +168,20 @@ class JdbcLogDao implements LogDao {
     public List<Map<String, Object>> getActivityReport() {
         String sql = "SELECT * " +
                 "FROM visitlog " +
-                "WHERE CREATEDATE < dateadd('DAY', 8, current_timestamp()) AND httpstatus != 404 AND (sessionid != '' OR note != '') " +
+                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND httpstatus != 404 AND (sessionid != '' OR note != '') " +
                 "ORDER BY createdate DESC " +
                 "LIMIT 800;";
         return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getLastActivity() {
+        String sql = "SELECT username,requestedurl,locales,useragent,sessionage,createdate " +
+                "FROM visitlog " +
+                "WHERE current_timestamp() < dateadd('HOUR', 1, CREATEDATE) AND httpstatus != 404 " +
+                "ORDER BY createdate DESC " +
+                "LIMIT 200;";
+        return jdbcTemplate.queryForList(sql);
+
     }
 }

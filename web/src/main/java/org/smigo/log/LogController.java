@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
@@ -47,6 +48,8 @@ public class LogController implements Serializable {
     private UserSession userSession;
     @Autowired
     private MailHandler mailHandler;
+    @Autowired
+    private LogHandler logHandler;
 
     @RequestMapping(value = "/rest/log/error", method = RequestMethod.POST)
     @ResponseBody
@@ -63,5 +66,11 @@ public class LogController implements Serializable {
     public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request) {
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, feature.getFeature());
         mailHandler.sendAdminNotification("feature request", feature.getFeature());
+    }
+
+    @RequestMapping(value = "/rest/log/activity", method = RequestMethod.POST)
+    @ResponseBody
+    public void getLastActivity() throws MessagingException {
+        logHandler.sendLastActivityToNotifier();
     }
 }

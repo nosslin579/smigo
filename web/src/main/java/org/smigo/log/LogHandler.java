@@ -117,4 +117,9 @@ public class LogHandler {
         ret.append("</table>");
         return ret.toString();
     }
+
+    public void sendLastActivityToNotifier() throws MessagingException {
+        final String html = getHtmlTable(logDao.getLastActivity(), "Activity");
+        mailHandler.sendAdminNotificationHtml("last activity", html);
+    }
 }
