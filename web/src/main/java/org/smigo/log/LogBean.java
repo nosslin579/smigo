@@ -82,7 +82,7 @@ class LogBean {
                 truncate(req.getHeader("referer")),
                 truncate(req.getRequestedSessionId()),
                 req.getMethod(),
-                truncate(req.getHeader("x-forwarded-for")),
+                truncate(req.getRemoteAddr()),
                 truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)),
                 truncate(req.getHeader("origin")),
                 response.getStatus(),
