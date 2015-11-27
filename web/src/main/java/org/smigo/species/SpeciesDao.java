@@ -22,8 +22,6 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.plants.PlantData;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,8 +39,6 @@ interface SpeciesDao {
     void setSpeciesTranslation(int id, String vernacularName, Locale locale);
 
     List<Species> searchSpecies(String query, Locale locale);
-
-    List<Species> getSpeciesFromList(List<PlantData> plants);
 
     Map<String, String> getSpeciesTranslation(Locale locale);
 }

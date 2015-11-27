@@ -23,7 +23,6 @@ package org.smigo.species;
  */
 
 import org.smigo.config.Cache;
-import org.smigo.plants.PlantData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -48,14 +47,12 @@ class JdbcSpeciesDao implements SpeciesDao {
             "species.*, families.name AS family_name,\n" +
             "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
             "FROM species\n" +
-            "LEFT JOIN plants ON species.id = plants.species_id\n" +
             "LEFT JOIN families ON species.family_id = families.id\n" +
             "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
             "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
             "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
             "WHERE %s\n" +
             "GROUP BY species.id\n" +
-            "ORDER BY COUNT(species.id) DESC\n" +
             "LIMIT %d;\n";
 
     private static final String DEFAULTICONNAME = "defaulticon.png";
@@ -90,27 +87,20 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Cacheable(value = Cache.SPECIES)
     public List<Species> getDefaultSpecies() {
         //Unknown, Hemp, Concrete and Sand is never display by default
-        return querySpeciesForList("species.id NOT IN (99,87,102,115)", 50, Locale.ROOT, new Object[]{});
+        String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE SPECIES_ID NOT IN (99,87,102,115) GROUP BY SPECIES_ID ORDER BY count(SPECIES_ID) DESC LIMIT 50)";
+        return querySpeciesForList(whereClause, 50, Locale.ROOT, new Object[]{});
     }
 
     @Override
     public List<Species> getUserSpecies(int userId) {
-        return querySpeciesForList("plants.user_id = ?", Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{userId});
+        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE USER_ID = " + userId + ")";
+        return querySpeciesForList(whereClause, Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{});
     }
 
     @Override
     public List<Species> searchSpecies(String query, Locale locale) {
         final String whereClause = "def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR families.name LIKE ? OR scientific_name LIKE ?";
         return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query, query});
-    }
-
-    @Override
-    public List<Species> getSpeciesFromList(List<PlantData> plants) {
-        final StringBuilder whereClause = new StringBuilder("species.id IN (");
-        for (Iterator<PlantData> i = plants.iterator(); i.hasNext(); ) {
-            whereClause.append(i.next().getSpeciesId() + (i.hasNext() ? "," : (")")));
-        }
-        return querySpeciesForList(whereClause.toString(), Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{});
     }
 
     @Override
