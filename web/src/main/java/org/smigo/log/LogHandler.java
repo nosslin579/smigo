@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,6 +76,7 @@ public class LogHandler {
     }
 
     @Scheduled(cron = "0 0 12 * * FRI")
+    @PostConstruct
     public void sendWeeklyReport() throws MessagingException {
         StringBuilder mail = new StringBuilder();
         mail.append("<html><body>");
@@ -88,19 +90,20 @@ public class LogHandler {
         mail.append("<tr><td>Total memory</td><td>").append(Runtime.getRuntime().totalMemory()).append("</td></tr>");
         mail.append("</table>");
 
-        mail.append(getHtmlTable(logDao.getUserReport(), "User"));
-        mail.append(getHtmlTable(logDao.getReferrerReport(), "Referrer"));
-        mail.append(getHtmlTable(logDao.getSpeciesReport(), "Species"));
-        mail.append(getHtmlTable(logDao.getSpeciesTranslationReport(), "Species translation"));
-        mail.append(getHtmlTable(logDao.getActivityReport(), "Activity"));
+        mail.append(getHtmlTable(logDao.getUserReport()));
+        mail.append(getHtmlTable(logDao.getReferrerReport()));
+        mail.append(getHtmlTable(logDao.getSpeciesReport()));
+        mail.append(getHtmlTable(logDao.getSpeciesTranslationReport()));
+        mail.append(getHtmlTable(logDao.getActivityReport()));
         mail.append("</body></html>");
         mailHandler.sendAdminNotificationHtml("weekly report", mail.toString());
     }
 
-    private String getHtmlTable(List<Map<String, Object>> tableRows, String header) {
+    private String getHtmlTable(QueryReport queryReport) {
+        final List<Map<String, Object>> tableRows = queryReport.getResult();
         StringBuilder ret = new StringBuilder();
         List<String> columnNames = Lists.newArrayList(tableRows.iterator().next().keySet());
-        ret.append("<h1>").append(header).append("</h1>");
+        ret.append("<p>").append(queryReport.getSql()).append("</p>");
         ret.append("<table border='1'>");
         ret.append("<tr>");
         for (String tableHeader : columnNames) {
@@ -119,7 +122,7 @@ public class LogHandler {
     }
 
     public void sendLastActivityToNotifier() throws MessagingException {
-        final String html = getHtmlTable(logDao.getLastActivity(), "Activity");
+        final String html = getHtmlTable(logDao.getLastActivity());
         mailHandler.sendAdminNotificationHtml("last activity", html);
     }
 }

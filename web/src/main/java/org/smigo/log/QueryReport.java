@@ -22,18 +22,23 @@ package org.smigo.log;
  * #L%
  */
 
-interface LogDao {
-    void log(LogBean logBean);
+import java.util.List;
+import java.util.Map;
 
-    QueryReport getUserReport();
+public class QueryReport {
+    private final String sql;
+    private final List<Map<String, Object>> result;
 
-    QueryReport getReferrerReport();
+    public QueryReport(String sql, List<Map<String, Object>> result) {
+        this.sql = sql;
+        this.result = result;
+    }
 
-    QueryReport getSpeciesReport();
+    public String getSql() {
+        return sql;
+    }
 
-    QueryReport getSpeciesTranslationReport();
-
-    QueryReport getActivityReport();
-
-    QueryReport getLastActivity();
+    public List<Map<String, Object>> getResult() {
+        return result;
+    }
 }
