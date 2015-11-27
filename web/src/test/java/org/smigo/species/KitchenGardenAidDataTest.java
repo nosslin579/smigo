@@ -78,27 +78,24 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
                     final Species species = getSpecies(plant);
                     if (species == null) {
                         sqlStatement.add("INSERT INTO SPECIES(ID,SCIENTIFIC_NAME,ITEM,ANNUAL,FAMILY_ID,ICONFILENAME) VALUES (" + plant.getId() + ",'" + plant.getName() + "'," + plant.isItem() + ",true" + "," + plant.getFamily().getId() + ",'" + plant.getId() + ".png');");
-                        sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + plant.getTranslation("en").replaceAll("'", "''") + "','','');");
                     } else if (species.isAnnual() != (plant.lifetime.getRepetitionYears() == 1)) {
                         log.error("Annual differ:" + plant);
                     }
                     final Map<String, String> translations = plant.getTranslations();
                     for (Map.Entry<String, String> kgaLangAndTranslation : translations.entrySet()) {
-                        final String lang = kgaLangAndTranslation.getKey();
+                        final String kgaLang = kgaLangAndTranslation.getKey();
                         final String kgaTranslation = kgaLangAndTranslation.getValue();
-                        final boolean english = "en".equals(lang);
-                        final String smigoTranslation = getSpeciesTranslation(plant.getId(), english ? "" : lang);
+                        final String smigoLang = "en".equals(kgaLang) ? "" : kgaLang;
+                        final String smigoTranslation = getSpeciesTranslation(plant.getId(), smigoLang);
 
                         if (kgaTranslation == null) {
                             log.info("KGA translation missing" + plant);
-                        } else if (smigoTranslation == null && !english) {
-                            sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + lang + "','');");
+                        } else if (smigoTranslation == null) {
+                            sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + smigoLang + "','');");
                         } else if (Objects.equals(smigoTranslation, kgaTranslation)) {
                             //looking good
-                        } else if (english) {
-                            log.error("Not inserting translation:" + plant.getId() + kgaLangAndTranslation + " - smigo:" + smigoTranslation);
                         } else {
-                            log.error("Translation exists but differ kga:" + plant.getId() + kgaLangAndTranslation + " - smigo:'" + getSpeciesTranslation(plant.getId(), lang) + "'");
+                            log.error("Translation exists but differ kga:" + plant.getId() + kgaLangAndTranslation + " - smigo:'" + getSpeciesTranslation(plant.getId(), kgaLang) + "'");
                         }
                     }
                 } else {
