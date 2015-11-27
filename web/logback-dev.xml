@@ -15,8 +15,12 @@
     <logger name="org.apache.coyote" level="INFO"/>
     <logger name="org.apache.tomcat" level="INFO"/>
     <logger name="org.apache.jasper" level="INFO"/>
+
+    <!--Stack trace for using default TaskScheduler-->
     <logger name="org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor" level="INFO"/>
     <logger name="org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor" level="INFO"/>
+    <!--Stacktrace for H2 JdbcResultSet not implementing method-->
+    <logger name="org.springframework.jdbc.support.JdbcUtils" level="INFO"/>
 
 
     <root level="WARN">
