@@ -27,12 +27,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -48,19 +50,17 @@ public class LogHandler {
 
 
     public void log(HttpServletRequest request, HttpServletResponse response) {
-        String requestedURL = request.getRequestURL().toString();
-        LogBean logBean = LogBean.create(request, response);
+        log.info(getRequestDump(request, response));
+        logDao.log(LogBean.create(request, response));
+    }
 
+    public String getRequestDump(HttpServletRequest request, HttpServletResponse response) {
         StringBuilder s = new StringBuilder("Logging request>");
-        s.append(logBean.toString());
-        s.append(" Auth type:");
-        s.append(request.getAuthType());
-        s.append(" Principal:");
-        s.append(request.getUserPrincipal());
+        s.append(LogBean.create(request, response).toString());
+        s.append(" Auth type:").append(request.getAuthType());
+        s.append(" Principal:").append(request.getUserPrincipal());
         s.append(" Parameters:");
-        for (Map.Entry<String, String[]> p : request.getParameterMap().entrySet()) {
-            s.append(p.getKey()).append("=").append(p.getValue()).append(" ");
-        }
+        request.getParameterMap().forEach((k, v) -> s.append("=").append(Arrays.toString(v)).append(" "));
         s.append(" Headers:");
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -69,9 +69,8 @@ public class LogHandler {
         }
 
         final long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
-        s.append(" Request finished in " + (System.nanoTime() - start) + "ns which is " + (System.nanoTime() - start) / 1000000 + "ms");
-        log.info(s.toString());
-        logDao.log(logBean);
+        s.append(" Request time elapsed:").append(System.nanoTime() - start).append("ns which is ").append((System.nanoTime() - start) / 1000000).append("ms");
+        return s.toString();
     }
 
     @Scheduled(cron = "0 0 12 * * FRI")
@@ -122,5 +121,24 @@ public class LogHandler {
     public void sendLastActivityToNotifier() throws MessagingException {
         final String html = getHtmlTable(logDao.getLastActivity());
         mailHandler.sendAdminNotificationHtml("last activity", html);
+    }
+
+    public void logError(HttpServletRequest request, HttpServletResponse response, Exception exception, Integer statusCode, String uri) {
+        if (uri != null) {
+            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, uri);
+        } else if (exception != null) {
+            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, exception.getClass().getName() + ":" + exception.getMessage());
+        }
+
+        log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode + " Uri:" + uri, exception);
+        if (statusCode != HttpStatus.NOT_FOUND.value()) {
+            final String separator = System.lineSeparator();
+            String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
+            if (exception != null) {
+                text = text + exception.getClass().getName() + exception.getMessage() + separator + Arrays.toString(exception.getStackTrace());
+            }
+            mailHandler.sendAdminNotification("error during request outside Spring MVC", text);
+        }
+
     }
 }

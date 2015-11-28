@@ -42,6 +42,7 @@ public class VisitLogger extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("Incoming request:" + request.getMethod() + request.getRequestURL().toString());
         request.setAttribute(REQUEST_TIMER, System.nanoTime());
         return true;
     }
