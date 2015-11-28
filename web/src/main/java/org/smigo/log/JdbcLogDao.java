@@ -164,7 +164,7 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public QueryReport getActivityReport() {
-        String sql = "SELECT * " +
+        String sql = "SELECT USERNAME,regexp_replace(REQUESTEDURL,'.+\\...','') as path,LOCALES,substring(SESSIONID,-4) as session,METHOD,CREATEDATE,ORIGIN,HTTPSTATUS,SESSIONAGE,HOST,QUERYSTRING,REFERER,USERAGENT,NOTE " +
                 "FROM visitlog " +
                 "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND httpstatus != 404 AND (sessionid != '' OR note != '') " +
                 "ORDER BY createdate DESC " +

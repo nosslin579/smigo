@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,7 +75,6 @@ public class LogHandler {
     }
 
     @Scheduled(cron = "0 0 12 * * FRI")
-    @PostConstruct
     public void sendWeeklyReport() throws MessagingException {
         StringBuilder mail = new StringBuilder();
         mail.append("<html><body>");
@@ -113,7 +111,7 @@ public class LogHandler {
         for (Map<String, Object> row : tableRows) {
             ret.append("<tr>");
             for (String column : columnNames) {
-                ret.append("<td>").append(row.get(column)).append("</td>");
+                ret.append("<td nowrap>").append(row.get(column)).append("</td>");
             }
             ret.append("</tr>");
         }
