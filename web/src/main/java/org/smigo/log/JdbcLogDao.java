@@ -22,6 +22,8 @@ package org.smigo.log;
  * #L%
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -29,12 +31,16 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Repository
 class JdbcLogDao implements LogDao {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private JdbcTemplate jdbcTemplate;
 
@@ -183,5 +189,13 @@ class JdbcLogDao implements LogDao {
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
 
+    }
+
+    @Override
+    public void backup() {
+        final String backupFile = System.getenv("CATALINA_HOME") + "/dbbackup/htwo" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".zip";
+        String sql = "BACKUP TO '" + backupFile + "';";
+        log.info("Backup to file:" + backupFile);
+        jdbcTemplate.execute(sql);
     }
 }
