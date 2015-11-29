@@ -124,11 +124,6 @@ public class LogHandler {
         return ret.toString();
     }
 
-    public void sendLastActivityToNotifier() throws MessagingException {
-        final String html = getHtmlTable(logDao.getLastActivity());
-        mailHandler.sendAdminNotificationHtml("last activity", html);
-    }
-
     public void logError(HttpServletRequest request, HttpServletResponse response, Exception exception, Integer statusCode, String uri) {
         if (uri != null) {
             request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, uri);

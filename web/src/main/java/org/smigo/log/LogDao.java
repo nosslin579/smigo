@@ -35,7 +35,5 @@ interface LogDao {
 
     QueryReport getActivityReport();
 
-    QueryReport getLastActivity();
-
     void backup();
 }

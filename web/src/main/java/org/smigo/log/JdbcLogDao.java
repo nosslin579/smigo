@@ -180,18 +180,6 @@ class JdbcLogDao implements LogDao {
     }
 
     @Override
-    public QueryReport getLastActivity() {
-        String sql = "SELECT username,requestedurl,locales,useragent,sessionage,createdate " +
-                "FROM visitlog " +
-                "WHERE current_timestamp() < dateadd('HOUR', 1, CREATEDATE) AND httpstatus != 404 " +
-                "ORDER BY createdate DESC " +
-                "LIMIT 200;";
-        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
-        return new QueryReport(sql, maps);
-
-    }
-
-    @Override
     public void backup() {
         final String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         final String backupFile = System.getenv("CATALINA_HOME") + "/dbbackup/file" + date + ".zip";
