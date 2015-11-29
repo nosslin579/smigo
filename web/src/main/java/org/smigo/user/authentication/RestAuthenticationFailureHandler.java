@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -62,7 +63,8 @@ class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
         String responseBody = objectMapper.writeValueAsString(errors);
         response.getWriter().append(responseBody);
 
-        final String note = "Authentication Failure:" + request.getParameter("username") + exception;
+        final String username = Arrays.toString(request.getParameterMap().get("username"));
+        final String note = "Authentication Failure:" + username + exception;
         log.info(note);
         mailHandler.sendAdminNotification("authentication failure", note);
     }
