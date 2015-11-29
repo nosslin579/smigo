@@ -73,8 +73,7 @@ public class LogHandler {
         return s.toString();
     }
 
-    @Scheduled(cron = "0 * * * * *")
-//    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void backup() throws MessagingException {
         logDao.backup();
     }
