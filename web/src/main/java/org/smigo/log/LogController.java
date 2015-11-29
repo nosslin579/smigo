@@ -63,9 +63,9 @@ public class LogController implements Serializable {
 
     @RequestMapping(value = "/rest/log/feature", method = RequestMethod.POST)
     @ResponseBody
-    public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request) {
+    public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, feature.getFeature());
-        mailHandler.sendAdminNotification("feature request", feature.getFeature());
+        mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response));
     }
 
     @RequestMapping(value = "/rest/log/activity", method = RequestMethod.POST)
