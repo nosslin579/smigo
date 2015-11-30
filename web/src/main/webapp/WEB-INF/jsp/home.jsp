@@ -44,7 +44,7 @@
         </div>
         <div class="col-md-8">
             <h2><spring:message code="msg.front.head3"/></h2>
-            <p><spring:message code="msg.front.desc3a"/> <a href="https://github.com/nosslin579/smigo">Github</a></p>
+            <p><spring:message code="msg.front.desc3a"/></p>
             <p><spring:message code="msg.front.desc3b"/></p>
         </div>
     </div>
