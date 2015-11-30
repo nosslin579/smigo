@@ -1,36 +1,38 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
-        <div species-tooltip class="species-tooltip hidden-xs">
-        </div>
+        <!--<div species-tooltip class="species-tooltip hidden-xs"></div>-->
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
+                <!--##### View, Add, Delete button #####-->
                 <div class="btn-group btn-group-justified">
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
                                 ng-click="speciesState.action = 'info'" title="{{'msg.view-square.title' | translate}}"
-                                tooltip="{{'msg.view-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                uib-tooltip="{{'msg.view-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-info-sign"></span><span class="visible-lg-inline"> {{'msg.view-square.title' | translate}}</span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-success': speciesState.action == 'add'}"
                                 ng-click="speciesState.action = 'add'" title="{{'msg.add-square.title' | translate}}"
-                                tooltip="{{'msg.add-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                uib-tooltip="{{'msg.add-square.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-plus-sign"></span><span class="visible-lg-inline"> {{'msg.add-square.title' | translate}}</span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
                                 ng-click="speciesState.action = 'delete'" title="{{'msg.deletesquare.title' | translate}}"
-                                tooltip="{{'msg.deletesquare.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                uib-tooltip="{{'msg.deletesquare.title' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'msg.deletesquare.title' | translate}}</span>
                         </button>
                     </div>
                 </div>
                 <hr/>
+                <!--##### Search field #####-->
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query)">
                     <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" placeholder="{{'search' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)">
                 </form>
+                <!--##### Species list #####-->
                 <ul class="nav nav-pills nav-stacked">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
@@ -38,6 +40,7 @@
                         <a class="select-species-link" href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
+                    <!--##### Add species link #####-->
                     <li ng-if="isSpeciesAddable(search.query) && userState.currentUser">
                         <a id="add-species-link" href="" ng-click="addSpecies(search.query)">
                             <span class="glyphicon glyphicon-plus"></span>
@@ -109,7 +112,7 @@
                 </div>
                 <div class="col-xs-offset-1 col-sm-offset-0 col-xs-5 dropdown" uib-dropdown ng-if="userState.currentUser.username">
                     <a href="#" class="btn btn-default btn-sm pull-right dropdown-toggle text-uppercase" uib-dropdown-toggle>
-                    <span class="glyphicon glyphicon-share-alt"></span> {{'msg.share' | translate}}</a>
+                        <span class="glyphicon glyphicon-share-alt"></span> {{'msg.share' | translate}}</a>
                     <ul class="dropdown-menu pull-right">
                         <li facebook ng-model="userState.currentUser.username">
                         </li>
