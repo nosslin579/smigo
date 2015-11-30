@@ -8,20 +8,18 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/">Smigo<span class="hidden-sm hidden-xs"> - <spring:message code="general.smigoslogan"/></span></a>
         </div>
-        <div class="navbar-collapse collapse" id="navbar-right-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/garden-planner"><spring:message code="garden"/></a></li>
-                <li><a href="/forum" id="forum-link"><spring:message code="msg.forum"/></a></li>
-                <li><a href="/help" target="_self"><spring:message code="help"/></a></li>
-                <sec:authorize access="isAnonymous()">
-                    <li><a href="/register" id="register-link"><spring:message code="msg.account.register"/></a></li>
-                    <li><a href="/login" id="login-link"><spring:message code="account.login"/></a></li>
-                </sec:authorize>
-                <sec:authorize access="isAuthenticated()">
-                    <li><a href="/account" id="account-link"><spring:message code="msg.settings"/></a></li>
-                    <li><a href="/logout" id="logout-link"><spring:message code="account.logout"/></a></li>
-                </sec:authorize>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/garden-planner"><spring:message code="garden"/></a></li>
+            <li><a href="/forum" id="forum-link"><spring:message code="msg.forum"/></a></li>
+            <li><a href="/help" target="_self"><spring:message code="help"/></a></li>
+            <sec:authorize access="isAnonymous()">
+                <li><a href="/register" id="register-link"><spring:message code="msg.account.register"/></a></li>
+                <li><a href="/login" id="login-link"><spring:message code="account.login"/></a></li>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <li><a href="/account" id="account-link"><spring:message code="msg.settings"/></a></li>
+                <li><a href="/logout" id="logout-link"><spring:message code="account.logout"/></a></li>
+            </sec:authorize>
+        </ul>
     </div>
 </nav>
