@@ -1,6 +1,6 @@
 "use strict";
 angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
-    .config(function ($routeProvider, $logProvider, $provide, $locationProvider, $tooltipProvider) {
+    .config(function ($routeProvider, $logProvider, $provide, $locationProvider, $uibTooltipProvider) {
         $logProvider.debugEnabled(false);
 
         $locationProvider.html5Mode(true);
@@ -71,7 +71,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngTouch'])
             };
         }]);
 
-        $tooltipProvider.setTriggers({'click': 'blur'});
+        $uibTooltipProvider.setTriggers({'click': 'blur'});
     })
     .run(function ($rootScope, $log, isTouchDevice) {
         $log.log("App run. isTouchDevice:" + isTouchDevice, initData);

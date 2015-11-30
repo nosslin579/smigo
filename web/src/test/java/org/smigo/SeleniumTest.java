@@ -350,7 +350,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         d.findElement(By.name("email")).sendKeys(username + EMAIL_PROVIDER);
         d.findElement(By.name("displayName")).sendKeys(DISPLAY_NAME);
-        new Select(d.findElement(By.name("locale"))).selectByValue("sv");
+        new Select(d.findElement(By.name("locale"))).selectByVisibleText("Svenska");
         d.findElement(By.name("about")).sendKeys(NON_LATIN_LETTERS);
         d.findElement(By.id("submit-account-button")).click();
 
@@ -367,7 +367,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         Assert.assertEquals(d.findElement(By.name("email")).getAttribute("value"), username + EMAIL_PROVIDER);
         Assert.assertEquals(d.findElement(By.name("displayName")).getAttribute("value"), DISPLAY_NAME);
-        Assert.assertEquals(new Select(d.findElement(By.name("locale"))).getFirstSelectedOption().getAttribute("value"), "sv");
+        Assert.assertEquals(new Select(d.findElement(By.name("locale"))).getFirstSelectedOption().getText(), "Svenska");
         Assert.assertEquals(d.findElement(By.name("about")).getAttribute("value"), NON_LATIN_LETTERS);
         log.info("Update account finished successfully. Username:" + username);
     }
