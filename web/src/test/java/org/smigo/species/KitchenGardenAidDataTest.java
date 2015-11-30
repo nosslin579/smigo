@@ -59,7 +59,7 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testDataIsComplete() throws Exception {
         List<String> sqlStatement = new ArrayList<>();
 
