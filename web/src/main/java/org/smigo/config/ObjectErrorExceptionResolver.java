@@ -28,6 +28,7 @@ import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,9 +42,15 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        if (handler == null) {
+            return null;
+        }
 
         try {
-            if (handler != null && ((HandlerMethod) handler).getMethodAnnotation(ResponseBody.class) != null) {
+            final HandlerMethod handlerMethod = (HandlerMethod) handler;
+            final boolean annotatedWithRestController = handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
+            final boolean annotatedWithResponseBody = handlerMethod.getMethodAnnotation(ResponseBody.class) != null;
+            if (annotatedWithResponseBody || annotatedWithRestController) {
                 response.setStatus(500);
                 final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
                 return new ModelAndView("object-error.jsp", "errors", modelObject);
