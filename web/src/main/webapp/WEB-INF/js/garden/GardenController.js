@@ -1,6 +1,7 @@
 function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService) {
 
     $scope.search = {query: '', proccessing: false};
+    $scope.clickAgainToOpenTooltipEnable = true;
 
     $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
@@ -25,6 +26,15 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
             controller: AddYearModalController,
             size: 'sm'
         });
+    };
+    $scope.openSpeciesModal = function (species) {
+        if (SpeciesService.getState().selectedSpecies == species) {
+            $scope.clickAgainToOpenTooltipEnable = false;
+            $modal.open({
+                templateUrl: 'species-modal.html',
+                controller: SpeciesModalController
+            });
+        }
     };
 }
 

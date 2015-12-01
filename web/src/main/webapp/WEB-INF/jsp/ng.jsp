@@ -25,7 +25,6 @@
     <%--angular--%>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-touch.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
 
 </head>
@@ -54,10 +53,10 @@
         <%@ include file="../js/garden/AddYearModalController.js" %>
         <%@ include file="../js/garden/SpeciesService.js" %>
         <%@ include file="../js/garden/GardenService.js" %>
-        <%@ include file="../js/garden/SpeciesTooltipDirective.js" %>
         <%@ include file="../js/garden/SquareDirective.js" %>
         <%@ include file="../js/garden/GridDirective.js" %>
 
+        <%@ include file="../js/species/SpeciesModalController.js" %>
         <%@ include file="../js/species/SpeciesController.js" %>
         <%@ include file="../js/species/RuleController.js" %>
 
@@ -93,9 +92,6 @@
 </script>
 <script type="text/ng-template" id="request-password-link.html">
     <%@ include file="../views/request-password-link.html" %>
-</script>
-<script type="text/ng-template" id="species-tooltip.html">
-    <%@ include file="../views/species-tooltip.html" %>
 </script>
 <script type="text/ng-template" id="square.html">
     <%@ include file="../views/square.html" %>

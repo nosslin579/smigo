@@ -1,6 +1,5 @@
 <div class="container-fluid full-height">
     <div class="row full-height">
-        <!--<div species-tooltip class="species-tooltip hidden-xs"></div>-->
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
                 <!--##### View, Add, Delete button #####-->
@@ -37,7 +36,9 @@
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
-                        <a class="select-species-link" href="" data-speciesid="{{s.id}}">{{s.vernacularName}}</a>
+                        <a class="select-species-link" href=""
+                           uib-tooltip="{{'msg.clickagaintoopen'|translate}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
+                           ng-click="openSpeciesModal(s)">{{s.vernacularName}}</a>
                     </li>
                     <hr/>
                     <!--##### Add species link #####-->
@@ -134,3 +135,4 @@
             </div>
         </div>
     </div>
+</div>

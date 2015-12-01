@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="close()">
+        <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
+    </button>
+    <h4 class="modal-title">
+        <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
+        {{species.vernacularName}}
+    </h4>
+</div>
+<div class="modal-body">
+    <div ng-if="species.item">
+        {{'msg.itemexplained' | translate}}
+    </div>
+
+    <div ng-if="species.scientificName">
+        <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
+    </div>
+    <div ng-if="species.family">
+        <strong>{{'family'|translate}}:</strong> {{species.family | translate}} -
+        <em>{{species.family.name}}</em>
+    </div>
+
+    <p>
+
+    <div ng-if="species.rules.find('goodcompanion','category') != null">
+        <strong>{{'rule.goodcompanion'|translate}}</strong>
+        <ul>
+            <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
+                <a href="" ng-click="selectSpecies(r.arg.id)">{{r.hint.messageParameter | translate}}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div ng-if="species.rules.find('badcompanion','category') != null">
+        <strong>{{'rule.badcompanion'|translate}}</strong>
+        <ul>
+            <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
+                <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="species.rules.find('goodcroprotation','category') != null">
+        <strong>{{'rule.goodcroprotation'|translate}}</strong>
+        <ul>
+            <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
+                {{r.hint.messageParameter[1] | translate}}
+            </li>
+        </ul>
+    </div>
+    <div ng-if="species.rules.find('badcroprotation','category') != null">
+        <strong>{{'rule.badcroprotation'|translate}}</strong>
+        <ul>
+            <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
+                {{r.hint.messageParameter | translate}}
+            </li>
+        </ul>
+    </div>
+    <div ng-if="species.rules.find('speciesrepetition','category') != null">
+        <strong>{{'rule.croprotation'|translate}}</strong>
+        <ul>
+            <li>{{'rule.speciesrepetition' | translate:species.rules.find('speciesrepetition','category').hint.messageParameter}}</li>
+        </ul>
+    </div>
+    </p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="close()">{{'msg.close' | translate}}</button>
+</div>

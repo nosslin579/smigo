@@ -97,6 +97,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 }
             };
             this.addPlant = function (species) {
+                //todo assert species object
                 if (squareSelf.plantArray.length <= 4 && mutable) {
                     var plant = new Plant(species, squareSelf.location);
                     squareSelf.plantArray.push(plant);
