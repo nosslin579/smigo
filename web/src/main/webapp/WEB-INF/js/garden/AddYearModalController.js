@@ -1,4 +1,4 @@
-function AddYearModalController($scope, $modalInstance, StateService, $log) {
+function AddYearModalController($scope, $uibModalInstance, StateService, $log) {
 
     $log.log('AddYearModalController', $scope);
 
@@ -12,11 +12,11 @@ function AddYearModalController($scope, $modalInstance, StateService, $log) {
 
     $scope.addYear = function (year) {
         garden.addYear(year);
-        $modalInstance.close(year);
+        $uibModalInstance.close(year);
     };
 
     $scope.close = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
 

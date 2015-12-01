@@ -1,4 +1,4 @@
-function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateService, SpeciesService, UserService) {
+function GardenController($http, $log, $uibModal, $scope, $filter, $timeout, StateService, SpeciesService, UserService) {
 
     $scope.search = {query: '', proccessing: false};
     $scope.clickAgainToOpenTooltipEnable = true;
@@ -21,7 +21,7 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
         $scope.search.query = '';
     };
     $scope.openAddYearModal = function () {
-        $modal.open({
+        $uibModal.open({
             templateUrl: 'add-year-modal.html',
             controller: AddYearModalController,
             size: 'sm'
@@ -30,7 +30,7 @@ function GardenController($http, $log, $modal, $scope, $filter, $timeout, StateS
     $scope.openSpeciesModal = function (species) {
         if (SpeciesService.getState().selectedSpecies == species) {
             $scope.clickAgainToOpenTooltipEnable = false;
-            $modal.open({
+            $uibModal.open({
                 templateUrl: 'species-modal.html',
                 controller: SpeciesModalController
             });
