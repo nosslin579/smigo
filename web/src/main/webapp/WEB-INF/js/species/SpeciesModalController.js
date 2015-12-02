@@ -1,5 +1,6 @@
 function SpeciesModalController($routeParams, $http, $log, $scope, $filter, $timeout, $uibModalInstance, SpeciesService, UserService) {
     $scope.species = SpeciesService.getState().selectedSpecies;
+    $scope.varieties = SpeciesService.getAllVarieties();
     $scope.selectSpecies = function (speciesId) {
         $log.info('Species from modal selected:' + speciesId);
         SpeciesService.selectSpecies(SpeciesService.getSpecies(speciesId));
@@ -11,4 +12,4 @@ function SpeciesModalController($routeParams, $http, $log, $scope, $filter, $tim
     };
 }
 
-angular.module('smigoModule').controller('SpeciesModalController', SpeciesModalController);
+angular.module('smigoModule').controller('SpeciesModalControvarietyControllerller', SpeciesModalController);

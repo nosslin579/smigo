@@ -20,6 +20,11 @@
         <em>{{species.family.name}}</em>
     </div>
 
+    <div>
+        <strong>{{'msg.varieties'|translate}}:</strong>
+        <a href="" style="padding-right: 10px" ng-repeat="v in varieties | filter:{speciesId:species.id} | orderBy:'name'">{{v.name}}</a>
+    </div>
+
     <p>
 
     <div ng-if="species.rules.find('goodcompanion','category') != null">

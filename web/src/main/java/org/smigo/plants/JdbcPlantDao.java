@@ -22,7 +22,6 @@ package org.smigo.plants;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,9 +40,6 @@ class JdbcPlantDao implements PlantDao {
     private static final String SELECT = "SELECT user_id,year,x,y,species_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Autowired
-    public ObjectMapper objectMapper;
 
     private RowMapper<PlantData> plantDataRowMapper = new RowMapper<PlantData>() {
         @Override

@@ -28,4 +28,6 @@ public interface VarietyDao {
     int addVariety(Variety variety);
 
     Collection<Variety> getVarietiesByUser(Integer userId);
+
+    Collection<Variety> getVarieties();
 }

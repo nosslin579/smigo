@@ -35,7 +35,7 @@ import java.util.Collection;
 
 @Repository
 class JdbcVarietyDao implements VarietyDao {
-    private static final String SELECT = "SELECT * FROM VARIETIES WHERE USER_ID = ?";
+    private static final String SELECT = "SELECT * FROM VARIETIES WHERE %s";
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
 
@@ -52,6 +52,13 @@ class JdbcVarietyDao implements VarietyDao {
 
     @Override
     public Collection<Variety> getVarietiesByUser(Integer userId) {
-        return jdbcTemplate.query(SELECT, new BeanPropertyRowMapper<>(Variety.class), userId);
+        final String select = String.format(SELECT, "USER_ID = ?");
+        return jdbcTemplate.query(select, new BeanPropertyRowMapper<>(Variety.class), userId);
+    }
+
+    @Override
+    public Collection<Variety> getVarieties() {
+        final String select = String.format(SELECT, "TRUE");
+        return jdbcTemplate.query(select, new BeanPropertyRowMapper<>(Variety.class));
     }
 }

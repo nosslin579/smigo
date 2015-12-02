@@ -42,8 +42,8 @@ public class VarietyController implements Serializable {
     private VarietyDao varietyDao;
 
     @RequestMapping(value = "/rest/variety", method = RequestMethod.GET)
-    public Collection<Variety> getVarieties(@RequestParam Integer userId) {
-        return varietyDao.getVarietiesByUser(userId);
+    public Collection<Variety> getVarieties(@RequestParam(required = false) Integer userId) {
+        return userId == null ? varietyDao.getVarieties() : varietyDao.getVarietiesByUser(userId);
     }
 
     @RequestMapping(value = "/rest/variety", method = RequestMethod.POST)

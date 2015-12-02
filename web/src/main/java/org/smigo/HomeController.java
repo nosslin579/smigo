@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.plants.PlantHandler;
 import org.smigo.species.SpeciesHandler;
+import org.smigo.species.varieties.VarietyDao;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
@@ -57,6 +58,8 @@ public class HomeController {
     private PlantHandler plantHandler;
     @Autowired
     private SpeciesHandler speciesHandler;
+    @Autowired
+    private VarietyDao varietyDao;
 
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
@@ -67,6 +70,7 @@ public class HomeController {
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", allMessages);
         model.addAttribute("rules", speciesHandler.getRules());
+        model.addAttribute("varieties", varietyDao.getVarieties());
     }
 
     @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link"}, method = RequestMethod.GET)

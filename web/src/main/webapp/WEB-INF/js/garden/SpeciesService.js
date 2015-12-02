@@ -7,6 +7,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species.find(28, 'id');
     state.pendingAdd = false;
+    state.varieties = initData.varieties;
     $log.log('SpeciesService', state);
 
     initData.rules.forEach(function (rule) {
@@ -176,6 +177,9 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     augmentSpecies([ret]);
                 });
             return ret;
+        },
+        getAllVarieties: function () {
+            return state.varieties;
         },
         isSpeciesAddable: function (vernacularName) {
             if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1 || state.pendingAdd) {
