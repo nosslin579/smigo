@@ -34,11 +34,12 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
     public PlantDataBean() {
     }
 
-    public PlantDataBean(int speciesId, int year, int x, int y) {
+    public PlantDataBean(int speciesId, int year, int x, int y, Integer varietyId) {
         this.speciesId = speciesId;
         this.year = year;
         this.x = x;
         this.y = y;
+        this.varietyId = varietyId;
     }
 
     @Override

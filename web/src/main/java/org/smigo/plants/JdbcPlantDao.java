@@ -37,7 +37,7 @@ import java.util.List;
 
 @Repository
 class JdbcPlantDao implements PlantDao {
-    private static final String SELECT = "SELECT user_id,year,x,y,species_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
+    private static final String SELECT = "SELECT user_id,year,x,y,species_id,variety_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -48,7 +48,8 @@ class JdbcPlantDao implements PlantDao {
                     speciesRS.getInt("species_id"),
                     speciesRS.getInt("year"),
                     speciesRS.getInt("x"),
-                    speciesRS.getInt("y")
+                    speciesRS.getInt("y"),
+                    speciesRS.getInt("variety_id")
             );
         }
     };
