@@ -96,7 +96,7 @@ class JdbcPlantDao implements PlantDao {
 
     @Override
     public void addPlant(int userId, PlantData plantData) {
-        String sql = "INSERT INTO plants(user_id, species_id, year, x, y) VALUES (?,?,?,?,?)";
-        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY());
+        String sql = "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY(), plantData.getVarietyId());
     }
 }

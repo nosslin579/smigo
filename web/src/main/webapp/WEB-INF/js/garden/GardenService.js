@@ -31,6 +31,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.y = plant.location.y;
             this.x = plant.location.x;
             this.speciesId = plant.species.id;
+            this.varietyId = plant.variety.id;
         }
 
         function Location(year, x, y) {
@@ -46,6 +47,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             var plantSelf = this;
             this.species = species;
             this.location = location;
+            this.variety = species.variety;
 
             function hasRuleHint(rule, location) {
                 var radius = 1,

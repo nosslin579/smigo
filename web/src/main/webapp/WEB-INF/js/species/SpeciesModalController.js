@@ -20,6 +20,7 @@ function SpeciesModalController($log, $scope, $uibModalInstance, SpeciesService,
     $scope.toggleVariety = function (variety, species, event) {
         $log.log('Toggle variety:', [variety, species, event]);
         species.variety = species.variety == variety ? null : variety;
+        event.currentTarget.blur();
     };
 }
 

@@ -62,7 +62,7 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = {"/rest/plant"}, method = RequestMethod.POST)
     @ResponseBody
-    public void updateGarden(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
+    public void addPlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
         plantHandler.addPlant(user, plantData);
     }
 
