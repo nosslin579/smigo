@@ -2,7 +2,7 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
 
     var garden = GardenService.createGarden(initData.plantDataArray, true),
         user = {
-            currentUser: initData.user,
+            currentUser: initData.user
         },
         pingCounter = 0;
 

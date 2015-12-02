@@ -21,6 +21,11 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         augmentSpecies(state.speciesArray);
     });
 
+    function Variety(name, speciesId, userId) {
+        this.name = name;
+        this.speciesId = speciesId;
+        this.userId = userId;
+    }
 
     function augmentSpecies(speciesArray) {
         $log.info('Augmenting species', [speciesArray]);
@@ -177,6 +182,14 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     augmentSpecies([ret]);
                 });
             return ret;
+        },
+        addVariety: function (name, speciesId, userId) {
+            var variety = new Variety(name, speciesId, userId);
+            $http.post('/rest/variety/', variety)
+                .then(function (response) {
+                    variety.id = response.data;
+                    state.varieties.push(variety);
+                });
         },
         getAllVarieties: function () {
             return state.varieties;

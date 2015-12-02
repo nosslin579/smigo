@@ -36,6 +36,7 @@ public class UserBean implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(UserBean.class);
 
+    private int id;
     @SafeHtml(whitelistType = WhiteListType.NONE)
     private String displayName = null;
 
@@ -52,10 +53,8 @@ public class UserBean implements Serializable {
     @AssertTrue
     private boolean termsOfService = false;
 
-    public UserBean() {
-    }
-
-    public UserBean(String username, String displayName, String email, String about, Locale locale, boolean termsOfService) {
+    public UserBean(int id, String username, String displayName, String email, String about, Locale locale, boolean termsOfService) {
+        this.id = id;
         this.displayName = displayName;
         this.username = username;
         this.email = email;
@@ -75,6 +74,14 @@ public class UserBean implements Serializable {
                 ", locale=" + locale +
                 ", termsOfService=" + termsOfService +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDisplayName() {
@@ -126,6 +133,6 @@ public class UserBean implements Serializable {
     }
 
     public static UserBean create(User user) {
-        return new UserBean(user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale(), user.isTermsOfService());
+        return new UserBean(user.getId(), user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale(), user.isTermsOfService());
     }
 }

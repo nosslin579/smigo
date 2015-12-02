@@ -20,10 +20,23 @@
         <em>{{species.family.name}}</em>
     </div>
 
+
     <div>
         <strong>{{'msg.varieties'|translate}}:</strong>
         <a href="" style="padding-right: 10px" ng-repeat="v in varieties | filter:{speciesId:species.id} | orderBy:'name'">{{v.name}}</a>
+        <button ng-click="addForm.visible=true" type="button" class="btn btn-default btn-xs" ng-if="!addForm.visible && user.currentUser">{{'add' | translate}}</button>
+        <form class="inline-form" ng-submit="addVariety(addForm,species.id)" ng-if="addForm.visible">
+            <hr/>
+            <div class="form-group">
+                <label for="addVarietyInput">{{'msg.variety' | translate}}</label>
+                <input class="form-control" type="text" id="addVarietyInput" placeholder="{{'name' | translate}}" ng-model="addForm.varietyName">
+            </div>
+            <button type="submit" class="btn btn-default">{{'add' | translate}}</button>
+            <button type="reset" class="btn btn-default" ng-click="addForm.visible=false">{{'cancel' | translate}}</button>
+            <hr/>
+        </form>
     </div>
+
 
     <p>
 
