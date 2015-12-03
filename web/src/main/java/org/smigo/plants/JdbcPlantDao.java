@@ -77,7 +77,7 @@ class JdbcPlantDao implements PlantDao {
     public void addPlants(List<? extends PlantData> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
-                "INSERT INTO plants(user_id, species_id, year, x, y) VALUES (" + userId + ", :speciesId, :year, :x, :y)",
+                "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (" + userId + ", :speciesId, :year, :x, :y, :varietyId)",
                 batch);
     }
 

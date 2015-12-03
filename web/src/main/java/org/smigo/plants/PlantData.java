@@ -31,5 +31,5 @@ public interface PlantData {
 
     int getYear();
 
-    int getVarietyId();
+    Integer getVarietyId();
 }

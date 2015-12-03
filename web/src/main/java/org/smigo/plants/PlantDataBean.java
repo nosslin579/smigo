@@ -29,7 +29,7 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
     private int y;
     private int year;
     private int speciesId;
-    private int varietyId;
+    private Integer varietyId;
 
     public PlantDataBean() {
     }
@@ -68,11 +68,11 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
     }
 
     @Override
-    public int getVarietyId() {
+    public Integer getVarietyId() {
         return varietyId;
     }
 
-    public void setVarietyId(int varietyId) {
+    public void setVarietyId(Integer varietyId) {
         this.varietyId = varietyId;
     }
 

@@ -32,7 +32,9 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.y = plant.location.y;
             this.x = plant.location.x;
             this.speciesId = plant.species.id;
-            this.varietyId = plant.variety.id;
+            if (plant.variety) {
+                this.varietyId = plant.variety.id;
+            }
         }
 
         function Location(year, x, y) {
