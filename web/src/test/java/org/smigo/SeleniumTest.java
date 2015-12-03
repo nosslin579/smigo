@@ -37,7 +37,6 @@ import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.sourceforge.kga.Plant;
 import org.sourceforge.kga.PlantList;
-import org.sourceforge.kga.Taxon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.ContextConfiguration;
@@ -420,7 +419,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         printWriter.print("<!DOCTYPE html>\n<html>\n<head lang=\"en\">\n<meta charset=\"UTF-8\">\n</head>\n<body>\n<form name=\"uploadform\" method=\"post\" action=\"" + HOST_URL + "/plant/upload\">\n");
         int counter = 0;
         for (Plant p : PlantList.getResources().getPlants()) {
-            if (p.getType() == Taxon.Type.SPECIES || p.getType() == Taxon.Type.SUBSPECIES) {
+            if (p.getImage() != null) {
                 printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].speciesId\" value=\"" + p.getId() + "\"/>");
                 printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].year\" value=\"2002\"/>");
                 printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].x\" value=\"0\"/>");
@@ -434,8 +433,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         printWriter.close();
         d.navigate().to(htmlFile.toURL());
         final List<WebElement> plant = d.findElements(By.className("plant"));
-        Assert.assertEquals(plant.size(), 121);
-        Assert.assertFalse(d.getPageSource().contains("defaulticon.png"));
+        Assert.assertEquals(plant.size(), 127);
 
     }
 }
