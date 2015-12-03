@@ -53,6 +53,9 @@ public class UserBean implements Serializable {
     @AssertTrue
     private boolean termsOfService = false;
 
+    public UserBean() {
+    }
+
     public UserBean(int id, String username, String displayName, String email, String about, Locale locale, boolean termsOfService) {
         this.id = id;
         this.displayName = displayName;

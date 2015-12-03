@@ -87,7 +87,7 @@ public class UserController {
     @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
     @ResponseBody
     public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response, Locale locale) {
-        log.info("Create Update user: " + user);
+        log.info("Create user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
             response.setStatus(HttpStatus.FORBIDDEN.value());
