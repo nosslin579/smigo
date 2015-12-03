@@ -371,4 +371,38 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElement(By.name("about")).getAttribute("value"), NON_LATIN_LETTERS);
         log.info("Update account finished successfully. Username:" + username);
     }
+
+    @Test(enabled = true)
+    public void varietyTest() throws InterruptedException {
+        final String username = addUser();
+        login(username, PASSWORD);
+        final String varietyName = "variety" + System.currentTimeMillis();
+        final String speciesText = "Grapes - " + varietyName;
+
+        //Open grapes modal
+        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");
+        d.findElement(By.partialLinkText("Grapes")).click();
+        d.findElement(By.partialLinkText("Grapes")).click();
+
+        //add
+        d.findElement(By.id("add-variety-modal")).click();
+        d.findElement(By.id("add-variety-input")).sendKeys(varietyName);
+        d.findElement(By.id("submit-variety-button")).click();
+
+        //select and close
+        d.findElement(By.linkText(varietyName)).click();
+        d.findElement(By.id("close-variety-modal-button")).click();
+
+        Assert.assertEquals(d.findElement(By.partialLinkText("Grapes")).getText(), speciesText);
+
+        //add plant
+        d.findElement(By.className("square-content")).click();
+
+        d.findElement(By.id("logout-link")).click();
+        login(username, PASSWORD);
+
+        d.get(HOST_URL + "/wall/" + username);
+        Thread.sleep(3000);
+        Assert.assertTrue(d.getPageSource().contains(speciesText));
+    }
 }

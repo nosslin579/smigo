@@ -28,17 +28,17 @@
                 <a tabindex="-1" ng-click="toggleVariety(v, species, $event)" href="#">{{v.name}}</a>
             </li>
             <li ng-if="!addForm.visible && user.currentUser">
-                <a ng-click="addForm.visible=true" href="" class="">
+                <a ng-click="addForm.visible=true" href="" id="add-variety-modal">
                     <span class="glyphicon glyphicon-plus"></span>{{'add' | translate}}...</a>
             </li>
         </ul>
         <form class="inline-form" ng-submit="addVariety(addForm,species.id)" ng-if="addForm.visible">
             <hr/>
             <div class="form-group">
-                <label for="addVarietyInput">{{'msg.variety' | translate}}</label>
-                <input class="form-control" type="text" id="addVarietyInput" placeholder="{{'name' | translate}}" ng-model="addForm.varietyName">
+                <label for="add-variety-input">{{'msg.variety' | translate}}</label>
+                <input class="form-control" type="text" id="add-variety-input" placeholder="{{'name' | translate}}" ng-model="addForm.varietyName">
             </div>
-            <button type="submit" class="btn btn-default">{{'add' | translate}}</button>
+            <button type="submit" class="btn btn-default" id="submit-variety-button">{{'add' | translate}}</button>
             <button type="reset" class="btn btn-default" ng-click="addForm.visible=false">{{'cancel' | translate}}</button>
             <hr/>
         </form>
@@ -89,5 +89,5 @@
     </p>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="close()">{{'msg.close' | translate}}</button>
+    <button type="button" class="btn btn-default" ng-click="close()" id="close-variety-modal-button">{{'msg.close' | translate}}</button>
 </div>
