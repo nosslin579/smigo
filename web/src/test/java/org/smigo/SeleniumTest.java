@@ -35,6 +35,9 @@ import org.slf4j.LoggerFactory;
 import org.smigo.config.DevelopmentConfiguration;
 import org.smigo.user.User;
 import org.smigo.user.UserDao;
+import org.sourceforge.kga.Plant;
+import org.sourceforge.kga.PlantList;
+import org.sourceforge.kga.Taxon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.ContextConfiguration;
@@ -45,6 +48,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -404,5 +411,31 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.get(HOST_URL + "/wall/" + username);
         Thread.sleep(3000);
         Assert.assertTrue(d.getPageSource().contains(speciesText));
+    }
+
+    @Test(enabled = true)
+    public void uploadFromKitchenGardenAidTest() throws InterruptedException, IOException {
+        File htmlFile = Files.createTempFile("upload", ".html").toFile();
+        PrintWriter printWriter = new PrintWriter(htmlFile);
+        printWriter.print("<!DOCTYPE html>\n<html>\n<head lang=\"en\">\n<meta charset=\"UTF-8\">\n</head>\n<body>\n<form name=\"uploadform\" method=\"post\" action=\"" + HOST_URL + "/plant/upload\">\n");
+        int counter = 0;
+        for (Plant p : PlantList.getResources().getPlants()) {
+            if (p.getType() == Taxon.Type.SPECIES || p.getType() == Taxon.Type.SUBSPECIES) {
+                printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].speciesId\" value=\"" + p.getId() + "\"/>");
+                printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].year\" value=\"2002\"/>");
+                printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].x\" value=\"0\"/>");
+                printWriter.print("<input type=\"hidden\" name=\"plants[" + counter + "].y\" value=\"" + counter + "\"/>");
+                ++counter;
+            }
+        }
+
+        printWriter.print("</form>\n<h1>Loading...</h1>\n<script>\nwindow.onload = function () {\nconsole.log(\'a\', document.getElementsByTagName(\'form\'));\ndocument.uploadform.submit();\n}\n</script>\n</body>\n</html>");
+        printWriter.flush();
+        printWriter.close();
+        d.navigate().to(htmlFile.toURL());
+        final List<WebElement> plant = d.findElements(By.className("plant"));
+        Assert.assertEquals(plant.size(), 121);
+        Assert.assertFalse(d.getPageSource().contains("defaulticon.png"));
+
     }
 }
