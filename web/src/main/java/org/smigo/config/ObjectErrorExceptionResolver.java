@@ -42,6 +42,11 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
+        if (uri != null && uri.startsWith("/rest/")) {
+            return getModelAndView(response);
+        }
+
         if (handler == null) {
             return null;
         }
@@ -51,14 +56,18 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
             final boolean annotatedWithRestController = handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
             final boolean annotatedWithResponseBody = handlerMethod.getMethodAnnotation(ResponseBody.class) != null;
             if (annotatedWithResponseBody || annotatedWithRestController) {
-                response.setStatus(500);
-                final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
-                return new ModelAndView("object-error.jsp", "errors", modelObject);
+                return getModelAndView(response);
             }
         } catch (Exception e) {
             log.error("Failed to return object error. Handler:" + handler, ex);
         }
         return null;
+    }
+
+    private ModelAndView getModelAndView(HttpServletResponse response) {
+        response.setStatus(500);
+        final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
+        return new ModelAndView("object-error.jsp", "errors", modelObject);
     }
 
     @Override
