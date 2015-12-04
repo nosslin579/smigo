@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
-        springSocialConfigurer.postLoginUrl(baseUrl + "/accept-termsofservice");
+        springSocialConfigurer.postLoginUrl(baseUrl + "/accept-terms-of-service");
         http.apply(springSocialConfigurer);
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();
@@ -108,7 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         openidLogin.loginProcessingUrl("/login-openid");
         openidLogin.authenticationUserDetailsService(openIdUserDetailsService);
         openidLogin.permitAll();
-        openidLogin.defaultSuccessUrl("/accept-termsofservice");
+        openidLogin.defaultSuccessUrl("/accept-terms-of-service");
 //      openidLogin.attributeExchange("https://www.google.com/.*").attribute("axContactEmail").type("http://axschema.org/contact/email").required(true);
     }
 

@@ -26,7 +26,7 @@
         <iframe class="embed-responsive-item" src="/static/terms-of-service.html"></iframe>
     </div>
 
-    <c:url value="/accept-termsofservice" var="actionUrl"/>
+    <c:url value="/accept-terms-of-service" var="actionUrl"/>
     <form:form role="form" method="post" action="${actionUrl}" commandName="acceptTermsOfService">
         <div class="has-error">
             <form:errors path="*" cssClass="help-block" element="span"/>

@@ -39,7 +39,7 @@ public class AcceptTermsOfServiceController {
     @Autowired
     private UserHandler userHandler;
 
-    @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.GET)
+    @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.GET)
     public String acceptTermsOfService(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
         if (user != null && !userHandler.getUser(user).isTermsOfService()) {
             model.addAttribute(new AcceptTermsOfService());
@@ -48,7 +48,7 @@ public class AcceptTermsOfServiceController {
         return "redirect:/garden-planner";
     }
 
-    @RequestMapping(value = "/accept-termsofservice", method = RequestMethod.POST)
+    @RequestMapping(value = "/accept-terms-of-service", method = RequestMethod.POST)
     public String acceptTermsOfService(@Valid AcceptTermsOfService acceptTermsOfService, BindingResult result,
                                        Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         if (result.hasErrors()) {
