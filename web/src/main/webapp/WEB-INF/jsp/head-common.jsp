@@ -13,7 +13,5 @@
 <%--http://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh--%>
 <link rel="icon" href="/static/species/28.png?v=6">
 
-<style>
-    <%@ include file="bootstrap.min.css" %>
-    <%@ include file="style.css" %>
-</style>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
