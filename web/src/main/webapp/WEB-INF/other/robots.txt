@@ -5,10 +5,10 @@ Allow: /help
 Allow: /login
 Allow: /register
 Allow: /forum
-Allow: /static/sitemap.xml
+Allow: /sitemap.xml
 
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.png$
 
-sitemap: http://smigo.org/static/sitemap.xml
+sitemap: http://smigo.org/sitemap.xml

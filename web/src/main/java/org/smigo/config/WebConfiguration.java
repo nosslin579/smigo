@@ -87,6 +87,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.setOrder(-1);
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/");
         registry.addResourceHandler("/robots.txt").addResourceLocations("/WEB-INF/other/");
+        registry.addResourceHandler("/sitemap.xml").addResourceLocations("/WEB-INF/other/");
         registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/");
     }
 

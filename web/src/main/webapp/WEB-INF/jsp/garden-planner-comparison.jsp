@@ -28,7 +28,7 @@
             <tr>
                 <th rowspan="2"><spring:message code="msg.name"/></th>
                 <th rowspan="2" class="text-center"><spring:message code="msg.price"/></th>
-                <th colspan="3" class="text-center"><spring:message code="msg.features"/></th>
+                <th colspan="4" class="text-center"><spring:message code="msg.features"/></th>
                 <th rowspan="2" class="text-center"><spring:message code="language"/></th>
                 <th colspan="4" class="text-center"><spring:message code="msg.platformsupport"/></th>
             </tr>
@@ -36,6 +36,7 @@
                 <th class="text-center"><spring:message code="msg.companionplanting"/></th>
                 <th class="text-center"><spring:message code="msg.croprotation"/></th>
                 <th class="text-center"><spring:message code="msg.socialmediasharing"/></th>
+                <th class="text-center"><spring:message code="msg.varieties"/></th>
                 <th class="text-center">Windows</th>
                 <th class="text-center">Mac</th>
                 <th class="text-center">iPad</th>
@@ -44,6 +45,7 @@
             <tr>
                 <th><a href="//smigo.org/">Smigo</a></th>
                 <td><spring:message code="msg.free"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -59,6 +61,7 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -71,6 +74,7 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="danger text-center"><spring:message code="yes"/></td>
                 <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -83,6 +87,7 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -93,6 +98,7 @@
                 <th class="text-nowrap">
                     <a href="//vegetableplanner.vegetable-gardening-online.com/">Vegetable planner</a></th>
                 <td><spring:message code="msg.free"/></td>
+                <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
