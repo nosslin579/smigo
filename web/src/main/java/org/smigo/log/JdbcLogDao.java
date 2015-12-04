@@ -29,6 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
@@ -182,15 +183,25 @@ class JdbcLogDao implements LogDao {
     @Override
     public void backup() {
         final String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String backupFile = "/hej/dbbackup/file" + date + ".zip";
+        final String dir = System.getProperty("user.dir");
+        final String backupFile = dir + "/dbbackup/file" + date + ".zip";
         String sqlFile = "BACKUP TO '" + backupFile + "';";
         log.info("Backup to file:" + backupFile);
         jdbcTemplate.execute(sqlFile);
 
-        final String backupScript = "/hej/dbbackup/script" + date + ".zip";
+        final String backupScript = dir + "/dbbackup/script" + date + ".zip";
         String sqlScript = "SCRIPT TO '" + backupScript + "' COMPRESSION ZIP;";
         log.info("Backup to file:" + backupScript);
         jdbcTemplate.execute(sqlScript);
+    }
+
+    @PostConstruct
+    public void upgrade() {
+        final String dir = System.getProperty("user.dir");
+        final String upgradeFile = dir + "/upgrade.sql";
+        String sql = "RUNSCRIPT FROM '" + upgradeFile + "';";
+        log.info("Upgrade from:" + upgradeFile);
+        jdbcTemplate.execute(sql);
     }
 
     @Override
