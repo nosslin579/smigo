@@ -84,25 +84,6 @@
     })();
 </script>
 
-<%--########## ng views ##############--%>
-<script type="text/ng-template" id="garden-planner.html">
-    <%@ include file="../views/garden-planner.html" %>
-</script>
-<script type="text/ng-template" id="login.html">
-    <%@ include file="../views/login.html" %>
-</script>
-<script type="text/ng-template" id="request-password-link.html">
-    <%@ include file="../views/request-password-link.html" %>
-</script>
-<script type="text/ng-template" id="square.html">
-    <%@ include file="../views/square.html" %>
-</script>
-<script type="text/ng-template" id="wall.html">
-    <%@ include file="../views/wall.html" %>
-</script>
-<script type="text/ng-template" id="grid.html">
-    <%@ include file="../views/grid.html" %>
-</script>
 <script type="text/ng-template" id="footer.html" charset="UTF-8">
     <jsp:include page="nav-bottom.jsp"/>
 </script>

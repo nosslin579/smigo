@@ -88,7 +88,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/").setCachePeriod(Integer.MAX_VALUE);
         registry.addResourceHandler("/robots.txt").addResourceLocations("/WEB-INF/other/");
         registry.addResourceHandler("/sitemap.xml").addResourceLocations("/WEB-INF/other/");
-        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/");
+        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(3600);
         registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(3600);
     }
 
