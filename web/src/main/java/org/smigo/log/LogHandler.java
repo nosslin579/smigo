@@ -75,7 +75,9 @@ public class LogHandler {
 
     @Scheduled(cron = "0 0 6 * * *")
     public void backup() throws MessagingException {
+        log.info("Running backing - start");
         logDao.backup();
+        log.info("Running backing - complete");
     }
 
     @Scheduled(cron = "0 0 12 * * FRI")

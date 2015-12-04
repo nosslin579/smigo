@@ -182,12 +182,12 @@ class JdbcLogDao implements LogDao {
     @Override
     public void backup() {
         final String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String backupFile = System.getenv("CATALINA_HOME") + "/dbbackup/file" + date + ".zip";
+        final String backupFile = "/hej/dbbackup/file" + date + ".zip";
         String sqlFile = "BACKUP TO '" + backupFile + "';";
         log.info("Backup to file:" + backupFile);
         jdbcTemplate.execute(sqlFile);
 
-        final String backupScript = System.getenv("CATALINA_HOME") + "/dbbackup/script" + date + ".zip";
+        final String backupScript = "/hej/dbbackup/script" + date + ".zip";
         String sqlScript = "SCRIPT TO '" + backupScript + "' COMPRESSION ZIP;";
         log.info("Backup to file:" + backupScript);
         jdbcTemplate.execute(sqlScript);
