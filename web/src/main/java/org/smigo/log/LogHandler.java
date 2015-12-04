@@ -95,6 +95,7 @@ public class LogHandler {
         mail.append(getHtmlTable(logDao.getUserReport()));
         mail.append(getHtmlTable(logDao.getReferrerReport()));
         mail.append(getHtmlTable(logDao.getSpeciesReport()));
+        mail.append(getHtmlTable(logDao.getVarietiesReport()));
         mail.append(getHtmlTable(logDao.getSpeciesTranslationReport()));
         mail.append(getHtmlTable(logDao.getActivityReport()));
         mail.append("</body></html>");

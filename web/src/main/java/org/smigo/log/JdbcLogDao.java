@@ -192,4 +192,11 @@ class JdbcLogDao implements LogDao {
         log.info("Backup to file:" + backupScript);
         jdbcTemplate.execute(sqlScript);
     }
+
+    @Override
+    public QueryReport getVarietiesReport() {
+        String sql = "SELECT * FROM VARIETIES ORDER BY ID DESC LIMIT 30;";
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return new QueryReport(sql, maps);
+    }
 }

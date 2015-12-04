@@ -36,4 +36,6 @@ interface LogDao {
     QueryReport getActivityReport();
 
     void backup();
+
+    QueryReport getVarietiesReport();
 }
