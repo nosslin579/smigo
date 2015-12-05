@@ -3,7 +3,7 @@
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
                 <!--##### View, Add, Delete button #####-->
-                <div class="btn-group btn-group-justified">
+                <div class="btn-group btn-group-justified" id="scroll-top">
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
                                 ng-click="speciesState.action = 'info'" title="{{'msg.view-square.title' | translate}}"
@@ -28,12 +28,14 @@
                 </div>
                 <hr/>
                 <!--##### Search field #####-->
-                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query)">
-                    <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" placeholder="{{'search' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)">
+                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query,$event)">
+                    <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text"
+                           placeholder="{{'search' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)"
+                           uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus">
                 </form>
                 <!--##### Species list #####-->
                 <ul class="nav nav-pills nav-stacked">
-                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query"
+                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" id="select-species-{{s.id}}"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
                         <a class="select-species-link" href=""
