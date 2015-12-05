@@ -1,6 +1,7 @@
 function GardenController($http, $log, $uibModal, $scope, $filter, $location, $anchorScroll, $timeout, StateService, SpeciesService, UserService) {
 
     $scope.search = {query: '', proccessing: false};
+    $scope.pressEnterToSelectTooltipEnable = true;
     $scope.clickAgainToOpenTooltipEnable = true;
 
     $scope.garden = StateService.getGarden();
@@ -14,6 +15,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
 
     $scope.selectedSpeciesFromTopResult = function (query, event) {
         $log.log('Setting species from', [query, event]);
+        $scope.pressEnterToSelectTooltipEnable = false;
         var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
         if (topResult) {
             SpeciesService.selectSpecies(topResult);

@@ -31,7 +31,7 @@
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query,$event)">
                     <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text"
                            placeholder="{{'search' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
-                           uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus">
+                           uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="pressEnterToSelectTooltipEnable">
                 </form>
                 <!--##### Species list #####-->
                 <ul class="nav nav-pills nav-stacked">
