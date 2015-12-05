@@ -121,13 +121,26 @@ class JdbcLogDao implements LogDao {
     @Override
     public QueryReport getReferrerReport() {
         String sql = "" +
-                "SELECT" +
-                "  referer,count(referer) " +
-                "FROM visitlog " +
-                "WHERE current_timestamp() < dateadd('MONTH',1,createdate)  AND REFERER != '' AND REFERER NOT LIKE '%smigo.%' AND REFERER NOT LIKE '%.ru/'" +
-                "GROUP BY referer " +
-                "ORDER BY count(referer) DESC " +
-                "LIMIT 200;";
+                "SELECT\n" +
+                "  REFERER,\n" +
+                "  COUNT(REFERER)\n" +
+                "FROM VISITLOG\n" +
+                "WHERE REFERER NOT LIKE 'http://smigo.org%' AND REFERER NOT LIKE 'http://sv.smigo.org%' AND XFORWARDEDFOR IN (\n" +
+                "  SELECT XFORWARDEDFOR\n" +
+                "  FROM VISITLOG\n" +
+                "  WHERE XFORWARDEDFOR != '' AND SESSIONID IN (\n" +
+                "    SELECT SESSIONID\n" +
+                "    FROM (SELECT\n" +
+                "            count(SESSIONID) AS counts,\n" +
+                "            SESSIONID\n" +
+                "          FROM VISITLOG\n" +
+                "          WHERE SESSIONID != ''\n" +
+                "          GROUP BY SESSIONID\n" +
+                "          ORDER BY counts DESC)\n" +
+                "    WHERE counts > 6)\n" +
+                "  GROUP BY XFORWARDEDFOR)\n" +
+                "GROUP BY REFERER\n" +
+                "ORDER BY COUNT(REFERER) DESC;";
 
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
@@ -171,11 +184,36 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public QueryReport getActivityReport() {
-        String sql = "SELECT USERNAME,regexp_replace(REQUESTEDURL,'.+\\...','') as path,LOCALES,substring(SESSIONID,-4) as session,METHOD,CREATEDATE,ORIGIN,HTTPSTATUS,SESSIONAGE,HOST,QUERYSTRING,REFERER,USERAGENT,NOTE " +
-                "FROM visitlog " +
-                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND httpstatus != 404 AND (sessionid != '' OR note != '') " +
-                "ORDER BY createdate DESC " +
-                "LIMIT 800;";
+        String sql = "SELECT\n" +
+                "  USERNAME,\n" +
+                "  regexp_replace(REQUESTEDURL, '.+smigo.org', '') AS path,\n" +
+                "  LOCALES,\n" +
+                "  substring(SESSIONID, -6)                        AS session,\n" +
+                "  METHOD,\n" +
+                "  CREATEDATE,\n" +
+                "  HTTPSTATUS                                      AS status,\n" +
+                "  SESSIONAGE                                      AS age,\n" +
+                "  HOST,\n" +
+                "  QUERYSTRING,\n" +
+                "  USERAGENT,\n" +
+                "  NOTE\n" +
+                "FROM VISITLOG\n" +
+                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN (\n" +
+                "  SELECT XFORWARDEDFOR\n" +
+                "  FROM VISITLOG\n" +
+                "  WHERE XFORWARDEDFOR != '' AND SESSIONID IN (\n" +
+                "    SELECT SESSIONID\n" +
+                "    FROM (SELECT\n" +
+                "            count(SESSIONID) AS requestCount,\n" +
+                "            SESSIONID\n" +
+                "          FROM VISITLOG\n" +
+                "          WHERE SESSIONID != ''\n" +
+                "          GROUP BY SESSIONID\n" +
+                "          ORDER BY requestCount DESC)\n" +
+                "    WHERE requestCount > 6)\n" +
+                "  GROUP BY XFORWARDEDFOR)\n" +
+                "ORDER BY CREATEDATE DESC\n" +
+                "LIMIT 500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
