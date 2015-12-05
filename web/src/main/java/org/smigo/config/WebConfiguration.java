@@ -113,6 +113,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addRedirectViewController("/signup", "/register").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addStatusController("/addyear", HttpStatus.GONE);
         registry.addStatusController("/garden/2014", HttpStatus.GONE);
+        registry.addStatusController("/species/:id", HttpStatus.BAD_REQUEST);
+        registry.addStatusController("/rule/:id", HttpStatus.BAD_REQUEST);
     }
 
     @Bean

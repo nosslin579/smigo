@@ -47,7 +47,7 @@ public class MessageController implements Serializable {
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<Message> getMessages(@RequestParam Integer page, @RequestParam Integer size) {
+    public List<Message> getMessages(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return messageHandler.getMessages(page, size);
     }
 

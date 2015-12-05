@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,11 @@ public class SpeciesController implements Serializable {
     public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearchBean species, Locale locale) {
         log.info("Searching species, query:" + species.getQuery());
         return speciesHandler.searchSpecies(species.getQuery(), locale);
+    }
+
+    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+    @RequestMapping(value = "/rest/species/search", method = RequestMethod.GET)
+    public void searchSpecies() {
     }
 
 }

@@ -27,12 +27,10 @@ import org.slf4j.LoggerFactory;
 import org.smigo.user.MailHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,4 +64,16 @@ public class LogController implements Serializable {
         request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, feature.getFeature());
         mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response));
     }
+
+    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+    @RequestMapping(value = "/rest/log/error", method = RequestMethod.GET)
+    public void logError() {
+    }
+
+
+    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+    @RequestMapping(value = "/rest/log/feature", method = RequestMethod.GET)
+    public void logFeatureRequest() {
+    }
+
 }
