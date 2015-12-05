@@ -56,6 +56,7 @@
         <%@ include file="../js/garden/GardenService.js" %>
         <%@ include file="../js/garden/SquareDirective.js" %>
         <%@ include file="../js/garden/GridDirective.js" %>
+        <%@ include file="../js/garden/FocusOnEscapeDirective.js" %>
 
         <%@ include file="../js/species/SpeciesModalController.js" %>
         <%@ include file="../js/species/SpeciesController.js" %>
