@@ -10,19 +10,17 @@ function SpeciesFilter($log, orderByFilter, translateFilter) {
         var queryLowerCase = query.toLowerCase();
         angular.forEach(speciesArray, function (s) {
             var vernacularIndex = s.vernacularName.toLowerCase().indexOf(queryLowerCase);
-            if (s.vernacularName && vernacularIndex !== -1) {
-                vernacularIndex === 0 ? ret.unshift(s) : ret.push(s);
-            } else if (s.scientificName &&
-                (s.scientificName.toLowerCase().indexOf(queryLowerCase) === 0 ||
-                    s.scientificName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1)) {
+            if (s.vernacularName && vernacularIndex !== -1 && (query.length > 2 || vernacularIndex === 0)) {
                 ret.push(s);
-            } else if (s.family && (translateFilter(s.family).toLowerCase().indexOf(queryLowerCase) === 0 ||
-                s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0)) {
-                ret.unshift(s);
+            } else if (query.length > 2) {
+                (s.scientificName && s.scientificName.toLowerCase().indexOf(queryLowerCase) === 0 ||
+                s.scientificName && s.scientificName.toLowerCase().indexOf(' ' + queryLowerCase) !== -1 ||
+                s.family && translateFilter(s.family).toLowerCase().indexOf(queryLowerCase) === 0 ||
+                s.family && s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0) && ret.push(s);
             }
         });
 //        console.timeEnd('SpeciesFilter');
-        return ret;
+        return orderByFilter(ret, 'vernacularName');
     };
 }
 

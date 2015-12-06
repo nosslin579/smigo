@@ -14,7 +14,7 @@
     <base href="/">
 
     <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/static/jquery-2.1.4.min.js">\x3C/script>')</script>
+    <script>window.jQuery || document.write('<script src="/static/jquery-2.1.3.min.js">\x3C/script>')</script>
 
     <%--bootstrap and styling--%>
     <%--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">--%>
