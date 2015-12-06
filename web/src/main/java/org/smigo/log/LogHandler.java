@@ -59,8 +59,6 @@ public class LogHandler {
         s.append(LogBean.create(request, response).toString());
         s.append(" Auth type:").append(request.getAuthType());
         s.append(" Principal:").append(request.getUserPrincipal());
-        s.append(" Parameters:");
-        request.getParameterMap().forEach((k, v) -> s.append("=").append(Arrays.toString(v)).append(" "));
         s.append(" Headers:");
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
