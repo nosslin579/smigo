@@ -114,7 +114,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             state.action = 'add';
             $log.log('Species selected:', [state, event]);
         },
-        addSpecies: function (vernacularName) {
+        addSpecies: function (vernacularName, user) {
             state.pendingAdd = true;
             var name = vernacularName.capitalize();
             var species = new Species(null, name);
@@ -193,15 +193,6 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         },
         getAllVarieties: function () {
             return state.varieties;
-        },
-        isSpeciesAddable: function (vernacularName) {
-            if (!vernacularName || search.previous.indexOf(vernacularName.toLocaleLowerCase()) == -1 || state.pendingAdd) {
-//                $log.debug('Species:' + vernacularName + ' not addable', search);
-                return false;
-            }
-            return !state.speciesArray.some(function (species) {
-                return species.vernacularName && species.vernacularName.toLocaleLowerCase() === vernacularName.toLowerCase();
-            });
         },
         getRule: function (id) {
             for (var i = 0; i < state.speciesArray.length; i++) {

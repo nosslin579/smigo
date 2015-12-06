@@ -42,21 +42,13 @@
                            uib-tooltip="{{'msg.clickagaintoopen'|translate}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
                            ng-click="openSpeciesModal(s)">{{s.vernacularName}} {{s.variety ? ' - ':''}} {{s.variety.name}}</a>
                     </li>
-                    <hr/>
-                    <!--##### Add species link #####-->
-                    <li ng-if="isSpeciesAddable(search.query) && userState.currentUser">
-                        <a id="add-species-link" href="" ng-click="addSpecies(search.query)">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            {{'msg.add-species' | translate:search.query }}
-                        </a>
-                    </li>
-                    <li ng-if="speciesState.pendingAdd" class="loadinggif">
-                        <a>
-                            <span class="glyphicon glyphicon-plus"></span>
-                            {{'msg.adding' | translate:search.query }}
-                        </a>
-                    </li>
                 </ul>
+                <hr/>
+                <!--##### Add species button #####-->
+                <button ng-click="addSpecies(search.query,userState.currentUser)" class="btn btn-primary" ng-disabled="speciesState.pendingAdd" ng-if="search.query">
+                    <span class="glyphicon glyphicon-plus"></span> {{'msg.add-species' | translate:search.query }}
+                </button>
+                <img ng-if="speciesState.pendingAdd" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>
         <div id="garden-frame" class="col-xs-9 no-select full-height">

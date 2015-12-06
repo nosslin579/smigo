@@ -11,7 +11,6 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
-    $scope.isSpeciesAddable = SpeciesService.isSpeciesAddable;
 
     $scope.selectedSpeciesFromTopResult = function (query, event) {
         $log.log('Setting species from', [query, event]);
