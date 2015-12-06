@@ -86,7 +86,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.setOrder(-1);
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/").setCachePeriod(Integer.MAX_VALUE);
-        registry.addResourceHandler("/sitemap.xml").addResourceLocations("/WEB-INF/other/");
         registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(3600);
         registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(3600);
     }
@@ -104,6 +103,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/help").setViewName("help.jsp");
         registry.addViewController("/welcome-back").setViewName("welcome-back.jsp");
         registry.addViewController("/robots.txt").setViewName("robots-txt.jsp");
+        registry.addViewController("/sitemap.xml").setViewName("sitemap-xml.jsp");
         registry.addRedirectViewController("/garden", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/hasta-luego", "/welcome-back").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/beta", "/").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
