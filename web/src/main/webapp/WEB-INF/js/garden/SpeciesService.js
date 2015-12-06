@@ -112,7 +112,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             event && event.preventDefault();
             state.selectedSpecies = species;
             state.action = 'add';
-            $log.log('Species selected:', state, event);
+            $log.log('Species selected:', [state, event]);
         },
         addSpecies: function (vernacularName) {
             state.pendingAdd = true;
