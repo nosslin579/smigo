@@ -22,6 +22,7 @@ package org.smigo.log;
  * #L%
  */
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -234,12 +237,16 @@ class JdbcLogDao implements LogDao {
     }
 
     @PostConstruct
-    public void upgrade() {
+    public void upgrade() throws IOException {
         final String dir = System.getProperty("user.dir");
         final String upgradeFile = dir + "/upgrade.sql";
-        String sql = "RUNSCRIPT FROM '" + upgradeFile + "';";
-        log.info("Upgrade from:" + upgradeFile);
-        jdbcTemplate.execute(sql);
+        final File file = new File(upgradeFile);
+        if (file.exists()) {
+            String sql = "RUNSCRIPT FROM '" + upgradeFile + "';";
+            log.info("Upgrade from:" + upgradeFile);
+            jdbcTemplate.execute(sql);
+            FileUtils.writeStringToFile(file, "", false);
+        }
     }
 
     @Override
