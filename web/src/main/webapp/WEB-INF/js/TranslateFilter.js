@@ -1,5 +1,5 @@
 function translateFilter($rootScope, $log, $http, $route) {
-    var msg = <c:out escapeXml="false" value="${f:toJson(messages)}" />;
+    var msg = initData.messages;
     $log.log('TranslateFilter', [msg]);
 
 

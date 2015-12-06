@@ -8,7 +8,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                     top: square.location.y * 48 + 100000 + 'px',
                     left: square.location.x * 48 + 100000 + 'px'
                 };
-            }
+            };
             scope.getGridSizeCss = function getGridSizeCss(garden) {
                 function getBounds(squareArrays) {
                     var axisLength = 9999;
@@ -43,7 +43,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
                     'height': (100000 + 47 + bounds.ymax * 48 + margin) + 'px',
                     'margin-left': (-100001 + -bounds.xmin * 48 + margin) + 'px'
                 };
-            }
+            };
 
             scope.mutable && element.find('.square-container').on('click', function (clickEvent) {
                 $log.log('Grid clicked', [clickEvent]);

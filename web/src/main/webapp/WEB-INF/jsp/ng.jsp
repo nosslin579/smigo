@@ -45,7 +45,8 @@
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
             rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>,
             plantDataArray: <c:out escapeXml="false" value="${f:toJson(plantData)}"/>,
-            varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>
+            varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>,
+            messages: <c:out escapeXml="false" value="${f:toJson(messages)}" />
         };
 
         <%@ include file="../js/app.js" %>

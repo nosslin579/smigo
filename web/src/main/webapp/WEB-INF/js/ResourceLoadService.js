@@ -20,7 +20,7 @@ function ResourceLoadService($http, $window, $timeout, $rootScope, $q, $log) {
         js.id = id;
         js.src = url;
         fjs.parentNode.insertBefore(js, fjs);
-    };
+    }
 
     return {
         facebook: function () {
