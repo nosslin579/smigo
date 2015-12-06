@@ -22,9 +22,7 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -54,7 +52,6 @@ class JdbcRuleDao implements RuleDao {
     private FamilyDao familyDao;
 
     @Override
-    @Cacheable(Cache.RULES)
     public List<RuleBean> getRules() {
         final Map<Integer, List<Integer>> impacts = getImpacts();
         return jdbcTemplate.query(SELECT, new RowMapper<RuleBean>() {

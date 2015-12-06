@@ -29,10 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.smigo.log.VisitLogger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyOverrideConfigurer;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -51,13 +47,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"org.smigo"})
-@EnableCaching
 @EnableAsync
 @EnableScheduling
 public class WebConfiguration extends WebMvcConfigurerAdapter {
@@ -128,7 +122,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setExposeContextBeansAsAttributes(true);
-//        resolver.setExposedContextBeanNames(new String[]{"hostEnvironmentInfo"});
         return resolver;
     }
 
@@ -140,14 +133,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-//    @Bean
-//    public CustomEditorConfigurer getCustomEditorConfigurer() {
-//        log.debug("getCustomEditorConfigurer");
-//        CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
-//        customEditorConfigurer.setPropertyEditorRegistrars(new PropertyEditorRegistrar[]{new CustomPropertyEditorRegistrar()});
-//        return customEditorConfigurer;
-//    }
-
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
@@ -156,19 +141,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        List<ConcurrentMapCache> concurrentMapCacheArrayList = new ArrayList<ConcurrentMapCache>();
-        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.RULES));
-        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES));
-        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.FAMILIES));
-        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES_TRANSLATION));
-        concurrentMapCacheArrayList.add(new ConcurrentMapCache(Cache.SPECIES_ID));
-        cacheManager.setCaches(concurrentMapCacheArrayList);
-        return cacheManager;
     }
 
     @Bean

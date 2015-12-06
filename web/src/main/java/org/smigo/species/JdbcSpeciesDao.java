@@ -22,10 +22,7 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -84,7 +81,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @Cacheable(value = Cache.SPECIES)
     public List<Species> getDefaultSpecies() {
         //Unknown, Hemp, Concrete and Sand is never display by default
         String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE SPECIES_ID NOT IN (99,87,102,115) GROUP BY SPECIES_ID ORDER BY count(SPECIES_ID) DESC LIMIT 50)";
@@ -104,7 +100,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @Cacheable(value = Cache.SPECIES_TRANSLATION, key = "#locale")
     public Map<String, String> getSpeciesTranslation(Locale locale) {
         List<Object> sqlArgs = new ArrayList<Object>();
         sqlArgs.add(locale.getLanguage());
@@ -136,7 +131,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @Cacheable(Cache.SPECIES_ID)
     public Species getSpecies(int id) {
         final Locale locale = Locale.ENGLISH;
         final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
@@ -145,7 +139,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    @CacheEvict(value = Cache.SPECIES_TRANSLATION, allEntries = true)
     public void setSpeciesTranslation(int id, String vernacularName, Locale locale) {
         String language = locale == null ? "" : locale.getLanguage();
         String country = locale == null ? "" : locale.getCountry();

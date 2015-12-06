@@ -22,9 +22,7 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.config.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -45,7 +43,6 @@ class JdbcFamilyDao implements FamilyDao {
     }
 
     @Override
-    @Cacheable(Cache.FAMILIES)
     public List<Family> getFamilies() {
         final String sql = String.format(SELECT);
         return jdbcTemplate.query(sql, new RowMapper<Family>() {
