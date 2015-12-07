@@ -114,31 +114,28 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             state.action = 'add';
             $log.log('Species selected:', [state, event]);
         },
-        addSpecies: function (vernacularName, user) {
+        addSpecies: function (vernacularNameRaw) {
             state.pendingAdd = true;
-            var name = vernacularName.capitalize();
-            var species = new Species(null, name);
+            state.addSpeciesErrors = [];
+            var vernacularName = vernacularNameRaw.capitalize();
             $log.log('Adding species:' + vernacularName, state);
-            return $http.post('/rest/species', species)
+            return $http.post('/rest/species', {vernacularName: vernacularName})
                 .then(function (response) {
-                    $log.log('Response from post species', response);
-                    species.id = response.data;
-                    state.speciesArray.push(species);
-                    state.selectedSpecies = species;
-                    state.pendingAdd = false;
-                }).then(function () {
-                    return $http.get('/rest/species/' + species.id);
-                }).then(function (response) {
-                    angular.extend(species, response.data);
-                    $rootScope.$broadcast('new-messages-available', species.messageKey, species.vernacularName);
+                    $log.log('Response from post species', [response]);
+                    var addedSpecies = new Species(response.data, vernacularName);
+                    state.speciesArray.push(addedSpecies);
+                    state.selectedSpecies = addedSpecies;
+                    $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
                 }).catch(function (error) {
-                    $log.warn('Could not add species', species, error);
-                    state.speciesArray.pop(species);
-                    state.selectedSpecies = state.speciesArray.find(28, 'id');
+                    $log.warn('Could not add species', [vernacularName, error]);
+                    state.addSpeciesErrors = error.data;
+                }).finally(function (a, b, c) {
+                    $log.warn('Add species finally', [a, b, c]);
                     state.pendingAdd = false;
                 });
         },
         searchSpecies: function (sq) {
+            state.addSpeciesErrors = [];
             var queryLowerCase = sq.query.toLocaleLowerCase();
             //Cancel search if new search within 2sec
             $timeout.cancel(search.promise);

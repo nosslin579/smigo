@@ -47,10 +47,10 @@ public class SpeciesHandler {
     @Autowired
     private FamilyDao familyDao;
 
-    public int addSpecies(SpeciesFormBean species, AuthenticatedUser user, Locale locale) {
-        final int id = speciesDao.addSpecies(species, user.getId());
-        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), null);
-        speciesDao.setSpeciesTranslation(id, species.getVernacularName(), locale);
+    public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
+        final int id = speciesDao.addSpecies(user.getId());
+        speciesDao.setSpeciesTranslation(id, vernacularName, null);
+        speciesDao.setSpeciesTranslation(id, vernacularName, locale);
         return id;
     }
 

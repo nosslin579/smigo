@@ -63,20 +63,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id");
+        this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
         this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
         rowMapper = new SpeciesViewRowMapper();
     }
 
     @Override
-    public int addSpecies(SpeciesFormBean species, int userId) {
+    public int addSpecies(int userId) {
         MapSqlParameterSource s = new MapSqlParameterSource();
-        s.addValue("name", species.getScientificName(), Types.VARCHAR);
-        s.addValue("item", species.isItem(), Types.BOOLEAN);
-        s.addValue("annual", species.isAnnual(), Types.BOOLEAN);
-        s.addValue("family_id", species.getFamily(), Types.INTEGER);
         s.addValue("creator", userId, Types.INTEGER);
-        //todo add createdate
         return insertSpecies.executeAndReturnKey(s).intValue();
     }
 

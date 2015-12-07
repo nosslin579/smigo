@@ -29,8 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Collection;
@@ -57,9 +59,14 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public int addSpecies(@Valid @RequestBody SpeciesFormBean species, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
+    public Object addSpecies(@Valid @RequestBody SpeciesAddBean species, BindingResult result,
+                             @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Adding species. Name:" + species.getVernacularName());
-        return speciesHandler.addSpecies(species, user, locale);
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.getAllErrors();
+        }
+        return speciesHandler.addSpecies(species.getVernacularName(), user, locale);
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)

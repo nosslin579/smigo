@@ -45,7 +45,10 @@
                 </ul>
                 <hr/>
                 <!--##### Add species button #####-->
-                <button ng-click="addSpecies(search.query,userState.currentUser)" class="btn btn-primary" ng-disabled="speciesState.pendingAdd" ng-if="search.query">
+                <div class="has-error">
+                    <span ng-repeat="error in speciesState.addSpeciesErrors" class="help-block">{{error.defaultMessage | translate:error.arguments}}</span>
+                </div>
+                <button ng-click="addSpecies(search.query)" class="btn btn-primary" ng-disabled="speciesState.pendingAdd" ng-if="search.query" id="add-species-button">
                     <span class="glyphicon glyphicon-plus"></span> {{'msg.add-species' | translate:search.query }}
                 </button>
                 <img ng-if="speciesState.pendingAdd" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>

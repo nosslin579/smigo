@@ -68,8 +68,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String PASSWORD = "qwerty";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
-    private static final String SPECIES_NAME = "Frango Salada";
-    private static final String SCIENTIFIC_NAME = "Frangus Saladus";
+    private static final String SPECIES_NAME = "Frangö Salada";
+    private static final String SCIENTIFIC_NAME = "Frangös Saladus";
     private static final String ITEM_NAME = "Sand";
     private static final String HOST_URL = "http://lh.smigo.org:8080";
     private static final int NUMBER_OF_SPECIES = 83;
@@ -199,13 +199,13 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
-        Thread.sleep(5000);
-        d.findElement(By.id("add-species-link")).click();
-        Thread.sleep(5000);
+        Thread.sleep(3000);
+        d.findElement(By.id("add-species-button")).click();
+        Thread.sleep(3000);
         d.findElement(By.className("square")).click();
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         d.findElement(By.id("logout-link")).click();
 

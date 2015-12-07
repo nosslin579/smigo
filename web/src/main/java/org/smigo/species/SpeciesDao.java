@@ -28,7 +28,7 @@ import java.util.Map;
 
 interface SpeciesDao {
 
-    int addSpecies(SpeciesFormBean species, int id);
+    int addSpecies(int id);
 
     List<Species> getDefaultSpecies();
 
