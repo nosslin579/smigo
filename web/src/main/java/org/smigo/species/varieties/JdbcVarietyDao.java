@@ -42,7 +42,7 @@ class JdbcVarietyDao implements VarietyDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insert = new SimpleJdbcInsert(dataSource).withTableName("VARIETIES").usingGeneratedKeyColumns("ID CREATEDATE").usingColumns("NAME", "USER_ID", "SPECIES_ID");
+        this.insert = new SimpleJdbcInsert(dataSource).withTableName("VARIETIES").usingGeneratedKeyColumns("ID").usingColumns("NAME", "USER_ID", "SPECIES_ID");
     }
 
     @Override
