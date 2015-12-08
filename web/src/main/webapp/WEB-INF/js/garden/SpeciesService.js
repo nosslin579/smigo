@@ -128,8 +128,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                 }).catch(function (error) {
                     $log.warn('Could not add species', [vernacularName, error]);
                     state.addSpeciesErrors = error.data;
-                }).finally(function (a, b, c) {
-                    $log.warn('Add species finally', [a, b, c]);
+                }).finally(function () {
                     state.pendingAdd = false;
                 });
         },
