@@ -181,7 +181,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
         },
         addVariety: function (name, speciesId) {
             var variety = new Variety(name, speciesId);
-            $http.post('/rest/variety/', variety)
+            return $http.post('/rest/variety/', variety)
                 .then(function (response) {
                     variety.id = response.data;
                     state.varieties.push(variety);

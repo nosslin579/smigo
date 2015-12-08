@@ -391,7 +391,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.partialLinkText("Grapes")).click();
 
         //add
-        d.findElement(By.id("add-variety-modal")).click();
+        d.findElement(By.id("show-add-variety-button")).click();
         d.findElement(By.id("add-variety-input")).sendKeys(varietyName);
         d.findElement(By.id("submit-variety-button")).click();
 

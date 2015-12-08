@@ -27,13 +27,15 @@
             <li ng-class="{active: species.variety==v}" role="presentation" ng-repeat="v in varieties | filter:{speciesId:species.id} | orderBy:'name'">
                 <a tabindex="-1" ng-click="toggleVariety(v, species, $event)" href="#">{{v.name}}</a>
             </li>
-            <li ng-if="!addForm.visible && user.currentUser">
-                <a ng-click="addForm.visible=true" href="" id="add-variety-modal">
-                    <span class="glyphicon glyphicon-plus"></span>{{'add' | translate}}...</a>
-            </li>
         </ul>
+        <button ng-click="addForm.visible=true" class="btn btn-primary btn-sm" ng-if="!addForm.visible" id="show-add-variety-button">
+            <span class="glyphicon glyphicon-plus"></span> {{'add' | translate }}
+        </button>
+        <hr/>
         <form class="inline-form" ng-submit="addVariety(addForm,species.id)" ng-if="addForm.visible">
-            <hr/>
+            <div class="has-error">
+                <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments}}</span>
+            </div>
             <div class="form-group">
                 <label for="add-variety-input">{{'msg.variety' | translate}}</label>
                 <input class="form-control" type="text" id="add-variety-input" placeholder="{{'name' | translate}}" ng-model="addForm.varietyName">
