@@ -22,15 +22,12 @@ package org.smigo.species.varieties;
  * #L%
  */
 
-import org.smigo.user.authentication.AuthenticatedUserId;
-
 import javax.validation.constraints.Size;
 
 public class Variety {
     private int id;
     @Size(min = 2, max = 40)
     private String name;
-    @AuthenticatedUserId
     private int userId;
     private int speciesId;
 

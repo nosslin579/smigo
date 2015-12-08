@@ -13,7 +13,7 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
     };
     $scope.addVariety = function (form, speciesId) {
         $log.log('Add Variety:', form);
-        SpeciesService.addVariety(form.varietyName, speciesId, StateService.getUser().currentUser.id);
+        SpeciesService.addVariety(form.varietyName, speciesId);
         form.varietyName = '';
         form.visible = false;
     };

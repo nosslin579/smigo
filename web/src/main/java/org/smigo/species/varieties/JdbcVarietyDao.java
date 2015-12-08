@@ -35,7 +35,7 @@ import java.util.Collection;
 
 @Repository
 class JdbcVarietyDao implements VarietyDao {
-    private static final String SELECT = "SELECT * FROM VARIETIES WHERE %s";
+    private static final String SELECT = "SELECT ID,SPECIES_ID,NAME FROM VARIETIES WHERE %s";
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
 
