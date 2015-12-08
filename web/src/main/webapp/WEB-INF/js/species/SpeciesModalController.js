@@ -13,15 +13,13 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
     };
     $scope.addVariety = function (form, speciesId) {
         $log.log('Add Variety:', form);
-        SpeciesService.addVariety(form.varietyName, speciesId)
-            .then(function () {
-                form.varietyName = '';
-                form.visible = false;
-            })
-            .catch(function (response) {
-                $log.log('Add Variety failed:', response);
-                $scope.objectErrors = response.data;
-            });
+        SpeciesService.addVariety(form.varietyName, speciesId).then(function () {
+            form.varietyName = '';
+            form.visible = false;
+        }).catch(function (response) {
+            $log.log('Add Variety failed:', response);
+            $scope.objectErrors = response.data;
+        });
     };
     $scope.toggleVariety = function (variety, species, event) {
         $log.log('Toggle variety:', [variety, species, event]);

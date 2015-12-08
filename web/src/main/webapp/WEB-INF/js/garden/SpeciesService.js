@@ -118,19 +118,18 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             state.addSpeciesErrors = [];
             var vernacularName = vernacularNameRaw.capitalize();
             $log.log('Adding species:' + vernacularName, state);
-            return $http.post('/rest/species', {vernacularName: vernacularName})
-                .then(function (response) {
-                    $log.log('Response from post species', [response]);
-                    var addedSpecies = new Species(response.data, vernacularName);
-                    state.speciesArray.push(addedSpecies);
-                    state.selectedSpecies = addedSpecies;
-                    $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
-                }).catch(function (error) {
-                    $log.warn('Could not add species', [vernacularName, error]);
-                    state.addSpeciesErrors = error.data;
-                }).finally(function () {
-                    state.pendingAdd = false;
-                });
+            return $http.post('/rest/species', {vernacularName: vernacularName}).then(function (response) {
+                $log.log('Response from post species', [response]);
+                var addedSpecies = new Species(response.data, vernacularName);
+                state.speciesArray.push(addedSpecies);
+                state.selectedSpecies = addedSpecies;
+                $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
+            }).catch(function (error) {
+                $log.warn('Could not add species', [vernacularName, error]);
+                state.addSpeciesErrors = error.data;
+            }).finally(function () {
+                state.pendingAdd = false;
+            });
         },
         searchSpecies: function (sq) {
             state.addSpeciesErrors = [];
