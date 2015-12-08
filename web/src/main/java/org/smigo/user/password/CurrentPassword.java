@@ -22,10 +22,7 @@ package org.smigo.user.password;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.User;
-import org.smigo.user.UserDao;
-import org.smigo.user.UserHandler;
+import org.smigo.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -47,7 +44,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface CurrentPassword {
 
-    String message() default "invalid";
+    String message() default "msg.passwordincorrect";
 
     Class<?>[] groups() default {};
 
@@ -61,6 +58,8 @@ public @interface CurrentPassword {
         private UserHandler userHandler;
         @Autowired
         private PasswordEncoder passwordEncoder;
+        @Autowired
+        private MailHandler mailHandler;
 
 
         public void initialize(CurrentPassword constraintAnnotation) {
@@ -70,7 +69,11 @@ public @interface CurrentPassword {
             AuthenticatedUser authenticatedUser = userHandler.getCurrentUser();
             User user = userDao.getUsersByUsername(authenticatedUser.getUsername()).get(0);
             final String password = user.getPassword();
-            return passwordEncoder.matches(rawPassword, password);
+            final boolean matches = passwordEncoder.matches(rawPassword, password);
+            if (!matches) {
+                mailHandler.sendAdminNotification("Password change failed", "User:" + authenticatedUser.getUsername() + " failed to enter correct current password when changing it.");
+            }
+            return matches;
         }
 
     }

@@ -30,6 +30,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -45,7 +46,12 @@ public class MailHandler {
 
     @PostConstruct
     public void sendStartupAdminNotification() {
-        sendAdminNotification("Server started", "Server started");
+        sendAdminNotification("Server", "Server started");
+    }
+
+    @PreDestroy
+    public void sendShutdownAdminNotification() {
+        sendAdminNotification("Server", "Server shutdown");
     }
 
 
