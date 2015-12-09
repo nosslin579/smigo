@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class MessageController implements Serializable {
@@ -47,8 +48,8 @@ public class MessageController implements Serializable {
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<Message> getMessages(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        return messageHandler.getMessages(page, size);
+    public List<Message> getMessages(Locale locale, @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        return messageHandler.getMessages(locale, page, size);
     }
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.POST)

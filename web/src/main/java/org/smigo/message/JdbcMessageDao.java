@@ -22,7 +22,6 @@ package org.smigo.message;
  * #L%
  */
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
@@ -43,28 +43,27 @@ class JdbcMessageDao implements MessageDao {
             "messages.id,\n" +
             "messages.text,\n" +
             "users.username,\n" +
-            "messages.createdate  \n" +
+            "messages.createdate,\n" +
+            "users.locale\n" +
             "FROM messages\n" +
             "LEFT JOIN users ON users.id = messages.submitter_user_id\n" +
-            "WHERE location = ?\n" +
+            "WHERE locale LIKE ?\n" +
             "ORDER BY createdate DESC\n" +
             "LIMIT ?,?;";
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public ObjectMapper objectMapper;
     private SimpleJdbcInsert insert;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insert = new SimpleJdbcInsert(dataSource).withTableName("messages").usingGeneratedKeyColumns("id").usingColumns("text", "submitter_user_id", "location");
+        this.insert = new SimpleJdbcInsert(dataSource).withTableName("messages").usingGeneratedKeyColumns("id").usingColumns("text", "submitter_user_id");
     }
 
     @Override
-    public List<Message> getMessage(String location, int from, int size) {
-        final String sql = String.format(SELECT);
-        return jdbcTemplate.query(sql, new Object[]{location, from, size}, new RowMapper<Message>() {
+    public List<Message> getMessage(Locale locale, int from, int size) {
+        final String whereParameter = locale.getLanguage() + "%";
+        return jdbcTemplate.query(SELECT, new Object[]{whereParameter, from, size}, new RowMapper<Message>() {
             @Override
             public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Message(rs.getInt("id"), rs.getString("text"), rs.getString("username"), rs.getDate("createdate"));
