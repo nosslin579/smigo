@@ -280,14 +280,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     @Test(enabled = true)
     public void addMessage() throws InterruptedException {
+        final String messageText = NON_LATIN_LETTERS + System.currentTimeMillis();
         final String username = addUser();
         login(username, PASSWORD);
         d.findElement(By.id("forum-link")).click();
-        d.findElement(By.tagName("textarea")).sendKeys(NON_LATIN_LETTERS);
+        d.findElement(By.tagName("textarea")).sendKeys(messageText);
         Thread.sleep(2000);
         d.findElement(By.id("submit-account-button")).click();
         Thread.sleep(2000);
-        Assert.assertTrue(d.getPageSource().contains(NON_LATIN_LETTERS));
+        Assert.assertTrue(d.getPageSource().contains(messageText));
         Assert.assertEquals(d.findElements(By.partialLinkText(username)).size(), 1);
     }
 
