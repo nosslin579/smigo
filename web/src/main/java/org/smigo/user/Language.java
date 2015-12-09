@@ -38,7 +38,13 @@ enum Language {
     USA(Locale.US),
     UK(Locale.UK),
     SPANISH(new Locale("es")),
-    CZECH(new Locale("cs"));
+    PORTUGUESE(new Locale("pt")),
+    DUTCH(new Locale("nl")),
+    TURKISH(new Locale("tr")),
+    GALICIAN(new Locale("gl")),
+    ITALIAN(Locale.ITALIAN),
+    CZECH(new Locale("cs")),
+    CATALAN(new Locale("ca"));
     private final Locale locale;
 
     Language(Locale locale) {
