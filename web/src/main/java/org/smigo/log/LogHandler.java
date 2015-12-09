@@ -34,10 +34,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class LogHandler {
@@ -132,7 +129,7 @@ public class LogHandler {
         }
 
         log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode + " Uri:" + uri, exception);
-        if (statusCode != HttpStatus.NOT_FOUND.value()) {
+        if (Objects.equals(statusCode, HttpStatus.NOT_FOUND.value())) {
             final String separator = System.lineSeparator();
             String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
             if (exception != null) {

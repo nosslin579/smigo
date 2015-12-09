@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +42,7 @@ public class ErrorController {
     @Autowired
     private LogHandler logHandler;
 
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    @RequestMapping(value = "/error")
     public String error(Model model, HttpServletRequest request, HttpServletResponse response) {
         final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
         final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
