@@ -1,10 +1,10 @@
 function ForumController($scope, $http, $log, StateService, UserService) {
 
-    $scope.message = {}
+    $scope.message = {};
     $scope.pagination = {
         page: 0,
-        size: 20,
-    }
+        size: 20
+    };
     $scope.pendingGetMore = true;
     $scope.user = StateService.getUser();
 

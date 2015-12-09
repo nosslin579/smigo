@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class AllMessagesSetTest {
 
-    public static final List<Object> SV_EXCLUDES = Arrays.asList("msg.forum", "ok", "msg.front.head1");
+    public static final List<Object> SV_EXCLUDES = Arrays.asList("ok", "msg.front.head1");
 
     @Test
     public void testSvMessagesExists() throws Exception {

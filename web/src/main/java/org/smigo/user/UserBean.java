@@ -52,6 +52,7 @@ public class UserBean implements Serializable {
 
     @AssertTrue
     private boolean termsOfService = false;
+    private String language;
 
     public UserBean() {
     }
@@ -135,7 +136,17 @@ public class UserBean implements Serializable {
         this.termsOfService = termsOfService;
     }
 
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
     public static UserBean create(User user) {
-        return new UserBean(user.getId(), user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale(), user.isTermsOfService());
+        final UserBean ret = new UserBean(user.getId(), user.getUsername(), user.getDisplayName(), user.getEmail(), user.getAbout(), user.getLocale(), user.isTermsOfService());
+        ret.setLanguage(user.getLocale().getDisplayLanguage(user.getLocale()));
+        return ret;
     }
 }
