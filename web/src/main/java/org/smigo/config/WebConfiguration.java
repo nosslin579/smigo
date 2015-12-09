@@ -64,6 +64,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     private String databasePassword;
     @Value("${databaseUrl}")
     private String databaseUrl;
+    @Value("${resourceCachePeriod:3600}")
+    private Integer resourceCachePeriod;
 
     @Bean(name = "dataSource")
     public DataSource getDataSource() throws PropertyVetoException {
@@ -80,8 +82,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.setOrder(-1);
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/").setCachePeriod(Integer.MAX_VALUE);
-        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(3600);
-        registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(3600);
+        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
+        registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(resourceCachePeriod);
     }
 
     @Override
