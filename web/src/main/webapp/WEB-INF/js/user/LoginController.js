@@ -11,6 +11,7 @@ function LoginController($scope, UserService) {
         username: '',
         password: ''
     };
+    $scope.formModel['remember-me'] = true;
 
     $scope.requestFeature = UserService.requestFeature;
     $scope.submitLoginOrRegisterForm = UserService.login;
