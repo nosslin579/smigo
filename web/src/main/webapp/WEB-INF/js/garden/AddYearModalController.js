@@ -4,7 +4,7 @@ function AddYearModalController($scope, $uibModalInstance, StateService, $log) {
 
     var garden = StateService.getGarden();
 
-    var last = garden.getAvailableYears().last();
+    var last = garden.getAvailableYears().smigoLast();
     $scope.forwardYear = garden.yearSquareMap[last].length !== 0 ? (last + 1) : false;
 
     var first = garden.getAvailableYears()[0];

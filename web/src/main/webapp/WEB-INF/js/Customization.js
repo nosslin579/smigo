@@ -1,3 +1,4 @@
+//todo rename
 Object.defineProperty(String.prototype, 'capitalize', {
     enumerable: false,
     configurable: false,
@@ -7,7 +8,7 @@ Object.defineProperty(String.prototype, 'capitalize', {
     }
 });
 
-Object.defineProperty(Array.prototype, 'last', {
+Object.defineProperty(Array.prototype, 'smigoLast', {
     enumerable: false,
     configurable: false,
     writable: false,
@@ -16,7 +17,7 @@ Object.defineProperty(Array.prototype, 'last', {
     }
 });
 
-Object.defineProperty(Array.prototype, 'find', {
+Object.defineProperty(Array.prototype, 'smigoFind', {
     enumerable: false,
     configurable: false,
     writable: false,

@@ -24,7 +24,7 @@
             <button class="btn btn-default btn-xs" ng-click="requestFeature('add-rule')">{{'add'|translate}}</button>
             </h3>
 
-            <div ng-if="species.rules.find('goodcompanion','category') != null">
+            <div ng-if="species.rules.smigoFind('goodcompanion','category') != null">
                 <strong>{{'rule.goodcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'">
@@ -34,7 +34,7 @@
                 </ul>
             </div>
 
-            <div ng-if="species.rules.find('badcompanion','category') != null">
+            <div ng-if="species.rules.smigoFind('badcompanion','category') != null">
                 <strong>{{'rule.badcompanion'|translate}}</strong>
                 <ul>
                     <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
@@ -43,7 +43,7 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="species.rules.find('goodcroprotation','category') != null">
+            <div ng-if="species.rules.smigoFind('goodcroprotation','category') != null">
                 <strong>{{'rule.goodcroprotation'|translate}}</strong>
                 <ul >
                     <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
@@ -51,7 +51,7 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="species.rules.find('badcroprotation','category') != null">
+            <div ng-if="species.rules.smigoFind('badcroprotation','category') != null">
                 <strong>{{'rule.badcroprotation'|translate}}</strong>
                 <ul >
                     <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
@@ -59,10 +59,10 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="species.rules.find('speciesrepetition','category') != null">
+            <div ng-if="species.rules.smigoFind('speciesrepetition','category') != null">
                 <strong>{{'rule.croprotation'|translate}}</strong>
                 <ul>
-                    <li>{{'rule.speciesrepetition' | translate:species.rules.find('speciesrepetition','category').hint.messageParameter}}</li>
+                    <li>{{'rule.speciesrepetition' | translate:species.rules.smigoFind('speciesrepetition','category').hint.messageParameter}}</li>
                 </ul>
             </div>
             </p>

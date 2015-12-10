@@ -5,7 +5,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
 
     state.action = 'add';
     state.speciesArray = initData.species;
-    state.selectedSpecies = initData.species.find(28, 'id');
+    state.selectedSpecies = initData.species.smigoFind(28, 'id');
     state.pendingAdd = false;
     state.varieties = initData.varieties;
     $log.log('SpeciesService', state);
@@ -147,7 +147,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                     .then(function (response) {
                         search.previous.push(queryLowerCase);
                         response.data.forEach(function (species) {
-                            if (!state.speciesArray.find(species.id, 'id')) {
+                            if (!state.speciesArray.smigoFind(species.id, 'id')) {
                                 state.speciesArray.push(species);
                                 augmentSpecies([species]);
                             }
@@ -164,7 +164,7 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
             if (!id) {
                 throw "Can not get species with no id";
             }
-            var species = state.speciesArray.find(id, 'id');
+            var species = state.speciesArray.smigoFind(id, 'id');
             if (species) {
                 return species;
             }
