@@ -26,6 +26,7 @@ import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,7 @@ class JdbcMessageDao implements MessageDao {
             "users.locale\n" +
             "FROM messages\n" +
             "LEFT JOIN users ON users.id = messages.submitter_user_id\n" +
-            "WHERE locale LIKE ?\n" +
+            "WHERE messages.locale LIKE ?\n" +
             "ORDER BY createdate DESC\n" +
             "LIMIT ?,?;";
     private JdbcTemplate jdbcTemplate;
@@ -78,5 +79,10 @@ class JdbcMessageDao implements MessageDao {
         map.put("submitter_user_id", user.getId());
         map.put("location", "wall");
         return insert.execute(map);
+    }
+
+    @Override
+    public int addMessage(AddMessageBean message) {
+        return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(message)).intValue();
     }
 }

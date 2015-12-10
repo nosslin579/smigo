@@ -34,8 +34,7 @@
                 <div>
                     <a href="/wall/{{m.submitter}}">{{m.submitter}}</a> {{m.createdate}}
                 </div>
-                <div>
-                    {{m.text}}
+                <div ng-bind-html="m.text">
                 </div>
                 <hr/>
 

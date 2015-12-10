@@ -24,6 +24,7 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.message.MessageHandler;
 import org.smigo.plants.PlantData;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,8 @@ public class UserHandler {
     private PlantHandler plantHandler;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MessageHandler messageHandler;
     @Value("${baseUrl}")
     private String baseUrl;
 
@@ -73,7 +76,7 @@ public class UserHandler {
         return createUser(user.getUsername(), encoded, locale, user.isTermsOfService());
     }
 
-    public User createUser(String username, String password, Locale locale, boolean tos) {
+    private User createUser(String username, String password, Locale locale, boolean tos) {
         long decideTime = System.currentTimeMillis() - request.getSession().getCreationTime();
 
         User newUser = new User();
@@ -89,6 +92,8 @@ public class UserHandler {
         //save plants
         List<PlantData> plants = userSession.getPlants();
         plantHandler.addPlants(plants, userId);
+
+        messageHandler.addWelcomeNewsMessage(newUser, plants.size());
         return newUser;
     }
 

@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.message;
 
 /*
  * #%L
@@ -22,21 +22,33 @@ package org.smigo.user;
  * #L%
  */
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+public class AddMessageBean {
 
-import java.util.Locale;
+    private String locale;
+    private String text;
+    private int submitterUserId;
 
-public class LanguageTest {
+    public String getLocale() {
+        return locale;
+    }
 
-    @Test
-    public void testContains() throws Exception {
-        for (Language language : Language.values()) {
-            Assert.assertTrue(Language.contains(language.getLocale()));
-        }
-        Assert.assertTrue(Language.contains(Locale.CANADA));
-        Assert.assertTrue(Language.contains(Locale.CANADA_FRENCH));
-        Assert.assertFalse(Language.contains(Locale.CHINESE));
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public int getSubmitterUserId() {
+        return submitterUserId;
+    }
+
+    public void setSubmitterUserId(int submitterUserId) {
+        this.submitterUserId = submitterUserId;
     }
 }

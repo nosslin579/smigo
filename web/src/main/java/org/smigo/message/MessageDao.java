@@ -31,4 +31,6 @@ public interface MessageDao {
     List<Message> getMessage(Locale locale, int from, int size);
 
     int addMessage(Message message, AuthenticatedUser user);
+
+    int addMessage(AddMessageBean message);
 }

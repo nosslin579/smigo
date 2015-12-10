@@ -1,5 +1,5 @@
 "use strict";
-angular.module('smigoModule', ['ngRoute', 'ui.bootstrap'])
+angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
     .config(function ($routeProvider, $logProvider, $provide, $locationProvider, $uibTooltipProvider) {
         $logProvider.debugEnabled(false);
 
