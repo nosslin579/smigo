@@ -22,7 +22,6 @@ package org.smigo.message;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,10 +32,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 @Repository
 class JdbcMessageDao implements MessageDao {
@@ -70,15 +67,6 @@ class JdbcMessageDao implements MessageDao {
                 return new Message(rs.getInt("id"), rs.getString("text"), rs.getString("username"), rs.getDate("createdate"));
             }
         });
-    }
-
-    @Override
-    public int addMessage(Message message, AuthenticatedUser user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("text", message.getText());
-        map.put("submitter_user_id", user.getId());
-        map.put("location", "wall");
-        return insert.execute(map);
     }
 
     @Override

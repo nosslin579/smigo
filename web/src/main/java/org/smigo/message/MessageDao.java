@@ -22,15 +22,11 @@ package org.smigo.message;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
-
 import java.util.List;
 import java.util.Locale;
 
 public interface MessageDao {
     List<Message> getMessage(Locale locale, int from, int size);
-
-    int addMessage(Message message, AuthenticatedUser user);
 
     int addMessage(AddMessageBean message);
 }

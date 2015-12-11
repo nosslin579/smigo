@@ -53,8 +53,10 @@ public class MessageHandler {
         return messages;
     }
 
-    public int addMessage(Message message, AuthenticatedUser user) {
-        return messageDao.addMessage(message, user);
+    public int addMessage(AddMessageBean message, AuthenticatedUser user, Locale locale) {
+        message.setSubmitterUserId(user.getId());
+        message.setLocale(locale.toLanguageTag());
+        return messageDao.addMessage(message);
     }
 
     @Async
