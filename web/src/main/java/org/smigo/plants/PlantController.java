@@ -50,13 +50,13 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlantData> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
+    public List<PlantDataBean> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
         return plantHandler.getPlants(user);
     }
 
     @RequestMapping(value = "/rest/plant/{username}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlantData> getPlants(@PathVariable String username) {
+    public List<PlantDataBean> getPlants(@PathVariable String username) {
         return plantHandler.getPlants(username);
     }
 
@@ -64,6 +64,12 @@ public class PlantController implements Serializable {
     @ResponseBody
     public void addPlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
         plantHandler.addPlant(user, plantData);
+    }
+
+    @RequestMapping(value = {"/rest/plant/add-year/{year}"}, method = RequestMethod.PUT)
+    @ResponseBody
+    public List<PlantDataBean> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user) {
+        return plantHandler.addYear(user, year);
     }
 
     @RequestMapping(value = {"/rest/plant/delete"}, method = RequestMethod.POST)

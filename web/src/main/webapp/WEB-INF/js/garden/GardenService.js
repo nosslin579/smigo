@@ -3,14 +3,9 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
     function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
 
-        function init(pda) {
-            if (!pda || !pda.length) {
-                var year = new Date().getFullYear();
-                gardenSelf.yearSquareMap[year] = [new Square(new Location(year, 14, 2)), new Square(new Location(year, 0, 0))];
-            }
-
-            for (var i = 0; i < pda.length; i++) {
-                var plantData = pda[i];
+        function addRawPlantData(plantDataArray) {
+            for (var i = 0; i < plantDataArray.length; i++) {
+                var plantData = plantDataArray[i];
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 var square = gardenSelf.getSquare(plantData.year, plantData.x, plantData.y);
                 species.variety = plantData.varietyId == 0 ? null : SpeciesService.getAllVarieties().smigoFind(plantData.varietyId, 'id');
@@ -24,7 +19,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                     return new Square(new Location(0, 0, 0));
                 };
             }
-            $log.info("Garden created:", gardenSelf);
+            $log.info("Garden initialized:", gardenSelf);
         }
 
         function PlantData(plant) {
@@ -156,8 +151,6 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             };
         }
 
-        this.yearSquareMap = {};
-
         this.getSquare = function (year, x, y) {
             if (!gardenSelf.yearSquareMap[year]) {
                 gardenSelf.yearSquareMap[year] = [];
@@ -197,31 +190,25 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             if (gardenSelf.yearSquareMap[year]) {
                 throw 'Cant add year that already exists';
             }
-            var newYearSquareArray = [],
-                trailingYear = gardenSelf.yearSquareMap[year - 1] ? year - 1 : gardenSelf.getAvailableYears().last(),
-                copyFromSquareArray = gardenSelf.yearSquareMap[trailingYear];
 
-            //add perennial from trailingYear
-            angular.forEach(copyFromSquareArray, function (square) {
-                angular.forEach(square.plantArray, function (plant) {
-                    if (!plant.species.annual) {
-                        var newSquare = new Square(new Location(year, plant.location.x, plant.location.y));
-                        newSquare.addPlant(plant.species);
-                        newYearSquareArray.push(newSquare);
-                    }
-                });
+            $http.put('/rest/plant/add-year/' + year).then(function (response) {
+                addRawPlantData(response.data);
+                gardenSelf.selectedYear = year;
+            }).catch(function () {
+                $log.error('Could not add year:' + year);
             });
-
-            gardenSelf.yearSquareMap[year] = newYearSquareArray;
-            gardenSelf.selectedYear = year;
         };
 
         this.setPlants = function (pda) {
             gardenSelf.yearSquareMap = {};
-            init(pda);
+            if (!pda || !pda.length) {
+                var year = new Date().getFullYear();
+                gardenSelf.yearSquareMap[year] = [new Square(new Location(year, 14, 2)), new Square(new Location(year, 0, 0))];
+            }
+            addRawPlantData(pda);
         };
 
-        init(plantDataArray);
+        gardenSelf.setPlants(plantDataArray);
     }
 
     return {

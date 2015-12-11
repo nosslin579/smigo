@@ -23,16 +23,14 @@ package org.smigo.plants;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -41,20 +39,6 @@ class JdbcPlantDao implements PlantDao {
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private RowMapper<PlantData> plantDataRowMapper = new RowMapper<PlantData>() {
-        @Override
-        public PlantData mapRow(ResultSet speciesRS, int rowNum) throws SQLException {
-            return new PlantDataBean(
-                    speciesRS.getInt("species_id"),
-                    speciesRS.getInt("year"),
-                    speciesRS.getInt("x"),
-                    speciesRS.getInt("y"),
-                    speciesRS.getInt("variety_id")
-            );
-        }
-    };
-
-
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -62,15 +46,15 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public List<PlantData> getPlants(int userId) {
+    public List<PlantDataBean> getPlants(int userId) {
         final String sql = String.format(SELECT, "user_id");
-        return jdbcTemplate.query(sql, new Object[]{userId}, plantDataRowMapper);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PlantDataBean.class), userId);
     }
 
     @Override
-    public List<PlantData> getPlants(String username) {
+    public List<PlantDataBean> getPlants(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.query(sql, new Object[]{username}, plantDataRowMapper);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PlantDataBean.class), username);
     }
 
     @Override

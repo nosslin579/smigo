@@ -29,6 +29,8 @@ import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -42,11 +44,11 @@ public class PlantHandler {
     @Autowired
     private UserHandler userHandler;
 
-    public List<PlantData> getPlants(String username) {
+    public List<PlantDataBean> getPlants(String username) {
         return plantDao.getPlants(username);
     }
 
-    public List<PlantData> getPlants(AuthenticatedUser user) {
+    public List<PlantDataBean> getPlants(AuthenticatedUser user) {
         if (user != null) {
             return plantDao.getPlants(user.getId());
         } else {
@@ -54,13 +56,17 @@ public class PlantHandler {
         }
     }
 
-    public void addPlants(List<PlantData> plants, int userId) {
+    public void addPlants(List<PlantDataBean> plants, Integer userId) {
         if (!plants.isEmpty()) {
-            plantDao.addPlants(plants, userId);
+            if (userId == null) {
+                userSession.getPlants().addAll(plants);
+            } else {
+                plantDao.addPlants(plants, userId);
+            }
         }
     }
 
-    public void addPlant(AuthenticatedUser user, PlantData plantData) {
+    public void addPlant(AuthenticatedUser user, PlantDataBean plantData) {
         if (user != null) {
             plantDao.addPlant(user.getId(), plantData);
         } else {
@@ -81,5 +87,26 @@ public class PlantHandler {
             userSession.getPlants().removeAll(userSession.getPlants());
             userSession.getPlants().addAll(plantData);
         }
+    }
+
+    public List<PlantDataBean> addYear(AuthenticatedUser user, int year) {
+        final List<PlantDataBean> plants = getPlants(user);
+        if (plants.isEmpty() || plants.stream().anyMatch(p -> p.getYear() == year)) {
+            return Collections.emptyList();
+        }
+
+        int lastYear = year - 1;
+        boolean containsLastYear = plants.stream().anyMatch(p -> p.getYear() == lastYear);
+        int copyFromYear = containsLastYear ? lastYear : plants.stream().min((p1, p2) -> Integer.compare(p1.getYear(), p2.getYear())).get().getYear();
+
+        List<PlantDataBean> ret = new ArrayList<>();
+        for (PlantDataBean p : plants) {
+            if (p.getYear() == copyFromYear && !speciesHandler.getSpecies(p.getSpeciesId()).isAnnual()) {
+                p.setYear(year);
+                ret.add(p);
+            }
+        }
+        addPlants(ret, user == null ? null : user.getId());
+        return ret;
     }
 }

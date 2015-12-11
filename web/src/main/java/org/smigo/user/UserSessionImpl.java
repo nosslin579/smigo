@@ -24,7 +24,7 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.plants.PlantData;
+import org.smigo.plants.PlantDataBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -37,10 +37,10 @@ import java.util.List;
 public class UserSessionImpl implements UserSession {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private List<PlantData> plants = new ArrayList<PlantData>();
+    private List<PlantDataBean> plants = new ArrayList<>();
 
     @Override
-    public List<PlantData> getPlants() {
+    public List<PlantDataBean> getPlants() {
         return plants;
     }
 

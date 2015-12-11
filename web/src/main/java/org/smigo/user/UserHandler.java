@@ -25,7 +25,7 @@ package org.smigo.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.message.MessageHandler;
-import org.smigo.plants.PlantData;
+import org.smigo.plants.PlantDataBean;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +90,7 @@ public class UserHandler {
         newUser.setId(userId);
 
         //save plants
-        List<PlantData> plants = userSession.getPlants();
+        List<PlantDataBean> plants = userSession.getPlants();
         plantHandler.addPlants(plants, userId);
 
         messageHandler.addWelcomeNewsMessage(newUser, plants.size());

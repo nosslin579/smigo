@@ -22,7 +22,7 @@ package org.smigo.user;
  * #L%
  */
 
-import org.smigo.plants.PlantData;
+import org.smigo.plants.PlantDataBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +30,6 @@ import java.util.List;
 
 public interface UserSession extends Serializable {
 
-    List<PlantData> getPlants();
+    List<PlantDataBean> getPlants();
 
 }

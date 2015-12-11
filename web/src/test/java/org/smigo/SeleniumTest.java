@@ -228,7 +228,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("add-forward-year-button")).click();
 
         Assert.assertEquals(d.findElements(By.className("visible-remainder")).size(), 1);
-        Assert.assertEquals(d.findElements(By.className("select-year")).size(), 2);
+        Assert.assertEquals(d.findElements(By.className("select-year")).size(), 1);
 
 
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");

@@ -25,9 +25,9 @@ package org.smigo.plants;
 import java.util.List;
 
 interface PlantDao {
-    List<PlantData> getPlants(int userId);
+    List<PlantDataBean> getPlants(int userId);
 
-    List<PlantData> getPlants(String username);
+    List<PlantDataBean> getPlants(String username);
 
     void addPlants(List<? extends PlantData> plants, int userId);
 
