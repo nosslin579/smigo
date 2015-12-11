@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class PlantController implements Serializable {
@@ -68,8 +69,8 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = {"/rest/plant/add-year/{year}"}, method = RequestMethod.PUT)
     @ResponseBody
-    public List<PlantDataBean> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user) {
-        return plantHandler.addYear(user, year);
+    public List<PlantDataBean> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
+        return plantHandler.addYear(user, year, locale);
     }
 
     @RequestMapping(value = {"/rest/plant/delete"}, method = RequestMethod.POST)

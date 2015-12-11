@@ -22,16 +22,14 @@ package org.smigo.plants;
  * #L%
  */
 
+import org.smigo.message.MessageHandler;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserHandler;
 import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class PlantHandler {
@@ -42,7 +40,7 @@ public class PlantHandler {
     @Autowired
     private SpeciesHandler speciesHandler;
     @Autowired
-    private UserHandler userHandler;
+    private MessageHandler messageHandler;
 
     public List<PlantDataBean> getPlants(String username) {
         return plantDao.getPlants(username);
@@ -89,7 +87,7 @@ public class PlantHandler {
         }
     }
 
-    public List<PlantDataBean> addYear(AuthenticatedUser user, int year) {
+    public List<PlantDataBean> addYear(AuthenticatedUser user, int year, Locale locale) {
         final List<PlantDataBean> plants = getPlants(user);
         if (plants.isEmpty() || plants.stream().anyMatch(p -> p.getYear() == year)) {
             return Collections.emptyList();
@@ -107,6 +105,7 @@ public class PlantHandler {
             }
         }
         addPlants(ret, user == null ? null : user.getId());
+        messageHandler.addNewYearNewsMessage(Optional.ofNullable(user), year, plants, locale);
         return ret;
     }
 }

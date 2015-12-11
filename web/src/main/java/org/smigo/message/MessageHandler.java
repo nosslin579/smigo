@@ -22,6 +22,9 @@ package org.smigo.message;
  * #L%
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.smigo.plants.PlantDataBean;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +32,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.time.Year;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Component
 public class MessageHandler {
+    private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
     @Autowired
     private MessageSource messageSource;
     @Autowired
@@ -61,6 +67,21 @@ public class MessageHandler {
         message.setText(text);
         message.setSubmitterUserId(1);
         message.setLocale(user.getLocale().toLanguageTag());
+        messageDao.addMessage(message);
+    }
+
+    public void addNewYearNewsMessage(Optional<AuthenticatedUser> optionalUser, int year, List<PlantDataBean> plants, Locale locale) {
+        final List<Integer> validYears = Arrays.asList(Year.now().getValue(), Year.now().plusYears(1).getValue());
+        if (!optionalUser.isPresent() || !validYears.contains(year) || plants.size() < 10) {
+            optionalUser.ifPresent(u -> log.info("Not adding new year news message for:" + u.getUsername()));
+            return;
+        }
+        final AuthenticatedUser user = optionalUser.get();
+        final AddMessageBean message = new AddMessageBean();
+        final String text = messageSource.getMessage("msg.useraddedyearmessage", new Object[]{user.getUsername(), year}, locale);
+        message.setText(text);
+        message.setSubmitterUserId(1);
+        message.setLocale(locale.toLanguageTag());
         messageDao.addMessage(message);
     }
 
