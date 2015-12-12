@@ -27,14 +27,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class LogHandler {
@@ -121,22 +123,17 @@ public class LogHandler {
         return ret.toString();
     }
 
-    public void logError(HttpServletRequest request, HttpServletResponse response, Exception exception, Integer statusCode, String uri) {
-        if (uri != null) {
-            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, uri);
-        } else if (exception != null) {
-            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, exception.getClass().getName() + ":" + exception.getMessage());
-        }
+    public void logError(HttpServletRequest request, HttpServletResponse response) {
+        final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
+        final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
+        final Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 
         log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode + " Uri:" + uri, exception);
-        if (Objects.equals(statusCode, HttpStatus.NOT_FOUND.value())) {
-            final String separator = System.lineSeparator();
-            String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
-            if (exception != null) {
-                text = text + exception.getClass().getName() + exception.getMessage() + separator + Arrays.toString(exception.getStackTrace());
-            }
-            mailHandler.sendAdminNotification("error during request outside Spring MVC", text);
+        final String separator = System.lineSeparator();
+        String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
+        if (exception != null) {
+            text = text + exception.getClass().getName() + exception.getMessage() + separator + Arrays.toString(exception.getStackTrace());
         }
-
+        mailHandler.sendAdminNotification("error during request outside Spring MVC", text);
     }
 }

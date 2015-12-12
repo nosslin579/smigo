@@ -29,6 +29,7 @@ import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,13 @@ public class LogController implements Serializable {
     private MailHandler mailHandler;
     @Autowired
     private LogHandler logHandler;
+
+    @RequestMapping(value = "/error")
+    public String error(Model model, HttpServletRequest request, HttpServletResponse response) {
+        logHandler.logError(request, response);
+        model.addAttribute("statusCode", request.getAttribute("javax.servlet.error.status_code"));
+        return "error.jsp";
+    }
 
     @RequestMapping(value = "/rest/log/error", method = RequestMethod.POST)
     @ResponseBody
