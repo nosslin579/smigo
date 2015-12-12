@@ -56,7 +56,7 @@ class JdbcLogDao implements LogDao {
     @Override
     @Async
     public void log(LogBean req) {
-        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,note,origin,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,origin,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
                 req.getSessionAge(),
                 req.getHttpStatus(),
@@ -68,7 +68,6 @@ class JdbcLogDao implements LogDao {
                 req.getSessionid(),
                 req.getMethod(),
                 req.getIp(),
-                req.getNote(),
                 req.getOrigin(),
                 req.getHost(),
                 req.getQueryString()};
@@ -199,7 +198,6 @@ class JdbcLogDao implements LogDao {
                 "  HOST,\n" +
                 "  QUERYSTRING,\n" +
                 "  USERAGENT,\n" +
-                "  NOTE\n" +
                 "FROM VISITLOG\n" +
                 "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN (\n" +
                 "  SELECT XFORWARDEDFOR\n" +

@@ -39,7 +39,6 @@ class LogBean {
     private final String sessionid;
     private final String method;
     private final String ip;
-    private final String note;
     private final String origin;
     private final int httpStatus;
     private final long sessionAge;
@@ -47,7 +46,7 @@ class LogBean {
     private final String host;
 
     public LogBean(String remoteUser, String url, String locales, String useragent, String host,
-                   String referer, String sessionid, String method, String ip, String note,
+                   String referer, String sessionid, String method, String ip,
                    String origin, int status, long sessionAge, String queryString) {
         this.remoteUser = remoteUser;
         this.url = url;
@@ -58,7 +57,6 @@ class LogBean {
         this.sessionid = sessionid;
         this.method = method;
         this.ip = ip;
-        this.note = note;
         this.origin = origin;
         this.httpStatus = status;
         this.sessionAge = sessionAge;
@@ -83,7 +81,6 @@ class LogBean {
                 truncate(req.getRequestedSessionId()),
                 req.getMethod(),
                 truncate(req.getRemoteAddr()),
-                truncate((String) req.getAttribute(VisitLogger.NOTE_ATTRIBUTE)),
                 truncate(req.getHeader("origin")),
                 response.getStatus(),
                 ageSeconds,
@@ -131,10 +128,6 @@ class LogBean {
         return ip;
     }
 
-    public String getNote() {
-        return note;
-    }
-
     @Override
     public String toString() {
         return "LogBean{" +
@@ -146,7 +139,6 @@ class LogBean {
                 ", sessionid='" + sessionid + '\'' +
                 ", method='" + method + '\'' +
                 ", ip='" + ip + '\'' +
-                ", note='" + note + '\'' +
                 ", origin='" + origin + '\'' +
                 ", httpStatus=" + httpStatus +
                 ", sessionAge=" + sessionAge +

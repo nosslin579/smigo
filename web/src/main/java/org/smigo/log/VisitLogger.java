@@ -35,7 +35,6 @@ public class VisitLogger extends HandlerInterceptorAdapter {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public static final String REQUEST_TIMER = "request-timer";
-    public static final String NOTE_ATTRIBUTE = "LogVisitNote";
 
     @Autowired
     private LogHandler logHandler;

@@ -48,7 +48,6 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
         if (ex != null) {
             final String note = ex.getClass().getName() + ":" + ex.getMessage();
             mailHandler.sendAdminNotification("error during request inside Spring MVC", note + "\n" + logBean);
-            request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, note);
         }
         return null;
     }

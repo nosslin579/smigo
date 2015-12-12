@@ -64,7 +64,7 @@ class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
         response.getWriter().append(responseBody);
 
         final String username = Arrays.toString(request.getParameterMap().get("username"));
-        final String note = "Authentication Failure:" + username + exception;
+        final String note = "Authentication Failure:" + username + System.lineSeparator() + exception;
         log.info(note);
         mailHandler.sendAdminNotification("authentication failure", note);
     }

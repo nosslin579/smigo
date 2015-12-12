@@ -62,14 +62,12 @@ public class LogController implements Serializable {
         final LogBean logBean = LogBean.create(request, response);
         final String msg = "Angular error:\n" + referenceError + "\nPlants:\n" + StringUtils.arrayToDelimitedString(userSession.getPlants().toArray(), ",") + logBean;
         log.error(msg);
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, referenceError.getStack());
         mailHandler.sendAdminNotification("angular error", msg);
     }
 
-    @RequestMapping(value = "/rest/log/feature", method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/log/feature/*", "/rest/log/feature"}, method = RequestMethod.POST)
     @ResponseBody
     public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(VisitLogger.NOTE_ATTRIBUTE, feature.getFeature());
         mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response));
     }
 
