@@ -88,15 +88,13 @@ class JdbcLogDao implements LogDao {
                 "  requests," +
                 "  sessions," +
                 "  p.plants AS plants," +
-                "  p.yearfrom  AS fromyear," +
-                "  p.yearto  AS toyear," +
+                "  p.years," +
                 "  speciescreated " +
                 "FROM users" +
                 "  LEFT JOIN (SELECT" +
                 "               user_id," +
                 "               count(*)  AS plants," +
-                "               min(year) AS yearfrom," +
-                "               max(year) AS yearto" +
+                "               group_concat(DISTINCT year) AS years" +
                 "             FROM plants " +
                 "             GROUP BY user_id) AS p ON p.user_id = users.id" +
                 "  LEFT JOIN (SELECT" +
@@ -110,7 +108,7 @@ class JdbcLogDao implements LogDao {
                 "               count(creator) AS speciescreated" +
                 "             FROM species" +
                 "             GROUP BY creator) AS sc ON sc.speciescreator = users.id " +
-                "WHERE current_timestamp() < dateadd('MONTH',1,createdate) " +
+                "WHERE current_timestamp() < dateadd('YEAR',1,createdate) " +
                 "ORDER BY id DESC " +
                 "LIMIT 200;";
 
@@ -121,25 +119,11 @@ class JdbcLogDao implements LogDao {
     @Override
     public QueryReport getReferrerReport() {
         String sql = "" +
-                "SELECT\n" +
-                "  REFERER,\n" +
-                "  COUNT(REFERER)\n" +
-                "FROM VISITLOG\n" +
-                "WHERE REFERER NOT LIKE 'http://smigo.org%' AND REFERER NOT LIKE 'http://sv.smigo.org%' AND XFORWARDEDFOR IN (\n" +
-                "  SELECT XFORWARDEDFOR\n" +
-                "  FROM VISITLOG\n" +
-                "  WHERE XFORWARDEDFOR != '' AND SESSIONID IN (\n" +
-                "    SELECT SESSIONID\n" +
-                "    FROM (SELECT\n" +
-                "            count(SESSIONID) AS counts,\n" +
-                "            SESSIONID\n" +
-                "          FROM VISITLOG\n" +
-                "          WHERE SESSIONID != ''\n" +
-                "          GROUP BY SESSIONID\n" +
-                "          ORDER BY counts DESC)\n" +
-                "    WHERE counts > 6)\n" +
-                "  GROUP BY XFORWARDEDFOR)\n" +
-                "GROUP BY REFERER\n" +
+                "SELECT REFERER,COUNT(REFERER) " +
+                "FROM VISITLOG " +
+                "WHERE REFERER NOT LIKE 'http://smigo.org%' AND REFERER NOT LIKE 'http://sv.smigo.org%' AND XFORWARDEDFOR IN " +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL LIKE '%smigo.org/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR) " +
+                "GROUP BY REFERER " +
                 "ORDER BY COUNT(REFERER) DESC;";
 
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
@@ -195,22 +179,10 @@ class JdbcLogDao implements LogDao {
                 "  SESSIONAGE                                      AS age,\n" +
                 "  HOST,\n" +
                 "  QUERYSTRING,\n" +
-                "  USERAGENT,\n" +
+                "  USERAGENT\n" +
                 "FROM VISITLOG\n" +
-                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN (\n" +
-                "  SELECT XFORWARDEDFOR\n" +
-                "  FROM VISITLOG\n" +
-                "  WHERE XFORWARDEDFOR != '' AND SESSIONID IN (\n" +
-                "    SELECT SESSIONID\n" +
-                "    FROM (SELECT\n" +
-                "            count(SESSIONID) AS requestCount,\n" +
-                "            SESSIONID\n" +
-                "          FROM VISITLOG\n" +
-                "          WHERE SESSIONID != ''\n" +
-                "          GROUP BY SESSIONID\n" +
-                "          ORDER BY requestCount DESC)\n" +
-                "    WHERE requestCount > 6)\n" +
-                "  GROUP BY XFORWARDEDFOR)\n" +
+                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN\n" +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL LIKE '%smigo.org/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
                 "ORDER BY CREATEDATE DESC\n" +
                 "LIMIT 1500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
