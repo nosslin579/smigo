@@ -29,7 +29,6 @@ import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.Year;
@@ -59,7 +58,6 @@ public class MessageHandler {
         return messageDao.addMessage(message);
     }
 
-    @Async
     public void addWelcomeNewsMessage(User user, int plants) {
         if (plants == 0) {
             return;

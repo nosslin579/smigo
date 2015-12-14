@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -54,7 +53,6 @@ class JdbcLogDao implements LogDao {
     }
 
     @Override
-    @Async
     public void log(LogBean req) {
         String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,origin,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
@@ -214,7 +212,7 @@ class JdbcLogDao implements LogDao {
                 "    WHERE requestCount > 6)\n" +
                 "  GROUP BY XFORWARDEDFOR)\n" +
                 "ORDER BY CREATEDATE DESC\n" +
-                "LIMIT 500;";
+                "LIMIT 1500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
