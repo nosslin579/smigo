@@ -131,7 +131,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(2000);
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void registerWithFacebook() throws Exception {
         //add default species
         testDao.deleteUserConnection(1375958496052051l);
