@@ -31,7 +31,7 @@
         <spring:message code="msg.answer.howdoesitwork2"/><br/>
         <spring:message code="msg.answer.howdoesitwork3"/><br/>
         <spring:message code="msg.answer.howdoesitwork4"/><br/>
-        <a href="/wall/example"><spring:message code="msg.viewexample"/></a>
+        <a href="/gardener/example"><spring:message code="msg.viewexample"/></a>
     </p>
 
     <h3><spring:message code="msg.question.howaddspecies"/></h3>

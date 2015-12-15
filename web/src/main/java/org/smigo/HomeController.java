@@ -81,7 +81,7 @@ public class HomeController {
         return "ng.jsp";
     }
 
-    @RequestMapping(value = {"/wall/{userName}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/gardener/{userName}"}, method = RequestMethod.GET)
     public String getWall(@PathVariable String userName, Model model) {
         model.addAttribute("msgTitle", "msg.title.wall");
         model.addAttribute("titleArg", userName);

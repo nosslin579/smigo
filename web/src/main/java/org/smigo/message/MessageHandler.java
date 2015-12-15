@@ -92,7 +92,7 @@ public class MessageHandler {
         for (String wordInText : stringList) {
             if (wordInText.startsWith("@")) {
                 String username = wordInText.replaceAll("@", "");
-                ret.append("<a href='/wall/").append(username).append("/'>").append(wordInText).append("</a>");
+                ret.append("<a href='/gardener/").append(username).append("/'>").append(wordInText).append("</a>");
             } else {
                 ret.append(wordInText);
             }
