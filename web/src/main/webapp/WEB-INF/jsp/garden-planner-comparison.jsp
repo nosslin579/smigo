@@ -26,7 +26,7 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tr>
-                <th rowspan="2"><spring:message code="msg.name"/></th>
+                <th rowspan="2"><spring:message code="name"/></th>
                 <th rowspan="2" class="text-center"><spring:message code="msg.price"/></th>
                 <th colspan="4" class="text-center"><spring:message code="msg.features"/></th>
                 <th rowspan="2" class="text-center"><spring:message code="language"/></th>

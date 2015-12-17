@@ -26,13 +26,14 @@
     <p><spring:message code="msg.answer.whatisthis"/></p>
 
     <h3><spring:message code="msg.question.howdoesitwork"/></h3>
-    <p>
-        <spring:message code="msg.answer.howdoesitwork1"/><br/>
-        <spring:message code="msg.answer.howdoesitwork2"/><br/>
-        <spring:message code="msg.answer.howdoesitwork3"/><br/>
-        <spring:message code="msg.answer.howdoesitwork4"/><br/>
-        <a href="/gardener/example"><spring:message code="msg.viewexample"/></a>
-    </p>
+
+    <div>
+        <div><spring:message code="msg.answer.howdoesitwork1"/></div>
+        <div><spring:message code="msg.answer.howdoesitwork2"/></div>
+        <div><spring:message code="msg.answer.howdoesitwork3"/></div>
+        <div><spring:message code="msg.answer.howdoesitwork4"/></div>
+        <div><spring:message code="msg.viewexample" arguments="<a href=\"/gardener/example\">,</a>"/></div>
+    </div>
 
     <h3><spring:message code="msg.question.howaddspecies"/></h3>
     <p><spring:message code="msg.answer.howaddspecies"/></p>

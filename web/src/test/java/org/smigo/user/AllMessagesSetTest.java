@@ -22,6 +22,8 @@ package org.smigo.user;
  * #L%
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,20 +32,34 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+@Test
 public class AllMessagesSetTest {
 
+    private static final Logger log = LoggerFactory.getLogger(AllMessagesSetTest.class);
+
     public static final List<Object> SV_EXCLUDES = Arrays.asList("ok", "msg.front.head1");
+    public static final List<Object> DE_EXCLUDES = Arrays.asList("name", "msg.title.species", "msg.anemailhasbeensent", "msg.link", "msg.twittersharetext", "ok", "msg.changepasswordsuccess", "msg.front.head1");
 
     @Test
     public void testSvMessagesExists() throws Exception {
+        boolean ok = true;
         final UserAdaptiveMessageSource messageSource = new UserAdaptiveMessageSource(-1);
-        final Map<Object, Object> englishMessages = messageSource.getAllMessages(Locale.ENGLISH);
+        final Map<Object, Object> englishMessages = messageSource.getAllMessages(Locale.ROOT);
         final Map<Object, Object> swedishMessages = messageSource.getAllMessages(Language.SWEDISH.getLocale());
-        for (Map.Entry svEntry : swedishMessages.entrySet()) {
-            if (!SV_EXCLUDES.contains(svEntry.getKey())) {
-                final Object enEntry = englishMessages.get(svEntry.getKey());
-                Assert.assertNotEquals(svEntry.getValue(), enEntry, "Not translated:" + svEntry);
+        final Map<Object, Object> germanMessages = messageSource.getAllMessages(Language.GERMAN.getLocale());
+        for (Object key : englishMessages.keySet()) {
+            String rootTranslation = englishMessages.get(key).toString();
+            String svTranslation = swedishMessages.get(key).toString();
+            String deTranslation = germanMessages.get(key).toString();
+            if (!SV_EXCLUDES.contains(key) && rootTranslation.equals(svTranslation)) {
+                System.out.println(key + "=sv_missing" + rootTranslation);
+                ok = false;
+            }
+            if (!DE_EXCLUDES.contains(key) && rootTranslation.equals(deTranslation)) {
+                System.out.println(key + "=de_missing" + rootTranslation + svTranslation);
+                ok = false;
             }
         }
+        Assert.assertTrue(ok);
     }
 }
