@@ -66,7 +66,8 @@ public class LogHandler {
         }
 
         final long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
-        s.append(" Request time elapsed:").append(System.nanoTime() - start).append("ns which is ").append((System.nanoTime() - start) / 1000000).append("ms");
+        final long elapsedTime = System.nanoTime() - start;
+        s.append(" Request time elapsed:").append(elapsedTime).append("ns which is ").append(elapsedTime / 1000000).append("ms");
         return s.toString();
     }
 

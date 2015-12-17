@@ -39,7 +39,6 @@ class LogBean {
     private final String sessionid;
     private final String method;
     private final String ip;
-    private final String origin;
     private final int httpStatus;
     private final long sessionAge;
     private final String queryString;
@@ -47,7 +46,7 @@ class LogBean {
 
     public LogBean(String remoteUser, String url, String locales, String useragent, String host,
                    String referer, String sessionid, String method, String ip,
-                   String origin, int status, long sessionAge, String queryString) {
+                   int status, long sessionAge, String queryString) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
@@ -57,7 +56,6 @@ class LogBean {
         this.sessionid = sessionid;
         this.method = method;
         this.ip = ip;
-        this.origin = origin;
         this.httpStatus = status;
         this.sessionAge = sessionAge;
         this.queryString = queryString;
@@ -73,7 +71,7 @@ class LogBean {
         final long age = session == null ? 0 : (System.currentTimeMillis() - session.getCreationTime());
         final long ageSeconds = TimeUnit.MILLISECONDS.toSeconds(age);
         return new LogBean(truncate(req.getRemoteUser()),
-                truncate(req.getRequestURL().toString()),
+                truncate(req.getRequestURI()),
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),
                 truncate(req.getHeader("host")),
@@ -81,11 +79,9 @@ class LogBean {
                 truncate(req.getRequestedSessionId()),
                 req.getMethod(),
                 truncate(req.getRemoteAddr()),
-                truncate(req.getHeader("origin")),
                 response.getStatus(),
                 ageSeconds,
                 truncate(truncate(req.getQueryString())));
-
     }
 
     private static String truncate(String s) {
@@ -139,16 +135,11 @@ class LogBean {
                 ", sessionid='" + sessionid + '\'' +
                 ", method='" + method + '\'' +
                 ", ip='" + ip + '\'' +
-                ", origin='" + origin + '\'' +
                 ", httpStatus=" + httpStatus +
                 ", sessionAge=" + sessionAge +
                 ", queryString='" + queryString + '\'' +
                 ", host='" + host + '\'' +
                 '}';
-    }
-
-    public String getOrigin() {
-        return origin;
     }
 
     public int getHttpStatus() {

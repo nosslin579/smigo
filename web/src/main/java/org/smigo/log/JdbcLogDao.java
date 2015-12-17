@@ -54,7 +54,7 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public void log(LogBean req) {
-        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,origin,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
                 req.getSessionAge(),
                 req.getHttpStatus(),
@@ -66,7 +66,6 @@ class JdbcLogDao implements LogDao {
                 req.getSessionid(),
                 req.getMethod(),
                 req.getIp(),
-                req.getOrigin(),
                 req.getHost(),
                 req.getQueryString()};
         int[] types = new int[args.length];
@@ -122,7 +121,7 @@ class JdbcLogDao implements LogDao {
                 "SELECT REFERER,COUNT(REFERER) " +
                 "FROM VISITLOG " +
                 "WHERE REFERER NOT LIKE 'http://smigo.org%' AND REFERER NOT LIKE 'http://sv.smigo.org%' AND XFORWARDEDFOR IN " +
-                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL LIKE '%smigo.org/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR) " +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR) " +
                 "GROUP BY REFERER " +
                 "ORDER BY COUNT(REFERER) DESC;";
 
@@ -170,7 +169,7 @@ class JdbcLogDao implements LogDao {
     public QueryReport getActivityReport() {
         String sql = "SELECT\n" +
                 "  USERNAME,\n" +
-                "  regexp_replace(REQUESTEDURL, '.+smigo.org', '') AS path,\n" +
+                "  REQUESTEDURL,\n" +
                 "  LOCALES,\n" +
                 "  substring(SESSIONID, -6)                        AS session,\n" +
                 "  METHOD,\n" +
@@ -182,7 +181,7 @@ class JdbcLogDao implements LogDao {
                 "  USERAGENT\n" +
                 "FROM VISITLOG\n" +
                 "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN\n" +
-                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL LIKE '%smigo.org/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
                 "ORDER BY CREATEDATE DESC\n" +
                 "LIMIT 1500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
