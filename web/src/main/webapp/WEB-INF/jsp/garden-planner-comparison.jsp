@@ -62,7 +62,7 @@
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
-                <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
+                <td class="text-center"><spring:message code="msg.english"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -74,8 +74,8 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
-                <td class="danger text-center"><spring:message code="yes"/></td>
-                <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="text-center"><spring:message code="msg.english"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
@@ -88,7 +88,7 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
-                <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
+                <td class="text-center"><spring:message code="msg.english"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
@@ -102,11 +102,25 @@
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
-                <td class="text-center"><spring:message code="msg.onlyenglish"/></td>
+                <td class="text-center"><spring:message code="msg.english"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="success text-center"><spring:message code="yes"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
                 <td class="danger text-center"><spring:message code="no"/></td>
+            </tr>
+            <tr>
+                <th class="text-nowrap">
+                    <a href="//anbeeten.de/">Anbeeten</a></th>
+                <td><spring:message code="msg.free"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="danger text-center"><spring:message code="no"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="text-center"><spring:message code="msg.german"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
+                <td class="success text-center"><spring:message code="yes"/></td>
             </tr>
         </table>
     </div>
