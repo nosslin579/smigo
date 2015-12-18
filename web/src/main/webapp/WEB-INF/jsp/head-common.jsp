@@ -9,10 +9,10 @@
 <link rel="alternate" hreflang="x-default" href="http://smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 <link rel="alternate" hreflang="sv" href="http://sv.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 <link rel="alternate" hreflang="en" href="http://en.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
+<link rel="alternate" hreflang="de" href="http://de.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 
 <%--http://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh--%>
 <link rel="icon" href="/static/species/28.png?v=6">
 
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
-<link rel="stylesheet" type="text/css" href="//cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css"/>
