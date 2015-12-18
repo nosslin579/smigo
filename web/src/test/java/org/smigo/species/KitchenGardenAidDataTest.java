@@ -33,6 +33,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -100,6 +101,7 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
                 log.error("Could not map plant:" + plant, e);
             }
             FileUtils.writeLines(new File("/tmp/data.sql"), sqlStatement);
+            Assert.assertTrue(sqlStatement.isEmpty());
         }
     }
 
