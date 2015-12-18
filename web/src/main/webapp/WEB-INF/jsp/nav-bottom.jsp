@@ -6,7 +6,7 @@
     <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
         <footer>
             <div class="row" style="margin: 16px;">
-                <div class="text-center">Copyright (C) 2011-2015 Christian Nilsson - christian1195@gmail.com</div>
+                <div class="text-center">Copyright (C) 2011-2015 Christian Nilsson - smigo@smigo.org</div>
             </div>
         </footer>
     </div>

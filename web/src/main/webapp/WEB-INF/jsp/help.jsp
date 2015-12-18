@@ -60,7 +60,7 @@
     <p><spring:message code="msg.answer.other" arguments="<a class=\"text-lowercase\" href=\"/forum\">,</a>"/></p>
 
     <div class="media">
-        <a class="pull-left" href="mailto:christian1195@gmail.com" target="_blank"><span class="social-sprite email"></span></a>
+        <a class="pull-left" href="mailto:smigo@smigo.org" target="_blank"><span class="social-sprite email"></span></a>
         <a class="pull-left" href="https://www.facebook.com/smigogarden" target="_blank"><span class="social-sprite facebook"></span></a>
         <a class="pull-left" href="https://www.twitter.com/smigogarden" target="_blank"><span class="social-sprite twitter"></span></a>
         <a class="pull-left" href="http://se.linkedin.com/pub/christian-nilsson/3b/798/a5b/" target="_blank"><span class="social-sprite linkedin"></span></a>
