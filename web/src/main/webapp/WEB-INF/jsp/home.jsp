@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="msg.title.front"/></title>
+    <title><spring:message code="msg.title.front"/> | Smigo</title>
     <meta name="description" content="<spring:message code="msg.metadescription.front"/>">
     <jsp:include page="head-common.jsp"/>
 

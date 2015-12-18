@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="${msgTitle}" arguments="${titleArg}"/></title>
+    <title><spring:message code="${msgTitle}" arguments="${titleArg}"/> | Smigo</title>
     <meta name="description" content="<spring:message code="${msgDescription}" arguments="${descriptionArg}"/>">
 
     <jsp:include page="head-common.jsp"/>

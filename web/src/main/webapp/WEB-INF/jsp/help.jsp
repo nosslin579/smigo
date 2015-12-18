@@ -6,8 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="msg.concat.title.help"/></title>
-    <meta name="description" content="<spring:message code="msg.concat.metadescription.help"/>">
+    <title><spring:message code="msg.title.help"/> | Smigo</title>
+    <meta name="description" content="<spring:message code="msg.metadescription.help"/>">
     <jsp:include page="head-common.jsp"/>
 </head>
 
