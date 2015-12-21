@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -125,18 +124,5 @@ public class UserController {
         final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
         allMessages.putAll(speciesTranslation);
         return allMessages;
-    }
-
-
-    @RequestMapping(value = "/ping", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Object ping(final Principal principal) {
-        log.debug("Ping" + principal);
-        return principal == null ? null : new Principal() {
-            @Override
-            public String getName() {
-                return principal.getName();
-            }
-        };
     }
 }
