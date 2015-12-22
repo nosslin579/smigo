@@ -1,26 +1,22 @@
-function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
+function UserService($log, $http, $rootScope, $q, $location) {
 
     $log.log('UserService');
 
-    var state = {
-        currentUser: initData.user
-    };
+    var state = {};
 
-    $rootScope.$on('current-user-changed', function (event, newUser) {
+    setUser(null, initData.user);
+
+    $rootScope.$on('current-user-changed', setUser);
+
+    function setUser(event, newUser) {
         if (newUser) {
-            $http.get('/rest/plant/' + newUser.username)
-                .then(function (response) {
-                    garden.setPlants(response.data);
-                });
             state.currentUser = newUser;
             $http.defaults.headers.common.SmigoUser = newUser.username;
         } else {
-            garden.setPlants([]);
             state.currentUser = null;
             $http.defaults.headers.common.SmigoUser = null;
         }
-    });
-
+    }
 
     function updateUser(userBean) {
         return $http.put('/rest/user', userBean)
