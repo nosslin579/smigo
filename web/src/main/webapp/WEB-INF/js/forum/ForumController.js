@@ -1,4 +1,4 @@
-function ForumController($scope, $http, $log, StateService, UserService) {
+function ForumController($scope, $http, $log, UserService) {
 
     $scope.message = {};
     $scope.pagination = {
@@ -6,7 +6,7 @@ function ForumController($scope, $http, $log, StateService, UserService) {
         size: 20
     };
     $scope.pendingGetMore = true;
-    $scope.user = StateService.getUser();
+    $scope.user = UserService.getState();
 
     $http.get('/rest/message', {params: $scope.pagination})
         .then(function (response) {
@@ -32,11 +32,11 @@ function ForumController($scope, $http, $log, StateService, UserService) {
         $http.post('/rest/message', message)
             .then(function (response) {
                 message.id = response.data;
-                message.submitter = StateService.getUser().currentUser.username;
+                message.submitter = UserService.getState().currentUser.username;
                 message.createdate = "now";
                 $scope.messages.unshift(message);
-                $scope.message = {}
-                $log.log('Messages is now:', $scope.messages)
+                $scope.message = {};
+                $log.log('Messages is now:', $scope.messages);
                 form.pendingAddMessage = false;
             });
     }

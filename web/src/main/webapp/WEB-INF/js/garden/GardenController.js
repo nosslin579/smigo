@@ -6,7 +6,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
 
     $scope.garden = StateService.getGarden();
     $scope.speciesState = SpeciesService.getState();
-    $scope.userState = StateService.getUser();
+    $scope.userState = UserService.getState();
 
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;

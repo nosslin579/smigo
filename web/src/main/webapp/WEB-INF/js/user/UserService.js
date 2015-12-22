@@ -2,6 +2,26 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
 
     $log.log('UserService');
 
+    var state = {
+        currentUser: initData.user
+    };
+
+    $rootScope.$on('current-user-changed', function (event, newUser) {
+        if (newUser) {
+            $http.get('/rest/plant/' + newUser.username)
+                .then(function (response) {
+                    garden.setPlants(response.data);
+                });
+            state.currentUser = newUser;
+            $http.defaults.headers.common.SmigoUser = newUser.username;
+        } else {
+            garden.setPlants([]);
+            state.currentUser = null;
+            $http.defaults.headers.common.SmigoUser = null;
+        }
+    });
+
+
     function updateUser(userBean) {
         return $http.put('/rest/user', userBean)
             .then(function (response) {
@@ -77,6 +97,9 @@ function UserService($log, $http, $timeout, $rootScope, $q, $location, $route) {
         requestFeature: function (feature) {
             $http.post('/rest/log/feature', {feature: feature});
             alert("This service is not yet available. Please try again later.");
+        },
+        getState: function () {
+            return state;
         }
     };
 }

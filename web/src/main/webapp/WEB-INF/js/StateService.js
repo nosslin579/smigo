@@ -1,9 +1,6 @@
 function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenService) {
 
-    var garden = GardenService.createGarden(initData.plantDataArray, true),
-        user = {
-            currentUser: initData.user
-        };
+    var garden = GardenService.createGarden(initData.plantDataArray, true);
 
     $rootScope.$on('current-user-changed', function (event, newUser) {
         if (newUser) {
@@ -11,12 +8,8 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
                 .then(function (response) {
                     garden.setPlants(response.data);
                 });
-            user.currentUser = newUser;
-            $http.defaults.headers.common.SmigoUser = newUser.username;
         } else {
             garden.setPlants([]);
-            user.currentUser = null;
-            $http.defaults.headers.common.SmigoUser = null;
         }
     });
 
@@ -25,7 +18,7 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
             return garden;
         },
         getUser: function () {
-            return user;
+            throw 'Not used anymore';
         }
     }
 

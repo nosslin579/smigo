@@ -1,7 +1,6 @@
-function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, SpeciesService, StateService) {
+function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, SpeciesService) {
     $scope.species = SpeciesService.getState().selectedSpecies;
     $scope.varieties = SpeciesService.getAllVarieties();
-    $scope.user = StateService.getUser();
     $scope.addForm = {name: '', visible: false};
     $scope.selectSpecies = function (speciesId) {
         $log.info('Species from modal selected:' + speciesId);

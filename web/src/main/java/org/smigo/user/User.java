@@ -32,6 +32,7 @@ import java.util.Locale;
 
 public class User {
 
+    @JsonIgnore
     private int id;
     @SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
     private String username;

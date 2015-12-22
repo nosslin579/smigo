@@ -1,6 +1,6 @@
-function AccountController($scope, $http, $log, StateService, UserService) {
+function AccountController($scope, $http, $log, UserService) {
 
-    $scope.userBean = angular.copy(StateService.getUser().currentUser);
+    $scope.userBean = angular.copy(UserService.getState().currentUser);
 
     $http.get('locales').then(function (resopnse) {
         $log.log('Locales retrieved', resopnse);
