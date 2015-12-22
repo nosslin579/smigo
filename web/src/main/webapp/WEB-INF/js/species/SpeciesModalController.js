@@ -7,9 +7,6 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
         SpeciesService.selectSpecies(SpeciesService.getSpecies(speciesId));
         $uibModalInstance.dismiss('selected species');
     };
-    $scope.close = function () {
-        $uibModalInstance.dismiss('close');
-    };
     $scope.addVariety = function (form, speciesId) {
         $log.log('Add Variety:', form);
         SpeciesService.addVariety(form.varietyName, speciesId).then(function () {
@@ -26,7 +23,7 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
         event.currentTarget.blur();
     };
     $rootScope.$broadcast('species-modal-open', $scope.species);
-    $scope.$on('modal.closing', function (a, b, c) {
+    $scope.$on('modal.closing', function () {
         $rootScope.$broadcast('species-modal-close', $scope.species);
     });
 
