@@ -46,19 +46,19 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public List<PlantDataBean> getPlants(int userId) {
+    public List<Plant> getPlants(int userId) {
         final String sql = String.format(SELECT, "user_id");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PlantDataBean.class), userId);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Plant.class), userId);
     }
 
     @Override
-    public List<PlantDataBean> getPlants(String username) {
+    public List<Plant> getPlants(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PlantDataBean.class), username);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Plant.class), username);
     }
 
     @Override
-    public void addPlants(List<PlantDataBean> plants, int userId) {
+    public void addPlants(List<Plant> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (" + userId + ", :speciesId, :year, :x, :y, :varietyId)",
@@ -66,7 +66,7 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void deletePlants(List<PlantDataBean> plants, int userId) {
+    public void deletePlants(List<Plant> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "DELETE FROM plants WHERE (user_id = " + userId + " AND species_id = :speciesId AND year = :year AND x = :x AND y = :y)",
@@ -74,14 +74,14 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void deletePlant(int userId, PlantDataBean plantData) {
+    public void deletePlant(int userId, Plant plant) {
         String sql = "DELETE FROM plants WHERE (user_id = ? AND species_id = ? AND year = ? AND x = ? AND y = ?)";
-        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY());
+        jdbcTemplate.update(sql, userId, plant.getSpeciesId(), plant.getYear(), plant.getX(), plant.getY());
     }
 
     @Override
-    public void addPlant(int userId, PlantDataBean plantData) {
+    public void addPlant(int userId, Plant plant) {
         String sql = "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY(), plantData.getVarietyId());
+        jdbcTemplate.update(sql, userId, plant.getSpeciesId(), plant.getYear(), plant.getX(), plant.getY(), plant.getVarietyId());
     }
 }

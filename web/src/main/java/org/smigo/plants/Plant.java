@@ -25,17 +25,17 @@ package org.smigo.plants;
 import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
 
 @UserHeaderAndAuthenticatedUserMatch
-public class PlantDataBean {
+public class Plant {
     private int x;
     private int y;
     private int year;
     private int speciesId;
     private Integer varietyId;
 
-    public PlantDataBean() {
+    public Plant() {
     }
 
-    public PlantDataBean(int speciesId, int year, int x, int y, Integer varietyId) {
+    public Plant(int speciesId, int year, int x, int y, Integer varietyId) {
         this.speciesId = speciesId;
         this.year = year;
         this.x = x;

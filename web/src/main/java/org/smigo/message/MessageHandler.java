@@ -24,7 +24,7 @@ package org.smigo.message;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.plants.PlantDataBean;
+import org.smigo.plants.Plant;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class MessageHandler {
         messageDao.addMessage(message);
     }
 
-    public void addNewYearNewsMessage(Optional<AuthenticatedUser> optionalUser, int year, List<PlantDataBean> plants, Locale locale) {
+    public void addNewYearNewsMessage(Optional<AuthenticatedUser> optionalUser, int year, List<Plant> plants, Locale locale) {
         final List<Integer> validYears = Arrays.asList(Year.now().getValue(), Year.now().plusYears(1).getValue());
         if (!optionalUser.isPresent() || !validYears.contains(year) || plants.size() < 10) {
             optionalUser.ifPresent(u -> log.info("Not adding new year news message for:" + u.getUsername()));

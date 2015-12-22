@@ -53,36 +53,36 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = "/rest/plant", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlantDataBean> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
+    public List<Plant> getPlants(@AuthenticationPrincipal AuthenticatedUser user) {
         return plantHandler.getPlants(user);
     }
 
     @RequestMapping(value = "/rest/plant/{username}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlantDataBean> getPlants(@PathVariable String username) {
+    public List<Plant> getPlants(@PathVariable String username) {
         return plantHandler.getPlants(username);
     }
 
     @RequestMapping(value = {"/rest/plant"}, method = RequestMethod.POST)
     @ResponseBody
-    public void addPlant(@Valid @RequestBody PlantDataBean plantData, BindingResult result, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+    public void addPlant(@Valid @RequestBody Plant plant, BindingResult result, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
         if (result.hasErrors()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            plantHandler.addPlant(user, plantData);
+            plantHandler.addPlant(user, plant);
         }
     }
 
     @RequestMapping(value = {"/rest/plant/add-year/{year}"}, method = RequestMethod.PUT)
     @ResponseBody
-    public List<PlantDataBean> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
+    public List<Plant> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
         return plantHandler.addYear(user, year, locale);
     }
 
     @RequestMapping(value = {"/rest/plant/delete"}, method = RequestMethod.POST)
     @ResponseBody
-    public void deletePlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
-        plantHandler.deletePlant(user, plantData);
+    public void deletePlant(@RequestBody Plant plant, @AuthenticationPrincipal AuthenticatedUser user) {
+        plantHandler.deletePlant(user, plant);
     }
 
     @RequestMapping(value = {"/plant/upload"}, method = RequestMethod.POST)

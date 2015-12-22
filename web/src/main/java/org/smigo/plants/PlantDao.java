@@ -25,15 +25,15 @@ package org.smigo.plants;
 import java.util.List;
 
 interface PlantDao {
-    List<PlantDataBean> getPlants(int userId);
+    List<Plant> getPlants(int userId);
 
-    List<PlantDataBean> getPlants(String username);
+    List<Plant> getPlants(String username);
 
-    void addPlants(List<PlantDataBean> plants, int userId);
+    void addPlants(List<Plant> plants, int userId);
 
-    void deletePlants(List<PlantDataBean> plants, int userId);
+    void deletePlants(List<Plant> plants, int userId);
 
-    void deletePlant(int userId, PlantDataBean plantData);
+    void deletePlant(int userId, Plant plant);
 
-    void addPlant(int userId, PlantDataBean plantData);
+    void addPlant(int userId, Plant plant);
 }

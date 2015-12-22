@@ -42,11 +42,11 @@ public class PlantHandler {
     @Autowired
     private MessageHandler messageHandler;
 
-    public List<PlantDataBean> getPlants(String username) {
+    public List<Plant> getPlants(String username) {
         return plantDao.getPlants(username);
     }
 
-    public List<PlantDataBean> getPlants(AuthenticatedUser user) {
+    public List<Plant> getPlants(AuthenticatedUser user) {
         if (user != null) {
             return plantDao.getPlants(user.getId());
         } else {
@@ -54,7 +54,7 @@ public class PlantHandler {
         }
     }
 
-    public void addPlants(List<PlantDataBean> plants, Integer userId) {
+    public void addPlants(List<Plant> plants, Integer userId) {
         if (!plants.isEmpty()) {
             if (userId == null) {
                 userSession.getPlants().addAll(plants);
@@ -64,15 +64,15 @@ public class PlantHandler {
         }
     }
 
-    public void addPlant(AuthenticatedUser user, PlantDataBean plantData) {
+    public void addPlant(AuthenticatedUser user, Plant plant) {
         if (user != null) {
-            plantDao.addPlant(user.getId(), plantData);
+            plantDao.addPlant(user.getId(), plant);
         } else {
-            userSession.getPlants().add(plantData);
+            userSession.getPlants().add(plant);
         }
     }
 
-    public void deletePlant(AuthenticatedUser user, PlantDataBean plant) {
+    public void deletePlant(AuthenticatedUser user, Plant plant) {
         if (user != null) {
             plantDao.deletePlant(user.getId(), plant);
         } else {
@@ -80,15 +80,15 @@ public class PlantHandler {
         }
     }
 
-    public void setPlants(AuthenticatedUser user, List<PlantDataBean> plantData) {
+    public void setPlants(AuthenticatedUser user, List<Plant> plant) {
         if (user == null) {
             userSession.getPlants().removeIf(p -> true);
-            userSession.getPlants().addAll(plantData);
+            userSession.getPlants().addAll(plant);
         }
     }
 
-    public List<PlantDataBean> addYear(AuthenticatedUser user, int year, Locale locale) {
-        final List<PlantDataBean> plants = getPlants(user);
+    public List<Plant> addYear(AuthenticatedUser user, int year, Locale locale) {
+        final List<Plant> plants = getPlants(user);
         if (plants.isEmpty() || plants.stream().anyMatch(p -> p.getYear() == year)) {
             return Collections.emptyList();
         }
@@ -97,8 +97,8 @@ public class PlantHandler {
         boolean containsLastYear = plants.stream().anyMatch(p -> p.getYear() == lastYear);
         int copyFromYear = containsLastYear ? lastYear : plants.stream().min((p1, p2) -> Integer.compare(p1.getYear(), p2.getYear())).get().getYear();
 
-        List<PlantDataBean> ret = new ArrayList<>();
-        for (PlantDataBean p : plants) {
+        List<Plant> ret = new ArrayList<>();
+        for (Plant p : plants) {
             if (p.getYear() == copyFromYear && !speciesHandler.getSpecies(p.getSpeciesId()).isAnnual()) {
                 p.setYear(year);
                 ret.add(p);

@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UploadBean {
-    private List<PlantDataBean> plants = new ArrayList<>();
+    private List<Plant> plants = new ArrayList<>();
 
-    public List<PlantDataBean> getPlants() {
+    public List<Plant> getPlants() {
         return plants;
     }
 
-    public void setPlants(List<PlantDataBean> plants) {
+    public void setPlants(List<Plant> plants) {
         this.plants = plants;
     }
 }
