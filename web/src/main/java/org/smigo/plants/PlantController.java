@@ -28,9 +28,11 @@ import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
@@ -63,8 +65,12 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = {"/rest/plant"}, method = RequestMethod.POST)
     @ResponseBody
-    public void addPlant(@RequestBody PlantDataBean plantData, @AuthenticationPrincipal AuthenticatedUser user) {
-        plantHandler.addPlant(user, plantData);
+    public void addPlant(@Valid @RequestBody PlantDataBean plantData, BindingResult result, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        if (result.hasErrors()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            plantHandler.addPlant(user, plantData);
+        }
     }
 
     @RequestMapping(value = {"/rest/plant/add-year/{year}"}, method = RequestMethod.PUT)

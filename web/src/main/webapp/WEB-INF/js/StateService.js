@@ -12,9 +12,11 @@ function StateService($http, $window, $timeout, $rootScope, $q, $log, GardenServ
                     garden.setPlants(response.data);
                 });
             user.currentUser = newUser;
+            $http.defaults.headers.common.SmigoUser = newUser.username;
         } else {
             garden.setPlants([]);
             user.currentUser = null;
+            $http.defaults.headers.common.SmigoUser = null;
         }
     });
 
