@@ -43,7 +43,7 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        final LogBean logBean = LogBean.create(request, response);
+        final Log logBean = Log.create(request, response);
         log.error("Error during request(Inside Spring MVC). Handler:" + handler + logBean, ex);
         if (ex != null) {
             final String note = ex.getClass().getName() + ":" + ex.getMessage();

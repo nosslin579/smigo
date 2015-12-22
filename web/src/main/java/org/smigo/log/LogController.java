@@ -59,7 +59,7 @@ public class LogController implements Serializable {
     @RequestMapping(value = "/rest/log/error", method = RequestMethod.POST)
     @ResponseBody
     public void logError(@RequestBody ReferenceError referenceError, HttpServletRequest request, HttpServletResponse response) {
-        final LogBean logBean = LogBean.create(request, response);
+        final Log logBean = Log.create(request, response);
         final String msg = "Angular error:\n" + referenceError + "\nPlants:\n" + StringUtils.arrayToDelimitedString(userSession.getPlants().toArray(), ",") + logBean;
         log.error(msg);
         mailHandler.sendAdminNotification("angular error", msg);

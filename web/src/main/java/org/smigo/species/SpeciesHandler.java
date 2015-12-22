@@ -89,7 +89,7 @@ public class SpeciesHandler {
         return speciesDao.getSpeciesTranslation(locale);
     }
 
-    public List<RuleBean> getRules() {
+    public List<Rule> getRules() {
         return ruleDao.getRules();
     }
 }

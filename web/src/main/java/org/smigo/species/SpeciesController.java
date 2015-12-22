@@ -59,7 +59,7 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public Object addSpecies(@Valid @RequestBody SpeciesAddBean species, BindingResult result,
+    public Object addSpecies(@Valid @RequestBody SpeciesAdd species, BindingResult result,
                              @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Adding species. Name:" + species.getVernacularName());
         if (result.hasErrors()) {
@@ -71,7 +71,7 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)
     @ResponseBody
-    public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearchBean species, Locale locale) {
+    public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearch species, Locale locale) {
         log.info("Searching species, query:" + species.getQuery());
         return speciesHandler.searchSpecies(species.getQuery(), locale);
     }

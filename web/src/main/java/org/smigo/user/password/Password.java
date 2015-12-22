@@ -1,4 +1,4 @@
-package org.smigo.species;
+package org.smigo.user.password;
 
 /*
  * #%L
@@ -22,21 +22,27 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.user.authentication.UserMustBeAuthenticated;
+class Password {
+    @CurrentPassword
+    private String oldPassword;
 
-import javax.validation.constraints.Size;
+    @NewPassword
+    private String newPassword;
 
-
-@UserMustBeAuthenticated
-public class SpeciesAddBean {
-    @Size(min = 2, max = 40, message = "msg.minandmaxlength")
-    private String vernacularName;
-
-    public String getVernacularName() {
-        return vernacularName;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setVernacularName(String vernacularName) {
-        this.vernacularName = vernacularName;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
 }

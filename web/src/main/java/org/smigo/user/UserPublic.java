@@ -1,4 +1,4 @@
-package org.smigo.user.password;
+package org.smigo.user;
 
 /*
  * #%L
@@ -22,15 +22,28 @@ package org.smigo.user.password;
  * #L%
  */
 
-class RequestPasswordLinkFormBean {
+public class UserPublic {
+    private String displayName;
 
-    private String email;
+    private String username;
 
-    public String getEmail() {
-        return email;
+    private String about;
+
+    public UserPublic(User user) {
+        this.displayName = user.getDisplayName();
+        this.username = user.getUsername();
+        this.about = user.getAbout();
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getAbout() {
+        return about;
     }
 }

@@ -70,7 +70,7 @@ class JdbcMessageDao implements MessageDao {
     }
 
     @Override
-    public int addMessage(AddMessageBean message) {
+    public int addMessage(MessageAdd message) {
         return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(message)).intValue();
     }
 }

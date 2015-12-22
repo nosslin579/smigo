@@ -72,20 +72,20 @@ public class UserController {
 
     @RequestMapping(value = "/rest/user", method = RequestMethod.GET)
     @ResponseBody
-    public UserBean getUser(@AuthenticationPrincipal AuthenticatedUser user) {
+    public User getUser(@AuthenticationPrincipal AuthenticatedUser user) {
         return userHandler.getUser(user);
     }
 
 
     @RequestMapping(value = "/rest/user/{username}", method = RequestMethod.GET)
     @ResponseBody
-    public PublicInfoUserBean getUser(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable String username) {
+    public UserPublic getUser(@AuthenticationPrincipal AuthenticatedUser user, @PathVariable String username) {
         return userHandler.getUserPublicInfo(username);
     }
 
     @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
     @ResponseBody
-    public List<ObjectError> addUser(@RequestBody @Valid RegisterFormBean user, BindingResult result, HttpServletResponse response, Locale locale) {
+    public List<ObjectError> addUser(@RequestBody @Valid UserAdd user, BindingResult result, HttpServletResponse response, Locale locale) {
         log.info("Create user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
@@ -98,7 +98,7 @@ public class UserController {
 
     @RequestMapping(value = "/rest/user", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<ObjectError> updateUser(@RequestBody @Valid UserBean userBean, BindingResult result,
+    public List<ObjectError> updateUser(@RequestBody @Valid User userBean, BindingResult result,
                                         @AuthenticationPrincipal AuthenticatedUser user,
                                         HttpServletResponse response) {
         if (result.hasErrors()) {

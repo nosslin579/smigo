@@ -23,7 +23,7 @@ package org.smigo.log;
  */
 
 interface LogDao {
-    void log(LogBean logBean);
+    void log(Log log);
 
     QueryReport getUserReport();
 

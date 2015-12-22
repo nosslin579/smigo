@@ -22,20 +22,31 @@ package org.smigo.user;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.SafeHtml;
+
+import javax.validation.constraints.AssertTrue;
 import java.util.Date;
 import java.util.Locale;
 
 public class User {
 
     private int id;
+    @SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
     private String username;
     private Locale locale;
     private Date createDate;
+    @AssertTrue
     private boolean termsOfService;
+    @Email
     private String email;
     private String displayName;
+    @JsonIgnore
     private int decideTime;
+    @SafeHtml(whitelistType = SafeHtml.WhiteListType.NONE)
     private String about;
+    @JsonIgnore
     private String password;
     private boolean enabled;
 

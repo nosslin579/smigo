@@ -50,12 +50,12 @@ public class LogHandler {
 
     public void log(HttpServletRequest request, HttpServletResponse response) {
         log.info(getRequestDump(request, response));
-        logDao.log(LogBean.create(request, response));
+        logDao.log(Log.create(request, response));
     }
 
     public String getRequestDump(HttpServletRequest request, HttpServletResponse response) {
         StringBuilder s = new StringBuilder("Logging request>");
-        s.append(LogBean.create(request, response).toString());
+        s.append(Log.create(request, response).toString());
         s.append(" Auth type:").append(request.getAuthType());
         s.append(" Principal:").append(request.getUserPrincipal());
         s.append(" Headers:");

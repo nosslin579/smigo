@@ -71,19 +71,19 @@ public class PasswordController {
 
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     @ResponseBody
-    public List<ObjectError> changePassword(@RequestBody @Valid PasswordFormBean passwordFormBean, BindingResult result,
+    public List<ObjectError> changePassword(@RequestBody @Valid Password password, BindingResult result,
                                             @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
-        userHandler.updatePassword(user.getId(), passwordFormBean.getNewPassword());
+        userHandler.updatePassword(user.getId(), password.getNewPassword());
         return Collections.emptyList();
     }
 
     @RequestMapping(value = "/request-password-link", method = RequestMethod.POST)
     @ResponseBody
-    public void requestPasswordLink(@RequestBody RequestPasswordLinkFormBean bean) {
+    public void requestPasswordLink(@RequestBody RequestPasswordLink bean) {
         userHandler.sendResetPasswordEmail(bean.getEmail());
     }
 

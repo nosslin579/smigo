@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.species;
 
 /*
  * #%L
@@ -22,28 +22,21 @@ package org.smigo.user;
  * #L%
  */
 
-public class PublicInfoUserBean {
-    private String displayName;
+import org.smigo.user.authentication.UserMustBeAuthenticated;
 
-    private String username;
+import javax.validation.constraints.Size;
 
-    private String about;
 
-    public PublicInfoUserBean(User user) {
-        this.displayName = user.getDisplayName();
-        this.username = user.getUsername();
-        this.about = user.getAbout();
+@UserMustBeAuthenticated
+public class SpeciesAdd {
+    @Size(min = 2, max = 40, message = "msg.minandmaxlength")
+    private String vernacularName;
+
+    public String getVernacularName() {
+        return vernacularName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getAbout() {
-        return about;
+    public void setVernacularName(String vernacularName) {
+        this.vernacularName = vernacularName;
     }
 }

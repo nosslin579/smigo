@@ -28,5 +28,5 @@ import java.util.Locale;
 public interface MessageDao {
     List<Message> getMessage(Locale locale, int from, int size);
 
-    int addMessage(AddMessageBean message);
+    int addMessage(MessageAdd message);
 }

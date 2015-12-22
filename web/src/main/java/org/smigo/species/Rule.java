@@ -25,7 +25,7 @@ package org.smigo.species;
 import java.util.Collections;
 import java.util.List;
 
-public class RuleBean {
+public class Rule {
 
     private final int id;
     private final int host;
@@ -33,7 +33,7 @@ public class RuleBean {
     private final int param;
     private final List<Integer> impacts;
 
-    public RuleBean(int id, int host, int type, int param, List<Integer> impacts) {
+    public Rule(int id, int host, int type, int param, List<Integer> impacts) {
         this.id = id;
         this.host = host;
         this.type = type;
@@ -61,7 +61,7 @@ public class RuleBean {
         return impacts;
     }
 
-    public static RuleBean create(int id, int host, int type, int causerSpecies, int causerFamily, int gap, List<Integer> impacts) {
+    public static Rule create(int id, int host, int type, int causerSpecies, int causerFamily, int gap, List<Integer> impacts) {
         int param = 0;
         if (type == 0 || type == 4) {
             param = causerSpecies;
@@ -75,6 +75,6 @@ public class RuleBean {
 
         final List<Integer> impactsNotNull = impacts == null ? Collections.emptyList() : Collections.unmodifiableList(impacts);
 
-        return new RuleBean(id, host, type, param, impactsNotNull);
+        return new Rule(id, host, type, param, impactsNotNull);
     }
 }

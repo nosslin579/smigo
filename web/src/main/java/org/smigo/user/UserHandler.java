@@ -71,7 +71,7 @@ public class UserHandler {
         throw new IllegalStateException("Tried 5 times and could not find a free username");
     }
 
-    public User createUser(RegisterFormBean user, Locale locale) {
+    public User createUser(UserAdd user, Locale locale) {
         final String encoded = passwordEncoder.encode(user.getPassword());
         return createUser(user.getUsername(), encoded, locale, user.isTermsOfService());
     }
@@ -103,16 +103,16 @@ public class UserHandler {
         userDao.updateUser(user);
     }
 
-    public PublicInfoUserBean getUserPublicInfo(String username) {
+    public UserPublic getUserPublicInfo(String username) {
         final List<User> user = userDao.getUsersByUsername(username);
-        return user.isEmpty() ? null : new PublicInfoUserBean(user.get(0));
+        return user.isEmpty() ? null : new UserPublic(user.get(0));
     }
 
-    public UserBean getUser(AuthenticatedUser user) {
+    public User getUser(AuthenticatedUser user) {
         if (user == null) {
             return null;
         }
-        return UserBean.create(userDao.getUserById(user.getId()));
+        return userDao.getUserById(user.getId());
     }
 
     public AuthenticatedUser getCurrentUser() {
@@ -123,12 +123,12 @@ public class UserHandler {
         return null;
     }
 
-    public void updateUser(int userId, UserBean userBean) {
-        final User user = userDao.getUserById(userId);
-        user.setAbout(userBean.getAbout());
-        user.setDisplayName(userBean.getDisplayName());
-        user.setEmail(userBean.getEmail());
-        user.setLocale(userBean.getLocale());
-        userDao.updateUser(user);
+    public void updateUser(int userId, User user) {
+        final User u = userDao.getUserById(userId);
+        u.setAbout(user.getAbout());
+        u.setDisplayName(user.getDisplayName());
+        u.setEmail(user.getEmail());
+        u.setLocale(user.getLocale());
+        userDao.updateUser(u);
     }
 }

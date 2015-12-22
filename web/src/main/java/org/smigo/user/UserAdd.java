@@ -29,9 +29,9 @@ import org.smigo.user.password.NewPassword;
 import javax.validation.constraints.AssertTrue;
 import java.util.Locale;
 
-public class RegisterFormBean {
+public class UserAdd {
 
-    private static final Logger log = LoggerFactory.getLogger(RegisterFormBean.class);
+    private static final Logger log = LoggerFactory.getLogger(UserAdd.class);
 
     @Username
     private String username = "";
@@ -44,7 +44,7 @@ public class RegisterFormBean {
 
     private Locale locale = Locale.ENGLISH;
 
-    public RegisterFormBean() {
+    public UserAdd() {
     }
 
     @Override

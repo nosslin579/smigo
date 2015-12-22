@@ -53,7 +53,7 @@ class JdbcLogDao implements LogDao {
     }
 
     @Override
-    public void log(LogBean req) {
+    public void log(Log req) {
         String sql = "INSERT INTO visitlog (sessionage,httpstatus,username,requestedurl,locales,useragent,referer,sessionid,method,xforwardedfor,host,querystring) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[] args = {
                 req.getSessionAge(),

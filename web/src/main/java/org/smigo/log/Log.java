@@ -29,7 +29,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-class LogBean {
+class Log {
 
     private final String remoteUser;
     private final String url;
@@ -44,9 +44,9 @@ class LogBean {
     private final String queryString;
     private final String host;
 
-    public LogBean(String remoteUser, String url, String locales, String useragent, String host,
-                   String referer, String sessionid, String method, String ip,
-                   int status, long sessionAge, String queryString) {
+    public Log(String remoteUser, String url, String locales, String useragent, String host,
+               String referer, String sessionid, String method, String ip,
+               int status, long sessionAge, String queryString) {
         this.remoteUser = remoteUser;
         this.url = url;
         this.locales = locales;
@@ -61,7 +61,7 @@ class LogBean {
         this.queryString = queryString;
     }
 
-    public static LogBean create(HttpServletRequest req, HttpServletResponse response) {
+    public static Log create(HttpServletRequest req, HttpServletResponse response) {
         StringBuilder locales = new StringBuilder();
         for (Enumeration<Locale> l = req.getLocales(); l.hasMoreElements(); ) {
             locales.append(l.nextElement().toString()).append(" ");
@@ -70,7 +70,7 @@ class LogBean {
         final HttpSession session = req.getSession(false);
         final long age = session == null ? 0 : (System.currentTimeMillis() - session.getCreationTime());
         final long ageSeconds = TimeUnit.MILLISECONDS.toSeconds(age);
-        return new LogBean(truncate(req.getRemoteUser()),
+        return new Log(truncate(req.getRemoteUser()),
                 truncate(req.getRequestURI()),
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),

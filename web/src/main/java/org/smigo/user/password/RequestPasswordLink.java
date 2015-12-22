@@ -1,4 +1,4 @@
-package org.smigo.species;
+package org.smigo.user.password;
 
 /*
  * #%L
@@ -22,15 +22,15 @@ package org.smigo.species;
  * #L%
  */
 
-public class SpeciesSearchBean {
-    private String query;
+class RequestPasswordLink {
 
-    public String getQuery() {
-        return query;
+    private String email;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void setQuery(String query) {
-        this.query = query;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
 }

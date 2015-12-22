@@ -52,7 +52,7 @@ public class MessageHandler {
         return messages;
     }
 
-    public int addMessage(AddMessageBean message, AuthenticatedUser user, Locale locale) {
+    public int addMessage(MessageAdd message, AuthenticatedUser user, Locale locale) {
         message.setSubmitterUserId(user.getId());
         message.setLocale(locale.toLanguageTag());
         return messageDao.addMessage(message);
@@ -62,7 +62,7 @@ public class MessageHandler {
         if (plants == 0) {
             return;
         }
-        final AddMessageBean message = new AddMessageBean();
+        final MessageAdd message = new MessageAdd();
         final String text = messageSource.getMessage("msg.welcomenewusermessage", new Object[]{user.getUsername()}, user.getLocale());
         message.setText(text);
         message.setSubmitterUserId(1);
@@ -77,7 +77,7 @@ public class MessageHandler {
             return;
         }
         final AuthenticatedUser user = optionalUser.get();
-        final AddMessageBean message = new AddMessageBean();
+        final MessageAdd message = new MessageAdd();
         final String text = messageSource.getMessage("msg.useraddedyearmessage", new Object[]{user.getUsername(), year}, locale);
         message.setText(text);
         message.setSubmitterUserId(1);

@@ -26,5 +26,5 @@ import java.util.List;
 
 interface RuleDao {
 
-    List<RuleBean> getRules();
+    List<Rule> getRules();
 }

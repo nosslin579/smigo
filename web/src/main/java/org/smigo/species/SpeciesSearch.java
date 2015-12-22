@@ -1,4 +1,4 @@
-package org.smigo.message;
+package org.smigo.species;
 
 /*
  * #%L
@@ -22,33 +22,15 @@ package org.smigo.message;
  * #L%
  */
 
-public class AddMessageBean {
+public class SpeciesSearch {
+    private String query;
 
-    private String locale;
-    private String text;
-    private int submitterUserId;
-
-    public String getLocale() {
-        return locale;
+    public String getQuery() {
+        return query;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public int getSubmitterUserId() {
-        return submitterUserId;
-    }
-
-    public void setSubmitterUserId(int submitterUserId) {
-        this.submitterUserId = submitterUserId;
-    }
 }

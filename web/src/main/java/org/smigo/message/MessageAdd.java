@@ -1,4 +1,4 @@
-package org.smigo.user.password;
+package org.smigo.message;
 
 /*
  * #%L
@@ -22,27 +22,33 @@ package org.smigo.user.password;
  * #L%
  */
 
-class PasswordFormBean {
-    @CurrentPassword
-    private String oldPassword;
+public class MessageAdd {
 
-    @NewPassword
-    private String newPassword;
+    private String locale;
+    private String text;
+    private int submitterUserId;
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getLocale() {
+        return locale;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
-    public String getOldPassword() {
-        return oldPassword;
+    public String getText() {
+        return text;
     }
 
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
+    public void setText(String text) {
+        this.text = text;
     }
 
+    public int getSubmitterUserId() {
+        return submitterUserId;
+    }
+
+    public void setSubmitterUserId(int submitterUserId) {
+        this.submitterUserId = submitterUserId;
+    }
 }

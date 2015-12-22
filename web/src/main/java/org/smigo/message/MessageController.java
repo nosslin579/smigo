@@ -54,7 +54,7 @@ public class MessageController implements Serializable {
 
     @RequestMapping(value = "/rest/message", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public int addMessage(@RequestBody AddMessageBean message, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response, Locale locale) {
+    public int addMessage(@RequestBody MessageAdd message, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response, Locale locale) {
         mailHandler.sendAdminNotification("message added to forum", message);
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

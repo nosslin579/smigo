@@ -52,18 +52,18 @@ class JdbcRuleDao implements RuleDao {
     private FamilyDao familyDao;
 
     @Override
-    public List<RuleBean> getRules() {
+    public List<Rule> getRules() {
         final Map<Integer, List<Integer>> impacts = getImpacts();
-        return jdbcTemplate.query(SELECT, new RowMapper<RuleBean>() {
+        return jdbcTemplate.query(SELECT, new RowMapper<Rule>() {
             @Override
-            public RuleBean mapRow(ResultSet rs, int rowNum) throws SQLException {
+            public Rule mapRow(ResultSet rs, int rowNum) throws SQLException {
                 final int id = rs.getInt("id");
                 final int host = rs.getInt("host");
                 final int type = rs.getInt("type");
                 final int causerSpecies = rs.getInt("causer"); //todo rename to causerspecies
                 final int causerFamily = rs.getInt("causerfamily");
                 final int gap = rs.getInt("gap"); //todo should return null if not set
-                return RuleBean.create(id, host, type, causerSpecies, causerFamily, gap, impacts.get(id));
+                return Rule.create(id, host, type, causerSpecies, causerFamily, gap, impacts.get(id));
             }
         });
     }
