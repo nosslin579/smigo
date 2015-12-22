@@ -64,7 +64,7 @@ public @interface UserHeaderAndAuthenticatedUserMatch {
         public boolean isValid(Object o, ConstraintValidatorContext constraintContext) {
             final Principal principal = request.getUserPrincipal();
             final String user = request.getHeader("SmigoUser");
-            return principal == null && user == null || principal != null && principal.getName().equals(user);
+            return principal == null && user == null || principal != null && user != null;
         }
 
     }

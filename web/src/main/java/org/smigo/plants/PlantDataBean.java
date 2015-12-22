@@ -22,8 +22,11 @@ package org.smigo.plants;
  * #L%
  */
 
+import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
+
 import java.io.Serializable;
 
+@UserHeaderAndAuthenticatedUserMatch
 public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
     private int x;
     private int y;
