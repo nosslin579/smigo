@@ -212,8 +212,12 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
     }
 
     return {
-        createGarden: function (plantDataArray, mutable) {
-            return new Garden(plantDataArray, mutable);
+        getGarden: function (username, mutable) {
+            var garden = new Garden([], mutable);
+            $http.get('/rest/plant/' + username).then(function (response) {
+                garden.setPlants(response.data);
+            });
+            return garden;
         }
     };
 }

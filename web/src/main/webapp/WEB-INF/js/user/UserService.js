@@ -1,6 +1,6 @@
 function UserService($log, $http, $rootScope, $q, $location) {
 
-    $log.log('UserService');
+    $log.log('UserService', [$http.defaults.headers]);
 
     var state = {};
 
@@ -14,7 +14,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
             $http.defaults.headers.common.SmigoUser = newUser.username;
         } else {
             state.currentUser = null;
-            $http.defaults.headers.common.SmigoUser = null;
+            delete $http.defaults.headers.common.SmigoUser;
         }
     }
 

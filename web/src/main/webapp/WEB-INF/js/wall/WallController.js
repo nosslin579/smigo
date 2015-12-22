@@ -5,11 +5,7 @@ function WallController($scope, $http, $log, $routeParams, GardenService, WallSe
             $scope.hostUser = response.data;
         });
 
-    $http.get('/rest/plant/' + $routeParams.username)
-        .then(function (response) {
-            $scope.garden = GardenService.createGarden(response.data, false);
-        });
-
+    $scope.garden = GardenService.getGarden($routeParams.username, true);
 }
 
 angular.module('smigoModule').controller('WallController', WallController);

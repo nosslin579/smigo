@@ -96,7 +96,6 @@
         <%@ include file="../js/social/TwitterDirective.js" %>
 
         <%@ include file="../js/MainMenuController.js" %>
-        <%@ include file="../js/StateService.js" %>
 
         <%@ include file="../js/EqualsDirective.js" %>
         <%@ include file="../js/TranslateFilter.js" %>
