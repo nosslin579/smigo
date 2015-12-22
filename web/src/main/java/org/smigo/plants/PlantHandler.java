@@ -72,17 +72,17 @@ public class PlantHandler {
         }
     }
 
-    public void deletePlant(AuthenticatedUser user, PlantData plantData) {
+    public void deletePlant(AuthenticatedUser user, PlantDataBean plant) {
         if (user != null) {
-            plantDao.deletePlant(user.getId(), plantData);
+            plantDao.deletePlant(user.getId(), plant);
         } else {
-            userSession.getPlants().remove(plantData);
+            userSession.getPlants().removeIf(p -> p.getSpeciesId() == plant.getSpeciesId() && p.getX() == plant.getX() && p.getY() == plant.getY() && p.getYear() == plant.getYear());
         }
     }
 
     public void setPlants(AuthenticatedUser user, List<PlantDataBean> plantData) {
         if (user == null) {
-            userSession.getPlants().removeAll(userSession.getPlants());
+            userSession.getPlants().removeIf(p -> true);
             userSession.getPlants().addAll(plantData);
         }
     }

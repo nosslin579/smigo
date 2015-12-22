@@ -58,7 +58,7 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void addPlants(List<? extends PlantData> plants, int userId) {
+    public void addPlants(List<PlantDataBean> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (" + userId + ", :speciesId, :year, :x, :y, :varietyId)",
@@ -66,7 +66,7 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void deletePlants(List<? extends PlantData> plants, int userId) {
+    public void deletePlants(List<PlantDataBean> plants, int userId) {
         SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
         namedParameterJdbcTemplate.batchUpdate(
                 "DELETE FROM plants WHERE (user_id = " + userId + " AND species_id = :speciesId AND year = :year AND x = :x AND y = :y)",
@@ -74,13 +74,13 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void deletePlant(int userId, PlantData plantData) {
+    public void deletePlant(int userId, PlantDataBean plantData) {
         String sql = "DELETE FROM plants WHERE (user_id = ? AND species_id = ? AND year = ? AND x = ? AND y = ?)";
         jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY());
     }
 
     @Override
-    public void addPlant(int userId, PlantData plantData) {
+    public void addPlant(int userId, PlantDataBean plantData) {
         String sql = "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (?,?,?,?,?,?)";
         jdbcTemplate.update(sql, userId, plantData.getSpeciesId(), plantData.getYear(), plantData.getX(), plantData.getY(), plantData.getVarietyId());
     }

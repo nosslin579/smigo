@@ -24,10 +24,8 @@ package org.smigo.plants;
 
 import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
 
-import java.io.Serializable;
-
 @UserHeaderAndAuthenticatedUserMatch
-public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Serializable {
+public class PlantDataBean {
     private int x;
     private int y;
     private int year;
@@ -50,27 +48,22 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
         return "{Plant:" + year + ", " + y + ", " + x + ", " + speciesId + "}";
     }
 
-    @Override
     public int getSpeciesId() {
         return speciesId;
     }
 
-    @Override
     public int getX() {
         return x;
     }
 
-    @Override
     public int getY() {
         return y;
     }
 
-    @Override
     public int getYear() {
         return year;
     }
 
-    @Override
     public Integer getVarietyId() {
         return varietyId;
     }
@@ -93,40 +86,5 @@ public class PlantDataBean implements PlantData, Comparable<PlantDataBean>, Seri
 
     public void setSpeciesId(int speciesId) {
         this.speciesId = speciesId;
-    }
-
-    @Override
-    public int compareTo(PlantDataBean p) {
-        if (this.year != p.year)
-            return this.year - p.year;
-        if (this.y != p.y)
-            return this.y - p.y;
-        if (this.x != p.x)
-            return this.x - p.x;
-        return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PlantData)) return false;
-
-        PlantData that = (PlantData) o;
-
-        if (speciesId != that.getSpeciesId()) return false;
-        if (x != that.getX()) return false;
-        if (y != that.getY()) return false;
-        if (year != that.getYear()) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        result = 31 * result + year;
-        result = 31 * result + speciesId;
-        return result;
     }
 }

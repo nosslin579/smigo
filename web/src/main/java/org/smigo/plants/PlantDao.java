@@ -29,11 +29,11 @@ interface PlantDao {
 
     List<PlantDataBean> getPlants(String username);
 
-    void addPlants(List<? extends PlantData> plants, int userId);
+    void addPlants(List<PlantDataBean> plants, int userId);
 
-    void deletePlants(List<? extends PlantData> plants, int userId);
+    void deletePlants(List<PlantDataBean> plants, int userId);
 
-    void deletePlant(int userId, PlantData plantData);
+    void deletePlant(int userId, PlantDataBean plantData);
 
-    void addPlant(int userId, PlantData plantData);
+    void addPlant(int userId, PlantDataBean plantData);
 }
