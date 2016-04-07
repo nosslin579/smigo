@@ -6,6 +6,9 @@ angular.module('smigoModule').directive('soFocusOnKeyPressed', function FocusOnK
             if (!element.is(':focus')) {
                 $log.log('FocusOnKeyPressedDirective keypressed', [e, document.activeElement]);
                 element.focus();
+                scope.$apply(function () {
+                    scope.search.query = '';
+                });
             }
         };
 
