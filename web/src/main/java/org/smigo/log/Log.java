@@ -71,7 +71,7 @@ class Log {
         final long age = session == null ? 0 : (System.currentTimeMillis() - session.getCreationTime());
         final long ageSeconds = TimeUnit.MILLISECONDS.toSeconds(age);
         return new Log(truncate(req.getRemoteUser()),
-                truncate(req.getRequestURI()),
+                truncate(getRequestURI(req, response)),
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),
                 truncate(req.getHeader("host")),
@@ -82,6 +82,15 @@ class Log {
                 response.getStatus(),
                 ageSeconds,
                 truncate(truncate(req.getQueryString())));
+    }
+
+    private static String getRequestURI(HttpServletRequest req, HttpServletResponse response) {
+        String errorUri = (String) req.getAttribute("javax.servlet.error.request_uri");
+        if (errorUri != null) {
+            return errorUri;
+        }
+        return req.getRequestURI();
+
     }
 
     private static String truncate(String s) {

@@ -91,24 +91,23 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.setOrder(-2);
+        registry.setOrder(-2);//Before controllers to avoid conflict
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
         registry.addViewController("/help").setViewName("help.jsp");
         registry.addViewController("/welcome-back").setViewName("welcome-back.jsp");
         registry.addViewController("/robots.txt").setViewName("robots-txt.jsp");
         registry.addViewController("/sitemap.xml").setViewName("sitemap-xml.jsp");
-        registry.addRedirectViewController("/garden", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/hasta-luego", "/welcome-back").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/beta", "/").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/tos.html", "/static/terms-of-service.html").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/accept-termsofservice", "/accept-terms-of-service").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/garden/**", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/hasta-luego/**", "/welcome-back").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/beta/**", "/").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/accept-termsofservice/**", "/accept-terms-of-service").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/signup/**", "/register").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/_=_", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/signup", "/register").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addRedirectViewController("/wall/{username}", "/gardener/{username}").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        registry.addStatusController("/addyear", HttpStatus.GONE);
-        registry.addStatusController("/deletespecies/*", HttpStatus.GONE);
-        registry.addStatusController("/garden/2014", HttpStatus.GONE);
+        registry.addRedirectViewController("/wall/{username}/**", "/gardener/{username}").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/tos.html", "/static/terms-of-service.html").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addStatusController("/addyear/**", HttpStatus.GONE);
+        registry.addStatusController("/deletespecies/**", HttpStatus.GONE);
         registry.addStatusController("/species/:id", HttpStatus.BAD_REQUEST);
         registry.addStatusController("/rule/:id", HttpStatus.BAD_REQUEST);
         registry.addStatusController("**/*.php", HttpStatus.NOT_FOUND);
