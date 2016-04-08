@@ -109,7 +109,7 @@ class JdbcLogDao implements LogDao {
                 "             GROUP BY creator) AS sc ON sc.speciescreator = users.id " +
                 "WHERE current_timestamp() < dateadd('YEAR',1,createdate) " +
                 "ORDER BY id DESC " +
-                "LIMIT 200;";
+                "LIMIT 50;";
 
         final List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, result);
@@ -120,8 +120,8 @@ class JdbcLogDao implements LogDao {
         String sql = "" +
                 "SELECT REFERER,COUNT(REFERER) " +
                 "FROM VISITLOG " +
-                "WHERE REFERER NOT LIKE 'http://smigo.org%' AND REFERER NOT LIKE 'http://sv.smigo.org%' AND XFORWARDEDFOR IN " +
-                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR) " +
+                "WHERE REFERER NOT REGEXP '^http:.{2,5}smigo.org' AND XFORWARDEDFOR IN " +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR) " +//IP from human actions
                 "GROUP BY REFERER " +
                 "ORDER BY COUNT(REFERER) DESC;";
 
@@ -143,7 +143,7 @@ class JdbcLogDao implements LogDao {
                 "  LEFT JOIN users u ON u.id = species.creator " +
                 "GROUP BY species.id " +
                 "ORDER BY id DESC " +
-                "LIMIT 20; ";
+                "LIMIT 40; ";
 
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
@@ -181,7 +181,7 @@ class JdbcLogDao implements LogDao {
                 "  USERAGENT\n" +
                 "FROM VISITLOG\n" +
                 "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN\n" +
-                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
+                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +//IP from human actions
                 "ORDER BY CREATEDATE DESC\n" +
                 "LIMIT 1500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
