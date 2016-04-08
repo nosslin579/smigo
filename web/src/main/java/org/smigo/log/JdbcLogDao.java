@@ -222,4 +222,12 @@ class JdbcLogDao implements LogDao {
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
+
+    @Override
+    public QueryReport getUserAgentReport() {
+        String sql = "SELECT VISITLOG.USERAGENT,COUNT(VISITLOG.USERAGENT) AS REQUESTS,GROUP_CONCAT(DISTINCT USERNAME) AS USERS FROM VISITLOG\n" +
+                "WHERE USERNAME IS NOT '' GROUP BY VISITLOG.USERAGENT ORDER BY COUNT(VISITLOG.USERAGENT) DESC LIMIT 20;";
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return new QueryReport(sql, maps);
+    }
 }

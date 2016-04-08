@@ -38,4 +38,6 @@ interface LogDao {
     void backup();
 
     QueryReport getVarietiesReport();
+
+    QueryReport getUserAgentReport();
 }

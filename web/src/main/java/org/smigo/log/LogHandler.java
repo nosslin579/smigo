@@ -97,6 +97,7 @@ public class LogHandler {
         mail.append(getHtmlTable(logDao.getSpeciesReport()));
         mail.append(getHtmlTable(logDao.getVarietiesReport()));
         mail.append(getHtmlTable(logDao.getSpeciesTranslationReport()));
+        mail.append(getHtmlTable(logDao.getUserAgentReport()));
         mail.append(getHtmlTable(logDao.getActivityReport()));
         mail.append("</body></html>");
         mailHandler.sendAdminNotificationHtml("weekly report", mail.toString());
