@@ -195,7 +195,7 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public QueryReport getUserAgentReport() {
-        String sql = "SELECT VISITLOG.USERAGENT,COUNT(VISITLOG.USERAGENT) AS REQUESTS,GROUP_CONCAT(DISTINCT USERNAME) AS USERS FROM VISITLOG\n" +
+        String sql = "SELECT REPLACE(VISITLOG.USERAGENT,'Mozilla/5.0 '),COUNT(VISITLOG.USERAGENT) AS REQUESTS,REGEXP_REPLACE(GROUP_CONCAT(DISTINCT USERNAME),'(?<=.{100}).+','...') AS USERS FROM VISITLOG\n" +
                 "WHERE USERNAME IS NOT '' GROUP BY VISITLOG.USERAGENT ORDER BY COUNT(VISITLOG.USERAGENT) DESC LIMIT 20;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
