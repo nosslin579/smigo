@@ -7,11 +7,8 @@
         {{species.vernacularName}}
     </h4>
 </div>
-<div class="modal-body">
-    <div ng-if="species.item">
-        {{'msg.itemexplained' | translate}}
-    </div>
 
+<div class="modal-body" ng-if="!species.item">
     <div ng-if="species.scientificName">
         <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
     </div>
@@ -90,6 +87,13 @@
     </div>
     </p>
 </div>
+
+<div class="modal-body" ng-if="species.item">
+    <div>
+        {{'msg.itemexplained' | translate}}
+    </div>
+</div>
+
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="$close()" id="close-variety-modal-button">{{'msg.close' | translate}}</button>
 </div>
