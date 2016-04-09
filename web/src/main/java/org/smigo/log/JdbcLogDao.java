@@ -78,37 +78,12 @@ class JdbcLogDao implements LogDao {
     @Override
     public QueryReport getUserReport() {
         String sql = "" +
-                "SELECT" +
-                "  users.username," +
-                "  users.locale," +
-                "  id," +
-                "  decidetime," +
-                "  users.createdate," +
-                "  requests," +
-                "  sessions," +
-                "  p.plants AS plants," +
-                "  p.years," +
-                "  speciescreated " +
-                "FROM users" +
-                "  LEFT JOIN (SELECT" +
-                "               user_id," +
-                "               count(*)  AS plants," +
-                "               group_concat(DISTINCT year) AS years" +
-                "             FROM plants " +
-                "             GROUP BY user_id) AS p ON p.user_id = users.id" +
-                "  LEFT JOIN (SELECT" +
-                "               username," +
-                "               count(*)                  AS requests," +
-                "               count(DISTINCT sessionid) AS sessions" +
-                "             FROM visitlog" +
-                "             GROUP BY username) AS r ON r.username = users.username" +
-                "  LEFT JOIN (SELECT" +
-                "               creator AS speciescreator," +
-                "               count(creator) AS speciescreated" +
-                "             FROM species" +
-                "             GROUP BY creator) AS sc ON sc.speciescreator = users.id " +
-                "WHERE current_timestamp() < dateadd('YEAR',1,createdate) " +
-                "ORDER BY id DESC " +
+                "SELECT users.username,users.locale,id,decidetime,users.createdate,p.plants AS plants,p.years,speciescreated,lastactive\n" +
+                "FROM (SELECT username,MAX(CREATEDATE) AS lastactive FROM visitlog WHERE USERNAME != '' AND current_timestamp() < dateadd('DAY',8,createdate) GROUP BY username) AS activeusers\n" +
+                "  LEFT JOIN USERS ON activeusers.username = users.username\n" +
+                "  LEFT JOIN (SELECT user_id,count(*) AS plants,group_concat(DISTINCT year) AS years FROM plants GROUP BY user_id) AS p ON p.user_id = users.id\n" +
+                "  LEFT JOIN (SELECT creator AS speciescreator,count(creator) AS speciescreated FROM species GROUP BY creator) AS sc ON sc.speciescreator = users.id\n" +
+                "ORDER BY lastactive DESC\n" +
                 "LIMIT 50;";
 
         final List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
