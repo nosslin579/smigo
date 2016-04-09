@@ -230,4 +230,13 @@ class JdbcLogDao implements LogDao {
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
+
+    @Override
+    public QueryReport getUrlReport() {
+        String sql = "SELECT METHOD,REQUESTEDURL,COUNT(REQUESTEDURL)AS COUNT FROM VISITLOG\n" +
+                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN (SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
+                "GROUP BY REQUESTEDURL,METHOD ORDER BY COUNT(REQUESTEDURL) DESC LIMIT 40;";
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return new QueryReport(sql, maps);
+    }
 }

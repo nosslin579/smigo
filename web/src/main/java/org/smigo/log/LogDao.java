@@ -40,4 +40,6 @@ interface LogDao {
     QueryReport getVarietiesReport();
 
     QueryReport getUserAgentReport();
+
+    QueryReport getUrlReport();
 }
