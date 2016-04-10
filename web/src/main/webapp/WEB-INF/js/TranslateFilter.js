@@ -1,20 +1,20 @@
 function translateFilter($rootScope, $log, $http, $route) {
-    var msg = initData.messages;
-    $log.log('TranslateFilter', [msg]);
+    var allMessages = initData.messages;
+    $log.log('TranslateFilter', [allMessages]);
 
 
     $rootScope.$on('new-messages-available', function (event, messageKey, value) {
-        $log.debug("Adding translation", [messageKey, value, msg]);
-        msg[messageKey] = value;
+        $log.debug("Adding translation", [messageKey, value, allMessages]);
+        allMessages[messageKey] = value;
     });
 
     $rootScope.$on('current-user-changed', function (event, user) {
         $http.get('/rest/translation')
             .then(function (response) {
-                if (!angular.equals(msg, response.data)) {
-                    $log.info('Messages reloaded and they differ, firing messages-reloaded', [msg, response.data]);
-                    msg = response.data;
-                    $rootScope.$broadcast('messages-reloaded', msg);
+                if (!angular.equals(allMessages, response.data)) {
+                    $log.info('Messages reloaded and they differ, firing messages-reloaded', [allMessages, response.data]);
+                    allMessages = response.data;
+                    $rootScope.$broadcast('messages-reloaded', allMessages);
                     $route.reload();
                 }
             });
@@ -23,34 +23,33 @@ function translateFilter($rootScope, $log, $http, $route) {
     /**
      * Param can be resolved from either message or messageParameter.
      */
-    function getParameter(message, messageParameter) {
-        if (!message.messageParameter && !messageParameter) {
-            return [];
-        }
-        var param = message.messageParameter ? message.messageParameter : messageParameter;
-        return param instanceof Array ? param : [param];
+    function getParameter(message, messageParameter1, messageParameter2) {
+        var ret = [].concat(message.messageParameter, messageParameter1, messageParameter2);
+        return ret.filter(function (n) {
+            return n != undefined
+        });//removes undefined and null elements
     }
 
-    return function (message, messageParameter) {
+    return function (message, messageParameter1, messageParameter2) {
         if (!message) {
-            $log.error('Can not translate', message, messageParameter);
+            $log.error('Can not translate', message, messageParameter1, messageParameter2);
             return 'n/a';
         }
 
-        //resolve parameter
-        var paramArray = getParameter(message, messageParameter),
-            translatedMessage = message.messageKey ? msg[message.messageKey] : msg[message];
+        var paramArray = getParameter(message, messageParameter1, messageParameter2),
+            translatedMessage = message.messageKey ? allMessages[message.messageKey] : allMessages[message];
 
         if (!translatedMessage) {
-            $log.error('Could not translate:', [msg, message, messageParameter]);
+            $log.error('Could not translate:', [allMessages, message, messageParameter1, messageParameter2]);
             return '-';
         }
 
+        //String interpolate params
         for (var i = 0; i < paramArray.length; i++) {
             var param = paramArray[i];
-            translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param.messageKey ? msg[param.messageKey] : param);
+            translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param.messageKey ? allMessages[param.messageKey] : param);
         }
-//        $log.debug('Translate:'+translatedMessage, [msg, message, messageParameter,paramArray]);
+        //$log.debug('Translate:' + translatedMessage, [msg, message, paramArray]);
         return translatedMessage;
     };
 }
