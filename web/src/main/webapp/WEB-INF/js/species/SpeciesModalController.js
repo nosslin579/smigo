@@ -29,4 +29,4 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
 
 }
 
-angular.module('smigoModule').controller('SpeciesModalControvarietyControllerller', SpeciesModalController);
+angular.module('smigoModule').controller('SpeciesModalController', SpeciesModalController);
