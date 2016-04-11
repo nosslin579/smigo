@@ -30,6 +30,7 @@ import javax.validation.constraints.Size;
 @UserMustBeAuthenticated
 public class SpeciesAdd {
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
+    @UniqueSpeciesName
     private String vernacularName;
 
     public String getVernacularName() {

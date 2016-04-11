@@ -46,7 +46,7 @@
                 <hr/>
                 <!--##### Add species button #####-->
                 <div class="has-error">
-                    <span ng-repeat="error in speciesState.addSpeciesErrors" class="help-block">{{error.defaultMessage | translate:error.arguments}}</span>
+                    <span ng-repeat="error in speciesState.addSpeciesErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:search.query}}</span>
                 </div>
                 <button ng-click="addSpecies(search.query)" class="btn btn-primary" ng-disabled="speciesState.pendingAdd" ng-if="search.query" id="add-species-button">
                     <span class="glyphicon glyphicon-plus"></span> {{'msg.add-species' | translate:search.query }}
