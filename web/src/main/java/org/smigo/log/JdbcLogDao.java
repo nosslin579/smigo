@@ -161,7 +161,7 @@ class JdbcLogDao implements LogDao {
     @Override
     public void backup() {
         final String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String dir = System.getProperty("user.dir");
+        final String dir = System.getProperty("user.dir");//todo change to property
         final String backupFile = dir + "/dbbackup/file" + date + ".zip";
         String sqlFile = "BACKUP TO '" + backupFile + "';";
         log.info("Backup to file:" + backupFile);
