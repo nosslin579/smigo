@@ -1,11 +1,22 @@
-<div class="modal-header">
+<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName}">
     <button type="button" class="close" ng-click="$close()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
-    <h4 class="modal-title">
+    <h4 class="modal-title" ng-if="!editVernacular.visible">
         <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
-        {{species.vernacularName}}
+        <span ng-click="editVernacular.visible=true">{{species.vernacularName}}</span>
     </h4>
+
+
+    <form class="form-inline" ng-submit="setSpeciesTranslation(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
+        <div class="has-error">
+            <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.lastName}}</span>
+        </div>
+        <div class="form-group" ng-class="{'has-error':editVernacular.objectErrors}">
+            <label for="editVernacularInput"><img ng-src="{{'/static/species/' + species.iconFileName}}"/></label>
+            <input class="form-control" type="text" ng-model="editVernacular.name" id="editVernacularInput" autofocus ng-blur="editVernacular.visible=false">
+        </div>
+    </form>
 </div>
 
 <div class="modal-body" ng-if="!species.item">

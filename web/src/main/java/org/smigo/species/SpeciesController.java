@@ -59,14 +59,27 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public Object addSpecies(@Valid @RequestBody SpeciesAdd species, BindingResult result,
+    public Object addSpecies(@Valid @RequestBody VernacularName name, BindingResult result,
                              @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
-        log.info("Adding species. Name:" + species.getVernacularName());
+        log.info("Adding species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
-        return speciesHandler.addSpecies(species.getVernacularName(), user, locale);
+        return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
+    }
+
+    @RequestMapping(value = "/rest/species/{id}/translation/{locale}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Object setSpeciesTranslation(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
+                                        @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
+        log.info("Updating species. Name:" + name.getVernacularName());
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.getAllErrors();
+        }
+        speciesHandler.setSpeciesTranslation(name, id, user.getId(), sessionLocale);
+        return null;
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)

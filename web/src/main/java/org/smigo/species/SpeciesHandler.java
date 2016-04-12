@@ -49,8 +49,8 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.setSpeciesTranslation(id, vernacularName, null);
-        speciesDao.setSpeciesTranslation(id, vernacularName, locale);
+        speciesDao.insertSpeciesTranslation(id, vernacularName, null);
+        speciesDao.insertSpeciesTranslation(id, vernacularName, locale);
         return id;
     }
 
@@ -91,5 +91,10 @@ public class SpeciesHandler {
 
     public List<Rule> getRules() {
         return ruleDao.getRules();
+    }
+
+    public void setSpeciesTranslation(VernacularName name, int speciesId, int userId, Locale locale) {
+        log.info("Species updated" + name);
+        speciesDao.setSpeciesTranslation(speciesId, name.getVernacularName(), locale);
     }
 }

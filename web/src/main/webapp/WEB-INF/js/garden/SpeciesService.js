@@ -1,4 +1,4 @@
-function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
+function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter, $log) {
     var state = {},
         search = {previous: [], promise: ""},
         ruleMap = {};
@@ -124,11 +124,28 @@ function SpeciesService($timeout, $http, $rootScope, translateFilter, $log) {
                 state.speciesArray.push(addedSpecies);
                 state.selectedSpecies = addedSpecies;
                 $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
+                $uibModal.open({
+                    templateUrl: 'species-modal.html',
+                    controller: SpeciesModalController
+                });
             }).catch(function (error) {
                 $log.warn('Could not add species', [vernacularName, error]);
                 state.addSpeciesErrors = error.data;
             }).finally(function () {
                 state.pendingAdd = false;
+            });
+        },
+        setSpeciesTranslation: function (species, updateObj, locale) {
+            var data = {vernacularName: updateObj.name};
+            updateObj.lastName = updateObj.name;
+            return $http.put('/rest/species/' + species.id + '/translation/' + locale, data).then(function (response) {
+                $log.log('Response from put species translation', [response]);
+                updateObj.visible = false;
+                delete updateObj.objectErrors;
+                species.vernacularName = updateObj.name;
+                $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
+            }).catch(function (response) {
+                updateObj.objectErrors = response.data;
             });
         },
         searchSpecies: function (sq) {

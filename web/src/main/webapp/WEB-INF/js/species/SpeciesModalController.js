@@ -1,5 +1,6 @@
-function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, SpeciesService) {
+function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, UserService, SpeciesService) {
     $scope.species = SpeciesService.getState().selectedSpecies;
+    $scope.currentUser = UserService.getState().currentUser;
     $scope.varieties = SpeciesService.getAllVarieties();
     $scope.addForm = {name: '', visible: false};
     $scope.selectSpecies = function (speciesId) {
@@ -7,6 +8,7 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Spe
         SpeciesService.selectSpecies(SpeciesService.getSpecies(speciesId));
         $uibModalInstance.dismiss('selected species');
     };
+    $scope.setSpeciesTranslation = SpeciesService.setSpeciesTranslation;
     $scope.addVariety = function (form, speciesId) {
         $log.log('Add Variety:', form);
         SpeciesService.addVariety(form.varietyName, speciesId).then(function () {

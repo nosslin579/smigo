@@ -34,11 +34,15 @@ interface SpeciesDao {
 
     List<Species> getUserSpecies(int userId);
 
+    Map<Locale, String> getSpeciesTranslation(int speciesId);
+
     Species getSpecies(int id);
 
-    void setSpeciesTranslation(int id, String vernacularName, Locale locale);
+    void insertSpeciesTranslation(int id, String vernacularName, Locale locale);
 
     List<Species> searchSpecies(String query, Locale locale);
 
     Map<String, String> getSpeciesTranslation(Locale locale);
+
+    void setSpeciesTranslation(int id, String vernacularName, Locale locale);
 }

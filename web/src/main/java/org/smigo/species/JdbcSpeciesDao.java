@@ -115,6 +115,24 @@ class JdbcSpeciesDao implements SpeciesDao {
         });
     }
 
+    @Override
+    public Map<Locale, String> getSpeciesTranslation(int speciesId) {
+        final String sql = "SELECT * FROM species_translation WHERE species_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{speciesId}, new int[]{Types.INTEGER}, new ResultSetExtractor<Map<Locale, String>>() {
+            @Override
+            public Map<Locale, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                Map<Locale, String> ret = new HashMap<>(rs.getFetchSize());
+                while (rs.next()) {
+                    String language = rs.getString("language");
+                    String country = rs.getString("country");
+                    String vernacularName = rs.getString("vernacular_name");
+                    ret.put(new Locale(language, country), vernacularName);
+                }
+                return ret;
+            }
+        });
+    }
+
     private List<Species> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
         List<Object> sqlArgs = new ArrayList<Object>();
         sqlArgs.add(locale.getLanguage());
@@ -134,7 +152,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void setSpeciesTranslation(int id, String vernacularName, Locale locale) {
+    public void insertSpeciesTranslation(int id, String vernacularName, Locale locale) {
         String language = locale == null ? "" : locale.getLanguage();
         String country = locale == null ? "" : locale.getCountry();
         MapSqlParameterSource s = new MapSqlParameterSource();
@@ -143,6 +161,12 @@ class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("country", country, Types.VARCHAR);
         s.addValue("vernacular_name", vernacularName);
         insertSpeciesTranslation.execute(s);
+    }
+
+    @Override
+    public void setSpeciesTranslation(int id, String vernacularName, Locale locale) {
+        String sql = "MERGE INTO SPECIES_TRANSLATION (SPECIES_ID, LANGUAGE, COUNTRY, VERNACULAR_NAME) KEY (SPECIES_ID, LANGUAGE, COUNTRY) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, id, locale.getLanguage(), locale.getCountry(), vernacularName);
     }
 
     private static class SpeciesViewRowMapper implements RowMapper<Species> {
