@@ -199,13 +199,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         d.findElement(By.id("add-species-button")).click();
-        Thread.sleep(3000);
+        Thread.sleep(1000);
+        d.findElement(By.id("close-species-modal-button")).click();
+        Thread.sleep(1000);
         d.findElement(By.className("square")).click();
-        Thread.sleep(3000);
+        Thread.sleep(1000);
 
         d.findElement(By.id("logout-link")).click();
 
@@ -398,7 +400,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         //select and close
         d.findElement(By.linkText(varietyName)).click();
-        d.findElement(By.id("close-variety-modal-button")).click();
+        d.findElement(By.id("close-species-modal-button")).click();
 
         Assert.assertEquals(d.findElement(By.partialLinkText("Grapes")).getText(), speciesText);
 
