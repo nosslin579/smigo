@@ -49,7 +49,7 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertSpeciesTranslation(id, vernacularName, null);
+        speciesDao.insertSpeciesTranslation(id, vernacularName, Locale.ROOT);
         speciesDao.insertSpeciesTranslation(id, vernacularName, locale);
         return id;
     }

@@ -153,12 +153,10 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public void insertSpeciesTranslation(int id, String vernacularName, Locale locale) {
-        String language = locale == null ? "" : locale.getLanguage();
-        String country = locale == null ? "" : locale.getCountry();
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("species_id", id, Types.INTEGER);
-        s.addValue("language", language, Types.VARCHAR);
-        s.addValue("country", country, Types.VARCHAR);
+        s.addValue("language", locale.getLanguage(), Types.VARCHAR);
+        s.addValue("country", locale.getCountry(), Types.VARCHAR);
         s.addValue("vernacular_name", vernacularName);
         insertSpeciesTranslation.execute(s);
     }
