@@ -44,6 +44,7 @@ package org.smigo.species;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,8 @@ public class Species {
     private String scientificName;
     private String iconFileName;
 
+    @JsonIgnore
+    private int creator;
 
     public Species(int id) {
         this.id = id;
@@ -110,6 +113,14 @@ public class Species {
 
     public String getIconFileName() {
         return iconFileName;
+    }
+
+    public int getCreator() {
+        return creator;
+    }
+
+    public void setCreator(int creator) {
+        this.creator = creator;
     }
 
     @Override

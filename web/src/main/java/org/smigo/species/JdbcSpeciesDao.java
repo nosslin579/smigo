@@ -178,6 +178,7 @@ class JdbcSpeciesDao implements SpeciesDao {
             ret.setFamily(Family.create(rs.getInt("family_id"), rs.getString("family_name")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
+            ret.setCreator(rs.getInt("creator"));
             return ret;
         }
     }

@@ -42,4 +42,11 @@ public class VernacularName {
     public void setVernacularName(String vernacularName) {
         this.vernacularName = vernacularName;
     }
+
+    @Override
+    public String toString() {
+        return "VernacularName{" +
+                "vernacularName='" + vernacularName + '\'' +
+                '}';
+    }
 }

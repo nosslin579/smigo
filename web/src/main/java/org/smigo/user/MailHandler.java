@@ -22,6 +22,8 @@ package org.smigo.user;
  * #L%
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -36,6 +38,7 @@ import javax.mail.internet.MimeMessage;
 
 @Component
 public class MailHandler {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private JavaMailSenderImpl mailSender;
@@ -64,14 +67,18 @@ public class MailHandler {
         mailSender.send(simpleMailMessage);
     }
 
-    public void sendAdminNotificationHtml(String subject, String text) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setText(text, true);
-        helper.setTo(notifierEmail);
-        helper.setFrom(mailSenderUsername);
-        helper.setSubject("[SMIGO] " + subject);
-        mailSender.send(message);
+    public void sendAdminNotificationHtml(String subject, String text) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setText(text, true);
+            helper.setTo(notifierEmail);
+            helper.setFrom(mailSenderUsername);
+            helper.setSubject("[SMIGO] " + subject);
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            log.error("Send message failed:" + text, e);
+        }
     }
 
     public void sendClientMessage(String emailAddress, String subject, String text) {

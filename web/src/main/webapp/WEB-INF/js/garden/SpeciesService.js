@@ -142,8 +142,12 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 $log.log('Response from put species translation', [response]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
-                species.vernacularName = updateObj.name;
-                $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
+                if (response.status === 200) {
+                    species.vernacularName = updateObj.name;
+                    $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
+                } else {
+                    updateObj.displayModReview = true;
+                }
             }).catch(function (response) {
                 updateObj.objectErrors = response.data;
             });

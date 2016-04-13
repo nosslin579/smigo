@@ -78,7 +78,10 @@ public class SpeciesController implements Serializable {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
-        speciesHandler.setSpeciesTranslation(name, id, user.getId(), sessionLocale);
+        Review review = speciesHandler.setSpeciesTranslation(name, id, user, sessionLocale);
+        if (review == Review.MODERATOR) {
+            response.setStatus(202);
+        }
         return null;
     }
 
