@@ -211,7 +211,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         d.findElement(By.id("logout-link")).click();
 
-        d.get(HOST_URL + "/wall/" + username);
+        d.get(HOST_URL + "/gardener/" + username);
 
         final WebElement plant = d.findElement(By.className("plant"));
         Thread.sleep(500);
