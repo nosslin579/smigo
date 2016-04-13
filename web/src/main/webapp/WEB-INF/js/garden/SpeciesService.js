@@ -136,8 +136,11 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             });
         },
         setSpeciesTranslation: function (species, updateObj, locale) {
+            if (species.vernacularName === updateObj.name) {
+                updateObj.visible = false;
+                return;
+            }
             var data = {vernacularName: updateObj.name};
-            updateObj.lastName = updateObj.name;
             return $http.put('/rest/species/' + species.id + '/translation/' + locale, data).then(function (response) {
                 $log.log('Response from put species translation', [response]);
                 updateObj.visible = false;
@@ -150,6 +153,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 }
             }).catch(function (response) {
                 updateObj.objectErrors = response.data;
+                updateObj.errorName = updateObj.name;
             });
         },
         searchSpecies: function (sq) {
