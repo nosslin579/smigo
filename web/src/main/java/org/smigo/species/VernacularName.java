@@ -22,14 +22,12 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
 import org.smigo.user.authentication.UserMustBeAuthenticated;
 
 import javax.validation.constraints.Size;
 
 
 @UserMustBeAuthenticated
-@UserHeaderAndAuthenticatedUserMatch
 public class VernacularName {
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
     @UniqueSpeciesName

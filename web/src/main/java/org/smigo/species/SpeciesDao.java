@@ -45,4 +45,6 @@ interface SpeciesDao {
     Map<String, String> getSpeciesTranslation(Locale locale);
 
     void setSpeciesTranslation(int id, String vernacularName, Locale locale);
+
+    void updateSpecies(int id, Species species);
 }

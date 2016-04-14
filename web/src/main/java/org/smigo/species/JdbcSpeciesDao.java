@@ -167,6 +167,12 @@ class JdbcSpeciesDao implements SpeciesDao {
         jdbcTemplate.update(sql, id, locale.getLanguage(), locale.getCountry(), vernacularName);
     }
 
+    @Override
+    public void updateSpecies(int id, Species species) {
+        String sql = "UPDATE SPECIES SET SCIENTIFIC_NAME = ? WHERE ID=?;";
+        jdbcTemplate.update(sql, species.getScientificName(), id);
+    }
+
     private static class SpeciesViewRowMapper implements RowMapper<Species> {
 
         @Override

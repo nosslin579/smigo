@@ -135,7 +135,30 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 state.pendingAdd = false;
             });
         },
+        updateSpecies: function (species, updateObj) {
+            $log.info('updateSpecies', [species, updateObj]);
+            if (species[updateObj.field] === updateObj.value) {
+                updateObj.visible = false;
+                return;
+            }
+            var data = {scientificName: species.scientificName};
+            data[updateObj.field] = updateObj.value;
+            return $http.put('/rest/species/' + species.id, data).then(function (response) {
+                $log.log('Response from put species', [response]);
+                updateObj.visible = false;
+                delete updateObj.objectErrors;
+                if (response.status === 200) {
+                    angular.extend(species, data);//merge new values into species
+                } else if (response.status === 202) {
+                    updateObj.displayModReview = true;
+                }
+            }).catch(function (response) {
+                updateObj.objectErrors = response.data;
+                updateObj.errorName = updateObj.value;
+            });
+        },
         setSpeciesTranslation: function (species, updateObj, locale) {
+            $log.info('setSpeciesTranslation', [species, updateObj, locale]);
             if (species.vernacularName === updateObj.name) {
                 updateObj.visible = false;
                 return;
@@ -148,7 +171,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 if (response.status === 200) {
                     species.vernacularName = updateObj.name;
                     $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
-                } else {
+                } else if (response.status === 202) {
                     updateObj.displayModReview = true;
                 }
             }).catch(function (response) {

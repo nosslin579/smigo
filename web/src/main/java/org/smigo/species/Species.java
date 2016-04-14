@@ -47,11 +47,15 @@ package org.smigo.species;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.user.authentication.UserMustBeAuthenticated;
 
+import javax.validation.constraints.Size;
+
+@UserMustBeAuthenticated
 public class Species {
     private static final Logger log = LoggerFactory.getLogger(Species.class);
 
-    private final int id;
+    private int id;
 
     private Family family = null;
 
@@ -61,11 +65,15 @@ public class Species {
     // If true instance is not a species but an object e.g. path, wall or house.
     private boolean item = false;
 
+    @Size(min = 2, max = 100, message = "msg.minandmaxlength")
     private String scientificName;
     private String iconFileName;
 
     @JsonIgnore
     private int creator;
+
+    public Species() {
+    }
 
     public Species(int id) {
         this.id = id;
@@ -149,5 +157,18 @@ public class Species {
 
     public String getMessageKey() {
         return "msg.species" + id;
+    }
+
+    @Override
+    public String toString() {
+        return "Species{" +
+                "id=" + id +
+                ", family=" + family +
+                ", annual=" + annual +
+                ", item=" + item +
+                ", scientificName='" + scientificName + '\'' +
+                ", iconFileName='" + iconFileName + '\'' +
+                ", creator=" + creator +
+                '}';
     }
 }

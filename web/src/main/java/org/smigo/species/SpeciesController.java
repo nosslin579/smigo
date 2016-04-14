@@ -85,6 +85,22 @@ public class SpeciesController implements Serializable {
         return null;
     }
 
+    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Object updateSpecies(@Valid @RequestBody Species species, BindingResult result, @PathVariable int id,
+                                @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        log.info("Updating species. Species:" + species);
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return result.getAllErrors();
+        }
+        Review review = speciesHandler.updateSpecies(id, species, user);
+        if (review == Review.MODERATOR) {
+            response.setStatus(202);
+        }
+        return null;
+    }
+
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)
     @ResponseBody
     public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearch species, Locale locale) {

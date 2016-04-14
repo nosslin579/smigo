@@ -98,7 +98,7 @@ public class SpeciesHandler {
 
     public Review setSpeciesTranslation(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(speciesId);
-        log.info("Species updated " + name + user + locale + species);
+        log.info("Updating species translation " + name + user + locale + species);
         if (species.getCreator() == user.getId()) {
             speciesDao.setSpeciesTranslation(speciesId, name.getVernacularName(), locale);
             return Review.NONE;
@@ -111,6 +111,24 @@ public class SpeciesHandler {
                 "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
                 "MERGE INTO SPECIES_TRANSLATION (SPECIES_ID, LANGUAGE, COUNTRY, VERNACULAR_NAME) KEY (SPECIES_ID, LANGUAGE, COUNTRY) VALUES " +
                 "(" + speciesId + ", '" + locale.getLanguage() + "','" + locale.getCountry() + "','" + name.getVernacularName() + "')";
+        mailHandler.sendAdminNotification("review request", text);
+        return Review.MODERATOR;
+    }
+
+    public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
+        Species originalSpecies = getSpecies(speciesId);
+        log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
+        if (originalSpecies.getCreator() == user.getId()) {
+            speciesDao.updateSpecies(speciesId, updatedSpecies);
+            return Review.NONE;
+        }
+        String translation = speciesDao.getSpeciesTranslation(speciesId).toString();
+        String text = "Species change." + System.lineSeparator() +
+                "From: " + originalSpecies + System.lineSeparator() +
+                "To: " + updatedSpecies + " " + System.lineSeparator() +
+                "SpeciesId: " + speciesId + System.lineSeparator() +
+                "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
+                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "' WHERE ID=" + speciesId + ";";
         mailHandler.sendAdminNotification("review request", text);
         return Review.MODERATOR;
     }

@@ -5,9 +5,8 @@
 
     <h4 class="modal-title" ng-if="!editVernacular.visible">
         <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
-        <span ng-click="editVernacular.visible=true" uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">
-            <strong id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
-        </span>
+        <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
+        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </h4>
 
     <form id="edit-vernacular-form" class="form-inline" ng-submit="setSpeciesTranslation(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
@@ -23,9 +22,24 @@
 </div>
 
 <div class="modal-body" ng-if="!species.item">
-    <div ng-if="species.scientificName">
-        <strong>{{'scientificname'|translate}}:</strong><em> {{species.scientificName}}</em>
+
+    <div ng-init="editScientific={visible:!species.scientificName, value:species.scientificName, field:'scientificName'}"></div>
+    <div ng-if="!editScientific.visible">
+        <strong>{{'scientificname'|translate}}: </strong>
+        <em uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
+        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editScientific.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
+    <form id="edit-scientific-form" class="form-inline" ng-submit="updateSpecies(species, editScientific)" ng-if="editScientific.visible">
+        <div class="has-error">
+            <span ng-repeat="error in editScientific.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editScientific.errorName}}</span>
+        </div>
+        <div class="form-group" ng-class="{'has-error':editScientific.objectErrors}">
+            <label for="edit-scientific-input">{{'scientificname'|translate}}: </label>
+            <input class="form-control" type="text" id="edit-scientific-input" autofocus autocomplete="off"
+                   ng-model="editScientific.value" ng-blur="editScientific.visible=!species.scientificName" ng-keydown="$event.which === 27 && $event.preventDefault()"><!-- Do not close modal on escape(27) if edit is in focus. -->
+        </div>
+    </form>
+
     <div ng-if="species.family">
         <strong>{{'family'|translate}}:</strong> {{species.family | translate}} -
         <em>{{species.family.name}}</em>
