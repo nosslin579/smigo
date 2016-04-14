@@ -2,21 +2,21 @@
     <button type="button" class="close" ng-click="$close()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
+
     <h4 class="modal-title" ng-if="!editVernacular.visible">
         <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
         <span ng-click="editVernacular.visible=true" uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">
-            <strong uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
+            <strong id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
         </span>
     </h4>
 
-
-    <form class="form-inline" ng-submit="setSpeciesTranslation(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
+    <form id="edit-vernacular-form" class="form-inline" ng-submit="setSpeciesTranslation(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.errorName}}</span>
         </div>
         <div class="form-group" ng-class="{'has-error':editVernacular.objectErrors}">
-            <label for="editVernacularInput"><img ng-src="{{'/static/species/' + species.iconFileName}}"/></label>
-            <input class="form-control" type="text" id="editVernacularInput" autofocus autocomplete="off"
+            <label for="edit-vernacular-input"><img ng-src="{{'/static/species/' + species.iconFileName}}"/></label>
+            <input class="form-control" type="text" id="edit-vernacular-input" autofocus autocomplete="off"
                    ng-model="editVernacular.name" ng-blur="editVernacular.visible=false" ng-keydown="$event.which === 27 && $event.preventDefault()"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>

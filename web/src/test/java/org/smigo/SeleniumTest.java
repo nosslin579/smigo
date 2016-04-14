@@ -197,6 +197,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void addSpecies() throws InterruptedException {
         final String username = addUser();
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
+        final String nameEdit = "X";
         login(username, PASSWORD);
         //add species
         Thread.sleep(1000);
@@ -204,6 +205,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(1000);
         d.findElement(By.id("add-species-button")).click();
         Thread.sleep(1000);
+        d.findElement(By.id("editable-vernacular-title")).click();
+        d.findElement(By.id("edit-vernacular-input")).sendKeys(nameEdit);//add to end of name
+        d.findElement(By.id("edit-vernacular-form")).submit();
+
         d.findElement(By.id("close-species-modal-button")).click();
         Thread.sleep(1000);
         d.findElement(By.className("square")).click();
@@ -215,7 +220,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         final WebElement plant = d.findElement(By.className("plant"));
         Thread.sleep(500);
-        Assert.assertEquals(plant.getAttribute("alt"), speciesName);
+        Assert.assertEquals(plant.getAttribute("alt"), speciesName + nameEdit);
         log.info("Add species finished successfully. Username:" + username);
 
     }
