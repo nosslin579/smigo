@@ -198,6 +198,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String username = addUser();
         final String speciesName = SPECIES_NAME + System.currentTimeMillis();
         final String nameEdit = "X";
+        final String scientificName = SCIENTIFIC_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
         Thread.sleep(1000);
@@ -205,9 +206,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Thread.sleep(1000);
         d.findElement(By.id("add-species-button")).click();
         Thread.sleep(1000);
+
+        //edit vernacular name
         d.findElement(By.id("editable-vernacular-title")).click();
         d.findElement(By.id("edit-vernacular-input")).sendKeys(nameEdit);//add to end of name
         d.findElement(By.id("edit-vernacular-form")).submit();
+
+        //edit scientific name
+        d.findElement(By.id("edit-scientific-input")).sendKeys(scientificName);
+        d.findElement(By.id("edit-scientific-form")).submit();
 
         d.findElement(By.id("close-species-modal-button")).click();
         Thread.sleep(1000);
@@ -217,10 +224,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("logout-link")).click();
 
         d.get(HOST_URL + "/gardener/" + username);
-
         final WebElement plant = d.findElement(By.className("plant"));
         Thread.sleep(500);
         Assert.assertEquals(plant.getAttribute("alt"), speciesName + nameEdit);
+
+        d.get(HOST_URL + "/garden-planner");
+        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(scientificName);
+        final int noSpecies = d.findElements(By.linkText(speciesName + nameEdit)).size();
+        Assert.assertEquals(noSpecies, 1);
+
         log.info("Add species finished successfully. Username:" + username);
 
     }

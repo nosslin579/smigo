@@ -26,7 +26,7 @@
     <div ng-init="editScientific={visible:!species.scientificName, value:species.scientificName, field:'scientificName'}"></div>
     <div ng-if="!editScientific.visible">
         <strong>{{'scientificname'|translate}}: </strong>
-        <em uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
+        <em id="editable-scientific-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editScientific.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
     <form id="edit-scientific-form" class="form-inline" ng-submit="updateSpecies(species, editScientific)" ng-if="editScientific.visible">
