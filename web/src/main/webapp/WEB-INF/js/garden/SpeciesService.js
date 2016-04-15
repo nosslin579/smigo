@@ -135,13 +135,18 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 state.pendingAdd = false;
             });
         },
-        updateSpecies: function (species, updateObj) {
-            $log.info('updateSpecies', [species, updateObj]);
+
+        updateSpecies: function (species, updateObj, overrideValue) {
+            $log.info('updateSpecies', [species, updateObj, overrideValue]);
+            overrideValue && (updateObj.value = overrideValue);
             if (species[updateObj.field] === updateObj.value) {
                 updateObj.visible = false;
                 return;
             }
-            var data = {scientificName: species.scientificName};
+            var data = {
+                scientificName: species.scientificName,
+                iconFileName: species.iconFileName
+            };
             data[updateObj.field] = updateObj.value;
             return $http.put('/rest/species/' + species.id, data).then(function (response) {
                 $log.log('Response from put species', [response]);

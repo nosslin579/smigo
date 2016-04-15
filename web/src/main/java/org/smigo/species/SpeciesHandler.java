@@ -122,13 +122,12 @@ public class SpeciesHandler {
             speciesDao.updateSpecies(speciesId, updatedSpecies);
             return Review.NONE;
         }
-        String translation = speciesDao.getSpeciesTranslation(speciesId).toString();
         String text = "Species change." + System.lineSeparator() +
                 "From: " + originalSpecies + System.lineSeparator() +
                 "To: " + updatedSpecies + " " + System.lineSeparator() +
                 "SpeciesId: " + speciesId + System.lineSeparator() +
                 "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
-                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "' WHERE ID=" + speciesId + ";";
+                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "', ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
         mailHandler.sendAdminNotification("review request", text);
         return Review.MODERATOR;
     }
