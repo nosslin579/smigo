@@ -30,7 +30,7 @@
         <div class="form-group" ng-class="{'has-error':editVernacular.objectErrors}">
             <label for="edit-vernacular-input"><img ng-src="{{'/static/species/' + species.iconFileName}}"/></label>
             <input class="form-control" type="text" id="edit-vernacular-input" autofocus autocomplete="off"
-                   ng-model="editVernacular.name" ng-blur="editVernacular.visible=!!editVernacular.value" ng-keydown="$event.which === 27 && $event.preventDefault()"><!-- Do not close modal on escape(27) if edit is in focus. -->
+                   ng-model="editVernacular.name" ng-blur="editVernacular.visible=false" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVernacular.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
 </div>
@@ -55,7 +55,7 @@
         <div class="form-group" ng-class="{'has-error':editScientific.objectErrors}">
             <label for="edit-scientific-input">{{'scientificname'|translate}}: </label>
             <input class="form-control" type="text" id="edit-scientific-input" autofocus autocomplete="off"
-                   ng-model="editScientific.value" ng-blur="editScientific.visible=!species.scientificName" ng-keydown="$event.which === 27 && $event.preventDefault()"><!-- Do not close modal on escape(27) if edit is in focus. -->
+                   ng-model="editScientific.value" ng-blur="editScientific.visible=!species.scientificName" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = !species.scientificName)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
 
