@@ -58,14 +58,14 @@ class JdbcSpeciesDao implements SpeciesDao {
     private SimpleJdbcInsert insertSpecies;
     private SimpleJdbcInsert insertSpeciesTranslation;
     private Map<Integer, Family> families;
-    private SpeciesViewRowMapper rowMapper;
+    private SpeciesRowMapper rowMapper;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
         this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
-        rowMapper = new SpeciesViewRowMapper();
+        rowMapper = new SpeciesRowMapper();
     }
 
     @Override
@@ -173,7 +173,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         jdbcTemplate.update(sql, species.getScientificName(), species.getIconFileName(), species.getFamilyId(), id);
     }
 
-    private static class SpeciesViewRowMapper implements RowMapper<Species> {
+    private static class SpeciesRowMapper implements RowMapper<Species> {
 
         @Override
         public Species mapRow(ResultSet rs, int rowNum) throws SQLException {

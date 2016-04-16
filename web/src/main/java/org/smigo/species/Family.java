@@ -27,7 +27,7 @@ package org.smigo.species;
  *
  * @author Christian Nilsson
  */
-public class Family implements Comparable<Family> {
+public class Family {
 
     public static final int NEW_FAMILY = -1;
     private int id;
@@ -99,11 +99,6 @@ public class Family implements Comparable<Family> {
     @Override
     public String toString() {
         return "Family {" + id + "," + name + "}";
-    }
-
-    @Override
-    public int compareTo(Family f) {
-        return name.compareTo(f.name);
     }
 
     public static Family create(int id, String name) {
