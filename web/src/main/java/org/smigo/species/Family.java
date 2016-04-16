@@ -1,25 +1,3 @@
-/**
- * Kitchen garden aid is a planning tool for kitchengardeners.
- * Copyright (C) 2010 Christian Nilsson
- *
- * This file is part of Kitchen garden aid.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
- * Email contact christian1195@gmail.com
- */
-
 package org.smigo.species;
 
 /*
@@ -51,17 +29,38 @@ package org.smigo.species;
  */
 public class Family implements Comparable<Family> {
 
-    private final int id;
+    public static final int NEW_FAMILY = -1;
+    private int id;
     /**
      * The scientific name in latin
      */
     private String name;
 
     /**
-     * Creates a new family.
-     *
-     * @param id the unique identifier
+     * For json generated instance indicating existing family
      */
+    public Family() {
+    }
+
+    /**
+     * For json generated instance indicating existing family
+     *
+     * @param id id of existing family
+     */
+    public Family(int id) {
+        this.id = id;
+    }
+
+    /**
+     * For json generated instance indicating new family by setting id to -1
+     *
+     * @param name new name of the family
+     */
+    public Family(String name) {
+        this.id = NEW_FAMILY;
+        this.name = name;
+    }
+
     public Family(int id, String name) {
         this.id = id;
         this.name = name;
@@ -71,8 +70,16 @@ public class Family implements Comparable<Family> {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -87,7 +94,6 @@ public class Family implements Comparable<Family> {
 
     public String getMessageKey() {
         return "family" + id;
-
     }
 
     @Override

@@ -98,7 +98,7 @@ public class SpeciesController implements Serializable {
         if (review == Review.MODERATOR) {
             response.setStatus(202);
         }
-        return null;
+        return speciesHandler.getSpecies(id);
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)

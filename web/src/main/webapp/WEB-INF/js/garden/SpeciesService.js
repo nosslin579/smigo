@@ -145,7 +145,8 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             }
             var data = {
                 scientificName: species.scientificName,
-                iconFileName: species.iconFileName
+                iconFileName: species.iconFileName,
+                family: species.family
             };
             data[updateObj.field] = updateObj.value;
             return $http.put('/rest/species/' + species.id, data).then(function (response) {
@@ -153,7 +154,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
                 if (response.status === 200) {
-                    angular.extend(species, data);//merge new values into species
+                    angular.extend(species, response.data);//merge new values into species
                 } else if (response.status === 202) {
                     updateObj.displayModReview = true;
                 }

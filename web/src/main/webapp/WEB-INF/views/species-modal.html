@@ -10,7 +10,7 @@
         </div>
         <span uib-dropdown on-toggle="toggled(open)" uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editIcon.displayModReview" tooltip-trigger="none" tooltip-placement="left">
           <a href id="simple-dropdown" uib-dropdown-toggle>
-              <img ng-src="{{'/static/species/' + species.iconFileName}}"/>
+              <img ng-src="{{'/static/species/' + species.iconFileName}}" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom"/>
           </a>
           <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown" style="min-width: 118px">
               <li ng-repeat="iconName in ['1','2','4','6','7','8','9','10','11','12','13','15','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','42','43','44','45','47','48','49','50','51','53','54','57','59','61','63','65','66','68','69','70','72','73','79','84','85','87','88','89','93','94','97','99','100','102','103','104','105','107','108','109','115','116','118','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','173','174','179','180','182','183','184','defaulticon']">
@@ -37,12 +37,13 @@
 
 <div class="modal-body" ng-if="!species.item">
 
-    <div ng-init="editScientific={visible:!species.scientificName, value:species.scientificName, field:'scientificName'}"></div>
+    <div ng-init="editScientific={visible:false, value:species.scientificName, field:'scientificName'}"></div>
 
     <!--#### Scientific name ####-->
     <div ng-if="!editScientific.visible">
         <strong>{{'scientificname'|translate}}: </strong>
-        <em id="editable-scientific-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
+        <em ng-if="species.scientificName" id="editable-scientific-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
+        <a href="#" ng-if="!species.scientificName" ng-click="editScientific.visible=true">&lt;{{'edit' | translate}}&gt;</a>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editScientific.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
 
@@ -55,14 +56,31 @@
         <div class="form-group" ng-class="{'has-error':editScientific.objectErrors}">
             <label for="edit-scientific-input">{{'scientificname'|translate}}: </label>
             <input class="form-control" type="text" id="edit-scientific-input" autofocus autocomplete="off"
-                   ng-model="editScientific.value" ng-blur="editScientific.visible=!species.scientificName" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = !species.scientificName)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+                   ng-model="editScientific.value" ng-blur="editScientific.visible=false" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
 
-    <div ng-if="species.family">
-        <strong>{{'family'|translate}}:</strong> {{species.family | translate}} -
-        <em>{{species.family.name}}</em>
+    <!--#### Family name ####-->
+    <div ng-init="editFamily = {visible:false, field:'family', value:null}"></div>
+    <div ng-if="!editFamily.visible">
+        <strong>{{'family'|translate}}:</strong>
+        <span ng-if="species.family" ng-click="editFamily.visible=true" id="editable-family-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top">{{species.family | translate}} - <em>{{species.family.name}}</em></span>
+        <a href="#" ng-if="!species.family" ng-click="editFamily.visible=true">&lt;{{'edit' | translate}}&gt;</a>
+        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editFamily.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
+
+    <!--#### Family form ####-->
+    <form ng-if="editFamily.visible" class="form-inline" ng-submit="updateSpecies(species, editFamily)">
+        <div class="has-error">
+            <span ng-repeat="error in editFamily.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editFamily.errorName}}</span>
+        </div>
+        <div class="form-group" ng-class="{'has-error':editFamily.objectErrors}">
+            <label for="edit-family-select">{{'family'|translate}}:</label>
+            <input id="edit-family-select" type="text" ng-model="editFamily.value" class="form-control" autofocus autocomplete="off" ng-blur="editFamily.visible=false"
+                   uib-typeahead="state as state.name for state in [{id:7201,name:'Apiaceae'},{id:7202,name:'Alliaceae'},{id:7203,name:'Cucurbitaceae'},{id:7204,name:'Brassicaceae'},{id:7205,name:'Fabaceae'},{id:7206,name:'Solanaceae'},{id:7207,name:'Asteraceae'},{id:7208,name:'Poaceae'},{id:7209,name:'Amaranthaceae'},{id:7210,name:'Polygonaceae'},{id:7211,name:'Rosaceae'},{id:7212,name:'Asparagaceae'},{id:7214,name:'Boraginaceae'},{id:7215,name:'Lamiaceae'},{id:7216,name:'Plantaginaceae'},{id:7217,name:'Cannabaceae'},{id:7218,name:'Linaceae'},{id:7219,name:'Tropaeolaceae'},{id:7220,name:'Geraniaceae'},{id:7221,name:'Vitaceae'},{id:7222,name:'Convolvulaceae'},{id:7223,name:'Grossulariaceae'},{id:7224,name:'Ericaceae'},{id:7225,name:'Malvaceae'},{id:7226,name:'Iridaceae'},{id:7227,name:'Liliaceae'},{id:7228,name:'Papaveraceae'},{id:7229,name:'Valerianaceae'},{id:7230,name:'Aizoaceae'}] | filter:$viewValue | limitTo:8"
+                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+        </div>
+    </form>
 
 
     <div>

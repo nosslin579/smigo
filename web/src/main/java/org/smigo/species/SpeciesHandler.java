@@ -34,6 +34,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class SpeciesHandler {
@@ -118,7 +119,7 @@ public class SpeciesHandler {
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
         Species originalSpecies = getSpecies(speciesId);
         log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
-        if (originalSpecies.getCreator() == user.getId()) {
+        if (originalSpecies.getCreator() == user.getId() && !Objects.equals(Family.NEW_FAMILY, updatedSpecies.getFamilyId())) {
             speciesDao.updateSpecies(speciesId, updatedSpecies);
             return Review.NONE;
         }
@@ -127,7 +128,9 @@ public class SpeciesHandler {
                 "To: " + updatedSpecies + " " + System.lineSeparator() +
                 "SpeciesId: " + speciesId + System.lineSeparator() +
                 "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
-                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "', ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
+                "UPDATE SPECIES SET FAMILY_ID = " + updatedSpecies.getFamilyId() + " WHERE ID=" + speciesId + ";" + System.lineSeparator() +
+                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "' WHERE ID=" + speciesId + ";" + System.lineSeparator() +
+                "UPDATE SPECIES SET ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
         mailHandler.sendAdminNotification("review request", text);
         return Review.MODERATOR;
     }

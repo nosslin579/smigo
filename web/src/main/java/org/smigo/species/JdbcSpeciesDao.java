@@ -169,8 +169,8 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public void updateSpecies(int id, Species species) {
-        String sql = "UPDATE SPECIES SET SCIENTIFIC_NAME = ?, ICONFILENAME = ? WHERE ID = ?;";
-        jdbcTemplate.update(sql, species.getScientificName(), species.getIconFileName(), id);
+        String sql = "UPDATE SPECIES SET SCIENTIFIC_NAME = ?, ICONFILENAME = ?, FAMILY_ID = ? WHERE ID = ?;";
+        jdbcTemplate.update(sql, species.getScientificName(), species.getIconFileName(), species.getFamilyId(), id);
     }
 
     private static class SpeciesViewRowMapper implements RowMapper<Species> {

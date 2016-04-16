@@ -171,4 +171,9 @@ public class Species {
                 ", creator=" + creator +
                 '}';
     }
+
+    @JsonIgnore
+    public Integer getFamilyId() {
+        return family == null || family.getId() == 0 ? null : family.getId();
+    }
 }
