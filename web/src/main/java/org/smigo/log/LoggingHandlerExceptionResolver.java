@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 @Component
 public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver, PriorityOrdered {
@@ -47,7 +48,10 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
         log.error("Error during request(Inside Spring MVC). Handler:" + handler + logBean, ex);
         if (ex != null) {
             final String note = ex.getClass().getName() + ":" + ex.getMessage();
-            mailHandler.sendAdminNotification("error during request inside Spring MVC", note + "\n" + logBean);
+            final String stackTrace = Arrays.toString(ex.getStackTrace()).replace(",", System.lineSeparator());
+            mailHandler.sendAdminNotification("error during request inside Spring MVC", note + System.lineSeparator() + logBean + System.lineSeparator() + stackTrace);
+        } else {
+            log.error("Error without exception.");
         }
         return null;
     }

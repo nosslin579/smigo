@@ -135,7 +135,8 @@ public class LogHandler {
         final String separator = System.lineSeparator();
         String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
         if (exception != null) {
-            text = text + exception.getClass().getName() + exception.getMessage() + separator + Arrays.toString(exception.getStackTrace());
+            final String stackTrace = Arrays.toString(exception.getStackTrace()).replace(",", separator);
+            text = text + exception.getClass().getName() + exception.getMessage() + separator + stackTrace;
         }
         mailHandler.sendAdminNotification("error during request outside Spring MVC", text);
     }
