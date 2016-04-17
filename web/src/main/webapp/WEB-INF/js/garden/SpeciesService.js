@@ -125,7 +125,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 state.selectedSpecies = addedSpecies;
                 $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
                 $uibModal.open({
-                    templateUrl: 'species-modal.html',
+                    templateUrl: 'views/species-modal.html',
                     controller: SpeciesModalController
                 });
             }).catch(function (error) {

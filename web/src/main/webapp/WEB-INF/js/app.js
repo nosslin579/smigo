@@ -7,37 +7,37 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
 
         $routeProvider.
             when('/request-password-link', {
-                templateUrl: 'request-password-link.html'
+                templateUrl: 'views/request-password-link.html'
             }).
             when('/account', {
-                templateUrl: 'account.html'
+                templateUrl: 'views/account.html'
             }).
             when('/login', {
-                templateUrl: 'login.html',
+                templateUrl: 'views/login.html',
                 controller: 'LoginController'
             }).
             when('/register', {
-                templateUrl: 'login.html',
+                templateUrl: 'views/login.html',
                 controller: 'RegisterController'
             }).
             when('/garden-planner', {
-                templateUrl: 'garden-planner.html',
+                templateUrl: 'views/garden-planner.html',
                 controller: 'GardenController'
             }).
             when('/gardener/:username', {
-                templateUrl: 'wall.html',
+                templateUrl: 'views/wall.html',
                 controller: 'WallController'
             }).
             when('/forum', {
-                templateUrl: 'forum.html',
+                templateUrl: 'views/forum.html',
                 controller: 'ForumController'
             }).
             when('/species/:id', {
-                templateUrl: 'species.html',
+                templateUrl: 'views/species.html',
                 controller: 'SpeciesController'
             }).
             when('/rule/:id', {
-                templateUrl: 'rule.html',
+                templateUrl: 'views/rule.html',
                 controller: 'RuleController'
             }).
             when('/wall/:username', {redirectTo: '/gardener/:username'}).
@@ -45,7 +45,7 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
             when('/garden', {redirectTo: 'garden-planner'}).
             //facebook adds #_=_ to URL after login
             when('/_=_', {redirectTo: '/garden-planner'}).
-            otherwise({templateUrl: '404.html'});
+            otherwise({templateUrl: 'views/404.html'});
 
         $provide.decorator("$exceptionHandler", ['$delegate', '$injector', function ($delegate, $injector) {
             var x = 0, previousStacks = [];

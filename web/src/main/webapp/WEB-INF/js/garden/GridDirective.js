@@ -59,7 +59,7 @@ angular.module('smigoModule').directive('soGrid', function ($log, $timeout, Spec
 
             });
         },
-        templateUrl: 'grid.html',
+        templateUrl: 'views/grid.html',
         scope: {garden: '=soGrid', mutable: '=soGridMutable'}
     }
 });

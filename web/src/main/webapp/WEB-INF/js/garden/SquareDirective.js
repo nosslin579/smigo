@@ -62,7 +62,7 @@ angular.module('smigoModule').directive('soSquare', function SquareDirective($lo
             tooltipElement.on('click', closeSquareTooltip);
 
         },
-        templateUrl: 'square.html',
+        templateUrl: 'views/square.html',
         scope: {square: '=soSquare'}
     }
 });

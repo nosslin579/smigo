@@ -38,7 +38,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     };
     $scope.openAddYearModal = function () {
         $uibModal.open({
-            templateUrl: 'add-year-modal.html',
+            templateUrl: 'views/add-year-modal.html',
             controller: AddYearModalController,
             size: 'sm',
             resolve: {
@@ -55,7 +55,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
         if (SpeciesService.getState().selectedSpecies == species) {
             $scope.clickAgainToOpenTooltipEnable = false;
             $uibModal.open({
-                templateUrl: 'species-modal.html',
+                templateUrl: 'views/species-modal.html',
                 controller: SpeciesModalController
             });
         }

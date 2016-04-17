@@ -78,9 +78,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.setOrder(-1);
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/").setCachePeriod(Integer.MAX_VALUE);
-        registry.addResourceHandler("/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
+        registry.addResourceHandler("/views/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
         registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(resourceCachePeriod);
     }
 
@@ -91,7 +90,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.setOrder(-2);//Before controllers to avoid conflict
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
         registry.addViewController("/help").setViewName("help.jsp");
