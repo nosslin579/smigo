@@ -213,6 +213,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("edit-vernacular-form")).submit();
 
         //edit scientific name
+        d.findElement(By.id("empty-scientific-value")).click();
         d.findElement(By.id("edit-scientific-input")).sendKeys(scientificName);
         d.findElement(By.id("edit-scientific-form")).submit();
 
