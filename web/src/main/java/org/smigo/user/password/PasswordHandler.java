@@ -28,7 +28,6 @@ import org.smigo.user.MailHandler;
 import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Component;
@@ -50,8 +49,6 @@ class PasswordHandler {
     private UserDao userDao;
     @Autowired
     private MailHandler emailHandler;
-    @Value("${baseUrl}")
-    private String baseUrl;
 
     private final Map<String, ResetKeyItem> resetKeyMap = new ConcurrentHashMap<>();
 
@@ -80,7 +77,7 @@ class PasswordHandler {
         tokenRepository.removeUserTokens(user.getUsername());
     }
 
-    public void sendResetPasswordEmail(String emailAddress) {
+    public void sendResetPasswordEmail(String emailAddress, String host) {
         log.info("Sending reset email to: " + emailAddress);
         log.info("Size of resetKeyMap:" + resetKeyMap.size());
 
@@ -95,7 +92,7 @@ class PasswordHandler {
             final String id = UUID.randomUUID().toString().replaceAll("-", "");
             resetKeyMap.put(id, new ResetKeyItem(id, emailAddress));
 
-            final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. " + baseUrl + "/reset-password/" + id;
+            final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. http://" + host + "/reset-password/" + id;
             emailHandler.sendClientMessage(emailAddress, subject, text);
         }
     }

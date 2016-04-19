@@ -28,7 +28,6 @@ import org.smigo.message.MessageHandler;
 import org.smigo.plants.Plant;
 import org.smigo.plants.PlantHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -56,8 +55,6 @@ public class UserHandler {
     private UserDao userDao;
     @Autowired
     private MessageHandler messageHandler;
-    @Value("${baseUrl}")
-    private String baseUrl;
 
     public User createUser() {
         for (int tries = 0; tries < 5; tries++) {

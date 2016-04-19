@@ -23,7 +23,6 @@ package org.smigo.user.authentication;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler restAuthenticationFailureHandler;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Value("${baseUrl}")
-    private String baseUrl;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -87,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         formLogin.successHandler(emptyAuthenticationSuccessHandler);
 
         final SpringSocialConfigurer springSocialConfigurer = new SpringSocialConfigurer();
-        springSocialConfigurer.postLoginUrl(baseUrl + "/accept-terms-of-service");
+        springSocialConfigurer.postLoginUrl("/accept-terms-of-service");
         http.apply(springSocialConfigurer);
 
         RememberMeConfigurer<HttpSecurity> rememberMe = http.rememberMe();

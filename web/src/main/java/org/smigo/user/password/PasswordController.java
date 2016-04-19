@@ -83,8 +83,8 @@ public class PasswordController {
 
     @RequestMapping(value = "/request-password-link", method = RequestMethod.POST)
     @ResponseBody
-    public void requestPasswordLink(@RequestBody RequestPasswordLink bean) {
-        userHandler.sendResetPasswordEmail(bean.getEmail());
+    public void requestPasswordLink(@RequestBody RequestPasswordLink bean, @RequestHeader("host") String host) {
+        userHandler.sendResetPasswordEmail(bean.getEmail(), host);
     }
 
     @RequestMapping(value = "/reset-password/{resetKey}", method = RequestMethod.GET)

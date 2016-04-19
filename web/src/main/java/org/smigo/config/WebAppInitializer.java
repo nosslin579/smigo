@@ -36,7 +36,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -90,16 +89,6 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
 //        servletContext.getSessionCookieConfig().setDomain(getDomain());
 
         servletContext.addServlet("dispatcher", new DispatcherServlet(context)).addMapping("/");
-    }
-
-    private String getDomain() {
-        try {
-            InitialContext initialContext = new InitialContext();
-            final URL url = (URL) initialContext.lookup("java:comp/env/baseUrl");
-            return "." + url.getHost();
-        } catch (NamingException e) {
-            throw new RuntimeException("Could not find base url", e);
-        }
     }
 
     private String getProfile() {
