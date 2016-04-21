@@ -53,7 +53,6 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertSpeciesTranslation(id, vernacularName, Locale.ROOT);
         speciesDao.insertSpeciesTranslation(id, vernacularName, locale);
         return id;
     }
@@ -91,12 +90,12 @@ public class SpeciesHandler {
     }
 
     public Map<String, String> getSpeciesTranslation(Locale locale) {
-        final Map<String, String> root = speciesDao.getSpeciesTranslation("", "");
+        final Map<String, String> ret = speciesDao.getSpeciesTranslation("en", "");
         final Map<String, String> language = speciesDao.getSpeciesTranslation(locale.getLanguage(), "");
         final Map<String, String> country = speciesDao.getSpeciesTranslation(locale.getLanguage(), locale.getCountry());
-        root.putAll(language);
-        root.putAll(country);
-        return root;
+        ret.putAll(language);
+        ret.putAll(country);
+        return ret;
     }
 
     public List<Rule> getRules() {

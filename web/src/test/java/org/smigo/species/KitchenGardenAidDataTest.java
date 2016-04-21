@@ -84,13 +84,12 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
                 for (Map.Entry<String, String> kgaLangAndTranslation : translations.entrySet()) {
                     final String kgaLang = kgaLangAndTranslation.getKey();
                     final String kgaTranslation = kgaLangAndTranslation.getValue();
-                    final String smigoLang = "en".equals(kgaLang) ? "" : kgaLang;
-                    final String smigoTranslation = getSpeciesTranslation(plant.getId(), smigoLang);
+                    final String smigoTranslation = getSpeciesTranslation(plant.getId(), kgaLang);
 
                     if (kgaTranslation == null) {
                         log.info("KGA translation missing" + plant);
                     } else if (smigoTranslation == null) {
-                        sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + smigoLang + "','');");
+                        sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + kgaLang + "','');");
                     } else if (Objects.equals(smigoTranslation, kgaTranslation)) {
                         //looking good
                     } else {
