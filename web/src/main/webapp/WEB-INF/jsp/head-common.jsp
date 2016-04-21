@@ -10,6 +10,7 @@
 <link rel="alternate" hreflang="sv" href="http://sv.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 <link rel="alternate" hreflang="en" href="http://en.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 <link rel="alternate" hreflang="de" href="http://de.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
+<link rel="alternate" hreflang="es" href="http://es.smigo.org${requestScope['javax.servlet.forward.request_uri']}">
 
 <%--http://stackoverflow.com/questions/2208933/how-do-i-force-a-favicon-refresh--%>
 <link rel="icon" href="/static/species/28.png?v=6">

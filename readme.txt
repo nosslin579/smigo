@@ -1,8 +1,8 @@
-System properties:
+#System properties:
 -Dlogback.configurationFile=web/logback-dev.xml
 
 
-If Tomcat then context.xml should contain these:
+#If Tomcat then context.xml should contain these:
 
    <Environment name="profile" value="dev" type="java.lang.String" override="false"/>
    <Environment name="mailSenderHost" value="" type="java.lang.String" override="false"/>
@@ -19,7 +19,7 @@ If Tomcat then context.xml should contain these:
 
 
 
-Merge species
+#Merge species
 UPDATE PLANTS
 SET SPECIES_ID = 1
 WHERE SPECIES_ID IN (2,3,4);
@@ -33,3 +33,12 @@ WHERE SPECIES_ID IN (2,3,4);
 
 DELETE FROM SPECIES
 WHERE ID IN (2,3,4);
+
+
+
+#Add lang
+1, Add message.properties and ensure every key is translated
+2, Add locale to AllMessagesSetTest
+3, Add rel="alternate" hreflang="es" tag
+4, Add OAuth url to facebook app
+5, Add url to DNS
