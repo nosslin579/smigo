@@ -22,7 +22,6 @@ package org.smigo.species;
  * #L%
  */
 
-import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,7 +53,7 @@ public @interface UniqueSpeciesName {
     class UniqueSpeciesNameValidator implements ConstraintValidator<UniqueSpeciesName, String> {
 
         @Autowired
-        private SpeciesHandler speciesHandler;
+        private SpeciesDao speciesDao;
         @Autowired
         private UserHandler userHandler;
 
@@ -62,9 +61,8 @@ public @interface UniqueSpeciesName {
         }
 
         public boolean isValid(String vernacularName, ConstraintValidatorContext constraintContext) {
-            AuthenticatedUser user = userHandler.getCurrentUser();
-            Locale locale = userHandler.getUser(user).getLocale();
-            Collection<String> speciesVernacularNameList = speciesHandler.getSpeciesTranslation(locale).values();
+            final Locale locale = userHandler.getLocale();
+            Collection<String> speciesVernacularNameList = speciesDao.getSpeciesTranslation(locale.getLanguage(), locale.getCountry()).values();
             return !speciesVernacularNameList.contains(vernacularName);
         }
 

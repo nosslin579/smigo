@@ -42,7 +42,7 @@ interface SpeciesDao {
 
     List<Species> searchSpecies(String query, Locale locale);
 
-    Map<String, String> getSpeciesTranslation(Locale locale);
+    Map<String, String> getSpeciesTranslation(String language, String country);
 
     void setSpeciesTranslation(int id, String vernacularName, Locale locale);
 

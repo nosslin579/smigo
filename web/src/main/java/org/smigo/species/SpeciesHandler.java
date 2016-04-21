@@ -80,6 +80,7 @@ public class SpeciesHandler {
     }
 
     public List<Species> searchSpecies(String query, Locale locale) {
+        //todo add search on translated family
         if (query.length() >= 5) {
             return speciesDao.searchSpecies('%' + query + '%', locale);
         } else if (query.length() >= 3) {
@@ -90,7 +91,12 @@ public class SpeciesHandler {
     }
 
     public Map<String, String> getSpeciesTranslation(Locale locale) {
-        return speciesDao.getSpeciesTranslation(locale);
+        final Map<String, String> root = speciesDao.getSpeciesTranslation("", "");
+        final Map<String, String> language = speciesDao.getSpeciesTranslation(locale.getLanguage(), "");
+        final Map<String, String> country = speciesDao.getSpeciesTranslation(locale.getLanguage(), locale.getCountry());
+        root.putAll(language);
+        root.putAll(country);
+        return root;
     }
 
     public List<Rule> getRules() {

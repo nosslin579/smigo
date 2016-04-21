@@ -61,7 +61,7 @@ public class UserHandler {
             String username = "user" + (int) (Math.random() * 1000000);
             final List<User> users = userDao.getUsersByUsername(username);
             if (users.size() == 0) {
-                final Locale locale = localeResolver.resolveLocale(request);
+                final Locale locale = getLocale();
                 return createUser(username, null, locale, false);
             }
         }
@@ -127,5 +127,9 @@ public class UserHandler {
         u.setEmail(user.getEmail());
         u.setLocale(user.getLocale());
         userDao.updateUser(u);
+    }
+
+    public Locale getLocale() {
+        return localeResolver.resolveLocale(request);
     }
 }

@@ -35,22 +35,18 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Repository
 class JdbcSpeciesDao implements SpeciesDao {
 
-    private static final String SELECT = "SELECT\n" +
-            "species.*, families.name AS family_name,\n" +
-            "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) AS vernacular_name\n" +
-            "FROM species\n" +
+    private static final String SELECT = "SELECT * FROM species\n" +
             "LEFT JOIN families ON species.family_id = families.id\n" +
-            "LEFT JOIN species_translation def ON def.species_id = species.id AND def.language = '' AND def.country = ''\n" +
-            "LEFT JOIN species_translation lang ON lang.species_id = species.id AND lang.language = ? AND lang.country = ''\n" +
-            "LEFT JOIN species_translation coun ON coun.species_id = species.id AND coun.language = ? AND coun.country = ?\n" +
             "WHERE %s\n" +
-            "GROUP BY species.id\n" +
-            "LIMIT %d;\n";
+            "GROUP BY species.id LIMIT %d;";
 
     private static final String DEFAULTICONNAME = "defaulticon.png";
 
@@ -79,36 +75,33 @@ class JdbcSpeciesDao implements SpeciesDao {
     public List<Species> getDefaultSpecies() {
         //Unknown, Hemp, Concrete and Sand is never display by default
         String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE SPECIES_ID NOT IN (99,87,102,115) GROUP BY SPECIES_ID ORDER BY count(SPECIES_ID) DESC LIMIT 50)";
-        return querySpeciesForList(whereClause, 50, Locale.ROOT, new Object[]{});
+        final String sql = String.format(SELECT, whereClause, 50);
+        return jdbcTemplate.query(sql, new Object[]{}, rowMapper);
     }
 
     @Override
     public List<Species> getUserSpecies(int userId) {
-        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE USER_ID = " + userId + ")";
-        return querySpeciesForList(whereClause, Integer.MAX_VALUE, Locale.ENGLISH, new Object[]{});
+        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE USER_ID = ?)";
+        final String sql = String.format(SELECT, whereClause, Integer.MAX_VALUE);
+        return jdbcTemplate.query(sql, new Object[]{userId}, rowMapper);
     }
 
     @Override
     public List<Species> searchSpecies(String query, Locale locale) {
-        final String whereClause = "coalesce(coun.vernacular_name, lang.vernacular_name, def.vernacular_name) IS NOT NULL AND (def.vernacular_name LIKE ? OR lang.vernacular_name LIKE ? OR coun.vernacular_name LIKE ? OR families.name LIKE ? OR scientific_name LIKE ?)";
-        return querySpeciesForList(whereClause, 10, locale, new Object[]{query, query, query, query, query});
+        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM SPECIES_TRANSLATION WHERE VERNACULAR_NAME LIKE ?) OR SCIENTIFIC_NAME LIKE ? OR FAMILIES.NAME LIKE ?";
+        final String sql = String.format(SELECT, whereClause, 10);
+        return jdbcTemplate.query(sql, new Object[]{query, query, query}, rowMapper);
     }
 
     @Override
-    public Map<String, String> getSpeciesTranslation(Locale locale) {
-        List<Object> sqlArgs = new ArrayList<Object>();
-        sqlArgs.add(locale.getLanguage());
-        sqlArgs.add(locale.getLanguage());
-        sqlArgs.add(locale.getCountry());
-        int[] types = new int[sqlArgs.size()];
-        Arrays.fill(types, Types.VARCHAR);
-        final String sql = String.format(SELECT, "TRUE", 1000);
-        return jdbcTemplate.query(sql, sqlArgs.toArray(), types, new ResultSetExtractor<Map<String, String>>() {
+    public Map<String, String> getSpeciesTranslation(String language, String country) {
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? AND COUNTRY = ?";
+        return jdbcTemplate.query(sql, new Object[]{language, country}, new int[]{Types.VARCHAR, Types.VARCHAR}, new ResultSetExtractor<Map<String, String>>() {
             @Override
             public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 Map<String, String> ret = new HashMap<>(rs.getFetchSize());
                 while (rs.next()) {
-                    ret.put("msg.species" + rs.getInt("id"), rs.getString("vernacular_name"));
+                    ret.put("msg.species" + rs.getInt("species_id"), rs.getString("vernacular_name"));
                 }
                 return ret;
             }
@@ -133,22 +126,10 @@ class JdbcSpeciesDao implements SpeciesDao {
         });
     }
 
-    private List<Species> querySpeciesForList(String whereClause, int maxResult, Locale locale, Object[] args) {
-        List<Object> sqlArgs = new ArrayList<Object>();
-        sqlArgs.add(locale.getLanguage());
-        sqlArgs.add(locale.getLanguage());
-        sqlArgs.add(locale.getCountry());
-        sqlArgs.addAll(Arrays.asList(args));
-        final String sql = String.format(SELECT, whereClause, maxResult);
-        return jdbcTemplate.query(sql, sqlArgs.toArray(), rowMapper);
-    }
-
     @Override
     public Species getSpecies(int id) {
-        final Locale locale = Locale.ENGLISH;
-        final Object[] args = {locale.getLanguage(), locale.getLanguage(), locale.getCountry(), id};
-        final String sql = String.format(SELECT, "species.id = ?", 1);
-        return jdbcTemplate.queryForObject(sql, args, rowMapper);
+        final String sql = String.format(SELECT, "SPECIES.ID = ?", 1);
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, rowMapper);
     }
 
     @Override
@@ -177,11 +158,11 @@ class JdbcSpeciesDao implements SpeciesDao {
 
         @Override
         public Species mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Species ret = new Species(rs.getInt("id"));
+            Species ret = new Species(rs.getInt("species.id"));
             ret.setScientificName(rs.getString("scientific_name"));
             ret.setItem(rs.getBoolean("item"));
             ret.setAnnual(rs.getBoolean("annual"));
-            ret.setFamily(Family.create(rs.getInt("family_id"), rs.getString("family_name")));
+            ret.setFamily(Family.create(rs.getInt("families.id"), rs.getString("families.name")));
             String iconfilename = rs.getString("iconfilename");
             ret.setIconFileName(iconfilename == null ? DEFAULTICONNAME : iconfilename);
             ret.setCreator(rs.getInt("creator"));
