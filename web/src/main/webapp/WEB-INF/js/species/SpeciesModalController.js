@@ -3,7 +3,7 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Use
     $scope.currentUser = UserService.getState().currentUser;
     $scope.varieties = SpeciesService.getAllVarieties();
     $scope.addForm = {name: '', visible: false};
-    $scope.setSpeciesTranslation = SpeciesService.setSpeciesTranslation;
+    $scope.setVernacular = SpeciesService.setVernacular;
     $scope.updateSpecies = SpeciesService.updateSpecies;
     $scope.selectSpecies = function (speciesId) {
         $log.info('Species from modal selected:' + speciesId);

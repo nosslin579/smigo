@@ -36,17 +36,17 @@ interface SpeciesDao {
 
     Map<String, String> getSynonyms(String language);
 
-    Map<Locale, String> getSpeciesTranslation(int speciesId);
+    Map<Locale, String> getVernacular(int speciesId);
 
     Species getSpecies(int id);
 
-    void insertSpeciesTranslation(int id, String vernacularName, Locale locale);
+    void insertVernacular(int id, String vernacularName, Locale locale);
 
     List<Species> searchSpecies(String query, Locale locale);
 
-    Map<String, String> getSpeciesTranslation(String language, String country);
+    Map<String, String> getVernacular(String language, String country);
 
-    void setSpeciesTranslation(int id, String vernacularName, Locale locale);
+    void setVernacular(int id, String vernacularName, Locale locale);
 
     void updateSpecies(int id, Species species);
 }

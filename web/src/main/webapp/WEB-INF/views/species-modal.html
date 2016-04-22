@@ -23,7 +23,7 @@
     </h4>
 
     <!--#### Edit vernacular form ####-->
-    <form id="edit-vernacular-form" class="form-inline" ng-submit="setSpeciesTranslation(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
+    <form id="edit-vernacular-form" class="form-inline" ng-submit="setVernacular(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.errorName}}</span>
         </div>

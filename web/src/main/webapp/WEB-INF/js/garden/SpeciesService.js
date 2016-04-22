@@ -163,14 +163,14 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.errorName = updateObj.value;
             });
         },
-        setSpeciesTranslation: function (species, updateObj, locale) {
-            $log.info('setSpeciesTranslation', [species, updateObj, locale]);
+        setVernacular: function (species, updateObj, locale) {
+            $log.info('setVernacular', [species, updateObj, locale]);
             if (species.vernacularName === updateObj.name) {
                 updateObj.visible = false;
                 return;
             }
             var data = {vernacularName: updateObj.name};
-            return $http.put('/rest/species/' + species.id + '/translation/' + locale, data).then(function (response) {
+            return $http.put('/rest/species/' + species.id + '/vernacular/' + locale, data).then(function (response) {
                 $log.log('Response from put species translation', [response]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;

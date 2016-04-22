@@ -53,7 +53,7 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         PropertiesHolder propertiesHolder = getMergedProperties(locale);
         Map properties = propertiesHolder.getProperties();
         Map<Object, Object> ret = new HashMap<Object, Object>(properties);
-        ret.putAll(speciesHandler.getSpeciesTranslation(locale));
+        ret.putAll(speciesHandler.getVernacular(locale));
         ret.putAll(speciesHandler.getSynonyms(locale));
         log.info("Get all messages took " + (System.currentTimeMillis() - start) + "ms");
         return ret;

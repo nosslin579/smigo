@@ -53,7 +53,7 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertSpeciesTranslation(id, vernacularName, locale);
+        speciesDao.insertVernacular(id, vernacularName, locale);
         return id;
     }
 
@@ -89,10 +89,10 @@ public class SpeciesHandler {
         }
     }
 
-    public Map<String, String> getSpeciesTranslation(Locale locale) {
-        final Map<String, String> ret = speciesDao.getSpeciesTranslation("en", "");
-        final Map<String, String> language = speciesDao.getSpeciesTranslation(locale.getLanguage(), "");
-        final Map<String, String> country = speciesDao.getSpeciesTranslation(locale.getLanguage(), locale.getCountry());
+    public Map<String, String> getVernacular(Locale locale) {
+        final Map<String, String> ret = speciesDao.getVernacular("en", "");
+        final Map<String, String> language = speciesDao.getVernacular(locale.getLanguage(), "");
+        final Map<String, String> country = speciesDao.getVernacular(locale.getLanguage(), locale.getCountry());
         ret.putAll(language);
         ret.putAll(country);
         return ret;
@@ -106,14 +106,14 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public Review setSpeciesTranslation(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
+    public Review setVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(speciesId);
         log.info("Updating species translation " + name + user + locale + species);
         if (species.getCreator() == user.getId()) {
-            speciesDao.setSpeciesTranslation(speciesId, name.getVernacularName(), locale);
+            speciesDao.setVernacular(speciesId, name.getVernacularName(), locale);
             return Review.NONE;
         }
-        String translation = speciesDao.getSpeciesTranslation(speciesId).toString();
+        String translation = speciesDao.getVernacular(speciesId).toString();
         String text = "Species translation change." + System.lineSeparator() +
                 "From: " + translation + System.lineSeparator() +
                 "To: " + locale + " " + name + System.lineSeparator() +

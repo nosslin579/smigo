@@ -94,7 +94,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public Map<String, String> getSpeciesTranslation(String language, String country) {
+    public Map<String, String> getVernacular(String language, String country) {
         final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? AND COUNTRY = ? ORDER BY PRECEDENCE DESC";
         return jdbcTemplate.query(sql, new Object[]{language, country}, new int[]{Types.VARCHAR, Types.VARCHAR}, new ResultSetExtractor<Map<String, String>>() {
             @Override
@@ -132,7 +132,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public Map<Locale, String> getSpeciesTranslation(int speciesId) {
+    public Map<Locale, String> getVernacular(int speciesId) {
         final String sql = "SELECT * FROM species_translation WHERE species_id = ? ORDER BY PRECEDENCE DESC ";
         return jdbcTemplate.query(sql, new Object[]{speciesId}, new int[]{Types.INTEGER}, new ResultSetExtractor<Map<Locale, String>>() {
             @Override
@@ -156,7 +156,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void insertSpeciesTranslation(int id, String vernacularName, Locale locale) {
+    public void insertVernacular(int id, String vernacularName, Locale locale) {
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("species_id", id, Types.INTEGER);
         s.addValue("language", locale.getLanguage(), Types.VARCHAR);
@@ -166,7 +166,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void setSpeciesTranslation(int id, String vernacularName, Locale locale) {
+    public void setVernacular(int id, String vernacularName, Locale locale) {
         String sql = "MERGE INTO SPECIES_TRANSLATION (SPECIES_ID, LANGUAGE, COUNTRY, VERNACULAR_NAME) KEY (SPECIES_ID, LANGUAGE, COUNTRY) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, id, locale.getLanguage(), locale.getCountry(), vernacularName);
     }

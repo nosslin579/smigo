@@ -69,16 +69,16 @@ public class SpeciesController implements Serializable {
         return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
     }
 
-    @RequestMapping(value = "/rest/species/{id}/translation/{locale}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
     @ResponseBody
-    public Object setSpeciesTranslation(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
+    public Object setVernacular(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
                                         @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
         log.info("Updating species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return result.getAllErrors();
         }
-        Review review = speciesHandler.setSpeciesTranslation(name, id, user, sessionLocale);
+        Review review = speciesHandler.setVernacular(name, id, user, sessionLocale);
         if (review == Review.MODERATOR) {
             response.setStatus(202);
         }

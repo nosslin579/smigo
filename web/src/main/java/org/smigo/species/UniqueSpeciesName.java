@@ -62,7 +62,7 @@ public @interface UniqueSpeciesName {
 
         public boolean isValid(String vernacularName, ConstraintValidatorContext constraintContext) {
             final Locale locale = userHandler.getLocale();
-            Collection<String> speciesVernacularNameList = speciesDao.getSpeciesTranslation(locale.getLanguage(), locale.getCountry()).values();
+            Collection<String> speciesVernacularNameList = speciesDao.getVernacular(locale.getLanguage(), locale.getCountry()).values();
             return !speciesVernacularNameList.contains(vernacularName);
         }
 
