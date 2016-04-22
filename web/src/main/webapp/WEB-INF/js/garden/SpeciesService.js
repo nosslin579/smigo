@@ -171,7 +171,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             }
             var data = {vernacularName: updateObj.name};
             return $http.put('/rest/species/' + species.id + '/vernacular/' + locale, data).then(function (response) {
-                $log.log('Response from put species translation', [response]);
+                $log.log('Response from put vernacular', [response]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
                 if (response.status === 200) {

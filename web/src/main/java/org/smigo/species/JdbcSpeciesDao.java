@@ -52,16 +52,15 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
-    private SimpleJdbcInsert insertSpeciesTranslation;
+    private SimpleJdbcInsert insertVernacular;
     private Map<Integer, Family> families;
-    private SpeciesRowMapper rowMapper;
+    private SpeciesRowMapper rowMapper = new SpeciesRowMapper();
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("precedence");
-        rowMapper = new SpeciesRowMapper();
+        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("precedence");
     }
 
     @Override
@@ -162,7 +161,7 @@ class JdbcSpeciesDao implements SpeciesDao {
         s.addValue("language", locale.getLanguage(), Types.VARCHAR);
         s.addValue("country", locale.getCountry(), Types.VARCHAR);
         s.addValue("vernacular_name", vernacularName);
-        insertSpeciesTranslation.execute(s);
+        insertVernacular.execute(s);
     }
 
     @Override
