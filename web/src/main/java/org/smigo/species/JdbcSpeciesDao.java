@@ -60,7 +60,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
+        this.insertSpeciesTranslation = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("precedence");
         rowMapper = new SpeciesRowMapper();
     }
 
