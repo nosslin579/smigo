@@ -37,6 +37,11 @@
 
 <div class="modal-body" ng-if="!species.item">
 
+    <div>
+        <strong>{{'msg.aka' | translate}}: </strong>
+        <em>{{'msg.speciesalt'+species.id | translate}}</em>
+    </div>
+
     <div ng-init="editScientific={visible:false, value:species.scientificName, field:'scientificName'}"></div>
 
     <!--#### Scientific name ####-->

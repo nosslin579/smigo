@@ -98,6 +98,10 @@ public class SpeciesHandler {
         return ret;
     }
 
+    public Map<String, String> getSynonyms(Locale locale) {
+        return speciesDao.getSynonyms(locale.getLanguage());
+    }
+
     public List<Rule> getRules() {
         return ruleDao.getRules();
     }

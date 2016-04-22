@@ -34,6 +34,8 @@ interface SpeciesDao {
 
     List<Species> getUserSpecies(int userId);
 
+    Map<String, String> getSynonyms(String language);
+
     Map<Locale, String> getSpeciesTranslation(int speciesId);
 
     Species getSpecies(int id);
