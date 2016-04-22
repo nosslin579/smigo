@@ -47,8 +47,8 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Species> getSpecies() {
-        return speciesHandler.getSpeciesMap();
+    public Collection<Species> getSpecies(Locale locale) {
+        return speciesHandler.getDefaultSpecies();
     }
 
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)
@@ -72,7 +72,7 @@ public class SpeciesController implements Serializable {
     @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
     @ResponseBody
     public Object setVernacular(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
-                                        @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
+                                @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
         log.info("Updating species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.FORBIDDEN.value());

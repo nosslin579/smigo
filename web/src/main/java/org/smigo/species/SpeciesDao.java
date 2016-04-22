@@ -32,8 +32,6 @@ interface SpeciesDao {
 
     List<Species> getDefaultSpecies();
 
-    List<Species> getUserSpecies(int userId);
-
     Map<String, String> getSynonyms(String language);
 
     Map<Locale, String> getVernacular(int speciesId);

@@ -66,7 +66,7 @@ public class SpeciesHandler {
         }
     }
 
-    public List<Species> getSpeciesMap() {
+    public List<Species> getDefaultSpecies() {
         return speciesDao.getDefaultSpecies();
     }
 
@@ -74,19 +74,9 @@ public class SpeciesHandler {
         return speciesDao.getSpecies(id);
     }
 
-    public List<Family> getFamilies() {
-        return familyDao.getFamilies();
-    }
-
     public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        if (query.length() >= 5) {
-            return speciesDao.searchSpecies('%' + query + '%', locale);
-        } else if (query.length() >= 3) {
-            return speciesDao.searchSpecies(query + '%', locale);
-        } else {
-            return speciesDao.searchSpecies(query, locale);
-        }
+        return speciesDao.searchSpecies(query, locale);
     }
 
     public Map<String, String> getVernacular(Locale locale) {

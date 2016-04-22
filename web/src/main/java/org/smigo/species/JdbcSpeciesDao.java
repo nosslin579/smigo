@@ -79,14 +79,8 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public List<Species> getUserSpecies(int userId) {
-        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM PLANTS WHERE USER_ID = ?)";
-        final String sql = String.format(SELECT, whereClause, Integer.MAX_VALUE);
-        return jdbcTemplate.query(sql, new Object[]{userId}, rowMapper);
-    }
-
-    @Override
-    public List<Species> searchSpecies(String query, Locale locale) {
+    public List<Species> searchSpecies(String search, Locale locale) {
+        String query = (search.length() >= 5 ? "%" : "") + search + (search.length() >= 3 ? "%" : "");
         final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM SPECIES_TRANSLATION WHERE VERNACULAR_NAME LIKE ?) OR SCIENTIFIC_NAME LIKE ? OR FAMILIES.NAME LIKE ?";
         final String sql = String.format(SELECT, whereClause, 10);
         return jdbcTemplate.query(sql, new Object[]{query, query, query}, rowMapper);
