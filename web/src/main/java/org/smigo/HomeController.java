@@ -63,12 +63,11 @@ public class HomeController {
 
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
-        final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
-        allMessages.putAll(speciesHandler.getSpeciesTranslation(locale));
+
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getSpeciesMap());
         model.addAttribute("plantData", plantHandler.getPlants(user));
-        model.addAttribute("messages", allMessages);
+        model.addAttribute("messages", messageSource.getAllMessages(locale));
         model.addAttribute("rules", speciesHandler.getRules());
         model.addAttribute("varieties", varietyDao.getVarieties());
     }

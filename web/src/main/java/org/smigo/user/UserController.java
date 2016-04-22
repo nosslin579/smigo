@@ -42,7 +42,6 @@ import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Controller that handles user specific type of requests.
@@ -120,9 +119,6 @@ public class UserController {
     @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public java.util.Map<Object, Object> getDefaultTranslation(Locale locale) {
-        final Map<String, String> speciesTranslation = speciesHandler.getSpeciesTranslation(locale);
-        final Map<Object, Object> allMessages = messageSource.getAllMessages(locale);
-        allMessages.putAll(speciesTranslation);
-        return allMessages;
+        return messageSource.getAllMessages(locale);
     }
 }
