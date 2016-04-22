@@ -95,7 +95,7 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public Map<String, String> getSpeciesTranslation(String language, String country) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? AND COUNTRY = ?";
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? AND COUNTRY = ? ORDER BY PRECEDENCE DESC";
         return jdbcTemplate.query(sql, new Object[]{language, country}, new int[]{Types.VARCHAR, Types.VARCHAR}, new ResultSetExtractor<Map<String, String>>() {
             @Override
             public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -110,7 +110,7 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public Map<Locale, String> getSpeciesTranslation(int speciesId) {
-        final String sql = "SELECT * FROM species_translation WHERE species_id = ?";
+        final String sql = "SELECT * FROM species_translation WHERE species_id = ? ORDER BY PRECEDENCE DESC ";
         return jdbcTemplate.query(sql, new Object[]{speciesId}, new int[]{Types.INTEGER}, new ResultSetExtractor<Map<Locale, String>>() {
             @Override
             public Map<Locale, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
