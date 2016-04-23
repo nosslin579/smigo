@@ -403,7 +403,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void varietyTest() throws InterruptedException {
         final String username = addUser();
         login(username, PASSWORD);
-        final String varietyName = "variety" + System.currentTimeMillis();
+        final String varietyName = "Variety" + System.currentTimeMillis();
         final String speciesText = "Grapes - " + varietyName;
 
         //Open grapes modal

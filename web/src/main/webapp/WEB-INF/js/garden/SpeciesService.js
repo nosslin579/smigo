@@ -231,12 +231,19 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 });
             return ret;
         },
-        addVariety: function (name, speciesId) {
-            var variety = new Variety(name, speciesId);
+        addVariety: function (editObj, speciesId) {
+            $log.log('Add Variety:', [editObj, speciesId]);
+            var variety = new Variety(editObj.value.capitalize(), speciesId);
             return $http.post('/rest/variety/', variety)
                 .then(function (response) {
+                    $log.log('Response from add variety', response);
                     variety.id = response.data;
                     state.varieties.push(variety);
+                    editObj.value = '';
+                    editObj.visible = false;
+                }).catch(function (response) {
+                    $log.log('Add Variety failed:', response);
+                    editObj.objectErrors = response.data;
                 });
         },
         getAllVarieties: function () {

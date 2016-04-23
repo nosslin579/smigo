@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class VarietyController implements Serializable {
     public Object addVariety(@Valid @RequestBody Variety variety, BindingResult result, HttpServletResponse response,
                              @AuthenticationPrincipal AuthenticatedUser user) {
         if (result.hasErrors()) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         variety.setUserId(user.getId());
