@@ -74,7 +74,7 @@ public class PasswordController {
     public List<ObjectError> changePassword(@RequestBody @Valid Password password, BindingResult result,
                                             @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
         if (result.hasErrors()) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         userHandler.updatePassword(user.getId(), password.getNewPassword());

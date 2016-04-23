@@ -63,7 +63,7 @@ public class SpeciesController implements Serializable {
                              @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Adding species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
@@ -75,7 +75,7 @@ public class SpeciesController implements Serializable {
                                 @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
         log.info("Updating species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         Review review = speciesHandler.setVernacular(name, id, user, sessionLocale);
@@ -91,7 +91,7 @@ public class SpeciesController implements Serializable {
                                 @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
         log.info("Updating species. Species:" + species);
         if (result.hasErrors()) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         Review review = speciesHandler.updateSpecies(id, species, user);

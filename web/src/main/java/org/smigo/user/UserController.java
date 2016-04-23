@@ -88,7 +88,7 @@ public class UserController {
         log.info("Create user: " + user);
         if (result.hasErrors()) {
             log.warn("Create user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         userHandler.createUser(user, locale);
@@ -102,7 +102,7 @@ public class UserController {
                                         HttpServletResponse response) {
         if (result.hasErrors()) {
             log.warn("Update user failed. Username:" + user.getUsername() + " Errors:" + StringUtils.arrayToDelimitedString(result.getAllErrors().toArray(), ", "));
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         log.info("Updating user: " + userBean.toString());
