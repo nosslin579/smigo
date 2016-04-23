@@ -103,15 +103,39 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             });
     }
 
+    function getSpecies(id) {
+        if (!id) {
+            throw "Can not get species with no id";
+        }
+        var species = state.speciesArray.smigoFind(id, 'id');
+        if (species) {
+            return species;
+        }
+        var ret = new Species(id, 'id' + id);
+        state.speciesArray.push(ret);
+        $http.get('/rest/species/' + id)
+            .then(function (response) {
+                angular.extend(ret, response.data);
+                augmentSpecies([ret]);
+            });
+        return ret;
+    }
+
     return {
         getState: function () {
             return state;
         },
         selectSpecies: function (species, event) {
+            $log.log('Species select:', [species, state, event]);
             event && event.preventDefault();
-            state.selectedSpecies = species;
+            if (state.speciesArray.indexOf(species) != -1) {
+                state.selectedSpecies = species;
+            } else if (angular.isNumber(species)) {
+                state.selectedSpecies = getSpecies(species);
+            } else {
+                throw 'SpeciesService.selectSpecies got invalid parameter: ' + species;
+            }
             state.action = 'add';
-            $log.log('Species selected:', [state, event]);
         },
         addSpecies: function (vernacularNameRaw) {
             state.pendingAdd = true;
@@ -135,7 +159,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 state.pendingAdd = false;
             });
         },
-
         updateSpecies: function (species, updateObj, overrideValue) {
             $log.info('updateSpecies', [species, updateObj, overrideValue]);
             overrideValue && (updateObj.value = overrideValue);
@@ -214,23 +237,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         getAllSpecies: function () {
             return state.speciesArray;
         },
-        getSpecies: function (id) {
-            if (!id) {
-                throw "Can not get species with no id";
-            }
-            var species = state.speciesArray.smigoFind(id, 'id');
-            if (species) {
-                return species;
-            }
-            var ret = new Species(id, 'id' + id);
-            state.speciesArray.push(ret);
-            $http.get('/rest/species/' + id)
-                .then(function (response) {
-                    angular.extend(ret, response.data);
-                    augmentSpecies([ret]);
-                });
-            return ret;
-        },
+        getSpecies: getSpecies,
         addVariety: function (editObj, speciesId) {
             $log.log('Add Variety:', [editObj, speciesId]);
             var variety = new Variety(editObj.value.capitalize(), speciesId);

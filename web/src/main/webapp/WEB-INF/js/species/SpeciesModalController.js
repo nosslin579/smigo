@@ -5,12 +5,8 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Use
     $scope.setVernacular = SpeciesService.setVernacular;
     $scope.updateSpecies = SpeciesService.updateSpecies;
     $scope.addVariety = SpeciesService.addVariety;
+    $scope.selectSpecies = SpeciesService.selectSpecies;
 
-    $scope.selectSpecies = function (speciesId) {
-        $log.info('Species from modal selected:' + speciesId);
-        SpeciesService.selectSpecies(SpeciesService.getSpecies(speciesId));
-        $uibModalInstance.dismiss('selected species');
-    };
     $scope.toggleVariety = function (variety, species, event) {
         $log.log('Toggle variety:', [variety, species, event]);
         species.variety = species.variety == variety ? null : variety;

@@ -57,7 +57,10 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
             $uibModal.open({
                 templateUrl: 'views/species-modal.html',
                 controller: SpeciesModalController
-            });
+            }).result.then(function (x) {
+                    $log.log('Modal close', x);
+                    $anchorScroll('select-species-' + SpeciesService.getState().selectedSpecies.id);
+                });
         }
     };
 }
