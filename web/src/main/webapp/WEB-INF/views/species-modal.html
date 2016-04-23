@@ -92,7 +92,8 @@
         <strong>{{'msg.varieties'|translate}}:</strong>
         <ul class="nav nav-pills">
             <li ng-class="{active: species.variety==v}" role="presentation" ng-repeat="v in varieties | filter:{speciesId:species.id}:true | orderBy:'name'">
-                <a tabindex="-1" ng-click="toggleVariety(v, species, $event)" href="#">{{v.name}}</a>
+                <a tabindex="-1" ng-click="toggleVariety(v, species, $event)" href="#"
+                   uib-tooltip="{{'msg.clicktoselect' | translate}}">{{v.name}}</a>
             </li>
         </ul>
         <button ng-click="editVariety.visible=true" class="btn btn-primary btn-sm" ng-if="!editVariety.visible" id="show-add-variety-button">
