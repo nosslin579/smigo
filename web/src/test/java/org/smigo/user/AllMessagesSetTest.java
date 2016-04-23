@@ -29,7 +29,6 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Test
@@ -45,25 +44,25 @@ public class AllMessagesSetTest {
     public void testSvMessagesExists() throws Exception {
         boolean ok = true;
         final UserAdaptiveMessageSource messageSource = new UserAdaptiveMessageSource(-1);
-        final Map<Object, Object> englishMessages = messageSource.getAllMessages(Locale.ROOT);
+        final Map<Object, Object> englishMessages = messageSource.getAllMessages(Language.ENGLISH.getLocale());
         final Map<Object, Object> swedishMessages = messageSource.getAllMessages(Language.SWEDISH.getLocale());
         final Map<Object, Object> germanMessages = messageSource.getAllMessages(Language.GERMAN.getLocale());
         final Map<Object, Object> spanishMessages = messageSource.getAllMessages(Language.SPANISH.getLocale());
         for (Object key : englishMessages.keySet()) {
-            String rootTranslation = englishMessages.get(key).toString();
+            String enTranslation = englishMessages.get(key).toString();
             String svTranslation = swedishMessages.get(key).toString();
             String deTranslation = germanMessages.get(key).toString();
             String esTranslation = spanishMessages.get(key).toString();
-            if (!SV_EXCLUDES.contains(key) && rootTranslation.equals(svTranslation)) {
-                System.out.println(key + "=sv_missing" + rootTranslation);
+            if (!SV_EXCLUDES.contains(key) && enTranslation.equals(svTranslation)) {
+                System.out.println(key + "=sv_missing" + enTranslation);
                 ok = false;
             }
-            if (!DE_EXCLUDES.contains(key) && rootTranslation.equals(deTranslation)) {
-                System.out.println(key + "=de_missing" + rootTranslation + svTranslation);
+            if (!DE_EXCLUDES.contains(key) && enTranslation.equals(deTranslation)) {
+                System.out.println(key + "=de_missing" + enTranslation + svTranslation);
                 ok = false;
             }
-            if (!ES_EXCLUDES.contains(key) && rootTranslation.equals(esTranslation)) {
-                System.out.println(key + "=es_missing" + rootTranslation + esTranslation);
+            if (!ES_EXCLUDES.contains(key) && enTranslation.equals(esTranslation)) {
+                System.out.println(key + "=es_missing" + enTranslation + esTranslation);
                 ok = false;
             }
         }
