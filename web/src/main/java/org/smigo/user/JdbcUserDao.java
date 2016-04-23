@@ -39,6 +39,7 @@ import java.util.Map;
 @Repository
 public class JdbcUserDao implements UserDao {
     private static final String SELECT = "SELECT * FROM users WHERE %s=?";
+    private final BeanPropertyRowMapper<User> userRowMapper = new BeanPropertyRowMapper<>(User.class);
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insert;
     private SimpleJdbcInsert insertOpenId;
@@ -66,19 +67,19 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> getUsersByUsername(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), username);
+        return jdbcTemplate.query(sql, userRowMapper, username);
     }
 
     @Override
     public List<User> getUsersByEmail(String email) {
         final String sql = String.format(SELECT, "email");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), email);
+        return jdbcTemplate.query(sql, userRowMapper, email);
     }
 
     @Override
     public List<User> getUsersByOpenIDAuthenticationToken(OpenIDAuthenticationToken token) {
         final String sql = "SELECT users.id, username FROM users JOIN openid ON openid.user_id = users.id WHERE openid.identity_url = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), token.getIdentityUrl());
+        return jdbcTemplate.query(sql, userRowMapper, token.getIdentityUrl());
     }
 
     @Override
@@ -98,6 +99,6 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getUserById(int id) {
         final String sql = String.format(SELECT, "id");
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), id);
+        return jdbcTemplate.queryForObject(sql, userRowMapper, id);
     }
 }

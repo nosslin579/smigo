@@ -99,7 +99,9 @@ public class SpeciesHandler {
     public Review setVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(speciesId);
         log.info("Updating species translation " + name + user + locale + species);
-        if (species.getCreator() == user.getId()) {
+        boolean isMod = user.isModerator();
+        boolean isCreator = species.getCreator() == user.getId();
+        if (isCreator || isMod) {
             speciesDao.setVernacular(speciesId, name.getVernacularName(), locale);
             return Review.NONE;
         }
@@ -118,7 +120,10 @@ public class SpeciesHandler {
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
         Species originalSpecies = getSpecies(speciesId);
         log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
-        if (originalSpecies.getCreator() == user.getId() && !Objects.equals(Family.NEW_FAMILY, updatedSpecies.getFamilyId())) {
+        boolean isMod = user.isModerator();
+        boolean isCreator = originalSpecies.getCreator() == user.getId();
+        boolean isNewFamily = Objects.equals(Family.NEW_FAMILY, updatedSpecies.getFamilyId());
+        if ((isCreator || isMod) && !isNewFamily) {
             speciesDao.updateSpecies(speciesId, updatedSpecies);
             return Review.NONE;
         }

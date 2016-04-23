@@ -29,10 +29,13 @@ import org.springframework.social.security.SocialUserDetails;
 import java.util.Collections;
 
 public class AuthenticatedUser extends SocialUser implements SocialUserDetails {
+    public static final String USER_AUTHORITY = "user";
+    public static final String MOD_AUTHORITY = "mod";
+
     private final int id;
 
-    public AuthenticatedUser(int id, String username, String password) {
-        super(username, password, Collections.singletonList(new SimpleGrantedAuthority("user")));
+    public AuthenticatedUser(int id, String username, String password, String authority) {
+        super(username, password, Collections.singletonList(new SimpleGrantedAuthority(authority)));
         this.id = id;
     }
 
@@ -43,5 +46,9 @@ public class AuthenticatedUser extends SocialUser implements SocialUserDetails {
     @Override
     public String getUserId() {
         return String.valueOf(id);
+    }
+
+    public boolean isModerator() {
+        return getAuthorities().contains(new SimpleGrantedAuthority(MOD_AUTHORITY));
     }
 }

@@ -50,9 +50,9 @@ class OpenIdUserDetailsService implements AuthenticationUserDetailsService<OpenI
             final User createdUser = userHandler.createUser();
             final int userId = createdUser.getId();
             userDao.addOpenId(userId, token.getIdentityUrl());
-            return new AuthenticatedUser(userId, createdUser.getUsername(), "");
+            return new AuthenticatedUser(userId, createdUser.getUsername(), "", AuthenticatedUser.USER_AUTHORITY);
         }
         final User user = users.get(0);
-        return new AuthenticatedUser(user.getId(), user.getUsername(), "");
+        return new AuthenticatedUser(user.getId(), user.getUsername(), "", user.getAuthority());
     }
 }

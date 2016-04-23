@@ -41,6 +41,6 @@ class CustomSocialUserDetailsService implements SocialUserDetailsService {
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException {
         final User user = userDao.getUserById(Integer.parseInt(userId));
-        return new AuthenticatedUser(user.getId(), user.getUsername(), "");
+        return new AuthenticatedUser(user.getId(), user.getUsername(), "", user.getAuthority());
     }
 }

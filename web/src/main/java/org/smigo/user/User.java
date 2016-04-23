@@ -50,6 +50,7 @@ public class User {
     @JsonIgnore
     private String password;
     private boolean enabled;
+    private String authority;
 
     public int getId() {
         return id;
@@ -146,5 +147,13 @@ public class User {
                 ", username='" + username + '\'' +
                 ", locale=" + locale +
                 '}';
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }
