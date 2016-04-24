@@ -57,6 +57,10 @@ public class SpeciesHandler {
         return id;
     }
 
+    public void deleteSpecies(int speciesId) {
+        speciesDao.deleteVernacular(speciesId);
+        speciesDao.deleteSpecies(speciesId);
+    }
 
     public String createIconFileName(int userId, int speciesId, CommonsMultipartFile uploadedIcon) {
         if (uploadedIcon == null || uploadedIcon.isEmpty()) {

@@ -1,4 +1,4 @@
-function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, UserService, SpeciesService) {
+function SpeciesModalController($log, $scope, $rootScope, UserService, SpeciesService) {
     $scope.species = SpeciesService.getState().selectedSpecies;
     $scope.currentUser = UserService.getState().currentUser;
     $scope.varieties = SpeciesService.getAllVarieties();
@@ -6,6 +6,7 @@ function SpeciesModalController($log, $scope, $rootScope, $uibModalInstance, Use
     $scope.updateSpecies = SpeciesService.updateSpecies;
     $scope.addVariety = SpeciesService.addVariety;
     $scope.selectSpecies = SpeciesService.selectSpecies;
+    $scope.deleteSpecies = SpeciesService.deleteSpecies;
 
     $scope.toggleVariety = function (variety, species, event) {
         $log.log('Toggle variety:', [variety, species, event]);

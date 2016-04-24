@@ -47,4 +47,8 @@ interface SpeciesDao {
     void setVernacular(int id, String vernacularName, Locale locale);
 
     void updateSpecies(int id, Species species);
+
+    void deleteSpecies(int speciesId);
+
+    void deleteVernacular(int speciesId);
 }

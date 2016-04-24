@@ -108,9 +108,14 @@ public class SpeciesController implements Serializable {
         return speciesHandler.searchSpecies(species.getQuery(), locale);
     }
 
+    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteSpecies(Locale locale, @PathVariable int id) {
+        speciesHandler.deleteSpecies(id);
+    }
+
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.GET)
     public void searchSpecies() {
     }
-
 }

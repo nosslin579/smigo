@@ -137,6 +137,17 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             }
             state.action = 'add';
         },
+        deleteSpecies: function (species) {
+            return $http.delete('/rest/species/' + species.id).then(function (response) {
+                $log.log('Response from delete species', [response, species]);
+                var indexOfDeleted = state.speciesArray.indexOf(species);
+                state.speciesArray.splice(indexOfDeleted, 1);
+                species.deleted = true;
+            }).catch(function (response) {
+                alert('Delete failed');
+                $log.warn('Response from delete species failed', [response, species]);
+            });
+        },
         addSpecies: function (vernacularNameRaw) {
             state.pendingAdd = true;
             state.addSpeciesErrors = [];

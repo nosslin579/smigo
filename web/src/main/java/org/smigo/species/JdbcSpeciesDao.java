@@ -54,7 +54,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     private SimpleJdbcInsert insertSpecies;
     private SimpleJdbcInsert insertVernacular;
     private Map<Integer, Family> families;
-    private SpeciesRowMapper rowMapper = new SpeciesRowMapper();
+    private RowMapper<Species> rowMapper = new SpeciesRowMapper();
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -168,6 +168,18 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void updateSpecies(int id, Species species) {
         String sql = "UPDATE SPECIES SET SCIENTIFIC_NAME = ?, ICONFILENAME = ?, FAMILY_ID = ? WHERE ID = ?;";
         jdbcTemplate.update(sql, species.getScientificName(), species.getIconFileName(), species.getFamilyId(), id);
+    }
+
+    @Override
+    public void deleteSpecies(int speciesId) {
+        String sql = "DELETE FROM SPECIES WHERE ID = ?";
+        jdbcTemplate.update(sql, speciesId);
+    }
+
+    @Override
+    public void deleteVernacular(int speciesId) {
+        String sql = "DELETE FROM SPECIES_TRANSLATION WHERE SPECIES_ID = ?";
+        jdbcTemplate.update(sql, speciesId);
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {

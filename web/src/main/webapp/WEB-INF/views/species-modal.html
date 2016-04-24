@@ -35,7 +35,7 @@
     </form>
 </div>
 
-<div class="modal-body" ng-if="!species.item">
+<div class="modal-body" ng-if="!species.item && !species.deleted">
 
     <div>
         <strong>{{'msg.aka' | translate}}: </strong>
@@ -165,6 +165,13 @@
     </div>
 </div>
 
+<div class="modal-body" ng-if="species.deleted">
+    <div>
+        {{'DELETED'}}
+    </div>
+</div>
+
 <div class="modal-footer">
+    <button ng-if="!species.deleted" type="button" class="btn btn-danger" ng-click="deleteSpecies(species)" id="delete-species-modal-button">{{'delete' | translate}}</button>
     <button type="button" class="btn btn-default" ng-click="$dismiss()" id="close-species-modal-button">{{'msg.close' | translate}}</button>
 </div>
