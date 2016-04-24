@@ -41,6 +41,8 @@ import java.util.concurrent.ConcurrentHashMap;
 class PasswordHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    public static final String MAIL_SUBJECT = "password reset";
+
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -67,6 +69,7 @@ class PasswordHandler {
         updatePassword(user.getId(), password);
         resetKeyItem.setPristine(false);
         log.info("Password successfully reset by: " + user);
+        emailHandler.sendAdminNotification(MAIL_SUBJECT, "User successfully reset password. " + user.getUsername());
     }
 
     public void updatePassword(int userId, String newPassword) {
@@ -81,19 +84,17 @@ class PasswordHandler {
         log.info("Sending reset email to: " + emailAddress);
         log.info("Size of resetKeyMap:" + resetKeyMap.size());
 
-        final String subject = "reset password";
-
         List<User> users = userDao.getUsersByEmail(emailAddress);
         if (users.isEmpty()) {
             final String text = "Can not reset password. No user with email " + emailAddress;
-            emailHandler.sendAdminNotification("no email for password reset", text);
-            emailHandler.sendClientMessage(emailAddress, subject, text);
+            emailHandler.sendAdminNotification(MAIL_SUBJECT, text);
+            emailHandler.sendClientMessage(emailAddress, MAIL_SUBJECT, text);
         } else {
             final String id = UUID.randomUUID().toString().replaceAll("-", "");
             resetKeyMap.put(id, new ResetKeyItem(id, emailAddress));
 
             final String text = "Your username is " + users.get(0).getUsername() + ". Click link to reset password. http://" + host + "/reset-password/" + id;
-            emailHandler.sendClientMessage(emailAddress, subject, text);
+            emailHandler.sendClientMessage(emailAddress, MAIL_SUBJECT, text);
         }
     }
 
