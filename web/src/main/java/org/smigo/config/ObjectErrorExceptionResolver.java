@@ -25,6 +25,8 @@ package org.smigo.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.PriorityOrdered;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,9 +45,13 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        if (ex instanceof AccessDeniedException) {
+            return getModelAndView(response, HttpStatus.FORBIDDEN);
+        }
+
         final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
         if (uri != null && uri.startsWith("/rest/")) {
-            return getModelAndView(response);
+            return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if (handler == null) {
@@ -57,7 +63,7 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
             final boolean annotatedWithRestController = handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
             final boolean annotatedWithResponseBody = handlerMethod.getMethodAnnotation(ResponseBody.class) != null;
             if (annotatedWithResponseBody || annotatedWithRestController) {
-                return getModelAndView(response);
+                return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
             log.error("Failed to return object error. Handler:" + handler, ex);
@@ -65,8 +71,8 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
         return null;
     }
 
-    private ModelAndView getModelAndView(HttpServletResponse response) {
-        response.setStatus(500);
+    private ModelAndView getModelAndView(HttpServletResponse response, HttpStatus httpStatus) {
+        response.setStatus(httpStatus.value());
         final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
         ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
         modelAndView.addObject("errors", modelObject);
