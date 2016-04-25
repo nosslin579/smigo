@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +68,9 @@ public class ObjectErrorExceptionResolver implements HandlerExceptionResolver, P
     private ModelAndView getModelAndView(HttpServletResponse response) {
         response.setStatus(500);
         final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
-        return new ModelAndView("object-error.jsp", "errors", modelObject);
+        ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
+        modelAndView.addObject("errors", modelObject);
+        return modelAndView;
     }
 
     @Override
