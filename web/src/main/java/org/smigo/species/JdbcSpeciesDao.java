@@ -60,7 +60,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("precedence");
+        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
     }
 
     @Override
@@ -149,12 +149,19 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void insertVernacular(int id, String vernacularName, Locale locale) {
+    public void insertVernacular(int id, String vernacularName, Locale locale, boolean lowestPrecedence) {
         MapSqlParameterSource s = new MapSqlParameterSource();
         s.addValue("species_id", id, Types.INTEGER);
         s.addValue("language", locale.getLanguage(), Types.VARCHAR);
         s.addValue("country", locale.getCountry(), Types.VARCHAR);
         s.addValue("vernacular_name", vernacularName);
+        if (lowestPrecedence) {
+            Integer precedence = jdbcTemplate.queryForObject("SELECT PRECEDENCE FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;", Integer.class);
+            s.addValue("precedence", --precedence);
+            insertVernacular.setGeneratedKeyNames();
+        } else {
+            insertVernacular.setGeneratedKeyName("precedence");
+        }
         insertVernacular.execute(s);
     }
 

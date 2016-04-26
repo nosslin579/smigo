@@ -38,6 +38,7 @@ import java.util.Objects;
 
 @Component
 public class SpeciesHandler {
+    public static final String REVIEW_REQUEST = "review request";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -53,7 +54,7 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertVernacular(id, vernacularName, locale);
+        speciesDao.insertVernacular(id, vernacularName, locale, false);
         return id;
     }
 
@@ -100,24 +101,16 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public Review setVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
+    public Review addVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(speciesId);
-        log.info("Updating species translation " + name + user + locale + species);
         boolean isMod = user.isModerator();
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || isMod) {
-            speciesDao.setVernacular(speciesId, name.getVernacularName(), locale);
+            speciesDao.insertVernacular(speciesId, name.getVernacularName(), locale, name.isPrimary());
             return Review.NONE;
         }
-        String translation = speciesDao.getVernacular(speciesId).toString();
-        String text = "Species translation change." + System.lineSeparator() +
-                "From: " + translation + System.lineSeparator() +
-                "To: " + locale + " " + name + System.lineSeparator() +
-                "SpeciesId: " + speciesId + System.lineSeparator() +
-                "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
-                "MERGE INTO SPECIES_TRANSLATION (SPECIES_ID, LANGUAGE, COUNTRY, VERNACULAR_NAME) KEY (SPECIES_ID, LANGUAGE, COUNTRY) VALUES " +
-                "(" + speciesId + ", '" + locale.getLanguage() + "','" + locale.getCountry() + "','" + name.getVernacularName() + "')";
-        mailHandler.sendAdminNotification("review request", text);
+        Map<Locale, String> vernacular = speciesDao.getVernacular(speciesId);
+        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + name + " to:" + vernacular + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
         return Review.MODERATOR;
     }
 
@@ -139,7 +132,7 @@ public class SpeciesHandler {
                 "UPDATE SPECIES SET FAMILY_ID = " + updatedSpecies.getFamilyId() + " WHERE ID=" + speciesId + ";" + System.lineSeparator() +
                 "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "' WHERE ID=" + speciesId + ";" + System.lineSeparator() +
                 "UPDATE SPECIES SET ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
-        mailHandler.sendAdminNotification("review request", text);
+        mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
         return Review.MODERATOR;
     }
 }

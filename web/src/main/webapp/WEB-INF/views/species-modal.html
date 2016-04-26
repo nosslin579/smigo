@@ -1,4 +1,4 @@
-<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName};editIcon={field:'iconFileName'}">
+<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, primary:true};editIcon={field:'iconFileName'}">
     <button type="button" class="close" ng-click="$dismiss()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
@@ -23,7 +23,7 @@
     </h4>
 
     <!--#### Edit vernacular form ####-->
-    <form id="edit-vernacular-form" class="form-inline" ng-submit="setVernacular(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
+    <form id="edit-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.errorName}}</span>
         </div>
@@ -37,10 +37,25 @@
 
 <div class="modal-body" ng-if="!species.item && !species.deleted">
 
-    <div>
+    <div ng-init="addVernacular={visible:false, name:''}"></div>
+
+    <div ng-if="!addVernacular.visible" ng-mouseover="addVernacular.addButtonVisible=true" ng-mouseleave="addVernacular.addButtonVisible=false">
         <strong>{{'msg.aka' | translate}}: </strong>
-        <em>{{'msg.speciesalt'+species.id | translate}}</em>
+        <em uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="addVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="left">{{'msg.speciesalt'+species.id | translate}}</em>
+        <a href="#" ng-click="addVernacular.visible=true" class="btn btn-primary btn-sm" ng-if="addVernacular.addButtonVisible"><span class="glyphicon glyphicon-plus"></span> {{'add'|translate}}</a>
     </div>
+
+    <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, addVernacular, currentUser.locale)" ng-if="addVernacular.visible">
+        <div class="has-error">
+            <span ng-repeat="error in addVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:addVernacular.errorName}}</span>
+        </div>
+        <div class="form-group" ng-class="{'has-error':addVernacular.objectErrors}">
+            <label for="add-vernacular-input">{{'vernacular'|translate}}: </label>
+            <input class="form-control" type="text" id="add-vernacular-input" autofocus autocomplete="off"
+                   ng-model="addVernacular.name" ng-blur="addVernacular.visible=false"
+                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (addVernacular.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+        </div>
+    </form>
 
     <div ng-init="editScientific={visible:false, value:species.scientificName, field:'scientificName'}"></div>
 

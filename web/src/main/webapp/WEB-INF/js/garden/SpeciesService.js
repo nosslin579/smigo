@@ -197,18 +197,18 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.errorName = updateObj.value;
             });
         },
-        setVernacular: function (species, updateObj, locale) {
-            $log.info('setVernacular', [species, updateObj, locale]);
-            if (species.vernacularName === updateObj.name) {
+        addVernacular: function (species, updateObj, locale) {
+            $log.info('addVernacular', [species, updateObj, locale]);
+            if (species.vernacularName === updateObj.name || !updateObj.name) {
                 updateObj.visible = false;
                 return;
             }
-            var data = {vernacularName: updateObj.name};
+            var data = {vernacularName: updateObj.name, primary: updateObj.primary};
             return $http.put('/rest/species/' + species.id + '/vernacular/' + locale, data).then(function (response) {
                 $log.log('Response from put vernacular', [response]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
-                if (response.status === 200) {
+                if (response.status === 200 && updateObj.primary) {
                     species.vernacularName = updateObj.name;
                     $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
                 } else if (response.status === 202) {

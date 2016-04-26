@@ -33,6 +33,16 @@ public class VernacularName {
     @UniqueSpeciesName
     private String vernacularName;
 
+    private boolean primary;
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
+    }
+
     public String getVernacularName() {
         return vernacularName;
     }
@@ -45,6 +55,7 @@ public class VernacularName {
     public String toString() {
         return "VernacularName{" +
                 "vernacularName='" + vernacularName + '\'' +
+                ", primary=" + primary +
                 '}';
     }
 }

@@ -70,22 +70,6 @@ public class SpeciesController implements Serializable {
         return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
     }
 
-    @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
-    @ResponseBody
-    public Object setVernacular(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
-                                @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
-        log.info("Updating species. Name:" + name.getVernacularName());
-        if (result.hasErrors()) {
-            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
-            return result.getAllErrors();
-        }
-        Review review = speciesHandler.setVernacular(name, id, user, sessionLocale);
-        if (review == Review.MODERATOR) {
-            response.setStatus(202);
-        }
-        return null;
-    }
-
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public Object updateSpecies(@Valid @RequestBody Species species, BindingResult result, @PathVariable int id,
@@ -119,5 +103,22 @@ public class SpeciesController implements Serializable {
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.GET)
     public void searchSpecies() {
+    }
+
+
+    @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Object addVernacular(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
+                                @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
+        log.info("Updating species. Name:" + name.getVernacularName());
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return result.getAllErrors();
+        }
+        Review review = speciesHandler.addVernacular(name, id, user, sessionLocale);
+        if (review == Review.MODERATOR) {
+            response.setStatus(HttpStatus.ACCEPTED.value());
+        }
+        return null;
     }
 }
