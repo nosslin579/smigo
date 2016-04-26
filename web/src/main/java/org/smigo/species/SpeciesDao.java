@@ -32,7 +32,10 @@ interface SpeciesDao {
 
     List<Species> getDefaultSpecies();
 
-    Map<String, String> getSynonyms(String language);
+    /**
+     * @return a map where key is species id and value is comma separated string of other vernaculars
+     */
+    Map<Integer, String> getVernacularOther(String language);
 
     Map<Locale, String> getVernacular(int speciesId);
 
@@ -42,6 +45,9 @@ interface SpeciesDao {
 
     List<Species> searchSpecies(String query, Locale locale);
 
+    /**
+     * @return a map where key is species message key and value is primary vernacular
+     */
     Map<String, String> getVernacular(String language, String country);
 
     void setVernacular(int id, String vernacularName, Locale locale);

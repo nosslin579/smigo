@@ -71,17 +71,25 @@ public class SpeciesHandler {
         }
     }
 
-    public List<Species> getDefaultSpecies() {
-        return speciesDao.getDefaultSpecies();
+    public List<Species> getDefaultSpecies(Locale locale) {
+        Map<Integer, String> vernacularOther = speciesDao.getVernacularOther(locale.getLanguage());
+        List<Species> ret = speciesDao.getDefaultSpecies();
+        ret.forEach(s -> s.setVernacularOther(vernacularOther.get(s.getId())));
+        return ret;
     }
 
-    public Species getSpecies(int id) {
-        return speciesDao.getSpecies(id);
+    public Species getSpecies(int id, Locale locale) {
+        Species ret = speciesDao.getSpecies(id);
+        ret.setVernacularOther(speciesDao.getVernacularOther(locale.getLanguage()).get(id));
+        return ret;
     }
 
     public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        return speciesDao.searchSpecies(query, locale);
+        Map<Integer, String> vernacularOther = speciesDao.getVernacularOther(locale.getLanguage());
+        List<Species> ret = speciesDao.searchSpecies(query, locale);
+        ret.forEach(s -> s.setVernacularOther(vernacularOther.get(s.getId())));
+        return ret;
     }
 
     public Map<String, String> getVernacular(Locale locale) {
@@ -93,16 +101,12 @@ public class SpeciesHandler {
         return ret;
     }
 
-    public Map<String, String> getSynonyms(Locale locale) {
-        return speciesDao.getSynonyms(locale.getLanguage());
-    }
-
     public List<Rule> getRules() {
         return ruleDao.getRules();
     }
 
     public Review addVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
-        Species species = getSpecies(speciesId);
+        Species species = getSpecies(speciesId, locale);
         boolean isMod = user.isModerator();
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || isMod) {
@@ -115,7 +119,7 @@ public class SpeciesHandler {
     }
 
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
-        Species originalSpecies = getSpecies(speciesId);
+        Species originalSpecies = getSpecies(speciesId, Locale.ENGLISH);
         log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
         boolean isMod = user.isModerator();
         boolean isCreator = originalSpecies.getCreator() == user.getId();

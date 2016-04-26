@@ -102,21 +102,19 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public Map<String, String> getSynonyms(String language) {
+    public Map<Integer, String> getVernacularOther(String language) {
         final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? ORDER BY PRECEDENCE";
-        return jdbcTemplate.query(sql, new Object[]{language}, new int[]{Types.VARCHAR}, new ResultSetExtractor<Map<String, String>>() {
+        return jdbcTemplate.query(sql, new Object[]{language}, new int[]{Types.VARCHAR}, new ResultSetExtractor<Map<Integer, String>>() {
             @Override
-            public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                Map<String, String> ret = new HashMap<>(rs.getFetchSize());
+            public Map<Integer, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                Map<Integer, String> ret = new HashMap<>(rs.getFetchSize());
                 while (rs.next()) {
-                    if (rs.getInt("precedence") == 1) {
-                        continue;
-                    }
-                    String speciesMessageKey = "msg.speciesalt" + rs.getInt("species_id");
+                    int speciesId = rs.getInt("species_id");
                     String vernacularName = rs.getString("vernacular_name");
-                    String primary = ret.putIfAbsent(speciesMessageKey, vernacularName);
-                    if (primary != null) {
-                        ret.put(speciesMessageKey, primary + ", " + vernacularName);
+                    String previousValue = ret.putIfAbsent(speciesId, "");//first one is primary so we exclude that one
+                    if (previousValue != null) {
+                        String separator = previousValue.equals("") ? "" : ", ";
+                        ret.put(speciesId, previousValue + separator + vernacularName);
                     }
                 }
                 return ret;

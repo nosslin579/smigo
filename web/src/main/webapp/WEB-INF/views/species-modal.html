@@ -41,7 +41,7 @@
 
     <div ng-if="!addVernacular.visible" ng-mouseover="addVernacular.addButtonVisible=true" ng-mouseleave="addVernacular.addButtonVisible=false">
         <strong>{{'msg.aka' | translate}}: </strong>
-        <em uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="addVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="left">{{'msg.speciesalt'+species.id | translate}}</em>
+        <em uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="addVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="left">{{species.vernacularOther}}</em>
         <a href="#" ng-click="addVernacular.visible=true" class="btn btn-primary btn-sm" ng-if="addVernacular.addButtonVisible"><span class="glyphicon glyphicon-plus"></span> {{'add'|translate}}</a>
     </div>
 

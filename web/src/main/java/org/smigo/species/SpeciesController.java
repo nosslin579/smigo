@@ -49,13 +49,13 @@ public class SpeciesController implements Serializable {
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
     public Collection<Species> getSpecies(Locale locale) {
-        return speciesHandler.getDefaultSpecies();
+        return speciesHandler.getDefaultSpecies(locale);
     }
 
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Species getSpecies(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
-        return speciesHandler.getSpecies(id);
+        return speciesHandler.getSpecies(id, locale);
     }
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
@@ -73,7 +73,7 @@ public class SpeciesController implements Serializable {
     @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public Object updateSpecies(@Valid @RequestBody Species species, BindingResult result, @PathVariable int id,
-                                @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+                                @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response, Locale locale) {
         log.info("Updating species. Species:" + species);
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
@@ -83,7 +83,7 @@ public class SpeciesController implements Serializable {
         if (review == Review.MODERATOR) {
             response.setStatus(202);
         }
-        return speciesHandler.getSpecies(id);
+        return speciesHandler.getSpecies(id, locale);
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)

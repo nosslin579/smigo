@@ -203,6 +203,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.visible = false;
                 return;
             }
+            updateObj.name = updateObj.name.capitalize();
             var data = {vernacularName: updateObj.name, primary: updateObj.primary};
             return $http.put('/rest/species/' + species.id + '/vernacular/' + locale, data).then(function (response) {
                 $log.log('Response from put vernacular', [response]);
@@ -211,6 +212,8 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 if (response.status === 200 && updateObj.primary) {
                     species.vernacularName = updateObj.name;
                     $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
+                } else if (response.status === 200 && !updateObj.primary) {
+                    species.vernacularOther += ', ' + updateObj.name;
                 } else if (response.status === 202) {
                     updateObj.displayModReview = true;
                 }

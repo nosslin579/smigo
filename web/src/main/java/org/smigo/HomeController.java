@@ -64,7 +64,7 @@ public class HomeController {
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
         model.addAttribute("user", userHandler.getUser(user));
-        model.addAttribute("species", speciesHandler.getDefaultSpecies());
+        model.addAttribute("species", speciesHandler.getDefaultSpecies(locale));
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("messages", messageSource.getAllMessages(locale));
         model.addAttribute("rules", speciesHandler.getRules());

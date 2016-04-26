@@ -49,6 +49,7 @@ public class Species {
 
     @JsonIgnore
     private int creator;
+    private String vernacularOther;
 
     public Species() {
     }
@@ -153,5 +154,13 @@ public class Species {
     @JsonIgnore
     public Integer getFamilyId() {
         return family == null || family.getId() == 0 ? null : family.getId();
+    }
+
+    public void setVernacularOther(String vernacularOther) {
+        this.vernacularOther = vernacularOther;
+    }
+
+    public String getVernacularOther() {
+        return vernacularOther;
     }
 }

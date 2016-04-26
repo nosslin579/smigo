@@ -55,7 +55,6 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         Map<Object, Object> ret = new HashMap<Object, Object>(properties);
         if (speciesHandler != null) { //ugly fix for test
             ret.putAll(speciesHandler.getVernacular(locale));
-            ret.putAll(speciesHandler.getSynonyms(locale));
         }
         log.info("Get all messages took " + (System.currentTimeMillis() - start) + "ms");
         return ret;
