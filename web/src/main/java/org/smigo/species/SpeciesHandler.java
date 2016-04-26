@@ -54,7 +54,7 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertVernacular(id, vernacularName, locale, false);
+        speciesDao.insertVernacular(id, vernacularName, locale, true);
         return id;
     }
 

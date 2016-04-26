@@ -41,7 +41,7 @@ interface SpeciesDao {
 
     Species getSpecies(int id);
 
-    void insertVernacular(int id, String vernacularName, Locale locale, boolean autoGeneratePrecedence);
+    void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary);
 
     List<Species> searchSpecies(String query, Locale locale);
 

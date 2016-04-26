@@ -52,7 +52,6 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
-    private SimpleJdbcInsert insertVernacular;
     private Map<Integer, Family> families;
     private RowMapper<Species> rowMapper = new SpeciesRowMapper();
 
@@ -60,7 +59,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation");
     }
 
     @Override
@@ -147,20 +145,11 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void insertVernacular(int id, String vernacularName, Locale locale, boolean lowestPrecedence) {
-        MapSqlParameterSource s = new MapSqlParameterSource();
-        s.addValue("species_id", id, Types.INTEGER);
-        s.addValue("language", locale.getLanguage(), Types.VARCHAR);
-        s.addValue("country", locale.getCountry(), Types.VARCHAR);
-        s.addValue("vernacular_name", vernacularName);
-        if (lowestPrecedence) {
-            Integer precedence = jdbcTemplate.queryForObject("SELECT PRECEDENCE FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;", Integer.class);
-            s.addValue("precedence", --precedence);
-            insertVernacular.setGeneratedKeyNames();
-        } else {
-            insertVernacular.setGeneratedKeyName("precedence");
-        }
-        insertVernacular.execute(s);
+    public void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary) {
+        String sql = primary ?
+                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE-1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;" :
+                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE+1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE DESC LIMIT 1;";
+        jdbcTemplate.update(sql, speciesId, vernacularName, locale.getLanguage(), locale.getCountry());
     }
 
     @Override
