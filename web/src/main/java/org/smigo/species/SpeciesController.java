@@ -106,6 +106,13 @@ public class SpeciesController implements Serializable {
     }
 
 
+    @RequestMapping(value = "/rest/vernacular", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Vernacular> getVernacular(Locale locale) {
+        log.info("Getting vernacular");
+        return speciesHandler.getVernacular(locale);
+    }
+
     @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
     @ResponseBody
     public Object addVernacular(@Valid @RequestBody Vernacular name, BindingResult result, @PathVariable int id, @PathVariable String locale,

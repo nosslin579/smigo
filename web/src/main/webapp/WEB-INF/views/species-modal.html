@@ -29,8 +29,9 @@
         </div>
         <div class="form-group" ng-class="{'has-error':editVernacular.objectErrors}">
             <label for="edit-vernacular-input"><img ng-src="{{'/static/species/' + species.iconFileName}}"/></label>
+            <!-- Do not close modal on escape(27) if edit is in focus. -->
             <input class="form-control" type="text" id="edit-vernacular-input" autofocus autocomplete="off"
-                   ng-model="editVernacular.name" ng-blur="editVernacular.visible=false" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVernacular.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+                   ng-model="editVernacular.name" ng-blur="editVernacular.visible=false" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVernacular.visible = false)">
         </div>
     </form>
 </div>
@@ -42,10 +43,11 @@
     <!--#### Vernacular other name ####-->
     <div ng-if="!vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong>
-        <em ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}" ng-if="!$first"
-            ng-repeat="v in species.vernaculars">{{v.vernacularName}} </em>
-        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="!species.vernacularOther">&lt;{{'edit' | translate}}&gt;</a>
-        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
+        <!--First element in array is the primary thus excluding -->
+        <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}" ng-if="!$first" ng-repeat="v in vernaculars">{{v.vernacularName}} </span>
+        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="vernaculars.length === 1">&lt;{{'edit' | translate}}&gt;</a>
+        <!--WORD JOINER (U+2060)-->
+        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>
 
     <!--#### Vernacular other delete ####-->
@@ -58,8 +60,9 @@
         </div>
         <div class="form-group" ng-class="{'has-error':vernacularOtherEdit.objectErrors}">
             <ul class="nav nav-pills">
-                <li role="presentation" ng-repeat="vo in species.vernacularOther.split(',')">
-                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, vo)" href="#">{{vo}}
+                <!--First element in array is the primary thus excluding -->
+                <li role="presentation" ng-repeat="v in vernaculars" ng-if="!$first">
+                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v)" href="#">{{v.vernacularName}}
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </li>
                 <li role="presentation">&#8288;</li>

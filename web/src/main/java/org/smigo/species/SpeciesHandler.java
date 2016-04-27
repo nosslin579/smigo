@@ -140,11 +140,7 @@ public class SpeciesHandler {
     }
 
     public List<Vernacular> getVernacular(Locale locale) {
-        List<Vernacular> ret = speciesDao.getVernacular(locale);
-        if (!locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
-            ret.addAll(speciesDao.getVernacular(Locale.ENGLISH));
-        }
-        return ret;
+        return speciesDao.getVernacular(locale);
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user) {

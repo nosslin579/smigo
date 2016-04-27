@@ -8,12 +8,21 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     state.selectedSpecies = initData.species.smigoFind(28, 'id');
     state.pendingAdd = false;
     state.varieties = initData.varieties;
+    state.vernaculars = [];
+
     $log.log('SpeciesService', state);
 
     initData.rules.forEach(function (rule) {
         !ruleMap[rule.host] && (ruleMap[rule.host] = []);
         ruleMap[rule.host].push(createRule(rule));
     });
+
+    $http.get('/rest/vernacular').then(function (response) {
+        $log.log('Response from /rest/vernacular', response);
+        state.vernaculars.length = 0;
+        Array.prototype.push.apply(state.vernaculars, response.data);
+    });
+
 
     augmentSpecies(state.speciesArray);
 

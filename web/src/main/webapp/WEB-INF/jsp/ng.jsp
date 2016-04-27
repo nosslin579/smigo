@@ -65,6 +65,7 @@
             varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>,
             messages: <c:out escapeXml="false" value="${f:toJson(messages)}" />
         };
+        console.log('Init data', initData);
 
         <%@ include file="../js/app.js" %>
         <%@ include file="../js/garden/SpeciesFilter.js" %>
