@@ -56,5 +56,7 @@ interface SpeciesDao {
 
     void deleteSpecies(int speciesId);
 
-    void deleteVernacular(int speciesId);
+    void deleteVernacular(int vernacularId);
+
+    List<Vernacular> getVernacular(Locale locale);
 }

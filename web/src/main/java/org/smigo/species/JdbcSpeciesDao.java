@@ -24,6 +24,7 @@ package org.smigo.species;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -53,7 +54,8 @@ class JdbcSpeciesDao implements SpeciesDao {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
     private Map<Integer, Family> families;
-    private RowMapper<Species> rowMapper = new SpeciesRowMapper();
+    private final RowMapper<Species> rowMapper = new SpeciesRowMapper();
+    private final RowMapper<Vernacular> vernacularRowMapper = new BeanPropertyRowMapper<>(Vernacular.class);
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -171,9 +173,15 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public void deleteVernacular(int speciesId) {
-        String sql = "DELETE FROM SPECIES_TRANSLATION WHERE SPECIES_ID = ?";
-        jdbcTemplate.update(sql, speciesId);
+    public void deleteVernacular(int vernacularId) {
+        String sql = "DELETE FROM SPECIES_TRANSLATION WHERE ID = ?";
+        jdbcTemplate.update(sql, vernacularId);
+    }
+
+    @Override
+    public List<Vernacular> getVernacular(Locale locale) {
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND COUNTRY=? ORDER BY PRECEDENCE DESC";
+        return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {

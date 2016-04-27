@@ -28,7 +28,7 @@ import javax.validation.constraints.Size;
 
 
 @UserMustBeAuthenticated
-public class VernacularName {
+public class Vernacular {
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
     @UniqueSpeciesName
     private String vernacularName;

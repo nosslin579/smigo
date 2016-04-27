@@ -60,7 +60,7 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public Object addSpecies(@Valid @RequestBody VernacularName name, BindingResult result,
+    public Object addSpecies(@Valid @RequestBody Vernacular name, BindingResult result,
                              @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Adding species. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
@@ -108,14 +108,25 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
     @ResponseBody
-    public Object addVernacular(@Valid @RequestBody VernacularName name, BindingResult result, @PathVariable int id, @PathVariable String locale,
+    public Object addVernacular(@Valid @RequestBody Vernacular name, BindingResult result, @PathVariable int id, @PathVariable String locale,
                                 @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
-        log.info("Updating species. Name:" + name.getVernacularName());
+        log.info("Adding vernacular. Name:" + name.getVernacularName());
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
         Review review = speciesHandler.addVernacular(name, id, user, sessionLocale);
+        if (review == Review.MODERATOR) {
+            response.setStatus(HttpStatus.ACCEPTED.value());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/rest/vernacular/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        log.info("Deleting vernacular. Name:" + id);
+        Review review = speciesHandler.deleteVernacular(id, user);
         if (review == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }

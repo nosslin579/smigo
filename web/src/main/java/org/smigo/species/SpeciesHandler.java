@@ -59,7 +59,7 @@ public class SpeciesHandler {
     }
 
     public void deleteSpecies(int speciesId) {
-        speciesDao.deleteVernacular(speciesId);
+//        speciesDao.deleteVernacular(speciesId);
         speciesDao.deleteSpecies(speciesId);
     }
 
@@ -105,7 +105,7 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public Review addVernacular(VernacularName name, int speciesId, AuthenticatedUser user, Locale locale) {
+    public Review addVernacular(Vernacular name, int speciesId, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(speciesId, locale);
         boolean isMod = user.isModerator();
         boolean isCreator = species.getCreator() == user.getId();
@@ -138,5 +138,22 @@ public class SpeciesHandler {
                 "UPDATE SPECIES SET ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
         mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
         return Review.MODERATOR;
+    }
+
+    public List<Vernacular> getVernacular2(Locale locale) {
+        return speciesDao.getVernacular(locale);
+    }
+
+    public Review deleteVernacular(int vernacularId, AuthenticatedUser user) {
+//        Species species = getSpecies(speciesId, locale);
+        boolean isMod = user.isModerator();
+        boolean isCreator = false;//species.getCreator() == user.getId();
+        if (isCreator || isMod) {
+            speciesDao.deleteVernacular(vernacularId);
+            return Review.NONE;
+        }
+        String text = "Delete vernacular ";
+        mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
+        return null;
     }
 }
