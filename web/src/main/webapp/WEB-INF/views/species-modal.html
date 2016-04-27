@@ -37,24 +37,36 @@
 
 <div class="modal-body" ng-if="!species.item && !species.deleted">
 
-    <div ng-init="addVernacular={visible:false, name:''}"></div>
+    <div ng-init="vernacularOtherEdit={visible:false, name:''}"></div>
 
-    <div ng-if="!addVernacular.visible" ng-mouseover="addVernacular.addButtonVisible=true" ng-mouseleave="addVernacular.addButtonVisible=false">
+    <!--#### Vernacular other name ####-->
+    <div ng-if="!vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong>
-        <em uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="addVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="left">{{species.vernacularOther}}</em>
-        <a href="#" ng-click="addVernacular.visible=true" class="btn btn-primary btn-sm" ng-if="addVernacular.addButtonVisible"><span class="glyphicon glyphicon-plus"></span> {{'add'|translate}}</a>
+        <em ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}">{{species.vernacularOther}}</em>
+        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="!species.vernacularOther">&lt;{{'edit' | translate}}&gt;</a>
+        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
 
-    <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, addVernacular, currentUser.locale)" ng-if="addVernacular.visible">
+    <!--#### Vernacular other delete ####-->
+
+
+    <!--#### Vernacular other add form ####-->
+    <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit, currentUser.locale)" ng-if="vernacularOtherEdit.visible">
         <div class="has-error">
-            <span ng-repeat="error in addVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:addVernacular.errorName}}</span>
+            <span ng-repeat="error in vernacularOtherEdit.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:vernacularOtherEdit.errorName}}</span>
         </div>
-        <div class="form-group" ng-class="{'has-error':addVernacular.objectErrors}">
-            <label for="add-vernacular-input">{{'vernacular'|translate}}: </label>
-            <input class="form-control" type="text" id="add-vernacular-input" autofocus autocomplete="off"
-                   ng-model="addVernacular.name" ng-blur="addVernacular.visible=false"
-                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (addVernacular.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+        <div class="form-group" ng-class="{'has-error':vernacularOtherEdit.objectErrors}">
+            <ul class="nav nav-pills">
+                <li role="presentation" ng-repeat="vo in species.vernacularOther.split(',')">
+                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, vo)" href="#">{{vo}}
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </li>
+                <li role="presentation">&#8288;</li>
+                <input class="form-control" type="text" id="add-vernacular-input" autofocus autocomplete="off" ng-model="vernacularOtherEdit.name" placeholder="{{'add' | translate}}"
+                       ng-keydown="$event.which === 27 && !($event.preventDefault()) && (vernacularOtherEdit.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+            </ul>
         </div>
+        <hr/>
     </form>
 
     <div ng-init="editScientific={visible:false, value:species.scientificName, field:'scientificName'}"></div>
@@ -101,6 +113,8 @@
                    ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
+
+    <hr/>
 
     <!--#### Varieties ####-->
     <div ng-init="editVariety={visible:false, name:''}">

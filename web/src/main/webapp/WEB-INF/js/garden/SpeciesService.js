@@ -222,6 +222,9 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.errorName = updateObj.name;
             });
         },
+        deleteVernacular: function (species, updateObj, vernacularName) {
+            $log.info('deleteVernacular', [species, updateObj, vernacularName]);
+        },
         searchSpecies: function (sq) {
             state.addSpeciesErrors = [];
             var queryLowerCase = sq.query.toLocaleLowerCase();
