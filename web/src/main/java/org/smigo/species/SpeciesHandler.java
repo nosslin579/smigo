@@ -31,10 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public class SpeciesHandler {
@@ -72,33 +73,28 @@ public class SpeciesHandler {
     }
 
     public List<Species> getDefaultSpecies(Locale locale) {
-        Map<Integer, String> vernacularOther = speciesDao.getVernacularOther(locale.getLanguage());
         List<Species> ret = speciesDao.getDefaultSpecies();
-        ret.forEach(s -> s.setVernacularOther(vernacularOther.get(s.getId())));
-        return ret;
+        return addVernacular(ret, locale);
     }
 
     public Species getSpecies(int id, Locale locale) {
-        Species ret = speciesDao.getSpecies(id);
-        ret.setVernacularOther(speciesDao.getVernacularOther(locale.getLanguage()).get(id));
-        return ret;
+        Species species = speciesDao.getSpecies(id);
+        return addVernacular(Collections.singletonList(species), locale).get(0);
     }
 
     public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        Map<Integer, String> vernacularOther = speciesDao.getVernacularOther(locale.getLanguage());
         List<Species> ret = speciesDao.searchSpecies(query, locale);
-        ret.forEach(s -> s.setVernacularOther(vernacularOther.get(s.getId())));
-        return ret;
+        return addVernacular(ret, locale);
     }
 
-    public Map<String, String> getVernacular(Locale locale) {
-        final Map<String, String> ret = speciesDao.getVernacular("en", "");
-        final Map<String, String> language = speciesDao.getVernacular(locale.getLanguage(), "");
-        final Map<String, String> country = speciesDao.getVernacular(locale.getLanguage(), locale.getCountry());
-        ret.putAll(language);
-        ret.putAll(country);
-        return ret;
+    private List<Species> addVernacular(List<Species> speciesList, Locale locale) {
+        List<Vernacular> vernaculars = speciesDao.getVernacular(locale);
+        for (Species species : speciesList) {
+            List<Vernacular> vernacularForSpecies = vernaculars.stream().filter(v -> v.getSpeciesId() == species.getId()).collect(Collectors.toList());
+            species.setVernaculars(vernacularForSpecies);
+        }
+        return speciesList;
     }
 
     public List<Rule> getRules() {
@@ -113,8 +109,11 @@ public class SpeciesHandler {
             speciesDao.insertVernacular(speciesId, name.getVernacularName(), locale, name.isPrimary());
             return Review.NONE;
         }
-        Map<Locale, String> vernacular = speciesDao.getVernacular(speciesId);
-        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + name + " to:" + vernacular + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
+        List<Vernacular> currentVernaculars = speciesDao.getVernacular(locale);
+        currentVernaculars.removeIf(v -> v.getSpeciesId() != speciesId);
+        String vernacularAsString = currentVernaculars.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
+        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + name + " to:" +
+                currentVernaculars + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
         return Review.MODERATOR;
     }
 
@@ -140,8 +139,12 @@ public class SpeciesHandler {
         return Review.MODERATOR;
     }
 
-    public List<Vernacular> getVernacular2(Locale locale) {
-        return speciesDao.getVernacular(locale);
+    public List<Vernacular> getVernacular(Locale locale) {
+        List<Vernacular> ret = speciesDao.getVernacular(locale);
+        if (!locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
+            ret.addAll(speciesDao.getVernacular(Locale.ENGLISH));
+        }
+        return ret;
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user) {

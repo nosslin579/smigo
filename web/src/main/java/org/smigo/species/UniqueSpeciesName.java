@@ -32,10 +32,8 @@ import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -64,11 +62,8 @@ public @interface UniqueSpeciesName {
 
         public boolean isValid(String vernacularName, ConstraintValidatorContext constraintContext) {
             final Locale locale = userHandler.getLocale();
-            Collection<String> vernacularPrimary = speciesDao.getVernacular(locale.getLanguage(), locale.getCountry()).values();
-            Map<Integer, String> vernacularOther = speciesDao.getVernacularOther(locale.getLanguage());
-            boolean containsVernacularOther = vernacularOther.values().stream().anyMatch(s -> Arrays.asList(s.split(", ")).contains(vernacularName));
-            boolean containsVernacularPrimary = vernacularPrimary.contains(vernacularName);
-            return !containsVernacularPrimary && !containsVernacularOther;
+            List<Vernacular> vernacular = speciesDao.getVernacular(locale);
+            return !vernacular.stream().anyMatch(v -> v.getVernacularName().equalsIgnoreCase(vernacularName));
         }
 
     }

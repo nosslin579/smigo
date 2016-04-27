@@ -29,18 +29,36 @@ import javax.validation.constraints.Size;
 
 @UserMustBeAuthenticated
 public class Vernacular {
+    private int id;
+
+    private int speciesId;
+
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
     @UniqueSpeciesName
     private String vernacularName;
 
+    private String language;
+
+    private String country;
+
+    private int precedence;
+
     private boolean primary;
 
-    public boolean isPrimary() {
-        return primary;
+    public int getId() {
+        return id;
     }
 
-    public void setPrimary(boolean primary) {
-        this.primary = primary;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getSpeciesId() {
+        return speciesId;
+    }
+
+    public void setSpeciesId(int speciesId) {
+        this.speciesId = speciesId;
     }
 
     public String getVernacularName() {
@@ -51,10 +69,47 @@ public class Vernacular {
         this.vernacularName = vernacularName;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getPrecedence() {
+        return precedence;
+    }
+
+    public void setPrecedence(int precedence) {
+        this.precedence = precedence;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
+    }
+
     @Override
     public String toString() {
-        return "VernacularName{" +
-                "vernacularName='" + vernacularName + '\'' +
+        return "Vernacular{" +
+                "id=" + id +
+                ", speciesId=" + speciesId +
+                ", vernacularName='" + vernacularName + '\'' +
+                ", language='" + language + '\'' +
+                ", country='" + country + '\'' +
+                ", precedence=" + precedence +
                 ", primary=" + primary +
                 '}';
     }

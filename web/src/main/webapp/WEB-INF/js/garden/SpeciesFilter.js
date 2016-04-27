@@ -13,7 +13,10 @@ function SpeciesFilter($log, orderByFilter, translateFilter) {
             if (vernacularIndex !== -1 && query.length > 2 || vernacularIndex === 0) {
                 ret.push(s);
             } else if (query.length > 2) {
-                (s.vernacularOther.toLocaleLowerCase().indexOf(queryLowerCase) !== -1 ||
+                var searchResultVernacularArray = s.vernaculars.filter(function (v) {
+                    return v.vernacularName.toLowerCase().indexOf(queryLowerCase) !== -1
+                });
+                (searchResultVernacularArray.length > 0 ||
                 s.scientificName && s.scientificName.toLowerCase().indexOf(queryLowerCase) !== -1 ||
                 s.family && translateFilter(s.family).toLowerCase().indexOf(queryLowerCase) === 0 ||
                 s.family && s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0)

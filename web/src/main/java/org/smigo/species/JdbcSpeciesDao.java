@@ -23,10 +23,8 @@ package org.smigo.species;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -36,7 +34,6 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -87,77 +84,9 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public Map<String, String> getVernacular(String language, String country) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? AND COUNTRY = ? ORDER BY PRECEDENCE DESC";
-        return jdbcTemplate.query(sql, new Object[]{language, country}, new int[]{Types.VARCHAR, Types.VARCHAR}, new ResultSetExtractor<Map<String, String>>() {
-            @Override
-            public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                Map<String, String> ret = new HashMap<>(rs.getFetchSize());
-                while (rs.next()) {
-                    ret.put("msg.species" + rs.getInt("species_id"), rs.getString("vernacular_name"));
-                }
-                return ret;
-            }
-        });
-    }
-
-    @Override
-    public Map<Integer, String> getVernacularOther(String language) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE = ? ORDER BY PRECEDENCE";
-        return jdbcTemplate.query(sql, new Object[]{language}, new int[]{Types.VARCHAR}, new ResultSetExtractor<Map<Integer, String>>() {
-            @Override
-            public Map<Integer, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                Map<Integer, String> ret = new HashMap<>(rs.getFetchSize());
-                while (rs.next()) {
-                    int speciesId = rs.getInt("species_id");
-                    String vernacularName = rs.getString("vernacular_name");
-                    String previousValue = ret.putIfAbsent(speciesId, "");//first one is primary so we exclude that one
-                    if (previousValue != null) {
-                        String separator = previousValue.equals("") ? "" : ", ";
-                        ret.put(speciesId, previousValue + separator + vernacularName);
-                    }
-                }
-                return ret;
-            }
-        });
-    }
-
-    @Override
-    public Map<Locale, String> getVernacular(int speciesId) {
-        final String sql = "SELECT * FROM species_translation WHERE species_id = ? ORDER BY PRECEDENCE DESC ";
-        return jdbcTemplate.query(sql, new Object[]{speciesId}, new int[]{Types.INTEGER}, new ResultSetExtractor<Map<Locale, String>>() {
-            @Override
-            public Map<Locale, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                Map<Locale, String> ret = new HashMap<>(rs.getFetchSize());
-                while (rs.next()) {
-                    String language = rs.getString("language");
-                    String country = rs.getString("country");
-                    String vernacularName = rs.getString("vernacular_name");
-                    ret.put(new Locale(language, country), vernacularName);
-                }
-                return ret;
-            }
-        });
-    }
-
-    @Override
     public Species getSpecies(int id) {
         final String sql = String.format(SELECT, "SPECIES.ID = ?", 1);
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, rowMapper);
-    }
-
-    @Override
-    public void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary) {
-        String sql = primary ?
-                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE-1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;" :
-                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE+1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE DESC LIMIT 1;";
-        jdbcTemplate.update(sql, speciesId, vernacularName, locale.getLanguage(), locale.getCountry());
-    }
-
-    @Override
-    public void setVernacular(int id, String vernacularName, Locale locale) {
-        String sql = "MERGE INTO SPECIES_TRANSLATION (SPECIES_ID, LANGUAGE, COUNTRY, VERNACULAR_NAME) KEY (SPECIES_ID, LANGUAGE, COUNTRY) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, id, locale.getLanguage(), locale.getCountry(), vernacularName);
     }
 
     @Override
@@ -180,8 +109,16 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public List<Vernacular> getVernacular(Locale locale) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND COUNTRY=? ORDER BY PRECEDENCE DESC";
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='')  ORDER BY COUNTRY DESC,PRECEDENCE;";
         return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
+    }
+
+    @Override
+    public void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary) {
+        String sql = primary ?
+                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE-1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;" :
+                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE+1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE DESC LIMIT 1;";
+        jdbcTemplate.update(sql, speciesId, vernacularName, locale.getLanguage(), locale.getCountry());
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {

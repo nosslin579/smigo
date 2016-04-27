@@ -24,6 +24,7 @@ package org.smigo.user;
 
 import org.slf4j.LoggerFactory;
 import org.smigo.species.SpeciesHandler;
+import org.smigo.species.Vernacular;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -54,7 +55,9 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         Map properties = propertiesHolder.getProperties();
         Map<Object, Object> ret = new HashMap<Object, Object>(properties);
         if (speciesHandler != null) { //ugly fix for test
-            ret.putAll(speciesHandler.getVernacular(locale));
+            for (Vernacular vernacular : speciesHandler.getVernacular(locale)) {
+                ret.putIfAbsent("msg.species" + vernacular.getSpeciesId(), vernacular.getVernacularName());
+            }
         }
         log.info("Get all messages took " + (System.currentTimeMillis() - start) + "ms");
         return ret;

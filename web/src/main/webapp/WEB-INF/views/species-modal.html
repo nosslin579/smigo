@@ -42,7 +42,8 @@
     <!--#### Vernacular other name ####-->
     <div ng-if="!vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong>
-        <em ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}">{{species.vernacularOther}}</em>
+        <em ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}" ng-if="!$first"
+            ng-repeat="v in species.vernaculars">{{v.vernacularName}} </em>
         <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="!species.vernacularOther">&lt;{{'edit' | translate}}&gt;</a>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
