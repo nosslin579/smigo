@@ -235,8 +235,15 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.errorName = updateObj.name;
             });
         },
-        deleteVernacular: function (species, updateObj, vernacularName) {
-            $log.info('deleteVernacular', [species, updateObj, vernacularName]);
+        deleteVernacular: function (species, updateObj, vernacular) {
+            $log.info('deleteVernacular', [species, updateObj, vernacular]);
+            return $http.delete('/rest/vernacular/' + vernacular.id).then(function (response) {
+                $log.log('Response from delete /rest/verncular/' + vernacular.id, [response, state]);
+                var indexOfDeleteElement = state.vernaculars.indexOf(vernacular);
+                state.vernaculars.splice(indexOfDeleteElement, 1);
+            }).catch(function (response) {
+                $log.error('Fail: delete /rest/verncular/' + vernacular.id, response);
+            });
         },
         searchSpecies: function (sq) {
             state.addSpeciesErrors = [];

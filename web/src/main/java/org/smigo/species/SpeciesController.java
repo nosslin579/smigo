@@ -147,9 +147,9 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/vernacular/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+    public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Deleting vernacular. Name:" + id);
-        Review review = speciesHandler.deleteVernacular(id, user);
+        Review review = speciesHandler.deleteVernacular(id, user, locale);
         if (review == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }

@@ -39,14 +39,15 @@
 
 <div class="modal-body" ng-if="!species.item && !species.deleted">
 
-    <div ng-init="vernacularOtherEdit={visible:false, name:'', locale:currentUser.locale, vernaculars:vernaculars}"></div>
+    <div ng-init="vernacularOtherEdit={visible:false, name:'', locale:currentUser.locale, vernaculars:vernaculars, scope:$scope}"></div>
 
     <!--#### Vernacular other name ####-->
     <div ng-if="!vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong>
         <!--First element in array is the primary thus excluding -->
-        <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}" ng-if="!$first" ng-repeat="v in vernaculars">{{v.vernacularName}} </span>
-        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="vernaculars.length === 1">&lt;{{'edit' | translate}}&gt;</a>
+        <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}"
+              ng-if="!$first" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true">{{v.vernacularName}} </span>
+        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="(speciesState.vernaculars | filter:{speciesId:species.id}:true).length === 1">&lt;{{'edit' | translate}}&gt;</a>
         <!--WORD JOINER (U+2060)-->
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>
@@ -54,15 +55,16 @@
 
     <!--#### Vernacular other add form ####-->
     <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit)" ng-if="vernacularOtherEdit.visible">
+        <strong>{{'msg.aka' | translate}}: </strong><br/>
         <div class="has-error">
             <span ng-repeat="error in vernacularOtherEdit.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:vernacularOtherEdit.errorName}}</span>
         </div>
         <div class="form-group" ng-class="{'has-error':vernacularOtherEdit.objectErrors}">
             <ul class="nav nav-pills">
                 <!--First element in array is the primary thus excluding -->
-                <li role="presentation" ng-repeat="v in vernaculars" ng-if="!$first">
+                <li role="presentation" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true" ng-if="!$first">
                     <!--#### Vernacular other delete ####-->
-                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v, vernaculars)" href="#">{{v.vernacularName}}
+                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v)" href="#">{{v.vernacularName}}
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </li>
                 <li role="presentation">&#8288;</li>

@@ -151,7 +151,7 @@ public class SpeciesHandler {
         return speciesDao.getVernacular(locale);
     }
 
-    public Review deleteVernacular(int vernacularId, AuthenticatedUser user) {
+    public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
 //        Species species = getSpecies(speciesId, locale);
         boolean isMod = user.isModerator();
         boolean isCreator = false;//species.getCreator() == user.getId();
@@ -159,7 +159,9 @@ public class SpeciesHandler {
             speciesDao.deleteVernacular(vernacularId);
             return Review.NONE;
         }
-        String text = "Delete vernacular ";
+        List<Vernacular> vernacularList = speciesDao.getVernacular(locale);
+        String text = "Delete vernacular " + vernacularId + System.lineSeparator() +
+                vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
         mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
         return null;
     }
