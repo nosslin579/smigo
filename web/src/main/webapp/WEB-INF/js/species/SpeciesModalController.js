@@ -2,7 +2,6 @@ function SpeciesModalController($log, $scope, $rootScope, $filter, UserService, 
     $scope.species = SpeciesService.getState().selectedSpecies;
     $scope.currentUser = UserService.getState().currentUser;
     $scope.varieties = SpeciesService.getAllVarieties();
-    $scope.vernaculars = $filter('filter')(SpeciesService.getState().vernaculars, {speciesId: $scope.species.id}, true);
     $scope.speciesState = SpeciesService.getState();
     $scope.addVernacularName = SpeciesService.addVernacular;
     $scope.deleteVernacular = SpeciesService.deleteVernacular;

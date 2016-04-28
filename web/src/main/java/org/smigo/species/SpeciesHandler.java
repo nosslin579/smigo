@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -78,28 +77,16 @@ public class SpeciesHandler {
     }
 
     public List<Species> getDefaultSpecies(Locale locale) {
-        List<Species> ret = speciesDao.getDefaultSpecies();
-        return addVernacular(ret, locale);
+        return speciesDao.getDefaultSpecies();
     }
 
     public Species getSpecies(int id, Locale locale) {
-        Species species = speciesDao.getSpecies(id);
-        return addVernacular(Collections.singletonList(species), locale).get(0);
+        return speciesDao.getSpecies(id);
     }
 
     public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        List<Species> ret = speciesDao.searchSpecies(query, locale);
-        return addVernacular(ret, locale);
-    }
-
-    private List<Species> addVernacular(List<Species> speciesList, Locale locale) {
-        List<Vernacular> vernaculars = speciesDao.getVernacular(locale);
-        for (Species species : speciesList) {
-            List<Vernacular> vernacularForSpecies = vernaculars.stream().filter(v -> v.getSpeciesId() == species.getId()).collect(Collectors.toList());
-            species.setVernaculars(vernacularForSpecies);
-        }
-        return speciesList;
+        return speciesDao.searchSpecies(query, locale);
     }
 
     public List<Rule> getRules() {

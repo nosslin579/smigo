@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.smigo.user.authentication.UserMustBeAuthenticated;
 
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @UserMustBeAuthenticated
 public class Species {
@@ -51,8 +49,6 @@ public class Species {
 
     @JsonIgnore
     private int creator;
-    private String vernacularOther;
-    private List<Vernacular> vernaculars = new ArrayList<>();
 
     public Species() {
     }
@@ -157,21 +153,5 @@ public class Species {
     @JsonIgnore
     public Integer getFamilyId() {
         return family == null || family.getId() == 0 ? null : family.getId();
-    }
-
-    public void setVernacularOther(String vernacularOther) {
-        this.vernacularOther = vernacularOther;
-    }
-
-    public String getVernacularOther() {
-        return vernacularOther;
-    }
-
-    public List<Vernacular> getVernaculars() {
-        return vernaculars;
-    }
-
-    public void setVernaculars(List<Vernacular> vernaculars) {
-        this.vernaculars = vernaculars;
     }
 }
