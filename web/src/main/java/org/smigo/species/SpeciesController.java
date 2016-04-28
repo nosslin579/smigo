@@ -113,22 +113,6 @@ public class SpeciesController implements Serializable {
         return speciesHandler.getVernacular(locale);
     }
 
-    @RequestMapping(value = "/rest/species/{id}/vernacular/{locale}", method = RequestMethod.PUT)
-    @ResponseBody
-    public Object addVernacular(@Valid @RequestBody Vernacular name, BindingResult result, @PathVariable int id, @PathVariable String locale,
-                                @AuthenticationPrincipal AuthenticatedUser user, Locale sessionLocale, HttpServletResponse response) {
-        log.info("Adding vernacular. Name:" + name.getVernacularName());
-        if (result.hasErrors()) {
-            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
-            return result.getAllErrors();
-        }
-        Review review = null;//speciesHandler.addVernacular(name, id, user, sessionLocale);
-        if (review == Review.MODERATOR) {
-            response.setStatus(HttpStatus.ACCEPTED.value());
-        }
-        return null;
-    }
-
     @RequestMapping(value = "/rest/vernacular", method = RequestMethod.POST)
     @ResponseBody
     public Object addVernacular(@Valid @RequestBody Vernacular vernacular, BindingResult result,
@@ -138,11 +122,11 @@ public class SpeciesController implements Serializable {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
-        Review review = speciesHandler.addVernacular(vernacular, user, locale);
-        if (review == Review.MODERATOR) {
+        CrudResult review = speciesHandler.addVernacular(vernacular, user, locale);
+        if (review.getReview() == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }
-        return null;
+        return review.getId();
     }
 
     @RequestMapping(value = "/rest/vernacular/{id}", method = RequestMethod.DELETE)

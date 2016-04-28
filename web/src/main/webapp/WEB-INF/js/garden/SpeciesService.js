@@ -212,24 +212,21 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.visible = false;
                 return;
             }
-            var precedence = updateObj.primary ? updateObj.vernaculars[0].precedence - 1 : updateObj.vernaculars.smigoLast().precedence + 1;
             var data = {
                 vernacularName: updateObj.name.capitalize(),
-                speciesId: species.id,
-                precedence: precedence
+                speciesId: species.id
             };
             return $http.post('/rest/vernacular', data).then(function (response) {
-                $log.log('Response from put vernacular', [response]);
+                $log.log('Response from put vernacular', [response, state.vernaculars]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
                 if (response.status === 200) {
-                    !updateObj.primary && updateObj.vernaculars.push(data);
-                    updateObj.primary && updateObj.vernaculars.unshift(data);
-                    updateObj.primary && (species.vernacularName = updateObj.name);
-                    updateObj.primary && $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
+                    data.id = response.data;
+                    state.vernaculars.push(data);
                 } else if (response.status === 202) {
                     updateObj.displayModReview = true;
                 }
+                updateObj.visible = false;
             }).catch(function (response) {
                 updateObj.objectErrors = response.data;
                 updateObj.errorName = updateObj.name;

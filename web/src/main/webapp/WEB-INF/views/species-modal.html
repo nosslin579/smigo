@@ -1,4 +1,4 @@
-<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, primary:true, vernaculars:vernaculars, locale:currentUser.locale};editIcon={field:'iconFileName'}">
+<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, locale:currentUser.locale};editIcon={field:'iconFileName'}">
     <button type="button" class="close" ng-click="$dismiss()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
@@ -39,7 +39,7 @@
 
 <div class="modal-body" ng-if="!species.item && !species.deleted">
 
-    <div ng-init="vernacularOtherEdit={visible:false, name:'', locale:currentUser.locale, vernaculars:vernaculars, scope:$scope}"></div>
+    <div ng-init="vernacularOtherEdit={visible:false, name:'', locale:currentUser.locale}"></div>
 
     <!--#### Vernacular other name ####-->
     <div ng-if="!vernacularOtherEdit.visible">
@@ -53,7 +53,7 @@
     </div>
 
 
-    <!--#### Vernacular other add form ####-->
+    <!--#### Vernacular other add/delete form ####-->
     <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit)" ng-if="vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong><br/>
         <div class="has-error">
@@ -62,7 +62,7 @@
         <div class="form-group" ng-class="{'has-error':vernacularOtherEdit.objectErrors}">
             <ul class="nav nav-pills">
                 <!--First element in array is the primary thus excluding -->
-                <li role="presentation" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true" ng-if="!$first">
+                <li role="presentation" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true">
                     <!--#### Vernacular other delete ####-->
                     <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v)" href="#">{{v.vernacularName}}
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>

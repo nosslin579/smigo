@@ -43,8 +43,6 @@ public class Vernacular {
 
     private int precedence;
 
-    private boolean primary;
-
     public int getId() {
         return id;
     }
@@ -93,14 +91,6 @@ public class Vernacular {
         this.precedence = precedence;
     }
 
-    public boolean isPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(boolean primary) {
-        this.primary = primary;
-    }
-
     @Override
     public String toString() {
         return "Vernacular{" +
@@ -110,7 +100,6 @@ public class Vernacular {
                 ", language='" + language + '\'' +
                 ", country='" + country + '\'' +
                 ", precedence=" + precedence +
-                ", primary=" + primary +
                 '}';
     }
 }

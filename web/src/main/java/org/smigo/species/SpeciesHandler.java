@@ -58,7 +58,6 @@ public class SpeciesHandler {
         Vernacular vernacular = new Vernacular();
         vernacular.setCountry(locale.getCountry());
         vernacular.setLanguage(locale.getLanguage());
-        vernacular.setPrecedence(1);
         vernacular.setVernacularName(vernacularName);
         vernacular.setSpeciesId(id);
         speciesDao.insertVernacular(vernacular);
@@ -107,7 +106,7 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public Review addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
+    public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
         Species species = getSpecies(vernacular.getSpeciesId(), locale);
         boolean isMod = user.isModerator();
         boolean isCreator = species.getCreator() == user.getId();
@@ -115,14 +114,16 @@ public class SpeciesHandler {
             vernacular.setLanguage(locale.getLanguage());
             vernacular.setCountry(locale.getCountry());
             speciesDao.insertVernacular(vernacular);
-            return Review.NONE;
+            //http://stackoverflow.com/questions/27547519/most-efficient-way-to-get-the-last-element-of-a-stream
+            Vernacular added = speciesDao.getVernacular(locale).stream().reduce((a, b) -> b).get();
+            return new CrudResult(added.getId(), Review.NONE);
         }
         List<Vernacular> currentVernaculars = speciesDao.getVernacular(locale);
         currentVernaculars.removeIf(v -> v.getSpeciesId() != vernacular.getSpeciesId());
         String vernacularAsString = currentVernaculars.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
         mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + vernacular + " to:" +
                 currentVernaculars + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
-        return Review.MODERATOR;
+        return new CrudResult(null, Review.MODERATOR);
     }
 
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
@@ -152,10 +153,8 @@ public class SpeciesHandler {
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
-//        Species species = getSpecies(speciesId, locale);
         boolean isMod = user.isModerator();
-        boolean isCreator = false;//species.getCreator() == user.getId();
-        if (isCreator || isMod) {
+        if (isMod) {
             speciesDao.deleteVernacular(vernacularId);
             return Review.NONE;
         }
@@ -163,6 +162,6 @@ public class SpeciesHandler {
         String text = "Delete vernacular " + vernacularId + System.lineSeparator() +
                 vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
         mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
-        return null;
+        return Review.MODERATOR;
     }
 }

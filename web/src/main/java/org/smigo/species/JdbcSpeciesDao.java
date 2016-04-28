@@ -61,7 +61,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("id").usingColumns("species_id", "vernacular_name", "language", "country", "precedence");
+        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("id", "precedence").usingColumns("species_id", "vernacular_name", "language", "country");
     }
 
     @Override
@@ -120,7 +120,8 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Override
     public int insertVernacular(Vernacular vernacular) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(vernacular);
-        return insertVernacular.executeAndReturnKey(parameterSource).intValue();
+        //http://stackoverflow.com/questions/5483139/springs-simplejdbcinsert-doesnt-produce-auto-generated-keys-as-expected
+        return insertVernacular.execute(parameterSource);
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {
