@@ -206,23 +206,27 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 updateObj.errorName = updateObj.value;
             });
         },
-        addVernacular: function (species, updateObj, locale) {
-            $log.info('addVernacular', [species, updateObj, locale]);
+        addVernacular: function (species, updateObj) {
+            $log.info('addVernacular', [species, updateObj]);
             if (species.vernacularName === updateObj.name || !updateObj.name) {
                 updateObj.visible = false;
                 return;
             }
-            updateObj.name = updateObj.name.capitalize();
-            var data = {vernacularName: updateObj.name, primary: updateObj.primary};
-            return $http.put('/rest/species/' + species.id + '/vernacular/' + locale, data).then(function (response) {
+            var precedence = updateObj.primary ? updateObj.vernaculars[0].precedence - 1 : updateObj.vernaculars.smigoLast().precedence + 1;
+            var data = {
+                vernacularName: updateObj.name.capitalize(),
+                speciesId: species.id,
+                precedence: precedence
+            };
+            return $http.post('/rest/vernacular', data).then(function (response) {
                 $log.log('Response from put vernacular', [response]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
-                if (response.status === 200 && updateObj.primary) {
-                    species.vernacularName = updateObj.name;
-                    $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
-                } else if (response.status === 200 && !updateObj.primary) {
-                    species.vernacularOther += ', ' + updateObj.name;
+                if (response.status === 200) {
+                    !updateObj.primary && updateObj.vernaculars.push(data);
+                    updateObj.primary && updateObj.vernaculars.unshift(data);
+                    updateObj.primary && (species.vernacularName = updateObj.name);
+                    updateObj.primary && $rootScope.$broadcast('new-messages-available', species.messageKey, updateObj.name);
                 } else if (response.status === 202) {
                     updateObj.displayModReview = true;
                 }

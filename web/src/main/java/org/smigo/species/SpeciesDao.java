@@ -33,8 +33,6 @@ interface SpeciesDao {
 
     Species getSpecies(int id);
 
-    void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary);
-
     List<Species> searchSpecies(String query, Locale locale);
 
     void updateSpecies(int id, Species species);
@@ -44,4 +42,6 @@ interface SpeciesDao {
     void deleteVernacular(int vernacularId);
 
     List<Vernacular> getVernacular(Locale locale);
+
+    int insertVernacular(Vernacular vernacular);
 }

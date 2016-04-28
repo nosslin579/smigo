@@ -26,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +52,7 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
+    private SimpleJdbcInsert insertVernacular;
     private Map<Integer, Family> families;
     private final RowMapper<Species> rowMapper = new SpeciesRowMapper();
     private final RowMapper<Vernacular> vernacularRowMapper = new BeanPropertyRowMapper<>(Vernacular.class);
@@ -58,6 +61,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
+        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("id").usingColumns("species_id", "vernacular_name", "language", "country", "precedence");
     }
 
     @Override
@@ -109,16 +113,14 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     @Override
     public List<Vernacular> getVernacular(Locale locale) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='')  ORDER BY COUNTRY DESC,PRECEDENCE;";
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='') ORDER BY COUNTRY DESC,PRECEDENCE;";
         return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
     }
 
     @Override
-    public void insertVernacular(int speciesId, String vernacularName, Locale locale, boolean primary) {
-        String sql = primary ?
-                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE-1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE ASC LIMIT 1;" :
-                "INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY,PRECEDENCE) SELECT ?,?,?,?,PRECEDENCE+1 FROM SPECIES_TRANSLATION ORDER BY PRECEDENCE DESC LIMIT 1;";
-        jdbcTemplate.update(sql, speciesId, vernacularName, locale.getLanguage(), locale.getCountry());
+    public int insertVernacular(Vernacular vernacular) {
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(vernacular);
+        return insertVernacular.executeAndReturnKey(parameterSource).intValue();
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {

@@ -55,7 +55,13 @@ public class SpeciesHandler {
 
     public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
         final int id = speciesDao.addSpecies(user.getId());
-        speciesDao.insertVernacular(id, vernacularName, locale, true);
+        Vernacular vernacular = new Vernacular();
+        vernacular.setCountry(locale.getCountry());
+        vernacular.setLanguage(locale.getLanguage());
+        vernacular.setPrecedence(1);
+        vernacular.setVernacularName(vernacularName);
+        vernacular.setSpeciesId(id);
+        speciesDao.insertVernacular(vernacular);
         return id;
     }
 
@@ -101,18 +107,20 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public Review addVernacular(Vernacular name, int speciesId, AuthenticatedUser user, Locale locale) {
-        Species species = getSpecies(speciesId, locale);
+    public Review addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
+        Species species = getSpecies(vernacular.getSpeciesId(), locale);
         boolean isMod = user.isModerator();
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || isMod) {
-            speciesDao.insertVernacular(speciesId, name.getVernacularName(), locale, name.isPrimary());
+            vernacular.setLanguage(locale.getLanguage());
+            vernacular.setCountry(locale.getCountry());
+            speciesDao.insertVernacular(vernacular);
             return Review.NONE;
         }
         List<Vernacular> currentVernaculars = speciesDao.getVernacular(locale);
-        currentVernaculars.removeIf(v -> v.getSpeciesId() != speciesId);
+        currentVernaculars.removeIf(v -> v.getSpeciesId() != vernacular.getSpeciesId());
         String vernacularAsString = currentVernaculars.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
-        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + name + " to:" +
+        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + vernacular + " to:" +
                 currentVernaculars + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
         return Review.MODERATOR;
     }

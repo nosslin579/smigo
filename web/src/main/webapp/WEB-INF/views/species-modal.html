@@ -1,9 +1,9 @@
-<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, primary:true};editIcon={field:'iconFileName'}">
+<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, primary:true, vernaculars:vernaculars, locale:currentUser.locale};editIcon={field:'iconFileName'}">
     <button type="button" class="close" ng-click="$dismiss()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
 
-    <!--#### Icon edit and vernacular title ####-->
+    <!--#### Icon edit ####-->
     <h4 class="modal-title" ng-if="!editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editIcon.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editIcon.errorName}}</span>
@@ -18,12 +18,13 @@
               </li>
           </ul>
         </span>
+        <!--#### Vernacular primary title ####-->
         <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </h4>
 
-    <!--#### Edit vernacular form ####-->
-    <form id="edit-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, editVernacular, currentUser.locale)" ng-if="editVernacular.visible">
+    <!--#### Vernacular primary form ####-->
+    <form id="edit-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, editVernacular)" ng-if="editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.errorName}}</span>
         </div>
@@ -38,7 +39,7 @@
 
 <div class="modal-body" ng-if="!species.item && !species.deleted">
 
-    <div ng-init="vernacularOtherEdit={visible:false, name:''}"></div>
+    <div ng-init="vernacularOtherEdit={visible:false, name:'', locale:currentUser.locale, vernaculars:vernaculars}"></div>
 
     <!--#### Vernacular other name ####-->
     <div ng-if="!vernacularOtherEdit.visible">
@@ -50,11 +51,9 @@
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>
 
-    <!--#### Vernacular other delete ####-->
-
 
     <!--#### Vernacular other add form ####-->
-    <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit, currentUser.locale)" ng-if="vernacularOtherEdit.visible">
+    <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit)" ng-if="vernacularOtherEdit.visible">
         <div class="has-error">
             <span ng-repeat="error in vernacularOtherEdit.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:vernacularOtherEdit.errorName}}</span>
         </div>
@@ -62,7 +61,8 @@
             <ul class="nav nav-pills">
                 <!--First element in array is the primary thus excluding -->
                 <li role="presentation" ng-repeat="v in vernaculars" ng-if="!$first">
-                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v)" href="#">{{v.vernacularName}}
+                    <!--#### Vernacular other delete ####-->
+                    <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v, vernaculars)" href="#">{{v.vernacularName}}
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </li>
                 <li role="presentation">&#8288;</li>

@@ -122,7 +122,23 @@ public class SpeciesController implements Serializable {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
-        Review review = speciesHandler.addVernacular(name, id, user, sessionLocale);
+        Review review = null;//speciesHandler.addVernacular(name, id, user, sessionLocale);
+        if (review == Review.MODERATOR) {
+            response.setStatus(HttpStatus.ACCEPTED.value());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/rest/vernacular", method = RequestMethod.POST)
+    @ResponseBody
+    public Object addVernacular(@Valid @RequestBody Vernacular vernacular, BindingResult result,
+                                @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
+        log.info("Adding vernacular:" + vernacular);
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return result.getAllErrors();
+        }
+        Review review = speciesHandler.addVernacular(vernacular, user, locale);
         if (review == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }
