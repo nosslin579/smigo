@@ -89,7 +89,7 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
 //        servletContext.getSessionCookieConfig().setDomain(getDomain());
 
         DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
-        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(false);
         servletContext.addServlet("dispatcher", dispatcherServlet).addMapping("/");
     }
 
