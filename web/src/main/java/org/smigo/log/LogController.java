@@ -51,7 +51,8 @@ public class LogController implements Serializable {
 
     @RequestMapping(value = "/error")
     public String error(Model model, HttpServletRequest request, HttpServletResponse response) {
-        logHandler.logError(request, response);
+        Exception ex = (Exception) request.getAttribute("javax.servlet.error.exception");
+        logHandler.logError(request, response, ex, "Outside Spring MVC");
         model.addAttribute("statusCode", request.getAttribute("javax.servlet.error.status_code"));
         return "error.jsp";
     }
@@ -68,7 +69,7 @@ public class LogController implements Serializable {
     @RequestMapping(value = {"/rest/log/feature/*", "/rest/log/feature"}, method = RequestMethod.POST)
     @ResponseBody
     public void logFeatureRequest(@RequestBody FeatureRequest feature, HttpServletRequest request, HttpServletResponse response) {
-        mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response));
+        mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response, System.lineSeparator()));
     }
 
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)

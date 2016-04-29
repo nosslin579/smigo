@@ -135,7 +135,7 @@ class Log {
 
     @Override
     public String toString() {
-        return "LogBean{" +
+        return "Log{" +
                 "remoteUser='" + remoteUser + '\'' +
                 ", url='" + url + '\'' +
                 ", locales='" + locales + '\'' +

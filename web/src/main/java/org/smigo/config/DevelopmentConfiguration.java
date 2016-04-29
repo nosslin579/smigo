@@ -50,6 +50,7 @@ public class DevelopmentConfiguration {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public static final File MAIL_FILE = new File("/tmp/mail.html");
+    private static final File MAIL_FILE_TXT = new File("/tmp/mail.txt");
 
 
     @Bean
@@ -69,7 +70,10 @@ public class DevelopmentConfiguration {
             @Override
             public void send(SimpleMailMessage simpleMessage) throws MailException {
                 try {
-                    FileUtils.writeStringToFile(MAIL_FILE, simpleMessage.getText(), Charset.defaultCharset());
+                    String text = simpleMessage.getText();
+                    String subject = simpleMessage.getSubject();
+                    FileUtils.writeStringToFile(MAIL_FILE, text, Charset.defaultCharset());
+                    FileUtils.writeStringToFile(MAIL_FILE_TXT, subject + text, Charset.defaultCharset());
                 } catch (IOException e) {
                     throw new MailSendException("Error sending email to " + simpleMessage.getFrom(), e);
                 }

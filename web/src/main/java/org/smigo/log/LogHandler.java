@@ -33,7 +33,8 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -49,25 +50,26 @@ public class LogHandler {
 
 
     public void log(HttpServletRequest request, HttpServletResponse response) {
-        log.info(getRequestDump(request, response));
+        log.info(getRequestDump(request, response, ",  "));
         logDao.log(Log.create(request, response));
     }
 
-    public String getRequestDump(HttpServletRequest request, HttpServletResponse response) {
-        StringBuilder s = new StringBuilder("Logging request>");
-        s.append(Log.create(request, response).toString());
-        s.append(" Auth type:").append(request.getAuthType());
-        s.append(" Principal:").append(request.getUserPrincipal());
-        s.append(" Headers:");
+    public String getRequestDump(HttpServletRequest request, HttpServletResponse response, String separator) {
+        StringBuilder s = new StringBuilder("Request dump").append(separator);
+        s.append(Log.create(request, response).toString()).append(separator);
+        s.append("Auth type:").append(request.getAuthType()).append(separator);
+        s.append("Principal:").append(request.getUserPrincipal()).append(separator);
+        s.append("Headers:").append(separator);
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
-            s.append(headerName).append("=").append(request.getHeader(headerName)).append(" - ");
+            s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
         }
 
         final long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
         final long elapsedTime = System.nanoTime() - start;
-        s.append(" Request time elapsed:").append(elapsedTime).append("ns which is ").append(elapsedTime / 1000000).append("ms");
+        s.append(separator).append("Request time elapsed:").append(elapsedTime);
+        s.append("ns which is ").append(elapsedTime / 1000000).append("ms").append(separator);
         return s.toString();
     }
 
@@ -126,18 +128,28 @@ public class LogHandler {
         return ret.toString();
     }
 
-    public void logError(HttpServletRequest request, HttpServletResponse response) {
-        final Exception exception = (Exception) request.getAttribute("javax.servlet.error.exception");
+    public void logError(HttpServletRequest request, HttpServletResponse response, Exception ex, String subject) {
         final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
         final Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 
-        log.error("Error during request. (Outside Spring MVC) Statuscode:" + statusCode + " Uri:" + uri, exception);
         final String separator = System.lineSeparator();
-        String text = "Statuscode:" + statusCode + separator + "Uri:" + uri + separator + getRequestDump(request, response) + separator;
-        if (exception != null) {
-            final String stackTrace = Arrays.toString(exception.getStackTrace()).replace(",", separator);
-            text = text + exception.getClass().getName() + exception.getMessage() + separator + stackTrace;
+        StringBuilder text = new StringBuilder();
+        text.append(getRequestDump(request, response, separator)).append(separator);
+        text.append("Statuscode:").append(statusCode).append(separator);
+        text.append("Uri:").append(uri).append(separator);
+        text.append("Exception:").append(getStackTrace(ex)).append(separator);
+
+
+        log.error("Error during request" + subject, ex);
+        mailHandler.sendAdminNotification("error during request " + subject, text);
+    }
+
+    private String getStackTrace(Exception ex) {
+        if (ex == null) {
+            return "";
         }
-        mailHandler.sendAdminNotification("error during request outside Spring MVC", text);
+        StringWriter errors = new StringWriter();
+        ex.printStackTrace(new PrintWriter(errors));
+        return errors.toString();
     }
 }
