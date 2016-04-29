@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.PriorityOrdered;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @Component
-public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver, PriorityOrdered {
+public class LogExceptionResolver implements HandlerExceptionResolver, Ordered {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -46,18 +46,15 @@ public class LoggingHandlerExceptionResolver implements HandlerExceptionResolver
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         final Log logBean = Log.create(request, response);
         log.error("Error during request(Inside Spring MVC). Handler:" + handler + logBean, ex);
-        if (ex != null) {
-            final String note = ex.getClass().getName() + ":" + ex.getMessage();
-            final String stackTrace = Arrays.toString(ex.getStackTrace()).replace(",", System.lineSeparator());
-            mailHandler.sendAdminNotification("error during request inside Spring MVC", note + System.lineSeparator() + logBean + System.lineSeparator() + stackTrace);
-        } else {
-            log.error("Error without exception.");
-        }
+        final String note = ex == null ? "No exception(wtf)" : ex.getClass().getName() + ":" + ex.getMessage();
+        final String stackTrace = ex == null ? "" : Arrays.toString(ex.getStackTrace()).replace(",", System.lineSeparator());
+        String text = note + System.lineSeparator() + logBean + System.lineSeparator() + stackTrace;
+        mailHandler.sendAdminNotification("error during request inside Spring MVC", text);
         return null;
     }
 
     @Override
     public int getOrder() {
-        return -1;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }

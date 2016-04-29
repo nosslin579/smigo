@@ -73,7 +73,7 @@ public class PlantController implements Serializable {
         }
     }
 
-    @RequestMapping(value = {"/rest/plant/add-year/{year}"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/rest/plant/add-year/{year:\\d+}"}, method = RequestMethod.PUT)
     @ResponseBody
     public List<Plant> addYear(@PathVariable Integer year, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
         return plantHandler.addYear(user, year, locale);

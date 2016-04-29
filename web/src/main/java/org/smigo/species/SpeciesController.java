@@ -52,7 +52,7 @@ public class SpeciesController implements Serializable {
         return speciesHandler.getDefaultSpecies(locale);
     }
 
-    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.GET)
     @ResponseBody
     public Species getSpecies(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
         return speciesHandler.getSpecies(id, locale);
@@ -70,7 +70,7 @@ public class SpeciesController implements Serializable {
         return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
     }
 
-    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.PUT)
     @ResponseBody
     public Object updateSpecies(@Valid @RequestBody Species species, BindingResult result, @PathVariable int id,
                                 @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response, Locale locale) {
@@ -94,7 +94,7 @@ public class SpeciesController implements Serializable {
     }
 
     @PreAuthorize("hasAuthority('" + AuthenticatedUser.MOD_AUTHORITY + "')")
-    @RequestMapping(value = "/rest/species/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteSpecies(Locale locale, @PathVariable int id) {
         speciesHandler.deleteSpecies(id);
@@ -103,6 +103,11 @@ public class SpeciesController implements Serializable {
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.GET)
     public void searchSpecies() {
+    }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @RequestMapping(value = "/rest/species/{\\D+}", method = RequestMethod.GET)
+    public void notFound() {
     }
 
 
@@ -129,7 +134,7 @@ public class SpeciesController implements Serializable {
         return review.getId();
     }
 
-    @RequestMapping(value = "/rest/vernacular/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
     public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Deleting vernacular. Name:" + id);

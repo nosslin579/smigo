@@ -25,7 +25,6 @@ package org.smigo.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class ErrorViewExceptionResolver implements HandlerExceptionResolver, PriorityOrdered {
+public class ErrorViewExceptionResolver implements HandlerExceptionResolver, Ordered {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -47,8 +46,7 @@ public class ErrorViewExceptionResolver implements HandlerExceptionResolver, Pri
         } catch (ServletException e) {
             log.error("Could not logout user " + request.getUserPrincipal(), e);
         }
-        response.setStatus(500);
-        return new ModelAndView("error.jsp", "statusCode", 500);
+        return new ModelAndView("error.jsp", "statusCode", response.getStatus());
     }
 
     @Override

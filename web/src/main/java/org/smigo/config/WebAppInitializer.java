@@ -88,7 +88,9 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         //http://stackoverflow.com/questions/4811877/share-session-data-between-2-subdomains
 //        servletContext.getSessionCookieConfig().setDomain(getDomain());
 
-        servletContext.addServlet("dispatcher", new DispatcherServlet(context)).addMapping("/");
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(context);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        servletContext.addServlet("dispatcher", dispatcherServlet).addMapping("/");
     }
 
     private String getProfile() {
