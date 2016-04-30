@@ -1,6 +1,6 @@
-function SpeciesFilter($log, orderByFilter, translateFilter, SpeciesService) {
+function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) {
 
-    var vernaculars = SpeciesService.getState().vernaculars;
+    var vernaculars = VernacularService.getState().vernaculars;
 
     function searchVernacular(query) {
         var ret = [];

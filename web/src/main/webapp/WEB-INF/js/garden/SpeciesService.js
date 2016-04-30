@@ -1,4 +1,4 @@
-function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter, $log) {
+function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter, $log, VernacularService) {
     var state = {},
         search = {previous: [], promise: ""},
         ruleMap = {};
@@ -8,7 +8,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     state.selectedSpecies = initData.species.smigoFind(28, 'id');
     state.pendingAdd = false;
     state.varieties = initData.varieties;
-    state.vernaculars = [];
 
     $log.log('SpeciesService', state);
 
@@ -16,13 +15,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         !ruleMap[rule.host] && (ruleMap[rule.host] = []);
         ruleMap[rule.host].push(createRule(rule));
     });
-
-    $http.get('/rest/vernacular').then(function (response) {
-        $log.log('Response from /rest/vernacular', response);
-        state.vernaculars.length = 0;
-        Array.prototype.push.apply(state.vernaculars, response.data);
-    });
-
 
     augmentSpecies(state.speciesArray);
 
@@ -157,17 +149,19 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 $log.warn('Response from delete species failed', [response, species]);
             });
         },
-        addSpecies: function (vernacularNameRaw) {
+        addSpecies: function (vernacularName) {
+            var updateObj = {name: vernacularName};
             state.pendingAdd = true;
             state.addSpeciesErrors = [];
-            var vernacularName = vernacularNameRaw.capitalize();
             $log.log('Adding species:' + vernacularName, state);
-            return $http.post('/rest/species', {vernacularName: vernacularName}).then(function (response) {
+            return $http.post('/rest/species', {}).then(function (response) {
                 $log.log('Response from post species', [response]);
-                var addedSpecies = new Species(response.data, vernacularName);
-                state.speciesArray.push(addedSpecies);
-                state.selectedSpecies = addedSpecies;
-                $rootScope.$broadcast('new-messages-available', addedSpecies.messageKey, addedSpecies.vernacularName);
+                updateObj.addedSpecies = new Species(response.data, vernacularName);
+                return VernacularService.addVernacular(updateObj.addedSpecies, updateObj);
+            }).then(function (response) {
+                state.speciesArray.push(updateObj.addedSpecies);
+                state.selectedSpecies = updateObj.addedSpecies;
+                $rootScope.$broadcast('new-messages-available', updateObj.addedSpecies.messageKey, updateObj.addedSpecies.vernacularName);
                 $uibModal.open({
                     templateUrl: 'views/species-modal.html',
                     controller: SpeciesModalController
@@ -204,42 +198,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             }).catch(function (response) {
                 updateObj.objectErrors = response.data;
                 updateObj.errorName = updateObj.value;
-            });
-        },
-        addVernacular: function (species, updateObj) {
-            $log.info('addVernacular', [species, updateObj]);
-            if (species.vernacularName === updateObj.name || !updateObj.name) {
-                updateObj.visible = false;
-                return;
-            }
-            var data = {
-                vernacularName: updateObj.name.capitalize(),
-                speciesId: species.id
-            };
-            return $http.post('/rest/vernacular', data).then(function (response) {
-                $log.log('Response from put vernacular', [response, state.vernaculars]);
-                updateObj.visible = false;
-                delete updateObj.objectErrors;
-                if (response.status === 200) {
-                    data.id = response.data;
-                    state.vernaculars.push(data);
-                } else if (response.status === 202) {
-                    updateObj.displayModReview = true;
-                }
-                updateObj.visible = false;
-            }).catch(function (response) {
-                updateObj.objectErrors = response.data;
-                updateObj.errorName = updateObj.name;
-            });
-        },
-        deleteVernacular: function (species, updateObj, vernacular) {
-            $log.info('deleteVernacular', [species, updateObj, vernacular]);
-            return $http.delete('/rest/vernacular/' + vernacular.id).then(function (response) {
-                $log.log('Response from delete /rest/verncular/' + vernacular.id, [response, state]);
-                var indexOfDeleteElement = state.vernaculars.indexOf(vernacular);
-                state.vernaculars.splice(indexOfDeleteElement, 1);
-            }).catch(function (response) {
-                $log.error('Fail: delete /rest/verncular/' + vernacular.id, response);
             });
         },
         searchSpecies: function (sq) {

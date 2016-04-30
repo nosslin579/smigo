@@ -24,7 +24,6 @@ package org.smigo.species;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.species.vernacular.Vernacular;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,14 +60,14 @@ public class SpeciesController implements Serializable {
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
-    public Object addSpecies(@Valid @RequestBody Vernacular name, BindingResult result,
+    public Object addSpecies(@Valid @RequestBody Species species, BindingResult result,
                              @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
-        log.info("Adding species. Name:" + name.getVernacularName());
+        log.info("Adding species. Name:" + species);
         if (result.hasErrors()) {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
-        return speciesHandler.addSpecies(name.getVernacularName(), user, locale);
+        return speciesHandler.addSpecies(species, user, locale);
     }
 
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.PUT)
@@ -82,7 +81,7 @@ public class SpeciesController implements Serializable {
         }
         Review review = speciesHandler.updateSpecies(id, species, user);
         if (review == Review.MODERATOR) {
-            response.setStatus(202);
+            response.setStatus(HttpStatus.ACCEPTED.value());
         }
         return speciesHandler.getSpecies(id, locale);
     }

@@ -24,8 +24,6 @@ package org.smigo.species;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.species.vernacular.Vernacular;
-import org.smigo.species.vernacular.VernacularHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,21 +44,12 @@ public class SpeciesHandler {
     @Autowired
     private SpeciesDao speciesDao;
     @Autowired
-    private VernacularHandler vernacularHandler;
-    @Autowired
     private RuleDao ruleDao;
     @Autowired
     private FamilyDao familyDao;
 
-    public int addSpecies(String vernacularName, AuthenticatedUser user, Locale locale) {
-        final int id = speciesDao.addSpecies(user.getId());
-        Vernacular vernacular = new Vernacular();
-        vernacular.setCountry(locale.getCountry());
-        vernacular.setLanguage(locale.getLanguage());
-        vernacular.setVernacularName(vernacularName);
-        vernacular.setSpeciesId(id);
-        vernacularHandler.addVernacular(vernacular, user, locale);
-        return id;
+    public int addSpecies(Species vernacularName, AuthenticatedUser user, Locale locale) {
+        return speciesDao.addSpecies(user.getId());
     }
 
     public void deleteSpecies(int speciesId) {

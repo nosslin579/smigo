@@ -68,6 +68,7 @@
         console.log('Init data', initData);
 
         <%@ include file="../js/app.js" %>
+        <%@ include file="../js/garden/VernacularService.js" %>
         <%@ include file="../js/garden/SpeciesFilter.js" %>
         <%@ include file="../js/garden/GardenController.js" %>
         <%@ include file="../js/garden/AddYearModalController.js" %>
