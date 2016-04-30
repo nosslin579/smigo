@@ -16,6 +16,8 @@ hs_err_pid*
 catalina.base_IS_UNDEFINED/
 dump/
 local.properties
+dev.properties
+prod.properties
 static/target/
 web/catalina.base_IS_UNDEFINED/
 web/target/

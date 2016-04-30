@@ -32,8 +32,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import java.util.Enumeration;
@@ -67,7 +65,7 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
             log.info("System prop:" + prop.toString());
         }
 
-        final String profile = getProfile();
+        final String profile = System.getProperty("smigoProfile", EnvironmentProfile.PRODUCTION);
         log.info("Starting with profile " + profile);
 
         WebApplicationContext context = new AnnotationConfigWebApplicationContext() {{
@@ -93,12 +91,4 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         servletContext.addServlet("dispatcher", dispatcherServlet).addMapping("/");
     }
 
-    private String getProfile() {
-        try {
-            InitialContext initialContext = new InitialContext();
-            return (String) initialContext.lookup("java:comp/env/profile");
-        } catch (NamingException e) {
-            throw new RuntimeException("Could not find profile", e);
-        }
-    }
 }

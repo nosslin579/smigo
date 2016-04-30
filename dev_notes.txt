@@ -1,0 +1,29 @@
+#System properties:
+-Dlogback.configurationFile=web/logback-dev.xml
+-Dmail.debug=true
+-XX:MaxMetaspaceSize=130M
+-DsmigoProfile=dev
+
+#Merge species
+UPDATE PLANTS
+SET SPECIES_ID = 1
+WHERE SPECIES_ID IN (2,3,4);
+
+UPDATE VARIETIES
+SET SPECIES_ID = 1
+WHERE SPECIES_ID IN (2,3,4);
+
+DELETE FROM SPECIES_TRANSLATION
+WHERE SPECIES_ID IN (2,3,4);
+
+DELETE FROM SPECIES
+WHERE ID IN (2,3,4);
+
+
+
+#Add lang
+1, Add message.properties and ensure every key is translated
+2, Add locale to AllMessagesSetTest
+3, Add rel="alternate" hreflang="es" tag
+4, Add OAuth url to facebook app
+5, Add url to DNS
