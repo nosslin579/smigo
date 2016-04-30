@@ -1,4 +1,4 @@
-package org.smigo.species;
+package org.smigo.species.vernacular;
 
 /*
  * #%L
@@ -34,7 +34,7 @@ public class Vernacular {
     private int speciesId;
 
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
-    @UniqueSpeciesName
+    @UniqueVernacular
     private String vernacularName;
 
     private String language;

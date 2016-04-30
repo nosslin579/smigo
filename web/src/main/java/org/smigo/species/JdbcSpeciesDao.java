@@ -22,13 +22,12 @@ package org.smigo.species;
  * #L%
  */
 
+import org.smigo.species.vernacular.Vernacular;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -52,7 +51,6 @@ class JdbcSpeciesDao implements SpeciesDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertSpecies;
-    private SimpleJdbcInsert insertVernacular;
     private Map<Integer, Family> families;
     private final RowMapper<Species> rowMapper = new SpeciesRowMapper();
     private final RowMapper<Vernacular> vernacularRowMapper = new BeanPropertyRowMapper<>(Vernacular.class);
@@ -61,7 +59,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.insertSpecies = new SimpleJdbcInsert(dataSource).withTableName("species").usingGeneratedKeyColumns("id").usingColumns("creator");
-        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").usingGeneratedKeyColumns("id", "precedence").usingColumns("species_id", "vernacular_name", "language", "country");
     }
 
     @Override
@@ -103,25 +100,6 @@ class JdbcSpeciesDao implements SpeciesDao {
     public void deleteSpecies(int speciesId) {
         String sql = "DELETE FROM SPECIES WHERE ID = ?";
         jdbcTemplate.update(sql, speciesId);
-    }
-
-    @Override
-    public void deleteVernacular(int vernacularId) {
-        String sql = "DELETE FROM SPECIES_TRANSLATION WHERE ID = ?";
-        jdbcTemplate.update(sql, vernacularId);
-    }
-
-    @Override
-    public List<Vernacular> getVernacular(Locale locale) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='') ORDER BY COUNTRY DESC,PRECEDENCE;";
-        return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
-    }
-
-    @Override
-    public int insertVernacular(Vernacular vernacular) {
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(vernacular);
-        //http://stackoverflow.com/questions/5483139/springs-simplejdbcinsert-doesnt-produce-auto-generated-keys-as-expected
-        return insertVernacular.execute(parameterSource);
     }
 
     private static class SpeciesRowMapper implements RowMapper<Species> {

@@ -1,4 +1,4 @@
-package org.smigo.species;
+package org.smigo.species.vernacular;
 
 /*
  * #%L
@@ -22,20 +22,13 @@ package org.smigo.species;
  * #L%
  */
 
-public class CrudResult {
-    private final Integer id;
-    private final Review review;
+import java.util.List;
+import java.util.Locale;
 
-    public CrudResult(Integer id, Review review) {
-        this.id = id;
-        this.review = review;
-    }
+interface VernacularDao {
+    void deleteVernacular(int vernacularId);
 
-    public Integer getId() {
-        return id;
-    }
+    List<Vernacular> getVernacular(Locale locale);
 
-    public Review getReview() {
-        return review;
-    }
+    int insertVernacular(Vernacular vernacular);
 }

@@ -1,4 +1,4 @@
-package org.smigo.species;
+package org.smigo.species.vernacular;
 
 /*
  * #%L
@@ -40,9 +40,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({METHOD, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = UniqueSpeciesName.UniqueSpeciesNameValidator.class)
+@Constraint(validatedBy = UniqueVernacular.UniqueVernacularValidator.class)
 @Documented
-public @interface UniqueSpeciesName {
+@interface UniqueVernacular {
 
     String message() default "msg.speciesalreadyexists";
 
@@ -50,19 +50,19 @@ public @interface UniqueSpeciesName {
 
     Class<? extends Payload>[] payload() default {};
 
-    class UniqueSpeciesNameValidator implements ConstraintValidator<UniqueSpeciesName, String> {
+    class UniqueVernacularValidator implements ConstraintValidator<UniqueVernacular, String> {
 
         @Autowired
-        private SpeciesDao speciesDao;
+        private VernacularDao vernacularDao;
         @Autowired
         private UserHandler userHandler;
 
-        public void initialize(UniqueSpeciesName constraintAnnotation) {
+        public void initialize(UniqueVernacular constraintAnnotation) {
         }
 
         public boolean isValid(String vernacularName, ConstraintValidatorContext constraintContext) {
             final Locale locale = userHandler.getLocale();
-            List<Vernacular> vernacular = speciesDao.getVernacular(locale);
+            List<Vernacular> vernacular = vernacularDao.getVernacular(locale);
             return !vernacular.stream().anyMatch(v -> v.getVernacularName().equalsIgnoreCase(vernacularName));
         }
 

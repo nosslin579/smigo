@@ -23,8 +23,8 @@ package org.smigo.user;
  */
 
 import org.slf4j.LoggerFactory;
-import org.smigo.species.SpeciesHandler;
-import org.smigo.species.Vernacular;
+import org.smigo.species.vernacular.Vernacular;
+import org.smigo.species.vernacular.VernacularHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -37,7 +37,7 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
 
     private final org.slf4j.Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private SpeciesHandler speciesHandler;
+    private VernacularHandler vernacularHandler;
 
     public UserAdaptiveMessageSource(int cacheSeconds) {
         super();
@@ -54,8 +54,8 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
         PropertiesHolder propertiesHolder = getMergedProperties(locale);
         Map properties = propertiesHolder.getProperties();
         Map<Object, Object> ret = new HashMap<Object, Object>(properties);
-        if (speciesHandler != null) { //ugly fix for test
-            for (Vernacular vernacular : speciesHandler.getVernacular(locale)) {
+        if (vernacularHandler != null) { //ugly fix for test
+            for (Vernacular vernacular : vernacularHandler.getVernacular(locale)) {
                 ret.putIfAbsent("msg.species" + vernacular.getSpeciesId(), vernacular.getVernacularName());
             }
         }

@@ -24,6 +24,7 @@ package org.smigo.species;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.species.vernacular.Vernacular;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,40 +109,5 @@ public class SpeciesController implements Serializable {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @RequestMapping(value = "/rest/species/{\\D+}", method = RequestMethod.GET)
     public void notFound() {
-    }
-
-
-    @RequestMapping(value = "/rest/vernacular", method = RequestMethod.GET)
-    @ResponseBody
-    public List<Vernacular> getVernacular(Locale locale) {
-        log.info("Getting vernacular");
-        return speciesHandler.getVernacular(locale);
-    }
-
-    @RequestMapping(value = "/rest/vernacular", method = RequestMethod.POST)
-    @ResponseBody
-    public Object addVernacular(@Valid @RequestBody Vernacular vernacular, BindingResult result,
-                                @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
-        log.info("Adding vernacular:" + vernacular);
-        if (result.hasErrors()) {
-            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
-            return result.getAllErrors();
-        }
-        CrudResult review = speciesHandler.addVernacular(vernacular, user, locale);
-        if (review.getReview() == Review.MODERATOR) {
-            response.setStatus(HttpStatus.ACCEPTED.value());
-        }
-        return review.getId();
-    }
-
-    @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
-        log.info("Deleting vernacular. Name:" + id);
-        Review review = speciesHandler.deleteVernacular(id, user, locale);
-        if (review == Review.MODERATOR) {
-            response.setStatus(HttpStatus.ACCEPTED.value());
-        }
-        return null;
     }
 }

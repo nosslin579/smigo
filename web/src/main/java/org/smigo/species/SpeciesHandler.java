@@ -24,9 +24,10 @@ package org.smigo.species;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.species.vernacular.Vernacular;
+import org.smigo.species.vernacular.VernacularHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
-import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -34,7 +35,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class SpeciesHandler {
@@ -44,9 +44,9 @@ public class SpeciesHandler {
     @Autowired
     private MailHandler mailHandler;
     @Autowired
-    private UserSession userSession;
-    @Autowired
     private SpeciesDao speciesDao;
+    @Autowired
+    private VernacularHandler vernacularHandler;
     @Autowired
     private RuleDao ruleDao;
     @Autowired
@@ -59,7 +59,7 @@ public class SpeciesHandler {
         vernacular.setLanguage(locale.getLanguage());
         vernacular.setVernacularName(vernacularName);
         vernacular.setSpeciesId(id);
-        speciesDao.insertVernacular(vernacular);
+        vernacularHandler.addVernacular(vernacular, user, locale);
         return id;
     }
 
@@ -93,26 +93,6 @@ public class SpeciesHandler {
         return ruleDao.getRules();
     }
 
-    public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
-        Species species = getSpecies(vernacular.getSpeciesId(), locale);
-        boolean isMod = user.isModerator();
-        boolean isCreator = species.getCreator() == user.getId();
-        if (isCreator || isMod) {
-            vernacular.setLanguage(locale.getLanguage());
-            vernacular.setCountry(locale.getCountry());
-            speciesDao.insertVernacular(vernacular);
-            //http://stackoverflow.com/questions/27547519/most-efficient-way-to-get-the-last-element-of-a-stream
-            Vernacular added = speciesDao.getVernacular(locale).stream().reduce((a, b) -> b).get();
-            return new CrudResult(added.getId(), Review.NONE);
-        }
-        List<Vernacular> currentVernaculars = speciesDao.getVernacular(locale);
-        currentVernaculars.removeIf(v -> v.getSpeciesId() != vernacular.getSpeciesId());
-        String vernacularAsString = currentVernaculars.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
-        mailHandler.sendAdminNotification(REVIEW_REQUEST, "Add vernacular:" + vernacular + " to:" +
-                currentVernaculars + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
-        return new CrudResult(null, Review.MODERATOR);
-    }
-
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
         Species originalSpecies = getSpecies(speciesId, Locale.ENGLISH);
         log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
@@ -135,20 +115,5 @@ public class SpeciesHandler {
         return Review.MODERATOR;
     }
 
-    public List<Vernacular> getVernacular(Locale locale) {
-        return speciesDao.getVernacular(locale);
-    }
 
-    public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
-        boolean isMod = user.isModerator();
-        if (isMod) {
-            speciesDao.deleteVernacular(vernacularId);
-            return Review.NONE;
-        }
-        List<Vernacular> vernacularList = speciesDao.getVernacular(locale);
-        String text = "Delete vernacular " + vernacularId + System.lineSeparator() +
-                vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
-        mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
-        return Review.MODERATOR;
-    }
 }
