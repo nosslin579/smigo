@@ -28,7 +28,7 @@
                 </div>
                 <hr/>
                 <!--##### Search field #####-->
-                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search.query,$event)">
+                <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search,$event)">
                     <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text"
                            placeholder="{{'search' | translate}} / {{'add' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
                            uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="pressEnterToSelectTooltipEnable">
@@ -46,12 +46,12 @@
                 <hr/>
                 <!--##### Add species button #####-->
                 <div class="has-error">
-                    <span ng-repeat="error in speciesState.addSpeciesErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:search.query}}</span>
+                    <span ng-repeat="error in search.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:search.query}}</span>
                 </div>
-                <button ng-click="addSpecies(search.query)" class="btn btn-primary" ng-disabled="speciesState.pendingAdd" ng-if="search.query" id="add-species-button">
+                <button ng-click="addSpecies(search)" class="btn btn-primary" ng-disabled="search.pendingAdd" ng-if="search.query" id="add-species-button">
                     <span class="glyphicon glyphicon-plus"></span> {{'msg.add-species' | translate:search.query }}
                 </button>
-                <img ng-if="speciesState.pendingAdd" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
+                <img ng-if="search.pendingAdd" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>
         <div id="garden-frame" class="col-xs-9 no-select full-height">

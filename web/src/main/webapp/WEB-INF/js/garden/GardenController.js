@@ -13,14 +13,14 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
 
-    $scope.selectedSpeciesFromTopResult = function (query, event) {
-        $log.log('Setting species from', [query, event]);
+    $scope.selectedSpeciesFromTopResult = function (search, event) {
+        $log.log('Setting species from', [search, event]);
         $scope.pressEnterToSelectTooltipEnable = false;
-        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
+        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), search)[0];
         if (topResult) {
             SpeciesService.selectSpecies(topResult);
         }
-        $scope.search.query = '';
+        search.query = '';
 
         //make sure selected species is visible in species scroll list
         $timeout(function () {

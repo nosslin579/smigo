@@ -1,7 +1,5 @@
-function VernacularService($http, $rootScope, $log) {
-    var state = {};
-
-    state.vernaculars = [];
+function VernacularService($http, $rootScope, $log, $q) {
+    var state = {vernaculars: []};
 
     $log.log('VernacularService', state);
 
@@ -31,7 +29,7 @@ function VernacularService($http, $rootScope, $log) {
                 speciesId: species.id
             };
             return $http.post('/rest/vernacular', data).then(function (response) {
-                $log.log('Response from put vernacular', [response, state.vernaculars]);
+                $log.log('Response from /rest/vernacular', [response, state.vernaculars]);
                 updateObj.visible = false;
                 delete updateObj.objectErrors;
                 if (response.status === 200) {
@@ -41,9 +39,12 @@ function VernacularService($http, $rootScope, $log) {
                     updateObj.displayModReview = true;
                 }
                 updateObj.visible = false;
+                return $q.resolve();
             }).catch(function (response) {
+                $log.error('Add vernacular failed', [response, updateObj, species]);
                 updateObj.objectErrors = response.data;
                 updateObj.errorName = updateObj.name;
+                return $q.reject(response);
             });
         },
         deleteVernacular: function (species, updateObj, vernacular) {

@@ -1,12 +1,10 @@
 function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter, $log, VernacularService) {
     var state = {},
-        search = {previous: [], promise: ""},
         ruleMap = {};
 
     state.action = 'add';
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species.smigoFind(28, 'id');
-    state.pendingAdd = false;
     state.varieties = initData.varieties;
 
     $log.log('SpeciesService', state);
@@ -149,28 +147,29 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 $log.warn('Response from delete species failed', [response, species]);
             });
         },
-        addSpecies: function (vernacularName) {
-            var updateObj = {name: vernacularName};
-            state.pendingAdd = true;
-            state.addSpeciesErrors = [];
-            $log.log('Adding species:' + vernacularName, state);
+        addSpecies: function (search) {
+            $log.log('AddSpecies', search);
+            search.pendingAdd = true;
+            search.objectErrors = [];
             return $http.post('/rest/species', {}).then(function (response) {
                 $log.log('Response from post species', [response]);
-                updateObj.addedSpecies = new Species(response.data, vernacularName);
-                return VernacularService.addVernacular(updateObj.addedSpecies, updateObj);
+                search.addedSpecies = new Species(response.data, search.name);
+                search.name = search.query;
+                return VernacularService.addVernacular(search.addedSpecies, search);
             }).then(function (response) {
-                state.speciesArray.push(updateObj.addedSpecies);
-                state.selectedSpecies = updateObj.addedSpecies;
-                $rootScope.$broadcast('new-messages-available', updateObj.addedSpecies.messageKey, updateObj.addedSpecies.vernacularName);
+                $log.log('Response from VernacularService.addVernacular', [response]);
+                state.speciesArray.push(search.addedSpecies);
+                state.selectedSpecies = search.addedSpecies;
+                $rootScope.$broadcast('new-messages-available', search.addedSpecies.messageKey, search.name);
                 $uibModal.open({
                     templateUrl: 'views/species-modal.html',
                     controller: SpeciesModalController
                 });
-            }).catch(function (error) {
-                $log.warn('Could not add species', [vernacularName, error]);
-                state.addSpeciesErrors = error.data;
+            }).catch(function (response) {
+                $log.error('Add species failed', [response]);
+                search.objectErrors = response.data;
             }).finally(function () {
-                state.pendingAdd = false;
+                search.pendingAdd = false;
             });
         },
         updateSpecies: function (species, updateObj, overrideValue) {
@@ -201,20 +200,19 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             });
         },
         searchSpecies: function (sq) {
-            state.addSpeciesErrors = [];
+            sq.addSpeciesErrors = [];
             var queryLowerCase = sq.query.toLocaleLowerCase();
             //Cancel search if new search within 2sec
-            $timeout.cancel(search.promise);
+            $timeout.cancel(sq.promise);
             sq.proccessing = false;
-            if (!sq.query || sq.query.length <= 2 || search.previous.indexOf(queryLowerCase) != -1) {
+            if (!sq.query || sq.query.length < 2) {
                 return;
             }
             sq.proccessing = true;
-            search.promise = $timeout(function () {
+            sq.promise = $timeout(function () {
                 $log.debug('Search with query', sq);
                 $http.post('/rest/species/search', {query: sq.query})
                     .then(function (response) {
-                        search.previous.push(queryLowerCase);
                         response.data.forEach(function (species) {
                             if (!state.speciesArray.smigoFind(species.id, 'id')) {
                                 state.speciesArray.push(species);
