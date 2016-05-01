@@ -46,8 +46,8 @@
         <strong>{{'msg.aka' | translate}}: </strong>
         <!--First element in array is the primary thus excluding -->
         <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}"
-              ng-if="!$first" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true">{{v.vernacularName}} </span>
-        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="(speciesState.vernaculars | filter:{speciesId:species.id}:true).length === 1">&lt;{{'edit' | translate}}&gt;</a>
+              ng-if="!$first" ng-repeat="v in getVernaculars(species.id)">{{v.vernacularName}} </span>
+        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="getVernaculars(species.id).length<=1">&lt;{{'edit' | translate}}&gt;</a>
         <!--WORD JOINER (U+2060)-->
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>
@@ -62,7 +62,7 @@
         <div class="form-group" ng-class="{'has-error':vernacularOtherEdit.objectErrors}">
             <ul class="nav nav-pills">
                 <!--First element in array is the primary thus excluding -->
-                <li role="presentation" ng-repeat="v in speciesState.vernaculars | filter:{speciesId:species.id}:true">
+                <li role="presentation" ng-repeat="v in getVernaculars(species.id)">
                     <!--#### Vernacular other delete ####-->
                     <a tabindex="-1" ng-click="deleteVernacular(species, vernacularOtherEdit, v)" href="#">{{v.vernacularName}}
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>

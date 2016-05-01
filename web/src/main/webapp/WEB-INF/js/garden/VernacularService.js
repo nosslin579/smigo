@@ -17,6 +17,14 @@ function VernacularService($http, $rootScope, $log, $q) {
         getState: function () {
             return state;
         },
+        getVernacular: function (speciesId) {
+            return state.vernaculars.smigoFind(speciesId, 'speciesId');
+        },
+        getVernaculars: function (speciesId) {
+            return state.vernaculars.filter(function (v) {
+                return v.speciesId === speciesId;
+            });
+        },
         addVernacular: function (species, updateObj) {
             $log.info('addVernacular', [species, updateObj]);
             if (!updateObj.name) {
