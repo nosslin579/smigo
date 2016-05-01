@@ -66,10 +66,12 @@ public class LogHandler {
             s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
         }
 
-        final long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
-        final long elapsedTime = System.nanoTime() - start;
-        s.append(separator).append("Request time elapsed:").append(elapsedTime);
-        s.append("ns which is ").append(elapsedTime / 1000000).append("ms").append(separator);
+        final Long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
+        if (start != null) {
+            final long elapsedTime = System.nanoTime() - start;
+            s.append(separator).append("Request time elapsed:").append(elapsedTime);
+            s.append("ns which is ").append(elapsedTime / 1000000).append("ms").append(separator);
+        }
         return s.toString();
     }
 
