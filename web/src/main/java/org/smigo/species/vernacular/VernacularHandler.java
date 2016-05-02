@@ -58,8 +58,10 @@ public class VernacularHandler {
             vernacular.setLanguage(locale.getLanguage());
             vernacular.setCountry(locale.getCountry());
             vernacularDao.insertVernacular(vernacular);
-            //http://stackoverflow.com/questions/27547519/most-efficient-way-to-get-the-last-element-of-a-stream
-            Vernacular added = vernacularDao.getVernacular(locale).stream().reduce((a, b) -> b).get();
+            //ugly starts here because h2 cant return generated keys properly
+            List<Vernacular> vernacularBySpecies = vernacularDao.getVernacularBySpecies(species.getId());
+            Vernacular added = vernacularBySpecies.stream().reduce((a, b) -> b.getVernacularName().equals(vernacular.getVernacularName()) ? b : a).get();
+            //ugly ends here
             return new CrudResult(added.getId(), Review.NONE);
         }
         List<Vernacular> currentVernaculars = vernacularDao.getVernacular(locale);

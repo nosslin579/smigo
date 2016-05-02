@@ -67,7 +67,7 @@ class JdbcVernacularDao implements VernacularDao {
     public int insertVernacular(Vernacular vernacular) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(vernacular);
         //http://stackoverflow.com/questions/5483139/springs-simplejdbcinsert-doesnt-produce-auto-generated-keys-as-expected
-        return insertVernacular.execute(parameterSource);
+        return insertVernacular.executeAndReturnKey(parameterSource).intValue();
     }
 
     @Override
