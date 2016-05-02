@@ -20,6 +20,12 @@ function VernacularService($http, $rootScope, $log, $q) {
         this.precedence = 1;
     }
 
+    function getVernaculars(speciesId) {
+        return state.vernaculars.filter(function (v) {
+            return v.speciesId === speciesId;
+        });
+    }
+
     return {
         getState: function () {
             return state;
@@ -30,13 +36,10 @@ function VernacularService($http, $rootScope, $log, $q) {
         getVernacularName: function (speciesId) {
             return state.vernaculars.smigoFind(speciesId, 'speciesId', new Vernacular(speciesId)).vernacularName;
         },
-        getVernaculars: function (speciesId) {
-            return state.vernaculars.filter(function (v) {
-                return v.speciesId === speciesId;
-            });
-        },
+        getVernaculars: getVernaculars,
         addVernacular: function (species, updateObj) {
             $log.info('addVernacular', [species, updateObj]);
+            updateObj.displayModReview = false;
             if (!updateObj.name) {
                 updateObj.visible = false;
                 return;
@@ -67,10 +70,20 @@ function VernacularService($http, $rootScope, $log, $q) {
         },
         deleteVernacular: function (species, updateObj, vernacular) {
             $log.info('deleteVernacular', [species, updateObj, vernacular]);
+            updateObj.displayModReview = false;
+            if (getVernaculars(species.id).length === 1) {
+                updateObj.objectErrors = [{defaultMessage: 'msg.unknownerror'}];
+                return;
+            }
             return $http.delete('/rest/vernacular/' + vernacular.id).then(function (response) {
                 $log.log('Response from delete /rest/verncular/' + vernacular.id, [response, state]);
-                var indexOfDeleteElement = state.vernaculars.indexOf(vernacular);
-                state.vernaculars.splice(indexOfDeleteElement, 1);
+                if (response.status === 200) {
+                    var indexOfDeleteElement = state.vernaculars.indexOf(vernacular);
+                    state.vernaculars.splice(indexOfDeleteElement, 1);
+                } else if (response.status === 202) {
+                    updateObj.displayModReview = true;
+                }
+                updateObj.visible = false;
             }).catch(function (response) {
                 $log.error('Fail: delete /rest/verncular/' + vernacular.id, response);
             });
