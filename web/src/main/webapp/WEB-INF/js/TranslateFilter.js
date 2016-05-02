@@ -21,38 +21,37 @@ function translateFilter($rootScope, $log, $http, $route) {
     });
 
     /**
-     * Param can be resolved from either message or messageParameter.
+     * Merge parameters to an array since they can be either string or array of string.
      */
-    function getParameter(message, messageParameter1, messageParameter2) {
-        //$log.log('getParameter', [message, messageParameter1, messageParameter2]);
-        var ret = [].concat(message.messageParameter, messageParameter1, messageParameter2);
+    function getParameter(messageParameter1, messageParameter2) {
+        //$log.log('getParameter', [messageParameter1, messageParameter2]);
+
+        //convert to array
+        var ret = [].concat(messageParameter1, messageParameter2);
+        //removes undefined and null elements
         return ret.filter(function (n) {
-            return n != undefined; //removes undefined and null elements
-            //}).map(function (n) {
-            //    return typeof n === 'function' ? n() : n;//if any parameter is a function, execute it and use return value
+            return n != undefined;
         });
     }
 
     return function (message, messageParameter1, messageParameter2) {
-        if (!message) {
-            $log.error('Can not translate', message, messageParameter1, messageParameter2);
+        if (!message || typeof message !== 'string') {
+            $log.error('Can not translate', [message, messageParameter1, messageParameter2]);
             return 'n/a';
-        } else if (typeof message === 'function') {
-            return message();
         }
 
-        var paramArray = getParameter(message, messageParameter1, messageParameter2),
-            translatedMessage = message.messageKey ? allMessages[message.messageKey] : allMessages[message];
+        var paramArray = getParameter(messageParameter1, messageParameter2),
+            translatedMessage = allMessages[message];
 
         if (!translatedMessage) {
-            $log.error('Could not translate:', [allMessages, message, messageParameter1, messageParameter2]);
+            $log.error('Could not translate(missing key):', [allMessages, message, messageParameter1, messageParameter2]);
             return '-';
         }
 
         //String interpolate params
         for (var i = 0; i < paramArray.length; i++) {
             var param = paramArray[i];
-            translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param.messageKey ? allMessages[param.messageKey] : param);
+            translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param);
         }
         //$log.debug('Translate:' + translatedMessage, [msg, message, paramArray]);
         return translatedMessage;

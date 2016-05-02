@@ -32,7 +32,7 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
                 ret.push(s);
             } else if (query.length > 2) {
                 (s.scientificName && s.scientificName.toLowerCase().indexOf(queryLowerCase) !== -1 ||
-                s.family && translateFilter(s.family).toLowerCase().indexOf(queryLowerCase) === 0 ||
+                s.family && translateFilter(s.family.messageKey).toLowerCase().indexOf(queryLowerCase) === 0 ||
                 s.family && s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0)
                 && ret.push(s);
             }
