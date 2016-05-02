@@ -102,7 +102,7 @@
     <div ng-init="editFamily = {visible:false, field:'family', value:null}"></div>
     <div ng-if="!editFamily.visible">
         <strong>{{'family'|translate}}:</strong>
-        <span ng-if="species.family" ng-click="editFamily.visible=true" id="editable-family-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top">{{species.family | translate}} - <em>{{species.family.name}}</em></span>
+        <span ng-if="species.family" ng-click="editFamily.visible=true" id="editable-family-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top">{{species.family.messageKey | translate}} - <em>{{species.family.name}}</em></span>
         <a href="#" ng-if="!species.family" ng-click="editFamily.visible=true">&lt;{{'edit' | translate}}&gt;</a>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editFamily.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
