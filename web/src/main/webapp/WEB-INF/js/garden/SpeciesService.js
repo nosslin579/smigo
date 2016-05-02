@@ -241,6 +241,10 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         getSpecies: getSpecies,
         addVariety: function (editObj, speciesId) {
             $log.log('Add Variety:', [editObj, speciesId]);
+            if (!editObj.value) {
+                editObj.visible = false;
+                return;
+            }
             var variety = new Variety(editObj.value.capitalize(), speciesId);
             return $http.post('/rest/variety/', variety)
                 .then(function (response) {
