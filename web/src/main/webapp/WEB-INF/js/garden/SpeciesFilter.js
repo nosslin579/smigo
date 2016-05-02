@@ -13,11 +13,15 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
         return ret;
     }
 
+    function getVernacularLowerCase(s) {
+        return VernacularService.getVernacular(s.id).vernacularName.toLowerCase();
+    }
+
     return function (speciesArray, query) {
 //        console.time('SpeciesFilter');
-//        console.log('SpeciesFilter', [input, query]);
+//        console.log('SpeciesFilter', [speciesArray, query]);
         if (!query) {
-            return orderByFilter(speciesArray, 'vernacularName');
+            return orderByFilter(speciesArray, getVernacularLowerCase);
         }
 
         var ret = [];
@@ -34,7 +38,7 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
             }
         });
 //        console.timeEnd('SpeciesFilter');
-        return orderByFilter(ret, 'vernacularName');
+        return orderByFilter(ret, getVernacularLowerCase);
     };
 }
 

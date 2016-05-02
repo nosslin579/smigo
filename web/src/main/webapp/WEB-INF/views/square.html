@@ -2,14 +2,14 @@
     <table class="table table-bordered">
         <tr>
             <th ng-repeat="p in square.plantArray">
-                <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/> {{p.species.vernacularName}}{{p.variety ? ' - ':''}}{{p.variety.name}}
+                <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/> {{p.species.id|vernacular}}{{p.variety ? ' - ':''}}{{p.variety.name}}
             </th>
         </tr>
 
         <tr>
             <td ng-repeat="p in square.plantArray">
                 <div ng-repeat="h in p.hints | orderBy:'category':true">
-                    <span class="glyphicon glyphicon-ok {{h.category}}"></span><span>{{h|translate}}</span>
+                    <span class="glyphicon glyphicon-ok {{h.category}}"></span><span>{{h.messageKey|translate:h.getArgsAsText(h.argument)}}</span>
                 </div>
                 <div ng-if="!p.hints.length">
                     {{'msg.nohints' | translate}}
@@ -20,5 +20,5 @@
 </div>
 <div class="square-content full-height">
     <img ng-repeat="p in square.plantArray" ng-src="{{'/static/species/' + p.species.iconFileName}}" class="plant pull-left"
-         alt="{{p.species.vernacularName}}" ng-class="{'small-species': square.plantArray.length > 1}"/>
+         alt="{{p.species.id|vernacular}}" ng-class="{'small-species': square.plantArray.length > 1}"/>
 </div>

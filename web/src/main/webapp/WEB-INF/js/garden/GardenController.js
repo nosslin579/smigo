@@ -1,4 +1,4 @@
-function GardenController($http, $log, $uibModal, $scope, $filter, $location, $anchorScroll, $timeout, GardenService, SpeciesService, UserService) {
+function GardenController($http, $log, $uibModal, $scope, $filter, $location, $anchorScroll, $timeout, GardenService, SpeciesService, UserService, VernacularService) {
 
     $scope.search = {query: '', proccessing: false};
     $scope.pressEnterToSelectTooltipEnable = true;
@@ -12,11 +12,12 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
+    $scope.getVernacularName = VernacularService.getVernacularName;
 
     $scope.selectedSpeciesFromTopResult = function (search, event) {
         $log.log('Setting species from', [search, event]);
         $scope.pressEnterToSelectTooltipEnable = false;
-        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), search)[0];
+        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), search.query)[0];
         if (topResult) {
             SpeciesService.selectSpecies(topResult);
         }
@@ -24,7 +25,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
 
         //make sure selected species is visible in species scroll list
         $timeout(function () {
-            var speciesArrayAlphabetically = $filter('orderBy')(SpeciesService.getAllSpecies(), 'vernacularName');
+            var speciesArrayAlphabetically = $filter('speciesFilter')(SpeciesService.getAllSpecies(), '');
             var indexOfSelectedSpecies = speciesArrayAlphabetically.indexOf(topResult);
             var speciesAboveSelected = speciesArrayAlphabetically[(indexOfSelectedSpecies - 4)];
             $log.log('Scrolling to(or not if undefined):', speciesAboveSelected);
@@ -34,7 +35,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     };
     $scope.getTopResult = function (query) {
         var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
-        return topResult ? topResult : '-';
+        return topResult ? VernacularService.getVernacularName(topResult.id) : '-';
     };
     $scope.openAddYearModal = function () {
         $uibModal.open({

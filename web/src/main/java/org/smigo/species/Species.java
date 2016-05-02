@@ -133,10 +133,6 @@ public class Species {
         return ret;
     }
 
-    public String getMessageKey() {
-        return "msg.species" + id;
-    }
-
     @Override
     public String toString() {
         return "Species{" +

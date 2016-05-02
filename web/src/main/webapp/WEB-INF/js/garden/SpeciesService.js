@@ -28,7 +28,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     function augmentSpecies(speciesArray) {
         $log.info('Augmenting species', [speciesArray]);
         speciesArray.forEach(function (species) {
-            species.vernacularName = translateFilter(species);
             species.rules = ruleMap[species.id];
             !species.rules && (species.rules = []);
         });
@@ -36,14 +35,20 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
 
     function createRule(rule) {
 
-        function Rule(rule, category, yearsBackMin, yearsBackMax, hasCauser, arg) {
+        function Rule(rule, category, yearsBackMin, yearsBackMax, hasCauser, arg, fnGetArgsAsText) {
             this.id = rule.id;
             this.host = rule.host;
             this.type = rule.type;
             this.impacts = rule.impacts;
             this.arg = arg;
             this.category = category;
-            this.hint = {messageKey: 'hint.' + category, messageParameter: arg, category: category}
+            this.hint = {
+                messageKey: 'hint.' + category,
+                messageParameter: arg,
+                argument: arg,
+                category: category,
+                getArgsAsText: fnGetArgsAsText
+            };
             this.yearsBack = {min: yearsBackMin, max: yearsBackMax};
             this.hasCauser = hasCauser;
             this.messageKey = 'rule.' + category;
@@ -62,19 +67,29 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             },
             speciesArg = new Species(rule.param),
             speciesHost = new Species(rule.host),
-            familyArg = new Message("family" + rule.param);
+            familyArg = new Message("family" + rule.param),
+
+            speciesGetArgsAsText = function (argument) {
+                return VernacularService.getVernacularName(argument.id);
+            },
+            rotationGetArgsAsText = function (argument) {
+                return [VernacularService.getVernacularName(argument[0].id), translateFilter(argument[1].messageKey)];
+            },
+            rawGetArgsAsText = function (argument) {
+                return argument;
+            };
 
         switch (rule.type) {
             case 0:
-                return new Rule(rule, 'goodcompanion', 0, 0, hasCauser.companion, speciesArg);
+                return new Rule(rule, 'goodcompanion', 0, 0, hasCauser.companion, speciesArg, speciesGetArgsAsText);
             case 4:
-                return new Rule(rule, 'badcompanion', 0, 0, hasCauser.companion, speciesArg);
+                return new Rule(rule, 'badcompanion', 0, 0, hasCauser.companion, speciesArg, speciesGetArgsAsText);
             case 5:
-                return new Rule(rule, 'goodcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
+                return new Rule(rule, 'goodcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg], rotationGetArgsAsText);
             case 6:
-                return new Rule(rule, 'badcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg]);
+                return new Rule(rule, 'badcroprotation', 1, 1, hasCauser.rotation, [speciesHost, familyArg], rotationGetArgsAsText);
             case 7:
-                return new Rule(rule, 'speciesrepetition', 1, rule.param, hasCauser.repetition, rule.param);
+                return new Rule(rule, 'speciesrepetition', 1, rule.param, hasCauser.repetition, rule.param, rawGetArgsAsText);
             default :
                 throw "No such rule type " + rule.type;
         }
@@ -86,9 +101,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
 
     function Species(id, vernacularName) {
         this.id = id;
-        this.vernacularName = vernacularName;
         this.iconFileName = 'defaulticon.png';
-        this.messageKey = 'msg.species' + id;
         this.rules = [];
     }
 
@@ -110,7 +123,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         if (species) {
             return species;
         }
-        var ret = new Species(id, 'id' + id);
+        var ret = new Species(id);
         state.speciesArray.push(ret);
         $http.get('/rest/species/' + id)
             .then(function (response) {
@@ -153,7 +166,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             search.objectErrors = [];
             return $http.post('/rest/species', {}).then(function (response) {
                 $log.log('Response from post species', [response]);
-                search.addedSpecies = new Species(response.data, search.name);
+                search.addedSpecies = new Species(response.data);
                 search.name = search.query;
                 return VernacularService.addVernacular(search.addedSpecies, search);
             }).then(function (response) {

@@ -21,12 +21,12 @@ Object.defineProperty(Array.prototype, 'smigoFind', {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: function (value, property) {
+    value: function (value, property, def) {
         for (var i = 0; i < this.length; i++) {
             if (this[i][property] === value) {
                 return this[i];
             }
         }
-        return null;
+        return def;
     }
 });

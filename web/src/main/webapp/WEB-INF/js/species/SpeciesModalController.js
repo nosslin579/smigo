@@ -5,6 +5,7 @@ function SpeciesModalController($log, $scope, $rootScope, UserService, SpeciesSe
     $scope.addVernacularName = VernacularService.addVernacular;
     $scope.deleteVernacular = VernacularService.deleteVernacular;
     $scope.getVernacular = VernacularService.getVernacular;
+    $scope.getVernacularName = VernacularService.getVernacularName;
     $scope.getVernaculars = VernacularService.getVernaculars;
     $scope.updateSpecies = SpeciesService.updateSpecies;
     $scope.addVariety = SpeciesService.addVariety;

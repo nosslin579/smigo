@@ -13,12 +13,22 @@ function VernacularService($http, $rootScope, $log, $q) {
         //todo
     });
 
+    function Vernacular(speciesId) {
+        //this.id = id;
+        this.speciesId = speciesId;
+        this.vernacularName = 'id' + speciesId;
+        this.precedence = 1;
+    }
+
     return {
         getState: function () {
             return state;
         },
         getVernacular: function (speciesId) {
-            return state.vernaculars.smigoFind(speciesId, 'speciesId');
+            return state.vernaculars.smigoFind(speciesId, 'speciesId', new Vernacular(speciesId));
+        },
+        getVernacularName: function (speciesId) {
+            return state.vernaculars.smigoFind(speciesId, 'speciesId', new Vernacular(speciesId)).vernacularName;
         },
         getVernaculars: function (speciesId) {
             return state.vernaculars.filter(function (v) {

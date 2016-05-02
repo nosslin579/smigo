@@ -1,4 +1,4 @@
-<div class="modal-header" ng-init="editVernacular={visible:false, name:species.vernacularName, locale:currentUser.locale};editIcon={field:'iconFileName'}">
+<div class="modal-header" ng-init="editVernacular={visible:false, name:getVernacularName(species.id), locale:currentUser.locale};editIcon={field:'iconFileName'}">
     <button type="button" class="close" ng-click="$dismiss()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
@@ -19,7 +19,7 @@
           </ul>
         </span>
         <!--#### Vernacular primary title ####-->
-        <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{species.vernacularName}}</strong>
+        <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{getVernacularName(species.id)}}</strong>
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </h4>
 
@@ -156,7 +156,7 @@
         <strong>{{'rule.goodcompanion'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" ng-click="$close('Selected species')">
-                <a href="" ng-click="selectSpecies(r.arg.id)">{{r.hint.messageParameter | translate}}</a>
+                <a href="" ng-click="selectSpecies(r.arg.id)">{{getVernacularName(r.arg.id)}}</a>
             </li>
         </ul>
     </div>
@@ -165,7 +165,7 @@
         <strong>{{'rule.badcompanion'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'badcompanion'}">
-                <a href="/species/{{r.arg.id}}">{{r.hint.messageParameter | translate}}</a>
+                <a href="/species/{{r.arg.id}}">{{getVernacularName(r.arg.id)}}</a>
             </li>
         </ul>
     </div>
@@ -173,7 +173,7 @@
         <strong>{{'rule.goodcroprotation'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
-                {{r.hint.messageParameter[1] | translate}}
+                {{r.arg[1] | translate}}
             </li>
         </ul>
     </div>
@@ -181,14 +181,14 @@
         <strong>{{'rule.badcroprotation'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
-                {{r.hint.messageParameter | translate}}
+                {{r.arg[1] | translate}}
             </li>
         </ul>
     </div>
-    <div ng-if="species.rules.smigoFind('speciesrepetition','category') != null">
+    <div ng-init="speciesRepetitionRule = species.rules.smigoFind('speciesrepetition','category')" ng-if="speciesRepetitionRule != null">
         <strong>{{'rule.croprotation'|translate}}</strong>
         <ul>
-            <li>{{'rule.speciesrepetition' | translate:species.rules.smigoFind('speciesrepetition','category').hint.messageParameter}}</li>
+            <li>{{'rule.speciesrepetition' | translate:speciesRepetitionRule.arg}}</li>
         </ul>
     </div>
     </p>

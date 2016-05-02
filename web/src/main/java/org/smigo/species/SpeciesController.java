@@ -106,7 +106,7 @@ public class SpeciesController implements Serializable {
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    @RequestMapping(value = "/rest/species/{\\D+}", method = RequestMethod.GET)
-    public void notFound() {
+    @RequestMapping(value = "/rest/species/{id:\\D+}", method = RequestMethod.GET)
+    public void notFound(@PathVariable String id) {
     }
 }

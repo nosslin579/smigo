@@ -24,16 +24,21 @@ function translateFilter($rootScope, $log, $http, $route) {
      * Param can be resolved from either message or messageParameter.
      */
     function getParameter(message, messageParameter1, messageParameter2) {
+        //$log.log('getParameter', [message, messageParameter1, messageParameter2]);
         var ret = [].concat(message.messageParameter, messageParameter1, messageParameter2);
         return ret.filter(function (n) {
-            return n != undefined
-        });//removes undefined and null elements
+            return n != undefined; //removes undefined and null elements
+            //}).map(function (n) {
+            //    return typeof n === 'function' ? n() : n;//if any parameter is a function, execute it and use return value
+        });
     }
 
     return function (message, messageParameter1, messageParameter2) {
         if (!message) {
             $log.error('Can not translate', message, messageParameter1, messageParameter2);
             return 'n/a';
+        } else if (typeof message === 'function') {
+            return message();
         }
 
         var paramArray = getParameter(message, messageParameter1, messageParameter2),

@@ -101,6 +101,7 @@
 
         <%@ include file="../js/EqualsDirective.js" %>
         <%@ include file="../js/TranslateFilter.js" %>
+        <%@ include file="../js/VernacularFilter.js" %>
     })();
 </script>
 
