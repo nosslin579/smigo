@@ -36,12 +36,24 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class RestExceptionResolver implements HandlerExceptionResolver, Ordered {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private ModelAndView jsonUnknownErrorView;
+
+    @PostConstruct
+    public void init() {
+        MappingJackson2JsonView view = new MappingJackson2JsonView();
+        view.setExtractValueFromSingleKeyModel(true);
+        final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
+        this.jsonUnknownErrorView = new ModelAndView(view);
+        this.jsonUnknownErrorView.addObject(modelObject);
+    }
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
@@ -75,10 +87,7 @@ public class RestExceptionResolver implements HandlerExceptionResolver, Ordered 
         if (response.getStatus() == 200) {
             response.setStatus(httpStatus.value());
         }
-        final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
-        ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
-        modelAndView.addObject("errors", modelObject);
-        return modelAndView;
+        return jsonUnknownErrorView;
     }
 
     @Override
