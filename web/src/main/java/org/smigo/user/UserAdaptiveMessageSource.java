@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -44,12 +43,8 @@ public class UserAdaptiveMessageSource extends ReloadableResourceBundleMessageSo
     }
 
     public Map<Object, Object> getAllMessages(Locale locale) {
-        long start = System.currentTimeMillis();
         clearCacheIncludingAncestors();
         PropertiesHolder propertiesHolder = getMergedProperties(locale);
-        Map properties = propertiesHolder.getProperties();
-        Map<Object, Object> ret = new HashMap<>(properties);
-        log.info("Get all messages took " + (System.currentTimeMillis() - start) + "ms");
-        return ret;
+        return propertiesHolder.getProperties();
     }
 }
