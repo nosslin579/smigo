@@ -99,7 +99,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         this.messageKey = messageKey;
     }
 
-    function Species(id, vernacularName) {
+    function Species(id) {
         this.id = id;
         this.iconFileName = 'defaulticon.png';
         this.rules = [];
@@ -173,7 +173,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                 $log.log('Response from VernacularService.addVernacular', [response]);
                 state.speciesArray.push(search.addedSpecies);
                 state.selectedSpecies = search.addedSpecies;
-                $rootScope.$broadcast('new-messages-available', search.addedSpecies.messageKey, search.name);
                 $uibModal.open({
                     templateUrl: 'views/species-modal.html',
                     controller: SpeciesModalController
