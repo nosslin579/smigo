@@ -240,8 +240,11 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         },
         getSpecies: getSpecies,
         addVariety: function (editObj, speciesId) {
-            $log.log('Add Variety:', [editObj, speciesId]);
-            if (!editObj.value) {
+            var unique = state.varieties.every(function (v) {
+                return v.speciesId !== speciesId && v.name !== editObj.value
+            });
+            $log.log('Add Variety:', [editObj, speciesId, unique]);
+            if (!editObj.value || !unique) {
                 editObj.visible = false;
                 return;
             }
@@ -253,6 +256,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
                     state.varieties.push(variety);
                     editObj.value = '';
                     editObj.visible = false;
+                    delete editObj.objectErrors;
                 }).catch(function (response) {
                     $log.log('Add Variety failed:', response);
                     editObj.objectErrors = response.data;
