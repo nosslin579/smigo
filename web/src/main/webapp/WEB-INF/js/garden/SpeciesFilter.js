@@ -2,6 +2,9 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
 
     var vernaculars = VernacularService.getState().vernaculars;
 
+    /**
+     * @returns {Array} array of speciesId that matches query
+     */
     function searchVernacular(query) {
         var ret = [];
         for (var i = 0; i < vernaculars.length; i++) {
@@ -28,7 +31,7 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
         var queryLowerCase = query.toLowerCase();
         var vernacularMatchesArray = searchVernacular(queryLowerCase);
         angular.forEach(speciesArray, function (s) {
-            if (vernacularMatchesArray.indexOf(s.id) !== -1) {
+            if (s.id == query || vernacularMatchesArray.indexOf(s.id) !== -1) {
                 ret.push(s);
             } else if (query.length > 2) {
                 (s.scientificName && s.scientificName.toLowerCase().indexOf(queryLowerCase) !== -1 ||
