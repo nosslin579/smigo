@@ -69,4 +69,17 @@ class JdbcVernacularDao implements VernacularDao {
         //http://stackoverflow.com/questions/5483139/springs-simplejdbcinsert-doesnt-produce-auto-generated-keys-as-expected
         return insertVernacular.execute(parameterSource);
     }
+
+    @Override
+    public Vernacular getVernacularById(int vernacularId) {
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE ID = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{vernacularId}, vernacularRowMapper);
+
+    }
+
+    @Override
+    public List<Vernacular> getVernacularBySpecies(int speciesId) {
+        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE SPECIES_ID=?";
+        return jdbcTemplate.query(sql, vernacularRowMapper, speciesId);
+    }
 }

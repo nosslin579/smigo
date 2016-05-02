@@ -31,4 +31,8 @@ interface VernacularDao {
     List<Vernacular> getVernacular(Locale locale);
 
     int insertVernacular(Vernacular vernacular);
+
+    Vernacular getVernacularById(int vernacularId);
+
+    List<Vernacular> getVernacularBySpecies(int speciesId);
 }

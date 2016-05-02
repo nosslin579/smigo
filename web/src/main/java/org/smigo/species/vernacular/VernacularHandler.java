@@ -71,14 +71,19 @@ public class VernacularHandler {
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
-        boolean isMod = user.isModerator();
-        if (isMod) {
+        Vernacular vernacular = vernacularDao.getVernacularById(vernacularId);
+        Species species = speciesHandler.getSpecies(vernacular.getSpeciesId(), locale);
+
+        boolean isMod = user != null && user.isModerator();
+        boolean isCreator = user != null && species.getCreator() == user.getId();
+        if (isCreator || isMod) {
             vernacularDao.deleteVernacular(vernacularId);
             return Review.NONE;
         }
-        List<Vernacular> vernacularList = vernacularDao.getVernacular(locale);
-        String text = "Delete vernacular " + vernacularId + System.lineSeparator() +
-                vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
+        List<Vernacular> vernacularList = vernacularDao.getVernacularBySpecies(species.getId());
+        String text = "Delete vernacular: " + vernacular + System.lineSeparator() + System.lineSeparator() + "Other vernaculars of that species:" +
+                vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
+                species + System.lineSeparator() + "Request made by user:" + user;
         mailHandler.sendAdminNotification(SpeciesHandler.REVIEW_REQUEST, text);
         return Review.MODERATOR;
     }
