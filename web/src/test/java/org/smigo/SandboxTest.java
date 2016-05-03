@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Test
 public class SandboxTest {
 
@@ -47,6 +50,19 @@ public class SandboxTest {
         log.warn("warn");
         log.error("error");
         Assert.assertTrue(true);
+
+    }
+
+    @Override
+    public String toString() {
+        return "SandboxTest{}";
+    }
+
+    public static void main(String[] args) {
+        List<SandboxTest> a = new ArrayList<>();
+        a.add(new SandboxTest());
+        a.add(new SandboxTest());
+        System.out.println(a.toString());
 
     }
 }
