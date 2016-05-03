@@ -35,11 +35,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MailHandler {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private UserHandler userHandler;
     @Autowired
     private JavaMailSenderImpl mailSender;
     @Value("${mailSenderUsername}")
@@ -88,5 +92,23 @@ public class MailHandler {
         simpleMailMessage.setSubject("Smigo " + subject);
         simpleMailMessage.setText(text);
         mailSender.send(simpleMailMessage);
+    }
+
+    public void sendReviewRequest(String title, List<?> current, Object edit, AuthenticatedUser user) {
+        User u = userHandler.getUser(user);
+        String indentation = "  ";
+        StringBuilder sb = new StringBuilder(title);
+        sb.append(System.lineSeparator());
+        sb.append("----------------------------------------------");
+        sb.append(System.lineSeparator()).append(System.lineSeparator());
+        sb.append("Current value(s):").append(System.lineSeparator());
+        sb.append(indentation).append(current.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator() + indentation)));
+        sb.append(System.lineSeparator()).append(System.lineSeparator());
+        sb.append("Changing value:").append(System.lineSeparator());
+        sb.append(indentation).append(edit);
+        sb.append(System.lineSeparator()).append(System.lineSeparator());
+        sb.append("Requested by user:").append(System.lineSeparator());
+        sb.append(indentation).append(u);
+        sendAdminNotification("review request", sb.toString());
     }
 }

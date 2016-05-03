@@ -33,7 +33,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 @Component
 public class VernacularHandler {
@@ -52,41 +51,34 @@ public class VernacularHandler {
 
     public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
         Species species = speciesHandler.getSpecies(vernacular.getSpeciesId(), locale);
-        boolean isMod = user.isModerator();
+        List<Vernacular> currentVernaculars = vernacularDao.getVernacularBySpecies(species.getId());
+        vernacular.setLanguage(locale.getLanguage());
+        vernacular.setCountry(locale.getCountry());
+
         boolean isCreator = species.getCreator() == user.getId();
-        if (isCreator || isMod) {
-            vernacular.setLanguage(locale.getLanguage());
-            vernacular.setCountry(locale.getCountry());
+        if (isCreator || user.isModerator()) {
             vernacularDao.insertVernacular(vernacular);
-            //ugly starts here because h2 cant return generated keys properly
-            List<Vernacular> vernacularBySpecies = vernacularDao.getVernacularBySpecies(species.getId());
-            Vernacular added = vernacularBySpecies.stream().reduce((a, b) -> b.getVernacularName().equals(vernacular.getVernacularName()) ? b : a).get();
-            //ugly ends here
+            //ugly way of getting added vernacular  because h2 cant return multiple generated keys properly
+            Vernacular added = currentVernaculars.stream().reduce((a, b) -> b.getVernacularName().equals(vernacular.getVernacularName()) ? b : a).get();
             return new CrudResult(added.getId(), Review.NONE);
         }
-        List<Vernacular> currentVernaculars = vernacularDao.getVernacular(locale);
-        currentVernaculars.removeIf(v -> v.getSpeciesId() != vernacular.getSpeciesId());
-        String vernacularAsString = currentVernaculars.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
-        mailHandler.sendAdminNotification(SpeciesHandler.REVIEW_REQUEST, "Add vernacular:" + vernacular + " to:" +
-                currentVernaculars + " with locale:" + locale + System.lineSeparator() + "Request made by:" + user.toString());
+
+        mailHandler.sendReviewRequest("Add vernacular", currentVernaculars, vernacular, user);
         return new CrudResult(null, Review.MODERATOR);
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
-        Vernacular vernacular = vernacularDao.getVernacularById(vernacularId);
-        Species species = speciesHandler.getSpecies(vernacular.getSpeciesId(), locale);
+        Vernacular delete = vernacularDao.getVernacularById(vernacularId);
+        Species species = speciesHandler.getSpecies(delete.getSpeciesId(), locale);
 
-        boolean isMod = user != null && user.isModerator();
-        boolean isCreator = user != null && species.getCreator() == user.getId();
-        if (isCreator || isMod) {
+        boolean isCreator = species.getCreator() == user.getId();
+        if (isCreator || user.isModerator()) {
             vernacularDao.deleteVernacular(vernacularId);
             return Review.NONE;
         }
-        List<Vernacular> vernacularList = vernacularDao.getVernacularBySpecies(species.getId());
-        String text = "Delete vernacular: " + vernacular + System.lineSeparator() + System.lineSeparator() + "Other vernaculars of that species:" +
-                vernacularList.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                species + System.lineSeparator() + "Request made by user:" + user;
-        mailHandler.sendAdminNotification(SpeciesHandler.REVIEW_REQUEST, text);
+        List<Vernacular> currentVernaculars = vernacularDao.getVernacularBySpecies(species.getId());
+        mailHandler.sendReviewRequest("Delete vernacular", currentVernaculars, delete, user);
+
         return Review.MODERATOR;
     }
 }

@@ -146,6 +146,12 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", locale=" + locale +
+                ", createDate=" + createDate +
+                ", email='" + email + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", decideTime=" + decideTime +
+                ", about='" + about + '\'' +
+                ", authority='" + authority + '\'' +
                 '}';
     }
 

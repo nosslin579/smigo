@@ -30,13 +30,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 @Component
 public class SpeciesHandler {
-    public static final String REVIEW_REQUEST = "review request";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -53,7 +53,6 @@ public class SpeciesHandler {
     }
 
     public void deleteSpecies(int speciesId) {
-//        speciesDao.deleteVernacular(speciesId);
         speciesDao.deleteSpecies(speciesId);
     }
 
@@ -84,7 +83,12 @@ public class SpeciesHandler {
 
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
         Species originalSpecies = getSpecies(speciesId, Locale.ENGLISH);
+        updatedSpecies.setId(originalSpecies.getId());
+        updatedSpecies.setAnnual(originalSpecies.isAnnual());
+        updatedSpecies.setCreator(originalSpecies.getCreator());
+
         log.info("Updating species " + speciesId + originalSpecies + updatedSpecies, user);
+
         boolean isMod = user.isModerator();
         boolean isCreator = originalSpecies.getCreator() == user.getId();
         boolean isNewFamily = Objects.equals(Family.NEW_FAMILY, updatedSpecies.getFamilyId());
@@ -92,15 +96,8 @@ public class SpeciesHandler {
             speciesDao.updateSpecies(speciesId, updatedSpecies);
             return Review.NONE;
         }
-        String text = "Species change." + System.lineSeparator() +
-                "From: " + originalSpecies + System.lineSeparator() +
-                "To: " + updatedSpecies + " " + System.lineSeparator() +
-                "SpeciesId: " + speciesId + System.lineSeparator() +
-                "UserId: " + user.getId() + " - " + user.getUsername() + System.lineSeparator() +
-                "UPDATE SPECIES SET FAMILY_ID = " + updatedSpecies.getFamilyId() + " WHERE ID=" + speciesId + ";" + System.lineSeparator() +
-                "UPDATE SPECIES SET SCIENTIFIC_NAME = '" + updatedSpecies.getScientificName() + "' WHERE ID=" + speciesId + ";" + System.lineSeparator() +
-                "UPDATE SPECIES SET ICONFILENAME = '" + updatedSpecies.getIconFileName() + "' WHERE ID=" + speciesId + ";";
-        mailHandler.sendAdminNotification(REVIEW_REQUEST, text);
+
+        mailHandler.sendReviewRequest("Update species", Arrays.asList(originalSpecies), updatedSpecies, user);
         return Review.MODERATOR;
     }
 

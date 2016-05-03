@@ -61,6 +61,10 @@ public class Species {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Family getFamily() {
         return family;
     }

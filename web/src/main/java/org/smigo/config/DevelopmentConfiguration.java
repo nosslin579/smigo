@@ -75,7 +75,7 @@ public class DevelopmentConfiguration {
                     String text = simpleMessage.getText();
                     String subject = simpleMessage.getSubject();
                     FileUtils.writeStringToFile(MAIL_FILE, text, Charset.defaultCharset());
-                    FileUtils.writeStringToFile(MAIL_FILE_TXT, subject + text, Charset.defaultCharset());
+                    FileUtils.writeStringToFile(MAIL_FILE_TXT, subject + System.lineSeparator() + text, Charset.defaultCharset());
                 } catch (IOException e) {
                     throw new MailSendException("Error sending email to " + simpleMessage.getFrom(), e);
                 }
