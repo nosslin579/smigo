@@ -5,43 +5,43 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
     /**
      * @returns {Array} array of speciesId that matches query
      */
-    function searchVernacular(query) {
+    function searchVernacular(queryUpperCase) {
         var ret = [];
         for (var i = 0; i < vernaculars.length; i++) {
-            var vernacularIndex = vernaculars[i].vernacularName.toLowerCase().indexOf(query);
-            if (vernacularIndex !== -1 && query.length > 2 || vernacularIndex === 0) {
+            var vernacularIndex = vernaculars[i].vernacularName.toUpperCase().indexOf(queryUpperCase);
+            if (vernacularIndex !== -1 && queryUpperCase.length > 2 || vernacularIndex === 0) {
                 ret.push(vernaculars[i].speciesId);
             }
         }
         return ret;
     }
 
-    function getVernacularLowerCase(s) {
-        return VernacularService.getVernacular(s.id).vernacularName.toLowerCase();
+    function getVernacularUpperCase(s) {
+        return VernacularService.getVernacular(s.id).vernacularName.toUpperCase();
     }
 
     return function (speciesArray, query) {
 //        console.time('SpeciesFilter');
 //        console.log('SpeciesFilter', [speciesArray, query]);
         if (!query) {
-            return orderByFilter(speciesArray, getVernacularLowerCase);
+            return orderByFilter(speciesArray, getVernacularUpperCase);
         }
 
         var ret = [];
-        var queryLowerCase = query.toLowerCase();
-        var vernacularMatchesArray = searchVernacular(queryLowerCase);
+        var queryUpperCase = query.toUpperCase();
+        var vernacularMatchesArray = searchVernacular(queryUpperCase);
         angular.forEach(speciesArray, function (s) {
             if (s.id == query || vernacularMatchesArray.indexOf(s.id) !== -1) {
                 ret.push(s);
             } else if (query.length > 2) {
-                (s.scientificName && s.scientificName.toLowerCase().indexOf(queryLowerCase) !== -1 ||
-                s.family && translateFilter(s.family.messageKey).toLowerCase().indexOf(queryLowerCase) === 0 ||
-                s.family && s.family.name.toLocaleLowerCase().indexOf(queryLowerCase) === 0)
+                (s.scientificName && s.scientificName.toUpperCase().indexOf(queryUpperCase) !== -1 ||
+                s.family && translateFilter(s.family.messageKey).toUpperCase().indexOf(queryUpperCase) === 0 ||
+                s.family && s.family.name.toUpperCase().indexOf(queryUpperCase) === 0)
                 && ret.push(s);
             }
         });
 //        console.timeEnd('SpeciesFilter');
-        return orderByFilter(ret, getVernacularLowerCase);
+        return orderByFilter(ret, getVernacularUpperCase);
     };
 }
 
