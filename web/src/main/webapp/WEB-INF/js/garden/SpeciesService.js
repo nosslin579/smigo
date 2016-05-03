@@ -186,6 +186,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         },
         updateSpecies: function (species, updateObj, overrideValue) {
             $log.info('updateSpecies', [species, updateObj, overrideValue]);
+            updateObj.displayModReview = false;
             overrideValue && (updateObj.value = overrideValue);
             if (species[updateObj.field] === updateObj.value) {
                 updateObj.visible = false;

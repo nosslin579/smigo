@@ -56,6 +56,7 @@
     <!--#### Vernacular other add/delete form ####-->
     <form id="add-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, vernacularOtherEdit)" ng-if="vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong><br/>
+
         <div class="has-error">
             <span ng-repeat="error in vernacularOtherEdit.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:vernacularOtherEdit.errorName}}</span>
         </div>
@@ -68,7 +69,8 @@
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </li>
                 <li role="presentation">&#8288;</li>
-                <input class="form-control" type="text" id="add-vernacular-input" autofocus autocomplete="off" ng-model="vernacularOtherEdit.name" placeholder="{{'add' | translate}}"
+                <input class="form-control" type="text" id="add-vernacular-input" ng-model="vernacularOtherEdit.name" placeholder="{{'add' | translate}}"
+                       ng-blur="vernacularOtherEdit.visible=false" autofocus autocomplete="off"
                        ng-keydown="$event.which === 27 && !($event.preventDefault()) && (vernacularOtherEdit.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
             </ul>
         </div>
@@ -93,8 +95,9 @@
         </div>
         <div class="form-group" ng-class="{'has-error':editScientific.objectErrors}">
             <label for="edit-scientific-input">{{'scientificname'|translate}}: </label>
-            <input class="form-control" type="text" id="edit-scientific-input" autofocus autocomplete="off"
-                   ng-model="editScientific.value" ng-blur="editScientific.visible=false" ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+            <input class="form-control" type="text" id="edit-scientific-input" ng-model="editScientific.value"
+                   autofocus autocomplete="off" ng-blur="editScientific.visible=false"
+                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
 
@@ -114,9 +117,10 @@
         </div>
         <div class="form-group" ng-class="{'has-error':editFamily.objectErrors}">
             <label for="edit-family-select">{{'family'|translate}}:</label>
-            <input id="edit-family-select" type="text" ng-model="editFamily.value" class="form-control" autofocus autocomplete="off" ng-blur="editFamily.visible=false"
+            <input id="edit-family-select" type="text" ng-model="editFamily.value" class="form-control"
                    uib-typeahead="state as state.name for state in [{id:7201,name:'Apiaceae'},{id:7202,name:'Alliaceae'},{id:7203,name:'Cucurbitaceae'},{id:7204,name:'Brassicaceae'},{id:7205,name:'Fabaceae'},{id:7206,name:'Solanaceae'},{id:7207,name:'Asteraceae'},{id:7208,name:'Poaceae'},{id:7209,name:'Amaranthaceae'},{id:7210,name:'Polygonaceae'},{id:7211,name:'Rosaceae'},{id:7212,name:'Asparagaceae'},{id:7214,name:'Boraginaceae'},{id:7215,name:'Lamiaceae'},{id:7216,name:'Plantaginaceae'},{id:7217,name:'Cannabaceae'},{id:7218,name:'Linaceae'},{id:7219,name:'Tropaeolaceae'},{id:7220,name:'Geraniaceae'},{id:7221,name:'Vitaceae'},{id:7222,name:'Convolvulaceae'},{id:7223,name:'Grossulariaceae'},{id:7224,name:'Ericaceae'},{id:7225,name:'Malvaceae'},{id:7226,name:'Iridaceae'},{id:7227,name:'Liliaceae'},{id:7228,name:'Papaveraceae'},{id:7229,name:'Valerianaceae'},{id:7230,name:'Aizoaceae'}] | filter:$viewValue | limitTo:8"
-                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editScientific.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
+                   autofocus autocomplete="off" ng-blur="editFamily.visible=false"
+                   ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editFamily.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
 
@@ -141,7 +145,9 @@
             </div>
             <div class="form-group" ng-class="{'has-error':editVariety.objectErrors}">
                 <label for="add-variety-input">{{'msg.variety' | translate}}</label>
-                <input class="form-control" type="text" id="add-variety-input" placeholder="{{'name' | translate}}" ng-model="editVariety.value">
+                <input class="form-control" type="text" id="add-variety-input" placeholder="{{'name' | translate}}" ng-model="editVariety.value"
+                       autofocus autocomplete="off" ng-blur="editVariety.visible=false"
+                       ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVariety.visible = false)">
             </div>
             <button type="submit" class="btn btn-default" id="submit-variety-button">{{'save' | translate}}</button>
             <button type="reset" class="btn btn-default" ng-click="editVariety.visible=false">{{'cancel' | translate}}</button>
