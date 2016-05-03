@@ -111,6 +111,10 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addStatusController("**/*.php", HttpStatus.NOT_FOUND);
         registry.addStatusController("cgi-bin/**", HttpStatus.NOT_FOUND);
         registry.addStatusController("**/*.cgi", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/wp/", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/wordpress/", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/HNAP1/", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/blog/robots.txt", HttpStatus.NOT_FOUND);
     }
 
     @Bean
