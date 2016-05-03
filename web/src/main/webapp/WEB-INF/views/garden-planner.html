@@ -29,7 +29,7 @@
                 <hr/>
                 <!--##### Search field #####-->
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search,$event)">
-                    <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text"
+                    <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" id="add-search-input"
                            placeholder="{{'search' | translate}} / {{'add' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
                            uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="pressEnterToSelectTooltipEnable">
                 </form>

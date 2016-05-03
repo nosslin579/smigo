@@ -47,7 +47,7 @@
         <!--First element in array is the primary thus excluding -->
         <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}"
               ng-if="!$first" ng-repeat="v in getVernaculars(species.id)">{{v.vernacularName}} </span>
-        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="getVernaculars(species.id).length<=1">&lt;{{'edit' | translate}}&gt;</a>
+        <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="getVernaculars(species.id).length<=1" id="add-vernacular-link">&lt;{{'edit' | translate}}&gt;</a>
         <!--WORD JOINER (U+2060)-->
         <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>

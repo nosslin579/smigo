@@ -68,13 +68,16 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final String PASSWORD = "qwerty";
     private static final String HASHPW = BCrypt.hashpw(PASSWORD, BCrypt.gensalt(4));
     private static final String NEW_PASSWORD = "password1";
-    private static final String SPECIES_NAME = "Frangö Salada";
+    private static final String VERNACULAR = "Frangö Salada";
     private static final String SCIENTIFIC_NAME = "Frangös Saladus";
     private static final String ITEM_NAME = "Sand";
     private static final String HOST_URL = "http://lh.smigo.org:8080";
     private static final int NUMBER_OF_SPECIES = 83;
 
+    private static final By SEARCH_BOX = By.id("add-search-input");
     private static final By SQUARE = By.className("square-content");
+    public static final By LOGOUT_LINK = By.id("logout-link");
+    public static final By LOGIN_LINK = By.id("login-link");
 
     @Autowired
     private UserDao userDao;
@@ -122,7 +125,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     private void login(String username, String password) throws InterruptedException {
         Thread.sleep(1000);
-        d.findElement(By.id("login-link")).click();
+        d.findElement(LOGIN_LINK).click();
         d.findElement(By.name("username")).clear();
         d.findElement(By.name("username")).sendKeys(username);
         d.findElement(By.name("password")).clear();
@@ -150,17 +153,17 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         final WebElement plant = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         Assert.assertEquals(plant.getTagName(), "img");
-        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
 
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
         Thread.sleep(3000);
 
-        d.findElement(By.id("login-link")).click();
+        d.findElement(LOGIN_LINK).click();
         d.findElement(By.partialLinkText("Facebook")).click();
 
         final WebElement plant2 = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         Assert.assertEquals(plant2.getTagName(), "img");
-        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
     }
 
     @Test(enabled = true)
@@ -196,21 +199,21 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     @Test(enabled = true)
     public void addSpecies() throws InterruptedException {
         final String username = addUser();
-        final String speciesName = SPECIES_NAME + System.currentTimeMillis();
-        final String nameEdit = "X";
+        final String vernacular = VERNACULAR + System.currentTimeMillis();
+        final String vernacularOther = vernacular + "X";
         final String scientificName = SCIENTIFIC_NAME + System.currentTimeMillis();
         login(username, PASSWORD);
         //add species
         Thread.sleep(1000);
-        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(speciesName);
+        d.findElement(SEARCH_BOX).sendKeys(vernacular);
         Thread.sleep(1000);
         d.findElement(By.id("add-species-button")).click();
         Thread.sleep(1000);
 
-        //edit vernacular name
-        d.findElement(By.id("editable-vernacular-title")).click();
-        d.findElement(By.id("edit-vernacular-input")).sendKeys(nameEdit);//add to end of name
-        d.findElement(By.id("edit-vernacular-form")).submit();
+        //add vernacular name
+        d.findElement(By.id("add-vernacular-link")).click();
+        d.findElement(By.id("add-vernacular-input")).sendKeys(vernacularOther);
+        d.findElement(By.id("add-vernacular-form")).submit();
 
         //edit scientific name
         d.findElement(By.id("empty-scientific-value")).click();
@@ -222,17 +225,22 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.className("square")).click();
         Thread.sleep(1000);
 
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
 
         d.get(HOST_URL + "/gardener/" + username);
         final WebElement plant = d.findElement(By.className("plant"));
         Thread.sleep(500);
-        Assert.assertEquals(plant.getAttribute("alt"), speciesName + nameEdit);
+        Assert.assertEquals(plant.getAttribute("alt"), vernacular);
 
         d.get(HOST_URL + "/garden-planner");
-        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys(scientificName);
-        final int noSpecies = d.findElements(By.linkText(speciesName + nameEdit)).size();
-        Assert.assertEquals(noSpecies, 1);
+        //search by other vernacular
+        d.findElement(SEARCH_BOX).sendKeys(vernacularOther);
+        Assert.assertEquals(d.findElements(By.linkText(vernacular)).size(), 1, "Incorrect search by other vernacular");
+        d.findElement(SEARCH_BOX).submit();
+
+        //search by scientific
+        d.findElement(SEARCH_BOX).sendKeys(scientificName);
+        Assert.assertEquals(d.findElements(By.linkText(vernacular)).size(), 1, "Incorrect search by scientific name");
 
         log.info("Add species finished successfully. Username:" + username);
 
@@ -251,7 +259,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(d.findElements(By.className("select-year")).size(), 1);
 
 
-        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");
+        d.findElement(SEARCH_BOX).sendKeys("vit");
         d.findElement(By.partialLinkText("Grapes")).click();
         d.findElement(By.className("visible-remainder")).click();
 
@@ -280,11 +288,11 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("verifyPassword")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-password-button")).click();
         w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
 
         //login again
         login(username, NEW_PASSWORD);
-        Assert.assertEquals(d.findElements(By.id("logout-link")).size(), 1);
+        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
         log.info("Change password finished successfully. Username:" + username);
     }
 
@@ -316,7 +324,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     public void resetPassword() throws Exception {
         final User user = addUser(true);
 
-        d.findElement(By.id("login-link")).click();
+        d.findElement(LOGIN_LINK).click();
 
         //Reset
         d.findElement(By.id("request-password-link")).click();
@@ -337,7 +345,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         //login
         login(user.getUsername(), NEW_PASSWORD);
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
 
         //reset password again with same key
         d.get(resetUrl);
@@ -352,7 +360,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     @Test(enabled = true)
     public void resetPasswordNonexistentEmail() throws Exception {
         final String emailAddress = "asdf@mailinator.com";
-        d.findElement(By.id("login-link")).click();
+        d.findElement(LOGIN_LINK).click();
 
         //Reset
         d.findElement(By.id("request-password-link")).click();
@@ -383,7 +391,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
 //        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
 
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
 
         Thread.sleep(1000);
         login(username, PASSWORD);
@@ -407,7 +415,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String speciesText = "Grapes - " + varietyName;
 
         //Open grapes modal
-        d.findElement(By.id("species-frame")).findElement(By.tagName("input")).sendKeys("vit");
+        d.findElement(SEARCH_BOX).sendKeys("vit");
         d.findElement(By.partialLinkText("Grapes")).click();
         d.findElement(By.partialLinkText("Grapes")).click();
 
@@ -425,7 +433,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //add plant
         d.findElement(By.className("square-content")).click();
 
-        d.findElement(By.id("logout-link")).click();
+        d.findElement(LOGOUT_LINK).click();
         login(username, PASSWORD);
 
         d.get(HOST_URL + "/wall/" + username);

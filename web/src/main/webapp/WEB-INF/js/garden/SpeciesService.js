@@ -240,11 +240,11 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         },
         getSpecies: getSpecies,
         addVariety: function (editObj, speciesId) {
-            var unique = state.varieties.every(function (v) {
-                return v.speciesId !== speciesId && v.name !== editObj.value
+            var duplicate = state.varieties.some(function (v) {
+                return v.speciesId === speciesId && v.name.toUpperCase() === editObj.value.toUpperCase();
             });
-            $log.log('Add Variety:', [editObj, speciesId, unique]);
-            if (!editObj.value || !unique) {
+            $log.log('Add Variety:', [editObj, speciesId, duplicate]);
+            if (!editObj.value || duplicate) {
                 editObj.visible = false;
                 return;
             }
