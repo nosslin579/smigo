@@ -75,6 +75,23 @@ public class VernacularController implements Serializable {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Object updateVernacular(@Valid @RequestBody Vernacular vernacular, BindingResult result, @PathVariable int id,
+                                   @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
+        log.info("Updating vernacular:" + vernacular);
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return result.getAllErrors();
+        }
+        Review review = vernacularHandler.updateVernacular(id, vernacular, user, locale);
+        if (review == Review.MODERATOR) {
+            response.setStatus(HttpStatus.ACCEPTED.value());
+        }
+        return null;
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
     public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {

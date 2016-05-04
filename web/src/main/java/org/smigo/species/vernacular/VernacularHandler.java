@@ -81,4 +81,19 @@ public class VernacularHandler {
 
         return Review.MODERATOR;
     }
+
+    public Review updateVernacular(int id, Vernacular update, AuthenticatedUser user, Locale locale) {
+        Vernacular current = vernacularDao.getVernacularById(id);
+        Species species = speciesHandler.getSpecies(current.getSpeciesId());
+
+        update.setId(id);
+
+        boolean isCreator = species.getCreator() == user.getId();
+        if (isCreator || user.isModerator()) {
+            vernacularDao.updateVernacular(update);
+            return Review.NONE;
+        }
+        mailHandler.sendReviewRequest("Update vernacular", vernacularDao.getVernacularBySpecies(species.getId()), update, user);
+        return Review.MODERATOR;
+    }
 }

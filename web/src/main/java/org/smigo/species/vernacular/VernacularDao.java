@@ -35,4 +35,6 @@ interface VernacularDao {
     Vernacular getVernacularById(int vernacularId);
 
     List<Vernacular> getVernacularBySpecies(int speciesId);
+
+    void updateVernacular(Vernacular vernacular);
 }

@@ -82,4 +82,10 @@ class JdbcVernacularDao implements VernacularDao {
         final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE SPECIES_ID=?";
         return jdbcTemplate.query(sql, vernacularRowMapper, speciesId);
     }
+
+    @Override
+    public void updateVernacular(Vernacular vernacular) {
+        String sql = "UPDATE SPECIES_TRANSLATION SET VERNACULAR_NAME= ? WHERE ID = ?;";
+        jdbcTemplate.update(sql, vernacular.getVernacularName(), vernacular.getId());
+    }
 }

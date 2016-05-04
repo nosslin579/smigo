@@ -93,9 +93,9 @@ public class Vernacular {
         return "Vernacular{" +
                 "id=" + id +
                 ", speciesId=" + speciesId +
-                ", vernacularName='" + vernacularName + '\'' +
                 ", language='" + language + '\'' +
                 ", country='" + country + '\'' +
+                ", vernacularName='" + vernacularName + '\'' +
                 ", precedence=" + precedence +
                 '}';
     }
