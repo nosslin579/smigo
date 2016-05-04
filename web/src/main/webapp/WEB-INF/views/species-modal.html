@@ -119,7 +119,7 @@
             <label for="edit-family-select">{{'family'|translate}}:</label>
             <input id="edit-family-select" type="text" ng-model="editFamily.value" class="form-control"
                    uib-typeahead="state as state.name for state in [{id:7201,name:'Apiaceae'},{id:7202,name:'Alliaceae'},{id:7203,name:'Cucurbitaceae'},{id:7204,name:'Brassicaceae'},{id:7205,name:'Fabaceae'},{id:7206,name:'Solanaceae'},{id:7207,name:'Asteraceae'},{id:7208,name:'Poaceae'},{id:7209,name:'Amaranthaceae'},{id:7210,name:'Polygonaceae'},{id:7211,name:'Rosaceae'},{id:7212,name:'Asparagaceae'},{id:7214,name:'Boraginaceae'},{id:7215,name:'Lamiaceae'},{id:7216,name:'Plantaginaceae'},{id:7217,name:'Cannabaceae'},{id:7218,name:'Linaceae'},{id:7219,name:'Tropaeolaceae'},{id:7220,name:'Geraniaceae'},{id:7221,name:'Vitaceae'},{id:7222,name:'Convolvulaceae'},{id:7223,name:'Grossulariaceae'},{id:7224,name:'Ericaceae'},{id:7225,name:'Malvaceae'},{id:7226,name:'Iridaceae'},{id:7227,name:'Liliaceae'},{id:7228,name:'Papaveraceae'},{id:7229,name:'Valerianaceae'},{id:7230,name:'Aizoaceae'}] | filter:$viewValue | limitTo:8"
-                   autofocus autocomplete="off" ng-blur="editFamily.visible=false"
+                   autofocus autocomplete="off"
                    ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editFamily.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
         </div>
     </form>
