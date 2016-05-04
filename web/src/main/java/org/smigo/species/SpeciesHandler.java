@@ -28,7 +28,6 @@ import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,25 +55,17 @@ public class SpeciesHandler {
         speciesDao.deleteSpecies(speciesId);
     }
 
-    public String createIconFileName(int userId, int speciesId, CommonsMultipartFile uploadedIcon) {
-        if (uploadedIcon == null || uploadedIcon.isEmpty()) {
-            return null;
-        } else {
-            return "u" + userId + "s" + speciesId + "." + uploadedIcon.getContentType().replace("image/", "");
-        }
-    }
-
-    public List<Species> getDefaultSpecies(Locale locale) {
+    public List<Species> getDefaultSpecies() {
         return speciesDao.getDefaultSpecies();
     }
 
-    public Species getSpecies(int id, Locale locale) {
+    public Species getSpecies(int id) {
         return speciesDao.getSpecies(id);
     }
 
-    public List<Species> searchSpecies(String query, Locale locale) {
+    public List<Species> searchSpecies(String query) {
         //todo add search on translated family
-        return speciesDao.searchSpecies(query, locale);
+        return speciesDao.searchSpecies(query);
     }
 
     public List<Rule> getRules() {
@@ -82,7 +73,8 @@ public class SpeciesHandler {
     }
 
     public Review updateSpecies(int speciesId, Species updatedSpecies, AuthenticatedUser user) {
-        Species originalSpecies = getSpecies(speciesId, Locale.ENGLISH);
+        Species originalSpecies = getSpecies(speciesId);
+        //these values are not editable and also this will make the review request less confusing
         updatedSpecies.setId(originalSpecies.getId());
         updatedSpecies.setAnnual(originalSpecies.isAnnual());
         updatedSpecies.setCreator(originalSpecies.getCreator());
@@ -93,7 +85,7 @@ public class SpeciesHandler {
         boolean isCreator = originalSpecies.getCreator() == user.getId();
         boolean isNewFamily = Objects.equals(Family.NEW_FAMILY, updatedSpecies.getFamilyId());
         if ((isCreator || isMod) && !isNewFamily) {
-            speciesDao.updateSpecies(speciesId, updatedSpecies);
+            speciesDao.updateSpecies(updatedSpecies);
             return Review.NONE;
         }
 

@@ -99,7 +99,7 @@ public class PlantHandler {
 
         List<Plant> ret = new ArrayList<>();
         for (Plant p : plants) {
-            if (p.getYear() == copyFromYear && !speciesHandler.getSpecies(p.getSpeciesId(), locale).isAnnual()) {
+            if (p.getYear() == copyFromYear && !speciesHandler.getSpecies(p.getSpeciesId()).isAnnual()) {
                 p.setYear(year);
                 ret.add(p);
             }

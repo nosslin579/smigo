@@ -49,13 +49,13 @@ public class SpeciesController implements Serializable {
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
     public Collection<Species> getSpecies(Locale locale) {
-        return speciesHandler.getDefaultSpecies(locale);
+        return speciesHandler.getDefaultSpecies();
     }
 
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.GET)
     @ResponseBody
     public Species getSpecies(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale) {
-        return speciesHandler.getSpecies(id, locale);
+        return speciesHandler.getSpecies(id);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -85,14 +85,14 @@ public class SpeciesController implements Serializable {
         if (review == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }
-        return speciesHandler.getSpecies(id, locale);
+        return speciesHandler.getSpecies(id);
     }
 
     @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)
     @ResponseBody
     public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearch species, Locale locale) {
         log.info("Searching species, query:" + species.getQuery());
-        return speciesHandler.searchSpecies(species.getQuery(), locale);
+        return speciesHandler.searchSpecies(species.getQuery());
     }
 
     @PreAuthorize("hasAuthority('" + AuthenticatedUser.MOD_AUTHORITY + "')")

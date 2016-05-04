@@ -23,7 +23,6 @@ package org.smigo.species;
  */
 
 import java.util.List;
-import java.util.Locale;
 
 interface SpeciesDao {
 
@@ -33,9 +32,9 @@ interface SpeciesDao {
 
     Species getSpecies(int id);
 
-    List<Species> searchSpecies(String query, Locale locale);
+    List<Species> searchSpecies(String query);
 
-    void updateSpecies(int id, Species species);
+    void updateSpecies(Species species);
 
     void deleteSpecies(int speciesId);
 

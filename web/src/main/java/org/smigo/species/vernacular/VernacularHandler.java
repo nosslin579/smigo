@@ -50,7 +50,7 @@ public class VernacularHandler {
     }
 
     public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
-        Species species = speciesHandler.getSpecies(vernacular.getSpeciesId(), locale);
+        Species species = speciesHandler.getSpecies(vernacular.getSpeciesId());
         List<Vernacular> currentVernaculars = vernacularDao.getVernacularBySpecies(species.getId());
         vernacular.setLanguage(locale.getLanguage());
         vernacular.setCountry(locale.getCountry());
@@ -69,7 +69,7 @@ public class VernacularHandler {
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {
         Vernacular delete = vernacularDao.getVernacularById(vernacularId);
-        Species species = speciesHandler.getSpecies(delete.getSpeciesId(), locale);
+        Species species = speciesHandler.getSpecies(delete.getSpeciesId());
 
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || user.isModerator()) {
