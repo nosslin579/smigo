@@ -51,4 +51,13 @@ public class MessageAdd {
     public void setSubmitterUserId(int submitterUserId) {
         this.submitterUserId = submitterUserId;
     }
+
+    @Override
+    public String toString() {
+        return "MessageAdd{" +
+                "locale='" + locale + '\'' +
+                ", text='" + text + '\'' +
+                ", submitterUserId=" + submitterUserId +
+                '}';
+    }
 }
