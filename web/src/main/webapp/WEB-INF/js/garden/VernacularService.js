@@ -85,7 +85,8 @@ function VernacularService($http, $rootScope, $log, $q) {
                 }
                 updateObj.visible = false;
             }).catch(function (response) {
-                $log.error('Fail: delete /rest/verncular/' + vernacular.id, response);
+                $log.error('Fail: delete /rest/verncular/' + vernacular.id, [response, updateObj, vernacular]);
+                updateObj.objectErrors = response.data;
             });
         }
     }

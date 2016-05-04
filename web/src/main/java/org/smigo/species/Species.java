@@ -25,11 +25,9 @@ package org.smigo.species;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.user.authentication.UserMustBeAuthenticated;
 
 import javax.validation.constraints.Size;
 
-@UserMustBeAuthenticated
 public class Species {
     private static final Logger log = LoggerFactory.getLogger(Species.class);
 

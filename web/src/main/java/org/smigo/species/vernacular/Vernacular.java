@@ -22,12 +22,9 @@ package org.smigo.species.vernacular;
  * #L%
  */
 
-import org.smigo.user.authentication.UserMustBeAuthenticated;
-
 import javax.validation.constraints.Size;
 
 
-@UserMustBeAuthenticated
 public class Vernacular {
     private int id;
 

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,7 @@ public class VarietyController implements Serializable {
         return userId == null ? varietyDao.getVarieties() : varietyDao.getVarietiesByUser(userId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/variety", method = RequestMethod.POST)
     public Object addVariety(@Valid @RequestBody Variety variety, BindingResult result, HttpServletResponse response,
                              @AuthenticationPrincipal AuthenticatedUser user) {

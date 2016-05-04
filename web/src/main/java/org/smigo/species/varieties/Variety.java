@@ -23,11 +23,9 @@ package org.smigo.species.varieties;
  */
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.smigo.user.authentication.UserMustBeAuthenticated;
 
 import javax.validation.constraints.Size;
 
-@UserMustBeAuthenticated
 public class Variety {
     private int id;
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")

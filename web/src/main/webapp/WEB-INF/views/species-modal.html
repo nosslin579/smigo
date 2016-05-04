@@ -70,7 +70,7 @@
                 </li>
                 <li role="presentation">&#8288;</li>
                 <input class="form-control" type="text" id="add-vernacular-input" ng-model="vernacularOtherEdit.name" placeholder="{{'add' | translate}}"
-                       ng-blur="vernacularOtherEdit.visible=false" autofocus autocomplete="off"
+                       autofocus autocomplete="off"
                        ng-keydown="$event.which === 27 && !($event.preventDefault()) && (vernacularOtherEdit.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
             </ul>
         </div>

@@ -58,6 +58,7 @@ public class SpeciesController implements Serializable {
         return speciesHandler.getSpecies(id, locale);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/species", method = RequestMethod.POST)
     @ResponseBody
     public Object addSpecies(@Valid @RequestBody Species species, BindingResult result,
@@ -70,6 +71,7 @@ public class SpeciesController implements Serializable {
         return speciesHandler.addSpecies(species, user, locale);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.PUT)
     @ResponseBody
     public Object updateSpecies(@Valid @RequestBody Species species, BindingResult result, @PathVariable int id,

@@ -44,26 +44,22 @@ import javax.servlet.http.HttpServletResponse;
 public class RestExceptionResolver implements HandlerExceptionResolver, Ordered {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private ModelAndView jsonUnknownErrorView;
+    private MappingJackson2JsonView view = new MappingJackson2JsonView();
 
     @PostConstruct
     public void init() {
-        MappingJackson2JsonView view = new MappingJackson2JsonView();
         view.setExtractValueFromSingleKeyModel(true);
-        final Object[] modelObject = {new ObjectError("unknown-error", "msg.unknownerror")};
-        this.jsonUnknownErrorView = new ModelAndView(view);
-        this.jsonUnknownErrorView.addObject(modelObject);
     }
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         if (ex instanceof AccessDeniedException) {
-            return getModelAndView(response, HttpStatus.FORBIDDEN);
+            return getModelAndView(response, HttpStatus.FORBIDDEN, new Object[]{new ObjectError("AccessDenied", "msg.needtobeloggedin")});
         }
 
         final String uri = (String) request.getAttribute("javax.servlet.error.request_uri");
         if (request.getRequestURI().startsWith("/rest/") || uri != null && uri.startsWith("/rest/")) {
-            return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR, new Object[]{new ObjectError("unknown-error", "msg.unknownerror")});
         }
 
         if (handler == null) {
@@ -75,7 +71,7 @@ public class RestExceptionResolver implements HandlerExceptionResolver, Ordered 
             final boolean annotatedWithRestController = handlerMethod.getBeanType().isAnnotationPresent(RestController.class);
             final boolean annotatedWithResponseBody = handlerMethod.getMethodAnnotation(ResponseBody.class) != null;
             if (annotatedWithResponseBody || annotatedWithRestController) {
-                return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                return getModelAndView(response, HttpStatus.INTERNAL_SERVER_ERROR, new Object[]{new ObjectError("unknown-error", "msg.unknownerror")});
             }
         } catch (Exception e) {
             log.error("Failed to return object error. Handler:" + handler, ex);
@@ -83,11 +79,13 @@ public class RestExceptionResolver implements HandlerExceptionResolver, Ordered 
         return null;
     }
 
-    private ModelAndView getModelAndView(HttpServletResponse response, HttpStatus httpStatus) {
+    private ModelAndView getModelAndView(HttpServletResponse response, HttpStatus httpStatus, Object[] model) {
         if (response.getStatus() == 200) {
             response.setStatus(httpStatus.value());
         }
-        return jsonUnknownErrorView;
+        ModelAndView jsonView = new ModelAndView(view);
+        jsonView.addObject(model);
+        return jsonView;
     }
 
     @Override

@@ -30,6 +30,7 @@ import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -56,6 +57,7 @@ public class VernacularController implements Serializable {
         return vernacularHandler.getVernacular(locale);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/vernacular", method = RequestMethod.POST)
     @ResponseBody
     public Object addVernacular(@Valid @RequestBody Vernacular vernacular, BindingResult result,
@@ -72,6 +74,7 @@ public class VernacularController implements Serializable {
         return review.getId();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
     public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
