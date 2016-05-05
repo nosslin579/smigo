@@ -57,10 +57,8 @@ public class VernacularHandler {
 
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || user.isModerator()) {
-            vernacularDao.insertVernacular(vernacular);
-            //ugly way of getting added vernacular  because h2 cant return multiple generated keys properly
-            Vernacular added = currentVernaculars.stream().reduce((a, b) -> b.getVernacularName().equals(vernacular.getVernacularName()) ? b : a).get();
-            return new CrudResult(added.getId(), Review.NONE);
+            int id = vernacularDao.insertVernacular(vernacular);
+            return new CrudResult(id, Review.NONE);
         }
 
         mailHandler.sendReviewRequest("Add vernacular", currentVernaculars, vernacular, user);
