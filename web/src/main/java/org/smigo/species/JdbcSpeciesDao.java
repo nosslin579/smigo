@@ -78,7 +78,7 @@ class JdbcSpeciesDao implements SpeciesDao {
     @Override
     public List<Species> searchSpecies(String search) {
         String query = (search.length() >= 5 ? "%" : "") + search + (search.length() >= 3 ? "%" : "");
-        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM SPECIES_TRANSLATION WHERE VERNACULAR_NAME LIKE ?) OR SCIENTIFIC_NAME LIKE ? OR FAMILIES.NAME LIKE ? OR CAST(SPECIES.ID AS TEXT) LIKE ?";
+        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM VERNACULARS WHERE VERNACULAR_NAME LIKE ?) OR SCIENTIFIC_NAME LIKE ? OR FAMILIES.NAME LIKE ? OR CAST(SPECIES.ID AS TEXT) LIKE ?";
         final String sql = String.format(SELECT, whereClause, 10);
         return jdbcTemplate.query(sql, new Object[]{query, query, query, search}, rowMapper);
     }

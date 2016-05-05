@@ -38,8 +38,6 @@ public class Vernacular {
 
     private String country;
 
-    private int precedence;
-
     public int getId() {
         return id;
     }
@@ -80,14 +78,6 @@ public class Vernacular {
         this.country = country;
     }
 
-    public int getPrecedence() {
-        return precedence;
-    }
-
-    public void setPrecedence(int precedence) {
-        this.precedence = precedence;
-    }
-
     @Override
     public String toString() {
         return "Vernacular{" +
@@ -96,7 +86,6 @@ public class Vernacular {
                 ", language='" + language + '\'' +
                 ", country='" + country + '\'' +
                 ", vernacularName='" + vernacularName + '\'' +
-                ", precedence=" + precedence +
                 '}';
     }
 }

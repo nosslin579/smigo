@@ -31,7 +31,7 @@ interface LogDao {
 
     QueryReport getSpeciesReport();
 
-    QueryReport getSpeciesTranslationReport();
+    QueryReport getVernacularsReport();
 
     QueryReport getActivityReport();
 

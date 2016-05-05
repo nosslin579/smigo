@@ -109,7 +109,7 @@ class JdbcLogDao implements LogDao {
                 "  group_concat(DISTINCT def.country SEPARATOR ' ') AS country, " +
                 "  u.LOCALE " +
                 "FROM species " +
-                "  LEFT JOIN species_translation def ON def.species_id = species.id " +
+                "  LEFT JOIN VERNACULARS def ON def.species_id = species.id " +
                 "  LEFT JOIN users u ON u.id = species.creator " +
                 "GROUP BY species.id " +
                 "ORDER BY id DESC " +
@@ -120,14 +120,14 @@ class JdbcLogDao implements LogDao {
     }
 
     @Override
-    public QueryReport getSpeciesTranslationReport() {
+    public QueryReport getVernacularsReport() {
         String sql = "SELECT " +
                 "  vernacular_name, " +
                 "  count(DISTINCT species_id) AS repetition, " +
                 "  group_concat(language)     AS language, " +
                 "  group_concat(country)      AS country, " +
                 "  group_concat(species_id)   AS species " +
-                "FROM species_translation " +
+                "FROM VERNACULARS " +
                 "GROUP BY vernacular_name " +
                 "ORDER BY repetition DESC " +
                 "LIMIT 20; ";

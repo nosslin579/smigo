@@ -84,16 +84,16 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
                 for (Map.Entry<String, String> kgaLangAndTranslation : translations.entrySet()) {
                     final String kgaLang = kgaLangAndTranslation.getKey();
                     final String kgaTranslation = kgaLangAndTranslation.getValue();
-                    final String smigoTranslation = getSpeciesTranslation(plant.getId(), kgaLang);
+                    final String smigoTranslation = getVernaculars(plant.getId(), kgaLang);
 
                     if (kgaTranslation == null) {
                         log.info("KGA translation missing" + plant);
                     } else if (smigoTranslation == null) {
-                        sqlStatement.add("INSERT INTO SPECIES_TRANSLATION(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + kgaLang + "','');");
+                        sqlStatement.add("INSERT INTO VERNACULARS(SPECIES_ID,VERNACULAR_NAME,LANGUAGE,COUNTRY) VALUES (" + plant.getId() + ",'" + kgaTranslation.replaceAll("'", "''") + "','" + kgaLang + "','');");
                     } else if (Objects.equals(smigoTranslation, kgaTranslation)) {
                         //looking good
                     } else {
-                        log.error("Translation exists but differ kga:" + plant.getId() + kgaLangAndTranslation + " - smigo:'" + getSpeciesTranslation(plant.getId(), kgaLang) + "'");
+                        log.error("Translation exists but differ kga:" + plant.getId() + kgaLangAndTranslation + " - smigo:'" + getVernaculars(plant.getId(), kgaLang) + "'");
                     }
                 }
             } catch (Exception e) {
@@ -122,8 +122,8 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
         return null;
     }
 
-    private String getSpeciesTranslation(int id, String lang) {
-        final String sql = "SELECT VERNACULAR_NAME FROM SPECIES_TRANSLATION WHERE SPECIES_ID=" + id + " AND LANGUAGE='" + lang + "';";
+    private String getVernaculars(int id, String lang) {
+        final String sql = "SELECT VERNACULAR_NAME FROM VERNACULARS WHERE SPECIES_ID=" + id + " AND LANGUAGE='" + lang + "';";
         final List<Map<String, Object>> ret = jdbcTemplate.queryForList(sql);
         return ret.iterator().hasNext() ? ret.iterator().next().values().iterator().next().toString() : null;
 

@@ -46,20 +46,20 @@ class JdbcVernacularDao implements VernacularDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("species_translation").
-                usingGeneratedKeyColumns("id", "precedence").usingColumns("species_id", "vernacular_name", "language", "country");
+        this.insertVernacular = new SimpleJdbcInsert(dataSource).withTableName("VERNACULARS").
+                usingGeneratedKeyColumns("id").usingColumns("species_id", "vernacular_name", "language", "country");
     }
 
 
     @Override
     public void deleteVernacular(int vernacularId) {
-        String sql = "DELETE FROM SPECIES_TRANSLATION WHERE ID = ?";
+        String sql = "DELETE FROM VERNACULARS WHERE ID = ?";
         jdbcTemplate.update(sql, vernacularId);
     }
 
     @Override
     public List<Vernacular> getVernacular(Locale locale) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='') ORDER BY COUNTRY DESC,PRECEDENCE;";
+        final String sql = "SELECT * FROM VERNACULARS WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='');";
         return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
     }
 
@@ -72,20 +72,20 @@ class JdbcVernacularDao implements VernacularDao {
 
     @Override
     public Vernacular getVernacularById(int vernacularId) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE ID = ?";
+        final String sql = "SELECT * FROM VERNACULARS WHERE ID = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{vernacularId}, vernacularRowMapper);
 
     }
 
     @Override
     public List<Vernacular> getVernacularBySpecies(int speciesId) {
-        final String sql = "SELECT * FROM SPECIES_TRANSLATION WHERE SPECIES_ID=?";
+        final String sql = "SELECT * FROM VERNACULARS WHERE SPECIES_ID=?";
         return jdbcTemplate.query(sql, vernacularRowMapper, speciesId);
     }
 
     @Override
     public void updateVernacular(Vernacular vernacular) {
-        String sql = "UPDATE SPECIES_TRANSLATION SET VERNACULAR_NAME= ? WHERE ID = ?;";
+        String sql = "UPDATE VERNACULARS SET VERNACULAR_NAME= ? WHERE ID = ?;";
         jdbcTemplate.update(sql, vernacular.getVernacularName(), vernacular.getId());
     }
 }

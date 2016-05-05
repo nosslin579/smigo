@@ -17,7 +17,6 @@ function VernacularService($http, $rootScope, $log, $q) {
         //this.id = id;
         this.speciesId = speciesId;
         this.vernacularName = 'id' + speciesId;
-        this.precedence = 1;
     }
 
     function getVernaculars(speciesId) {
