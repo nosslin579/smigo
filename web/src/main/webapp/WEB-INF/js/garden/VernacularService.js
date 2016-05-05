@@ -67,6 +67,31 @@ function VernacularService($http, $rootScope, $log, $q) {
                 return $q.reject(response);
             });
         },
+        updateVernacular: function (species, updateObj) {
+            $log.info('updateVernacular', [species, updateObj]);
+            updateObj.displayModReview = false;
+            if (!updateObj.name) {
+                updateObj.visible = false;
+                return;
+            }
+            var vernacular = state.vernaculars.smigoFind(species.id, 'speciesId');
+            var data = angular.extend({}, vernacular, {vernacularName: updateObj.name.capitalize()});
+            return $http.put('/rest/vernacular/' + vernacular.id, data).then(function (response) {
+                $log.log('Response from /rest/vernacular', [response, state.vernaculars]);
+                updateObj.visible = false;
+                delete updateObj.objectErrors;
+                if (response.status === 200) {
+                    vernacular.vernacularName = data.vernacularName;
+                } else if (response.status === 202) {
+                    updateObj.displayModReview = true;
+                }
+                updateObj.visible = false;
+            }).catch(function (response) {
+                $log.error('Update vernacular failed', [response, updateObj, species]);
+                updateObj.objectErrors = response.data;
+                updateObj.errorName = updateObj.name;
+            });
+        },
         deleteVernacular: function (species, updateObj, vernacular) {
             $log.info('deleteVernacular', [species, updateObj, vernacular]);
             updateObj.displayModReview = false;

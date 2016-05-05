@@ -24,7 +24,7 @@
     </h4>
 
     <!--#### Vernacular primary form ####-->
-    <form id="edit-vernacular-form" class="form-inline" ng-submit="addVernacularName(species, editVernacular)" ng-if="editVernacular.visible">
+    <form id="edit-vernacular-form" class="form-inline" ng-submit="updateVernacularName(species, editVernacular)" ng-if="editVernacular.visible">
         <div class="has-error">
             <span ng-repeat="error in editVernacular.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editVernacular.errorName}}</span>
         </div>
