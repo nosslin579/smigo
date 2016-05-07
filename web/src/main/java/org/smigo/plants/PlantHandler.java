@@ -54,6 +54,10 @@ public class PlantHandler {
         }
     }
 
+    public List<Plant> getPlants(int speciesId) {
+        return plantDao.getPlantsBySpecies(speciesId);
+    }
+
     public void addPlants(List<Plant> plants, Integer userId) {
         if (!plants.isEmpty()) {
             if (userId == null) {
@@ -107,5 +111,9 @@ public class PlantHandler {
         addPlants(ret, user == null ? null : user.getId());
         messageHandler.addNewYearNewsMessage(Optional.ofNullable(user), year, plants, locale);
         return ret;
+    }
+
+    public void replaceSpecies(int oldSpeciesId, int newSpeciesId) {
+        plantDao.replaceSpecies(oldSpeciesId, newSpeciesId);
     }
 }

@@ -22,6 +22,7 @@ package org.smigo.plants;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
 
 @UserHeaderAndAuthenticatedUserMatch
@@ -30,6 +31,8 @@ public class Plant {
     private int y;
     private int year;
     private int speciesId;
+    @JsonIgnore
+    private int userId;
     private Integer varietyId;
 
     public Plant() {
@@ -41,11 +44,6 @@ public class Plant {
         this.x = x;
         this.y = y;
         this.varietyId = varietyId;
-    }
-
-    @Override
-    public String toString() {
-        return "{Plant:" + year + ", " + y + ", " + x + ", " + speciesId + "}";
     }
 
     public int getSpeciesId() {
@@ -68,6 +66,14 @@ public class Plant {
         return varietyId;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public void setVarietyId(Integer varietyId) {
         this.varietyId = varietyId;
     }
@@ -86,5 +92,17 @@ public class Plant {
 
     public void setSpeciesId(int speciesId) {
         this.speciesId = speciesId;
+    }
+
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "x=" + x +
+                ", y=" + y +
+                ", year=" + year +
+                ", speciesId=" + speciesId +
+                ", userId=" + userId +
+                ", varietyId=" + varietyId +
+                '}' + System.lineSeparator();
     }
 }

@@ -38,6 +38,7 @@ class JdbcPlantDao implements PlantDao {
     private static final String SELECT = "SELECT user_id,year,x,y,species_id,variety_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private BeanPropertyRowMapper<Plant> rowMapper = new BeanPropertyRowMapper<>(Plant.class);
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -48,13 +49,20 @@ class JdbcPlantDao implements PlantDao {
     @Override
     public List<Plant> getPlants(int userId) {
         final String sql = String.format(SELECT, "user_id");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Plant.class), userId);
+        return jdbcTemplate.query(sql, rowMapper, userId);
     }
+
+    @Override
+    public List<Plant> getPlantsBySpecies(int speciesId) {
+        final String sql = String.format(SELECT, "species_id");
+        return jdbcTemplate.query(sql, rowMapper, speciesId);
+    }
+
 
     @Override
     public List<Plant> getPlants(String username) {
         final String sql = String.format(SELECT, "username");
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Plant.class), username);
+        return jdbcTemplate.query(sql, rowMapper, username);
     }
 
     @Override
@@ -84,4 +92,11 @@ class JdbcPlantDao implements PlantDao {
         String sql = "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (?,?,?,?,?,?)";
         jdbcTemplate.update(sql, userId, plant.getSpeciesId(), plant.getYear(), plant.getX(), plant.getY(), plant.getVarietyId());
     }
+
+    @Override
+    public void replaceSpecies(int oldSpeciesId, int newSpeciesId) {
+        String sql = "UPDATE PLANTS SET SPECIES_ID=? WHERE SPECIES_ID = ?;";
+        jdbcTemplate.update(sql, newSpeciesId, oldSpeciesId);
+    }
+
 }

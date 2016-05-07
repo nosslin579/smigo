@@ -22,6 +22,8 @@ package org.smigo.species.vernacular;
  * #L%
  */
 
+import org.smigo.plants.Plant;
+import org.smigo.plants.PlantHandler;
 import org.smigo.species.CrudResult;
 import org.smigo.species.Review;
 import org.smigo.species.Species;
@@ -29,6 +31,7 @@ import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,9 +43,13 @@ public class VernacularHandler {
     @Autowired
     private MailHandler mailHandler;
     @Autowired
+    private PlantHandler plantHandler;
+    @Autowired
     private SpeciesHandler speciesHandler;
     @Autowired
     private VernacularDao vernacularDao;
+    @Value("${replaceSpeciesKey}")
+    private String replaceSpeciesKey;
 
 
     public List<Vernacular> getVernacular(Locale locale) {
@@ -55,6 +62,10 @@ public class VernacularHandler {
         vernacular.setLanguage(locale.getLanguage());
         vernacular.setCountry(locale.getCountry());
 
+        if (vernacular.getVernacularName().endsWith(replaceSpeciesKey)) {
+            replaceSpecies(vernacular, species);
+        }
+
         boolean isCreator = species.getCreator() == user.getId();
         if (isCreator || user.isModerator()) {
             int id = vernacularDao.insertVernacular(vernacular);
@@ -63,6 +74,20 @@ public class VernacularHandler {
 
         mailHandler.sendReviewRequest("Add vernacular", currentVernaculars, vernacular, user);
         return new CrudResult(null, Review.MODERATOR);
+    }
+
+    private void replaceSpecies(Vernacular newVernacular, Species newSpecies) {
+        String name = newVernacular.getVernacularName().replace(replaceSpeciesKey, "");
+        newVernacular.setVernacularName(name);
+
+        Locale locale = new Locale(newVernacular.getLanguage(), newVernacular.getCountry());
+        Vernacular oldVernacular = vernacularDao.getVernacularByName(name, locale);
+        List<Plant> restore = plantHandler.getPlants(oldVernacular.getSpeciesId());
+
+        mailHandler.sendAdminNotification("restore plants", "Old:" + oldVernacular + " New:" + newVernacular + System.lineSeparator() + restore.toString());
+
+        vernacularDao.deleteVernacular(oldVernacular.getId());
+        plantHandler.replaceSpecies(oldVernacular.getSpeciesId(), newSpecies.getId());
     }
 
     public Review deleteVernacular(int vernacularId, AuthenticatedUser user, Locale locale) {

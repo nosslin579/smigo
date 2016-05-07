@@ -87,4 +87,11 @@ class JdbcVernacularDao implements VernacularDao {
         String sql = "UPDATE VERNACULARS SET VERNACULAR_NAME= ? WHERE ID = ?;";
         jdbcTemplate.update(sql, vernacular.getVernacularName(), vernacular.getId());
     }
+
+    @Override
+    public Vernacular getVernacularByName(String name, Locale locale) {
+        final String sql = "SELECT * FROM VERNACULARS WHERE VERNACULAR_NAME=? AND LANGUAGE=? AND COUNTRY=?";
+        Object[] args = {name, locale.getLanguage(), locale.getCountry()};
+        return jdbcTemplate.queryForObject(sql, args, vernacularRowMapper);
+    }
 }

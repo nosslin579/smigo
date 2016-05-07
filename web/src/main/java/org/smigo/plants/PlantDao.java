@@ -36,4 +36,8 @@ interface PlantDao {
     void deletePlant(int userId, Plant plant);
 
     void addPlant(int userId, Plant plant);
+
+    List<Plant> getPlantsBySpecies(int speciesId);
+
+    void replaceSpecies(int oldSpeciesId, int newSpeciesId);
 }

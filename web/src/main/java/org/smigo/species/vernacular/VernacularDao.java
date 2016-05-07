@@ -37,4 +37,7 @@ interface VernacularDao {
     List<Vernacular> getVernacularBySpecies(int speciesId);
 
     void updateVernacular(Vernacular vernacular);
+
+    Vernacular getVernacularByName(String vernacularName, Locale locale);
+
 }
