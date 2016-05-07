@@ -422,7 +422,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //add
         d.findElement(By.id("show-add-variety-button")).click();
         d.findElement(By.id("add-variety-input")).sendKeys(varietyName);
-        d.findElement(By.id("submit-variety-button")).click();
+        d.findElement(By.id("add-variety-form")).submit();
 
         //select and close
         d.findElement(By.linkText(varietyName)).click();

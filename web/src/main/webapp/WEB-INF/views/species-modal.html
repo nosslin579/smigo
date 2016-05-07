@@ -139,7 +139,7 @@
             <span class="glyphicon glyphicon-plus"></span> {{'add' | translate }}
         </button>
         <hr/>
-        <form class="inline-form" ng-submit="addVariety(editVariety,species.id)" ng-if="editVariety.visible">
+        <form class="inline-form" ng-submit="addVariety(editVariety,species.id)" ng-if="editVariety.visible" id="add-variety-form">
             <div class="has-error">
                 <span ng-repeat="error in editVariety.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments}}</span>
             </div>
@@ -149,7 +149,7 @@
                        autofocus autocomplete="off" ng-blur="editVariety.visible=false"
                        ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVariety.visible = false)">
             </div>
-            <button type="submit" class="btn btn-default" id="submit-variety-button">{{'save' | translate}}</button>
+            <button type="submit" class="btn btn-default">{{'save' | translate}}</button>
             <button type="reset" class="btn btn-default" ng-click="editVariety.visible=false">{{'cancel' | translate}}</button>
             <hr/>
         </form>
