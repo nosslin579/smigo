@@ -25,6 +25,7 @@ package org.smigo.plants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
@@ -35,10 +36,9 @@ import java.util.List;
 
 @Repository
 class JdbcPlantDao implements PlantDao {
-    private static final String SELECT = "SELECT user_id,year,x,y,species_id,variety_id FROM plants JOIN users ON users.id = plants.user_id WHERE %s = ?";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private BeanPropertyRowMapper<Plant> rowMapper = new BeanPropertyRowMapper<>(Plant.class);
+    private RowMapper<Plant> rowMapper = new BeanPropertyRowMapper<>(Plant.class);
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -48,20 +48,20 @@ class JdbcPlantDao implements PlantDao {
 
     @Override
     public List<Plant> getPlants(int userId) {
-        final String sql = String.format(SELECT, "user_id");
+        final String sql = "SELECT * FROM PLANTS WHERE USER_ID=?";
         return jdbcTemplate.query(sql, rowMapper, userId);
     }
 
     @Override
     public List<Plant> getPlantsBySpecies(int speciesId) {
-        final String sql = String.format(SELECT, "species_id");
+        final String sql = "SELECT * FROM PLANTS WHERE SPECIES_ID=?";
         return jdbcTemplate.query(sql, rowMapper, speciesId);
     }
 
 
     @Override
     public List<Plant> getPlants(String username) {
-        final String sql = String.format(SELECT, "username");
+        final String sql = "SELECT * FROM PLANTS WHERE USER_ID = (SELECT ID FROM USERS WHERE USERNAME=?)";
         return jdbcTemplate.query(sql, rowMapper, username);
     }
 
