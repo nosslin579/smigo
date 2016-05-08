@@ -3,15 +3,18 @@ function VernacularService($http, $rootScope, $log, $q) {
 
     $log.log('VernacularService', state);
 
-    $http.get('/rest/vernacular').then(function (response) {
-        $log.log('Response from /rest/vernacular', response);
-        state.vernaculars.length = 0;
-        Array.prototype.push.apply(state.vernaculars, response.data);
-    });
+    $rootScope.$on('messages-reloaded', reloadVernacular);
 
-    $rootScope.$on('messages-reloaded', function (event, msg) {
-        //todo
-    });
+    reloadVernacular();
+
+    function reloadVernacular() {
+        return $http.get('/rest/vernacular').then(function (response) {
+            $log.log('Response from /rest/vernacular', response);
+            state.vernaculars.length = 0;
+            Array.prototype.push.apply(state.vernaculars, response.data);
+        });
+    }
+
 
     function Vernacular(speciesId) {
         //this.id = id;
