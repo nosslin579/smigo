@@ -62,7 +62,7 @@ public class VernacularHandler {
         vernacular.setLanguage(locale.getLanguage());
         vernacular.setCountry(locale.getCountry());
 
-        if (vernacular.getVernacularName().endsWith(replaceSpeciesKey)) {
+        if (vernacular.getVernacularName().endsWith(replaceSpeciesKey) && user.isModerator()) {
             replaceSpecies(vernacular, species);
         }
 
