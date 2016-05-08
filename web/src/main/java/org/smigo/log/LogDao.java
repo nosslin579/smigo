@@ -31,10 +31,6 @@ interface LogDao {
 
     QueryReport getSpeciesReport();
 
-    QueryReport getVernacularsReport();
-
-    QueryReport getActivityReport();
-
     void backup();
 
     QueryReport getVarietiesReport();
@@ -42,4 +38,6 @@ interface LogDao {
     QueryReport getUserAgentReport();
 
     QueryReport getUrlReport();
+
+    QueryReport getPopularNewVernaculars();
 }

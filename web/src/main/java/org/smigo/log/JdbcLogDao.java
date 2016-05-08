@@ -78,8 +78,8 @@ class JdbcLogDao implements LogDao {
     @Override
     public QueryReport getUserReport() {
         String sql = "" +
-                "SELECT users.username,users.locale,id,decidetime,users.createdate,p.plants AS plants,p.years,speciescreated,lastactive\n" +
-                "FROM (SELECT username,MAX(CREATEDATE) AS lastactive FROM visitlog WHERE USERNAME != '' AND current_timestamp() < dateadd('DAY',8,createdate) GROUP BY username) AS activeusers\n" +
+                "SELECT users.username,users.locale,id,decidetime,users.createdate,p.plants AS plants,p.years,speciescreated,firstactive,lastactive\n" +
+                "FROM (SELECT username,MAX(CREATEDATE) AS lastactive ,MIN(CREATEDATE) AS firstactive FROM visitlog WHERE USERNAME != '' AND current_timestamp() < dateadd('DAY',8,createdate) GROUP BY username) AS activeusers\n" +
                 "  LEFT JOIN USERS ON activeusers.username = users.username\n" +
                 "  LEFT JOIN (SELECT user_id,count(*) AS plants,group_concat(DISTINCT year) AS years FROM plants GROUP BY user_id) AS p ON p.user_id = users.id\n" +
                 "  LEFT JOIN (SELECT creator AS speciescreator,count(creator) AS speciescreated FROM species GROUP BY creator) AS sc ON sc.speciescreator = users.id\n" +
@@ -115,45 +115,6 @@ class JdbcLogDao implements LogDao {
                 "ORDER BY id DESC " +
                 "LIMIT 40; ";
 
-        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
-        return new QueryReport(sql, maps);
-    }
-
-    @Override
-    public QueryReport getVernacularsReport() {
-        String sql = "SELECT " +
-                "  vernacular_name, " +
-                "  count(DISTINCT species_id) AS repetition, " +
-                "  group_concat(language)     AS language, " +
-                "  group_concat(country)      AS country, " +
-                "  group_concat(species_id)   AS species " +
-                "FROM VERNACULARS " +
-                "GROUP BY vernacular_name " +
-                "ORDER BY repetition DESC " +
-                "LIMIT 20; ";
-        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
-        return new QueryReport(sql, maps);
-    }
-
-    @Override
-    public QueryReport getActivityReport() {
-        String sql = "SELECT\n" +
-                "  USERNAME,\n" +
-                "  REQUESTEDURL,\n" +
-                "  LOCALES,\n" +
-                "  substring(SESSIONID, -6)                        AS session,\n" +
-                "  METHOD,\n" +
-                "  CREATEDATE,\n" +
-                "  HTTPSTATUS                                      AS status,\n" +
-                "  SESSIONAGE                                      AS age,\n" +
-                "  HOST,\n" +
-                "  QUERYSTRING,\n" +
-                "  USERAGENT\n" +
-                "FROM VISITLOG\n" +
-                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN\n" +
-                "(SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +//IP from human actions
-                "ORDER BY CREATEDATE DESC\n" +
-                "LIMIT 1500;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
@@ -195,17 +156,44 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public QueryReport getUserAgentReport() {
-        String sql = "SELECT REPLACE(VISITLOG.USERAGENT,'Mozilla/5.0 '),COUNT(VISITLOG.USERAGENT) AS REQUESTS,REGEXP_REPLACE(GROUP_CONCAT(DISTINCT USERNAME),'(?<=.{100}).+','...') AS USERS FROM VISITLOG\n" +
-                "WHERE USERNAME IS NOT '' GROUP BY VISITLOG.USERAGENT ORDER BY COUNT(VISITLOG.USERAGENT) DESC LIMIT 20;";
+        String sql = "SELECT\n" +
+                "  GROUP_CONCAT(DISTINCT USERNAME) AS USER,\n" +
+                "  REPLACE(VISITLOG.USERAGENT, 'Mozilla/5.0 '),\n" +
+                "  COUNT(VISITLOG.USERAGENT) AS REQUESTS,\n" +
+                "  COUNT(DISTINCT VISITLOG.SESSIONID) AS SESSIONS,\n" +
+                "  MIN(CREATEDATE)\n" +
+                "FROM VISITLOG\n" +
+                "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND USERNAME IS NOT ''\n" +
+                "GROUP BY USERAGENT, USERNAME\n" +
+                "ORDER BY max(CREATEDATE) DESC\n" +
+                "LIMIT 20;\n";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
 
     @Override
     public QueryReport getUrlReport() {
-        String sql = "SELECT METHOD,REQUESTEDURL,COUNT(REQUESTEDURL)AS COUNT FROM VISITLOG\n" +
+        String sql = "SELECT METHOD,REQUESTEDURL,COUNT(REQUESTEDURL),group_concat(DISTINCT HTTPSTATUS) FROM VISITLOG\n" +
                 "WHERE current_timestamp() < dateadd('DAY', 8, CREATEDATE) AND XFORWARDEDFOR IN (SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
                 "GROUP BY REQUESTEDURL,METHOD ORDER BY COUNT(REQUESTEDURL) DESC LIMIT 40;";
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return new QueryReport(sql, maps);
+    }
+
+    @Override
+    public QueryReport getPopularNewVernaculars() {
+        String sql = "SELECT\n" +
+                "  PLANTS.SPECIES_ID,\n" +
+                "  count(PLANTS.SPECIES_ID),\n" +
+                "  group_concat(DISTINCT VERNACULAR_NAME) as name,\n" +
+                "  group_concat(DISTINCT USER_ID) as users,\n" +
+                "  concat(group_concat(DISTINCT LANGUAGE), '-', group_concat(DISTINCT COUNTRY)) as locale\n" +
+                "FROM PLANTS\n" +
+                "  LEFT JOIN VERNACULARS ON VERNACULARS.SPECIES_ID = PLANTS.SPECIES_ID\n" +
+                "WHERE PLANTS.SPECIES_ID > 10000\n" +
+                "GROUP BY PLANTS.SPECIES_ID\n" +
+                "ORDER BY COUNT(DISTINCT USER_ID) DESC\n" +
+                "LIMIT 10;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
