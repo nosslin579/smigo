@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
-import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -83,16 +82,6 @@ public class HomeController {
     public String getWall(@PathVariable String userName, Model model) {
         model.addAttribute("msgTitle", "msg.title.wall");
         model.addAttribute("titleArg", userName);
-        return "ng.jsp";
-    }
-
-    @RequestMapping(value = {"/species/{id}"}, method = RequestMethod.GET)
-    public String getSpecies(@PathVariable int id, Model model, Locale locale) {
-        model.addAttribute("msgTitle", "msg.title.species");
-        model.addAttribute("msgDescription", "msg.metadescription.species");
-        Object translation = ((Map) model.asMap().get("messages")).get("msg.species" + id);
-        model.addAttribute("titleArg", translation);
-        model.addAttribute("descriptionArg", translation);
         return "ng.jsp";
     }
 }

@@ -266,16 +266,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         },
         getAllVarieties: function () {
             return state.varieties;
-        },
-        getRule: function (id) {
-            for (var i = 0; i < state.speciesArray.length; i++) {
-                var species = state.speciesArray[i];
-                for (var j = 0; j < species.rules.length; j++) {
-                    if (species.rules[j].id === id) {
-                        return species.rules[j];
-                    }
-                }
-            }
         }
     }
 }
