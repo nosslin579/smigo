@@ -107,7 +107,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addStatusController("/addyear/**", HttpStatus.GONE);
         registry.addStatusController("/deletespecies/**", HttpStatus.GONE);
         registry.addStatusController("/species/:id", HttpStatus.BAD_REQUEST);
-        registry.addStatusController("/rule/:id", HttpStatus.BAD_REQUEST);
+        registry.addStatusController("/rule/**", HttpStatus.NOT_FOUND);
         registry.addStatusController("**/*.php", HttpStatus.NOT_FOUND);
         registry.addStatusController("cgi-bin/**", HttpStatus.NOT_FOUND);
         registry.addStatusController("**/*.cgi", HttpStatus.NOT_FOUND);

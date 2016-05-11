@@ -6,6 +6,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species.smigoFind(28, 'id');
     state.varieties = initData.varieties;
+    state.rules = initData.rules;
 
     $log.log('SpeciesService', state);
 

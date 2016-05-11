@@ -36,10 +36,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
                 templateUrl: 'views/species.html',
                 controller: 'SpeciesController'
             }).
-            when('/rule/:id', {
-                templateUrl: 'views/rule.html',
-                controller: 'RuleController'
-            }).
             when('/wall/:username', {redirectTo: '/gardener/:username'}).
             when('/beta', {redirectTo: '/'}).
             when('/garden', {redirectTo: 'garden-planner'}).

@@ -80,7 +80,6 @@
 
         <%@ include file="../js/species/SpeciesModalController.js" %>
         <%@ include file="../js/species/SpeciesController.js" %>
-        <%@ include file="../js/species/RuleController.js" %>
 
         <%@ include file="../js/user/RegisterController.js" %>
         <%@ include file="../js/user/LoginController.js" %>

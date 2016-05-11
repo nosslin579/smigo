@@ -95,11 +95,4 @@ public class HomeController {
         model.addAttribute("descriptionArg", translation);
         return "ng.jsp";
     }
-
-    @RequestMapping(value = {"/rule/{id}"}, method = RequestMethod.GET)
-    public String getRule(@PathVariable int id, Model model, Locale locale) {
-        model.addAttribute("msgTitle", "msg.title.rule");
-        model.addAttribute("titleArg", id);
-        return "ng.jsp";
-    }
 }

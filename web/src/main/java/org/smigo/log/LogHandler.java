@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +82,6 @@ public class LogHandler {
         log.info("Running backing - complete");
     }
 
-    @PostConstruct
     @Scheduled(cron = "0 0 12 * * FRI")
     public void sendWeeklyReport() throws MessagingException {
         StringBuilder mail = new StringBuilder();
