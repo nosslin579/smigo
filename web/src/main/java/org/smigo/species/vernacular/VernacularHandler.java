@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +54,9 @@ public class VernacularHandler {
 
 
     public List<Vernacular> getVernacular(Locale locale) {
-        return vernacularDao.getVernacular(locale);
+        List<Vernacular> ret = vernacularDao.getVernacular(locale);
+        Collections.sort(ret, (o1, o2) -> o2.getCountry().compareTo(o1.getCountry()));
+        return ret;
     }
 
     public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
