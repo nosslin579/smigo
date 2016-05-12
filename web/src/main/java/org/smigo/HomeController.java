@@ -30,7 +30,6 @@ import org.smigo.species.varieties.VarietyDao;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.UserAdaptiveMessageSource;
 import org.smigo.user.UserHandler;
-import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,8 +46,6 @@ import java.util.Locale;
 public class HomeController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserSession userSession;
     @Autowired
     private UserHandler userHandler;
     @Autowired

@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.plants;
 
 /*
  * #%L
@@ -24,7 +24,6 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.plants.Plant;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,7 @@ import java.util.List;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
-public class UserSessionImpl implements UserSession {
+class SessionPlantHolder implements PlantHolder {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private List<Plant> plants = new ArrayList<>();

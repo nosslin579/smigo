@@ -24,8 +24,8 @@ package org.smigo.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.plants.PlantHolder;
 import org.smigo.user.MailHandler;
-import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -43,7 +43,7 @@ public class LogController implements Serializable {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private UserSession userSession;
+    private PlantHolder plantHolder;
     @Autowired
     private MailHandler mailHandler;
     @Autowired
@@ -61,7 +61,7 @@ public class LogController implements Serializable {
     @ResponseBody
     public void logError(@RequestBody ReferenceError referenceError, HttpServletRequest request, HttpServletResponse response) {
         final Log logBean = Log.create(request, response);
-        final String msg = "Angular error:\n" + referenceError + "\nPlants:\n" + StringUtils.arrayToDelimitedString(userSession.getPlants().toArray(), ",") + logBean;
+        final String msg = "Angular error:\n" + referenceError + "\nPlants:\n" + StringUtils.arrayToDelimitedString(plantHolder.getPlants().toArray(), ",") + logBean;
         log.error(msg);
         mailHandler.sendAdminNotification("angular error", msg);
     }

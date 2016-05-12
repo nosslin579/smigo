@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.smigo.message.MessageHandler;
 import org.smigo.plants.Plant;
 import org.smigo.plants.PlantHandler;
+import org.smigo.plants.PlantHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,7 +47,7 @@ public class UserHandler {
     @Autowired
     private LocaleResolver localeResolver;
     @Autowired
-    private UserSession userSession;
+    private PlantHolder plantHolder;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -87,7 +88,7 @@ public class UserHandler {
         newUser.setId(userId);
 
         //save plants
-        List<Plant> plants = userSession.getPlants();
+        List<Plant> plants = plantHolder.getPlants();
         plantHandler.addPlants(plants, userId);
 
         messageHandler.addWelcomeNewsMessage(newUser, plants.size());

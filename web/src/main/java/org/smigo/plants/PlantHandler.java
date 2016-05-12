@@ -25,7 +25,6 @@ package org.smigo.plants;
 import org.smigo.message.MessageHandler;
 import org.smigo.species.SpeciesHandler;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class PlantHandler {
     @Autowired
-    private UserSession userSession;
+    private PlantHolder plantHolder;
     @Autowired
     private PlantDao plantDao;
     @Autowired
@@ -53,7 +52,7 @@ public class PlantHandler {
         if (user != null) {
             return plantDao.getPlants(user.getId());
         } else {
-            return userSession.getPlants();
+            return plantHolder.getPlants();
         }
     }
 
@@ -66,7 +65,7 @@ public class PlantHandler {
             return plants;
         }
         if (userId == null) {
-            userSession.getPlants().addAll(plants);
+            plantHolder.getPlants().addAll(plants);
             plants.forEach(plant -> plant.setId(plantId.incrementAndGet()));
             return plants;
         }
@@ -85,7 +84,7 @@ public class PlantHandler {
             return plantDao.addPlant(plant);
         } else {
             plant.setId(plantId.incrementAndGet());
-            userSession.getPlants().add(plant);
+            plantHolder.getPlants().add(plant);
             return plant.getId();
         }
     }
@@ -97,15 +96,15 @@ public class PlantHandler {
                 throw new java.lang.IllegalArgumentException("Delete plant returned other then one row affected:" + numOfPlantsDeleted);
             }
         } else {
-            userSession.getPlants().removeIf(p -> p.getId() == plantId);
+            plantHolder.getPlants().removeIf(p -> p.getId() == plantId);
         }
     }
 
     public void setPlants(AuthenticatedUser user, List<Plant> plant) {
         if (user == null) {
-            userSession.getPlants().removeIf(p -> true);
-            userSession.getPlants().addAll(plant);
-            userSession.getPlants().forEach(p -> p.setId(plantId.incrementAndGet()));
+            plantHolder.getPlants().removeIf(p -> true);
+            plantHolder.getPlants().addAll(plant);
+            plantHolder.getPlants().forEach(p -> p.setId(plantId.incrementAndGet()));
         }
     }
 

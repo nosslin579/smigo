@@ -1,4 +1,4 @@
-package org.smigo.user;
+package org.smigo.plants;
 
 /*
  * #%L
@@ -22,13 +22,11 @@ package org.smigo.user;
  * #L%
  */
 
-import org.smigo.plants.Plant;
-
 import java.io.Serializable;
 import java.util.List;
 
 
-public interface UserSession extends Serializable {
+public interface PlantHolder extends Serializable {
 
     List<Plant> getPlants();
 
