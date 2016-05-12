@@ -65,12 +65,13 @@ public class PlantController implements Serializable {
 
     @RequestMapping(value = {"/rest/plant"}, method = RequestMethod.POST)
     @ResponseBody
-    public void addPlant(@Valid @RequestBody Plant plant, BindingResult result, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+    public Integer addPlant(@Valid @RequestBody Plant plant, BindingResult result, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
         if (result.hasErrors()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        } else {
-            plantHandler.addPlant(user, plant);
+            return null;
         }
+        return plantHandler.addPlant(user, plant);
+
     }
 
     @RequestMapping(value = {"/rest/plant/add-year/{year:\\d+}"}, method = RequestMethod.PUT)
@@ -79,10 +80,10 @@ public class PlantController implements Serializable {
         return plantHandler.addYear(user, year, locale);
     }
 
-    @RequestMapping(value = {"/rest/plant/delete"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/rest/plant/{id:\\d+}"}, method = RequestMethod.DELETE)
     @ResponseBody
-    public void deletePlant(@RequestBody Plant plant, @AuthenticationPrincipal AuthenticatedUser user) {
-        plantHandler.deletePlant(user, plant);
+    public void deletePlant(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user) {
+        plantHandler.deletePlant(user, id);
     }
 
     @RequestMapping(value = {"/plant/upload"}, method = RequestMethod.POST)

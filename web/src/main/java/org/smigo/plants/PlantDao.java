@@ -29,13 +29,9 @@ interface PlantDao {
 
     List<Plant> getPlants(String username);
 
-    void addPlants(List<Plant> plants, int userId);
+    int deletePlant(int userId, int plant);
 
-    void deletePlants(List<Plant> plants, int userId);
-
-    void deletePlant(int userId, Plant plant);
-
-    void addPlant(int userId, Plant plant);
+    int addPlant(Plant plant);
 
     List<Plant> getPlantsBySpecies(int speciesId);
 

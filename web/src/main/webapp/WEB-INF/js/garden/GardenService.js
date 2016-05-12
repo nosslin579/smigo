@@ -9,7 +9,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 var square = gardenSelf.getSquare(plantData.year, plantData.x, plantData.y);
                 species.variety = plantData.varietyId == 0 ? null : SpeciesService.getAllVarieties().smigoFind(plantData.varietyId, 'id');
-                square.plantArray.push(new Plant(species, square.location));
+                square.plantArray.push(new Plant(plantData.id, species, square.location));
             }
 
 
@@ -41,8 +41,9 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.y = +y;
         }
 
-        function Plant(species, location) {
+        function Plant(id, species, location) {
             var plantSelf = this;
+            this.id = id;
             this.species = species;
             this.location = location;
             this.variety = species.variety;
@@ -97,15 +98,16 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 }
             };
             this.addPlant = function (species) {
-                //todo assert species object
                 if (squareSelf.plantArray.length <= 4 && mutable) {
-                    var plant = new Plant(species, squareSelf.location);
+                    var plant = new Plant(0, species, squareSelf.location);
                     squareSelf.plantArray.push(plant);
-                    $http.post('/rest/plant', new PlantData(plant))
-                        .catch(function (response) {
-                            squareSelf.plantArray.splice(squareSelf.plantArray.indexOf(plant));
-                        });
-                    $log.debug('Plant added: ' + species.scientificName, squareSelf);
+                    $http.post('/rest/plant', new PlantData(plant)).then(function (response) {
+                        plant.id = response.data;
+                        $log.log('Response from /rest/plant', [response, species, squareSelf]);
+                    }).catch(function (response) {
+                        squareSelf.plantArray.splice(squareSelf.plantArray.indexOf(plant));
+                        $log.error('Plant add failed: ', [response, species, squareSelf]);
+                    });
                 }
             };
             this.removePlant = function (species) {
@@ -123,11 +125,13 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                     removeObj.plant = squareSelf.plantArray.pop();
                 }
 
-                $http.post('/rest/plant/delete', new PlantData(removeObj.plant))
-                    .catch(function (response) {
-                        squareSelf.plantArray.push(removeObj.plant);
-                    });
-                $log.debug('Removed plant', removeObj.plant, new PlantData(removeObj.plant));
+                $http.delete('/rest/plant/' + removeObj.plant.id).then(function (response) {
+                    $log.log('Response from /rest/plant/' + removeObj.plant.id, [response, removeObj])
+                }).catch(function (response) {
+                    squareSelf.plantArray.push(removeObj.plant);
+                    $log.error('Remove plant failed', [response, removeObj]);
+                }).finally(function () {
+                });
             };
 
 

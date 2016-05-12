@@ -27,6 +27,7 @@ import org.smigo.user.authentication.UserHeaderAndAuthenticatedUserMatch;
 
 @UserHeaderAndAuthenticatedUserMatch
 public class Plant {
+    private int id;
     private int x;
     private int y;
     private int year;
@@ -38,12 +39,14 @@ public class Plant {
     public Plant() {
     }
 
-    public Plant(int speciesId, int year, int x, int y, Integer varietyId) {
-        this.speciesId = speciesId;
-        this.year = year;
-        this.x = x;
-        this.y = y;
-        this.varietyId = varietyId;
+    public Plant(Plant plant) {
+        this.id = plant.id;
+        this.userId = plant.userId;
+        this.speciesId = plant.speciesId;
+        this.year = plant.year;
+        this.x = plant.x;
+        this.y = plant.y;
+        this.varietyId = plant.varietyId;
     }
 
     public int getSpeciesId() {
@@ -68,6 +71,14 @@ public class Plant {
 
     public int getUserId() {
         return userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setUserId(int userId) {
@@ -97,7 +108,8 @@ public class Plant {
     @Override
     public String toString() {
         return "Plant{" +
-                "x=" + x +
+                "id=" + id +
+                ", x=" + x +
                 ", y=" + y +
                 ", year=" + year +
                 ", speciesId=" + speciesId +

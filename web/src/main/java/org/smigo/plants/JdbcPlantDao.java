@@ -26,9 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -37,13 +37,13 @@ import java.util.List;
 @Repository
 class JdbcPlantDao implements PlantDao {
     private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private SimpleJdbcInsert insertPlant;
     private RowMapper<Plant> rowMapper = new BeanPropertyRowMapper<>(Plant.class);
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.insertPlant = new SimpleJdbcInsert(dataSource).withTableName("plants").usingGeneratedKeyColumns("id").usingColumns("x", "y", "year", "species_Id", "variety_Id", "user_Id");
     }
 
     @Override
@@ -66,31 +66,15 @@ class JdbcPlantDao implements PlantDao {
     }
 
     @Override
-    public void addPlants(List<Plant> plants, int userId) {
-        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
-        namedParameterJdbcTemplate.batchUpdate(
-                "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (" + userId + ", :speciesId, :year, :x, :y, :varietyId)",
-                batch);
+    public int deletePlant(int userId, int plant) {
+        String sql = "DELETE FROM plants WHERE (user_id = ? AND id = ?)";
+        return jdbcTemplate.update(sql, userId, plant);
     }
 
     @Override
-    public void deletePlants(List<Plant> plants, int userId) {
-        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(plants.toArray());
-        namedParameterJdbcTemplate.batchUpdate(
-                "DELETE FROM plants WHERE (user_id = " + userId + " AND species_id = :speciesId AND year = :year AND x = :x AND y = :y)",
-                batch);
-    }
-
-    @Override
-    public void deletePlant(int userId, Plant plant) {
-        String sql = "DELETE FROM plants WHERE (user_id = ? AND species_id = ? AND year = ? AND x = ? AND y = ?)";
-        jdbcTemplate.update(sql, userId, plant.getSpeciesId(), plant.getYear(), plant.getX(), plant.getY());
-    }
-
-    @Override
-    public void addPlant(int userId, Plant plant) {
-        String sql = "INSERT INTO plants(user_id, species_id, year, x, y, variety_id) VALUES (?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, userId, plant.getSpeciesId(), plant.getYear(), plant.getX(), plant.getY(), plant.getVarietyId());
+    public int addPlant(Plant plant) {
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(plant);
+        return insertPlant.executeAndReturnKey(parameterSource).intValue();
     }
 
     @Override

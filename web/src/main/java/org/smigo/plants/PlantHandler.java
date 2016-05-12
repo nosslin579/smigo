@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class PlantHandler {
@@ -41,6 +42,8 @@ public class PlantHandler {
     private SpeciesHandler speciesHandler;
     @Autowired
     private MessageHandler messageHandler;
+
+    private AtomicInteger plantId = new AtomicInteger(0);
 
     public List<Plant> getPlants(String username) {
         return plantDao.getPlants(username);
@@ -58,29 +61,43 @@ public class PlantHandler {
         return plantDao.getPlantsBySpecies(speciesId);
     }
 
-    public void addPlants(List<Plant> plants, Integer userId) {
-        if (!plants.isEmpty()) {
-            if (userId == null) {
-                userSession.getPlants().addAll(plants);
-            } else {
-                plantDao.addPlants(plants, userId);
-            }
+    public List<Plant> addPlants(List<Plant> plants, Integer userId) {
+        if (plants.isEmpty()) {
+            return plants;
         }
+        if (userId == null) {
+            userSession.getPlants().addAll(plants);
+            plants.forEach(plant -> plant.setId(plantId.incrementAndGet()));
+            return plants;
+        }
+
+        plants.forEach(plant -> {
+            plant.setUserId(userId);
+            int id = plantDao.addPlant(plant);
+            plant.setId(id);
+        });
+        return plants;
     }
 
-    public void addPlant(AuthenticatedUser user, Plant plant) {
+    public int addPlant(AuthenticatedUser user, Plant plant) {
         if (user != null) {
-            plantDao.addPlant(user.getId(), plant);
+            plant.setUserId(user.getId());
+            return plantDao.addPlant(plant);
         } else {
+            plant.setId(plantId.incrementAndGet());
             userSession.getPlants().add(plant);
+            return plant.getId();
         }
     }
 
-    public void deletePlant(AuthenticatedUser user, Plant plant) {
+    public void deletePlant(AuthenticatedUser user, int plantId) {
         if (user != null) {
-            plantDao.deletePlant(user.getId(), plant);
+            int numOfPlantsDeleted = plantDao.deletePlant(user.getId(), plantId);
+            if (numOfPlantsDeleted != 1) {
+                throw new java.lang.IllegalArgumentException("Delete plant returned other then one row affected:" + numOfPlantsDeleted);
+            }
         } else {
-            userSession.getPlants().removeIf(p -> p.getSpeciesId() == plant.getSpeciesId() && p.getX() == plant.getX() && p.getY() == plant.getY() && p.getYear() == plant.getYear());
+            userSession.getPlants().removeIf(p -> p.getId() == plantId);
         }
     }
 
@@ -88,29 +105,30 @@ public class PlantHandler {
         if (user == null) {
             userSession.getPlants().removeIf(p -> true);
             userSession.getPlants().addAll(plant);
+            userSession.getPlants().forEach(p -> p.setId(plantId.incrementAndGet()));
         }
     }
 
-    public List<Plant> addYear(AuthenticatedUser user, int year, Locale locale) {
-        final List<Plant> plants = getPlants(user);
-        if (plants.isEmpty() || plants.stream().anyMatch(p -> p.getYear() == year)) {
+    public List<Plant> addYear(AuthenticatedUser user, int theNewYear, Locale locale) {
+        final List<Plant> currentPlants = getPlants(user);
+        if (currentPlants.isEmpty() || currentPlants.stream().anyMatch(p -> p.getYear() == theNewYear)) {
             return Collections.emptyList();
         }
 
-        int lastYear = year - 1;
-        boolean containsLastYear = plants.stream().anyMatch(p -> p.getYear() == lastYear);
-        int copyFromYear = containsLastYear ? lastYear : plants.stream().min((p1, p2) -> Integer.compare(p1.getYear(), p2.getYear())).get().getYear();
+        int lastYear = theNewYear - 1;
+        boolean containsLastYear = currentPlants.stream().anyMatch(p -> p.getYear() == lastYear);
+        int copyFromYear = containsLastYear ? lastYear : currentPlants.stream().min((p1, p2) -> Integer.compare(p1.getYear(), p2.getYear())).get().getYear();
 
-        List<Plant> ret = new ArrayList<>();
-        for (Plant p : plants) {
+        List<Plant> newYearPlants = new ArrayList<>();
+        for (Plant p : currentPlants) {
             if (p.getYear() == copyFromYear && !speciesHandler.getSpecies(p.getSpeciesId()).isAnnual()) {
-                p.setYear(year);
-                ret.add(p);
+                Plant newPlant = new Plant(p);
+                newPlant.setYear(theNewYear);
+                newYearPlants.add(newPlant);
             }
         }
-        addPlants(ret, user == null ? null : user.getId());
-        messageHandler.addNewYearNewsMessage(Optional.ofNullable(user), year, plants, locale);
-        return ret;
+        messageHandler.addNewYearNewsMessage(Optional.ofNullable(user), theNewYear, currentPlants, locale);
+        return addPlants(newYearPlants, user == null ? null : user.getId());
     }
 
     public void replaceSpecies(int oldSpeciesId, int newSpeciesId) {
