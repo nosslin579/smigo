@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -46,6 +47,9 @@ class JdbcLogDao implements LogDao {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private JdbcTemplate jdbcTemplate;
+
+    @Value("${sqlDirectory}")
+    private String sqlDirectory;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -122,13 +126,12 @@ class JdbcLogDao implements LogDao {
     @Override
     public void backup() {
         final String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String dir = System.getProperty("user.dir");//todo change to property
-        final String backupFile = dir + "/dbbackup/file" + date + ".zip";
+        final String backupFile = sqlDirectory + "/dbbackup/file" + date + ".zip";
         String sqlFile = "BACKUP TO '" + backupFile + "';";
         log.info("Backup to file:" + backupFile);
         jdbcTemplate.execute(sqlFile);
 
-        final String backupScript = dir + "/dbbackup/script" + date + ".zip";
+        final String backupScript = sqlDirectory + "/dbbackup/script" + date + ".zip";
         String sqlScript = "SCRIPT TO '" + backupScript + "' COMPRESSION ZIP;";
         log.info("Backup to file:" + backupScript);
         jdbcTemplate.execute(sqlScript);
@@ -136,8 +139,7 @@ class JdbcLogDao implements LogDao {
 
     @PostConstruct
     public void upgrade() throws IOException {
-        final String dir = System.getProperty("user.dir");
-        final String upgradeFile = dir + "/upgrade.sql";
+        final String upgradeFile = sqlDirectory + "/upgrade.sql";
         final File file = new File(upgradeFile);
         if (file.exists()) {
             String sql = "RUNSCRIPT FROM '" + upgradeFile + "';";
