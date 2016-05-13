@@ -35,11 +35,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class VernacularHandler {
+
+    public static final Comparator<Vernacular> VERNACULAR_COMPARATOR = (o1, o2) -> o2.getCountry().compareTo(o1.getCountry()) == 0 ? Integer.compare(o1.getId(), o2.getId()) : 1;
 
     @Autowired
     private MailHandler mailHandler;
@@ -55,9 +60,31 @@ public class VernacularHandler {
 
     public List<Vernacular> getVernacular(Locale locale) {
         List<Vernacular> ret = vernacularDao.getVernacular(locale);
-        Collections.sort(ret, (o1, o2) -> o2.getCountry().compareTo(o1.getCountry()));
+        Collections.sort(ret);
         return ret;
     }
+
+    public List<Vernacular> getVernacular(int speciesId, Locale locale) {
+        List<Vernacular> ret = vernacularDao.getVernacularBySpecies(speciesId);
+
+        //this is most likely a user species
+        if (ret.size() == 1) {
+            return ret;
+        }
+
+        //filter by locale
+        Predicate<Vernacular> localeMatcher = vernacular -> vernacular.getLanguage().equals(locale.getLanguage()) && (vernacular.getCountry().isEmpty() || vernacular.getCountry().equals(locale.getCountry()));
+        if (ret.stream().anyMatch(localeMatcher)) {
+            List<Vernacular> vernacularLocaleFiltered = ret.stream().filter(localeMatcher).collect(Collectors.toList());
+            Collections.sort(vernacularLocaleFiltered);
+            return vernacularLocaleFiltered;
+        }
+
+        //return english vernaculars
+        ret.removeIf(vernacular -> !vernacular.getLanguage().equals("en") || !vernacular.getCountry().isEmpty());
+        return ret;
+    }
+
 
     public CrudResult addVernacular(Vernacular vernacular, AuthenticatedUser user, Locale locale) {
         Species species = speciesHandler.getSpecies(vernacular.getSpeciesId());

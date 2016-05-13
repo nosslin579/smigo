@@ -17,7 +17,6 @@ function VernacularService($http, $rootScope, $log, $q) {
 
 
     function Vernacular(speciesId) {
-        //this.id = id;
         this.speciesId = speciesId;
         this.vernacularName = 'id' + speciesId;
     }
@@ -33,10 +32,24 @@ function VernacularService($http, $rootScope, $log, $q) {
             return state;
         },
         getVernacular: function (speciesId) {
-            return state.vernaculars.smigoFind(speciesId, 'speciesId', new Vernacular(speciesId));
-        },
-        getVernacularName: function (speciesId) {
-            return state.vernaculars.smigoFind(speciesId, 'speciesId', new Vernacular(speciesId)).vernacularName;
+            //$log.log('getVernaclar',speciesId);
+            if (!state.vernaculars.length) {
+                return new Vernacular(speciesId);
+            }
+            var vernacular = state.vernaculars.smigoFind(speciesId, 'speciesId');
+            if (vernacular) {
+                return vernacular;
+            }
+            var ret = new Vernacular(speciesId);
+            state.vernaculars.push(ret);
+            $http.get('/rest/vernacular/', {params: {speciesid: speciesId}}).then(function (response) {
+                $log.log('Response from /rest/vernacular/', response);
+                if (response.data.length) {
+                    angular.extend(ret, response.data.shift());
+                    Array.prototype.push.apply(state.vernaculars, response.data);
+                }
+            });
+            return ret;
         },
         getVernaculars: getVernaculars,
         addVernacular: function (species, updateObj) {

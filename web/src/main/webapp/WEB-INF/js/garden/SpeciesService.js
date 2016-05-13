@@ -71,10 +71,10 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
             familyArg = new Message("family" + rule.param),
 
             speciesGetArgsAsText = function (argument) {
-                return VernacularService.getVernacularName(argument.id);
+                return VernacularService.getVernacular(argument.id).vernacularName;
             },
             rotationGetArgsAsText = function (argument) {
-                return [VernacularService.getVernacularName(argument[0].id), translateFilter(argument[1].messageKey)];
+                return [VernacularService.getVernacular(argument[0].id).vernacularName, translateFilter(argument[1].messageKey)];
             },
             rawGetArgsAsText = function (argument) {
                 return argument;

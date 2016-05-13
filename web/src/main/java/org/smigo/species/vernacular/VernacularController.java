@@ -52,10 +52,18 @@ public class VernacularController implements Serializable {
 
     @RequestMapping(value = "/rest/vernacular", method = RequestMethod.GET)
     @ResponseBody
-    public List<Vernacular> getVernacular(Locale locale) {
+    public List<Vernacular> getAllVernacular(Locale locale) {
         log.info("Getting vernacular");
         return vernacularHandler.getVernacular(locale);
     }
+
+    @RequestMapping(value = "/rest/vernacular", method = RequestMethod.GET, params = {"speciesid"})
+    @ResponseBody
+    public List<Vernacular> getVernacularBySpecies(@RequestParam("speciesid") int speciesId, Locale locale) {
+        log.info("Getting vernacular");
+        return vernacularHandler.getVernacular(speciesId,locale);
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/vernacular", method = RequestMethod.POST)

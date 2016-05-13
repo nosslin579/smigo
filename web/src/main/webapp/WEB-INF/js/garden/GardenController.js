@@ -12,7 +12,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.addSpecies = SpeciesService.addSpecies;
     $scope.selectSpecies = SpeciesService.selectSpecies;
     $scope.searchSpecies = SpeciesService.searchSpecies;
-    $scope.getVernacularName = VernacularService.getVernacularName;
+    $scope.getVernacular = VernacularService.getVernacular;
 
     $scope.selectedSpeciesFromTopResult = function (search, event) {
         $log.log('Setting species from', [search, event]);
@@ -35,7 +35,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     };
     $scope.getTopResult = function (query) {
         var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
-        return topResult ? VernacularService.getVernacularName(topResult.id) : '-';
+        return topResult ? VernacularService.getVernacular(topResult.id).vernacularName : '-';
     };
     $scope.openAddYearModal = function () {
         $uibModal.open({

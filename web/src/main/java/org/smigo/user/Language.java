@@ -30,14 +30,14 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 enum Language {
-    GERMAN(Locale.GERMAN),
     ENGLISH(Locale.ENGLISH),
+    SPANISH(new Locale("es")),
+    GERMAN(Locale.GERMAN),
     FRENCH(Locale.FRENCH),
     SWEDISH(new Locale("sv")),
     ROMANIAN(new Locale("ro")),
     USA(Locale.US),
     UK(Locale.UK),
-    SPANISH(new Locale("es")),
     PORTUGUESE(new Locale("pt")),
     DUTCH(new Locale("nl")),
     TURKISH(new Locale("tr")),
@@ -45,6 +45,7 @@ enum Language {
     ITALIAN(Locale.ITALIAN),
     CZECH(new Locale("cs")),
     CATALAN(new Locale("ca"));
+
     private final Locale locale;
 
     Language(Locale locale) {

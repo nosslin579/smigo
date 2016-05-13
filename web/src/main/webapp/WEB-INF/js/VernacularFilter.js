@@ -1,6 +1,6 @@
 function vernacularFilter($log, VernacularService) {
     return function (speciesId) {
-        return VernacularService.getVernacularName(speciesId);
+        return VernacularService.getVernacular(speciesId).vernacularName;
     };
 }
 angular.module('smigoModule').filter('vernacular', vernacularFilter);
