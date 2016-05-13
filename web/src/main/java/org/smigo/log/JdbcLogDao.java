@@ -108,10 +108,11 @@ class JdbcLogDao implements LogDao {
         String sql = "SELECT " +
                 "  species.id, " +
                 "  u.username AS creator, " +
-                "  group_concat(DISTINCT def.vernacular_name SEPARATOR ' ') AS name, " +
+                "  group_concat(DISTINCT def.vernacular_name SEPARATOR ' ') AS names, " +
                 "  group_concat(DISTINCT def.language SEPARATOR ' ') AS language,  " +
                 "  group_concat(DISTINCT def.country SEPARATOR ' ') AS country, " +
-                "  u.LOCALE " +
+                "  u.LOCALE, " +
+                "  species.createdate " +
                 "FROM species " +
                 "  LEFT JOIN VERNACULARS def ON def.species_id = species.id " +
                 "  LEFT JOIN users u ON u.id = species.creator " +

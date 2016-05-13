@@ -91,9 +91,9 @@ public class LogHandler {
 
         mail.append("<table>");
         mail.append("<tr><td>Available processors</td><td>").append(Runtime.getRuntime().availableProcessors()).append("</td></tr>");
-        mail.append("<tr><td>Free memory</td><td>").append(Runtime.getRuntime().freeMemory()).append("</td></tr>");
-        mail.append("<tr><td>Max memory</td><td>").append(Runtime.getRuntime().maxMemory()).append("</td></tr>");
-        mail.append("<tr><td>Total memory</td><td>").append(Runtime.getRuntime().totalMemory()).append("</td></tr>");
+        mail.append("<tr><td>Free memory</td><td>").append(Runtime.getRuntime().freeMemory() / 1000000).append("M</td></tr>");
+        mail.append("<tr><td>Max memory</td><td>").append(Runtime.getRuntime().maxMemory() / 1000000).append("M</td></tr>");
+        mail.append("<tr><td>Total memory</td><td>").append(Runtime.getRuntime().totalMemory() / 1000000).append("M</td></tr>");
         mail.append("</table>");
 
         mail.append(getHtmlTable(logDao.getUserReport()));
