@@ -46,6 +46,7 @@ public class UsernameUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found:" + username);
         }
         final User user = userDetails.get(0);
-        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword(), user.getAuthority());
+        //Because security this will never grant more than user authority
+        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword(), AuthenticatedUser.USER_AUTHORITY);
     }
 }
