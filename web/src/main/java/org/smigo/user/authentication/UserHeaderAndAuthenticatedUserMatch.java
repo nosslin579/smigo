@@ -23,6 +23,7 @@ package org.smigo.user.authentication;
  */
 
 
+import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.security.Principal;
+import java.util.Objects;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
@@ -53,8 +54,10 @@ public @interface UserHeaderAndAuthenticatedUserMatch {
 
     Class<? extends Payload>[] payload() default {};
 
-    public class UserHeaderAndAuthenticatedUserMatchValidator implements ConstraintValidator<UserHeaderAndAuthenticatedUserMatch, Object> {
+    class UserHeaderAndAuthenticatedUserMatchValidator implements ConstraintValidator<UserHeaderAndAuthenticatedUserMatch, Object> {
 
+        @Autowired
+        private MailHandler mailHandler;
         @Autowired
         private HttpServletRequest request;
 
@@ -62,9 +65,13 @@ public @interface UserHeaderAndAuthenticatedUserMatch {
         }
 
         public boolean isValid(Object o, ConstraintValidatorContext constraintContext) {
-            final Principal principal = request.getUserPrincipal();
-            final String user = request.getHeader("SmigoUser");
-            return principal == null && user == null || principal != null && user != null;//todo: compare username
+            final String remoteUser = request.getRemoteUser();
+            final String headerUser = request.getHeader("SmigoUser");
+            boolean clientServerMatch = Objects.equals(remoteUser, headerUser);
+            if (!clientServerMatch) {
+                mailHandler.sendAdminNotification("header SmigoUser mismatch", "RemoteUser:" + remoteUser + " Header:" + headerUser);
+            }
+            return clientServerMatch;
         }
 
     }
