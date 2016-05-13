@@ -155,8 +155,6 @@ class Log {
         return httpStatus;
     }
 
-
-    //todo remove host
     public String getHost() {
         return host;
     }
