@@ -17,30 +17,30 @@
     <script>window.jQuery || document.write('<script src="/static/jquery-2.1.3.min.js">\x3C/script>')</script>
 
     <%--angular--%>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script>window.angular || document.write('<script src="/static/angular1.4.8/angular.min.js">\x3C/script>')</script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script>window.angular || document.write('<script src="/static/angular1.5.5/angular.min.js">\x3C/script>')</script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-sanitize.min.js"></script>
     <script>
         try {
             window.angular.module('ngSanitize');
         } catch (e) {
-            document.write('<script src="/static/angular1.4.8/angular-sanitize.min.js">\x3C/script>');
+            document.write('<script src="/static/angular1.5.5/angular-sanitize.min.js">\x3C/script>');
         }
     </script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
     <script>
         try {
             window.angular.module('ngRoute');
         } catch (e) {
-            document.write('<script src="/static/angular1.4.8/angular-route.min.js">\x3C/script>');
+            document.write('<script src="/static/angular1.5.5/angular-route.min.js">\x3C/script>');
         }
     </script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
     <script>
         try {
             window.angular.module('ui.bootstrap');
         } catch (e) {
-            document.write('<script src="/static/ui-bootstrap-tpls-0.14.3.min.js">\x3C/script>');
+            document.write('<script src="/static/ui-bootstrap-tpls-1.3.2.min.js">\x3C/script>');
         }
     </script>
 
