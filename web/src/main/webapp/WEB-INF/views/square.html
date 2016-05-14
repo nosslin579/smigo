@@ -12,7 +12,7 @@
                     <span class="glyphicon glyphicon-ok {{h.category}}"></span><span>{{h.messageKey|translate:h.getArgsAsText(h.argument)}}</span>
                 </div>
                 <div ng-if="!p.hints.length">
-                    {{'msg.nohints' | translate}}
+                    <span so-msg="msg.nohints"></span>
                 </div>
             </td>
         </tr>

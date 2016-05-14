@@ -1,16 +1,13 @@
 <div class="container">
     <div class="page-header text-center">
-        <h1>
-            {{'msg.settings' | translate}}
-        </h1>
+        <h1 so-msg="msg.settings"></h1>
     </div>
 
     <hr/>
 
     <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate=""
           ng-controller="AccountController">
-        <div class="alert alert-success" role="alert" ng-if="updateSuccessful">
-            {{'msg.accountupdatesuccess' | translate}}
+        <div class="alert alert-success" role="alert" ng-if="updateSuccessful" so-msg="msg.accountupdatesuccess">
         </div>
         <div class="has-error">
             <span ng-repeat="error in objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
@@ -18,17 +15,17 @@
 
         <!--#### Email ####-->
         <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">{{'email' | translate}} </label>
+            <label for="inputEmail3" class="col-sm-2 control-label" so-msg="email"> </label>
 
             <div class="col-sm-10">
-                <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="{{'email' | translate}}" ng-model="userBean.email"/>
-                <span ng-show="accountDetailsForm.email.$invalid" class="help-block">{{'msg.pleaseentervalidemail' | translate}}</span>
+                <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="{{'email' | translate}}>" ng-model="userBean.email"/>
+                <span ng-show="accountDetailsForm.email.$invalid" class="help-block" so-msg="msg.pleaseentervalidemail"></span>
             </div>
         </div>
 
         <!--#### Display name ####-->
         <div class="form-group">
-            <label for="inputName3" class="col-sm-2 control-label">{{'name' | translate}}</label>
+            <label for="inputName3" class="col-sm-2 control-label" so-msg="name"></label>
 
             <div class="col-sm-10">
                 <input type="text" name="displayName" class="form-control" id="inputName3" placeholder="{{'name' | translate}}" ng-model="userBean.displayName">
@@ -37,7 +34,7 @@
 
         <!--#### Language ####-->
         <div class="form-group">
-            <label for="inputLocale3" class="col-sm-2 control-label">{{'language' | translate}}</label>
+            <label for="inputLocale3" class="col-sm-2 control-label" so-msg="language"></label>
 
             <div class="col-sm-4">
                 <select id="inputLocale3" name="locale" class="form-control" ng-model="userBean.locale" ng-options="k as v for (k,v) in locales">
@@ -47,7 +44,7 @@
 
         <!--#### About ####-->
         <div class="form-group">
-            <label for="inputAbout3" class="col-sm-2 control-label">{{'about' | translate}}</label>
+            <label for="inputAbout3" class="col-sm-2 control-label" so-msg="about"></label>
 
             <div class="col-sm-10">
                 <textarea rows="5" maxlength="4000" name="about" class="form-control" id="inputAbout3" placeholder="{{'about' | translate}}" ng-model="userBean.about"/>
@@ -57,7 +54,7 @@
         <!--#### Save button ####-->
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button id="submit-account-button" type="submit" class="btn btn-default">{{'save' | translate}}</button>
+                <button id="submit-account-button" type="submit" class="btn btn-default" so-msg="save"></button>
                 <img ng-if="accountDetailsForm.pendingSave" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>
@@ -69,8 +66,7 @@
     <form name="passwordForm" class="form-horizontal" role="form" novalidate=""
           ng-submit="submitForm(passwordForm,passwordBean)" ng-controller="PasswordController">
 
-        <div class="alert alert-success" role="alert" ng-if="updateSuccessful">
-            {{'msg.changepasswordsuccess' | translate}}
+        <div class="alert alert-success" role="alert" ng-if="updateSuccessful" so-msg="msg.changepasswordsuccess">
         </div>
         <div class="has-error">
             <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
@@ -78,21 +74,21 @@
 
         <!--#### Current password ####-->
         <div class="form-group" ng-class="{'has-error':passwordForm.oldPassword.$invalid && passwordForm.oldPassword.$dirty}">
-            <label for="old-password-input" class="col-sm-2 control-label">{{'account.currentpassword' | translate}}</label>
+            <label for="old-password-input" class="col-sm-2 control-label" so-msg="account.currentpassword"></label>
 
             <div class="col-sm-10">
                 <input type="password" name="oldPassword" class="form-control" id="old-password-input" placeholder="{{'account.currentpassword' | translate}}"
                        ng-model="passwordBean.oldPassword" ng-required="true">
 
                 <div ng-if="passwordForm.oldPassword.$dirty">
-                    <span ng-show="passwordForm.oldPassword.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                    <span ng-show="passwordForm.oldPassword.$error.required" class="help-block" so-msg="msg.required"></span>
                 </div>
             </div>
         </div>
 
         <!--#### New password ####-->
         <div class="form-group" ng-class="{'has-error':passwordForm.newPassword.$invalid && passwordForm.newPassword.$dirty}">
-            <label for="new-password-input" class="col-sm-2 control-label">{{'msg.newpassword' | translate}}</label>
+            <label for="new-password-input" class="col-sm-2 control-label" so-msg="msg.newpassword"></label>
 
             <div class="col-sm-10">
                 <input type="password" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'msg.newpassword' | translate}}"
@@ -107,14 +103,14 @@
 
         <!--#### Verify password ####-->
         <div class="form-group" ng-class="{'has-error':passwordForm.verifyPassword.$invalid && passwordForm.verifyPassword.$dirty}">
-            <label for="verify-password-input" class="col-sm-2 control-label">{{'passwordagain' | translate}}</label>
+            <label for="verify-password-input" class="col-sm-2 control-label" so-msg="passwordagain"></label>
 
             <div class="col-sm-10">
                 <input type="password" name="verifyPassword" class="form-control" id="verify-password-input" placeholder="{{'passwordagain' | translate}}"
                        ng-model="verifyPassword" equals="{{passwordBean.newPassword}}">
 
                 <div ng-if="passwordForm.verifyPassword.$dirty">
-                    <span ng-show="passwordForm.verifyPassword.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>
+                    <span ng-show="passwordForm.verifyPassword.$error.equals" class="help-block" so-msg="msg.entersamevalueagain"></span>
                 </div>
             </div>
         </div>
@@ -122,7 +118,7 @@
         <!--#### Save button ####-->
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button id="submit-password-button" type="submit" class="btn btn-default">{{'changepassword' | translate}}</button>
+                <button id="submit-password-button" type="submit" class="btn btn-default" so-msg="changepassword"></button>
                 <img ng-if="passwordForm.pendingSave" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
             </div>
         </div>

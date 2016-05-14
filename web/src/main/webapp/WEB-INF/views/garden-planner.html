@@ -8,21 +8,24 @@
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
                                 ng-click="speciesState.action = 'info'" title="{{'view' | translate}}"
                                 uib-tooltip="{{'view' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
-                            <span class="glyphicon glyphicon-info-sign"></span><span class="visible-lg-inline" so-msg="view"></span>
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            <span class="visible-lg-inline" so-msg="view"></span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-success': speciesState.action == 'add'}"
                                 ng-click="speciesState.action = 'add'" title="{{'add' | translate}}"
                                 uib-tooltip="{{'add' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
-                            <span class="glyphicon glyphicon-plus-sign"></span><span class="visible-lg-inline"> {{'add' | translate}}</span>
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                            <span class="visible-lg-inline" so-msg="add"></span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
                                 ng-click="speciesState.action = 'delete'" title="{{'delete' | translate}}"
                                 uib-tooltip="{{'delete' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
-                            <span class="glyphicon glyphicon-remove-sign"></span><span class="visible-lg-inline"> {{'delete' | translate}}</span>
+                            <span class="glyphicon glyphicon-remove-sign"></span>
+                            <span class="visible-lg-inline" so-msg="delete"></span>
                         </button>
                     </div>
                 </div>
@@ -83,9 +86,7 @@
                                 <li class="divider"></li>
                                 <!--#### Add year link 1 ####-->
                                 <li>
-                                    <a href="" ng-click="openAddYearModal()">
-                                        {{'addyear' | translate}}
-                                    </a>
+                                    <a href="" ng-click="openAddYearModal()" so-msg="addyear"></a>
                                 </li>
                             </ul>
                         </li>
@@ -103,14 +104,14 @@
                         <!--#### Add year link 2 ####-->
                         <li class="hidden-xs hidden-sm">
                             <a id="add-year-link" href="" ng-click="openAddYearModal()">
-                                <span class="glyphicon glyphicon-plus"></span>{{'addyear' | translate}}
+                                <span class="glyphicon glyphicon-plus"></span> <span so-msg="addyear"></span>
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-xs-offset-1 col-sm-offset-0 col-xs-5 dropdown" uib-dropdown ng-if="userState.currentUser.username">
                     <a href="#" class="btn btn-default btn-sm pull-right dropdown-toggle text-uppercase" uib-dropdown-toggle>
-                        <span class="glyphicon glyphicon-share-alt"></span> {{'msg.share' | translate}}</a>
+                        <span class="glyphicon glyphicon-share-alt"></span> <span so-msg="msg.share"></span></a>
                     <ul class="dropdown-menu pull-right">
                         <li facebook ng-model="userState.currentUser.username">
                         </li>
@@ -124,7 +125,7 @@
                         </li>
                         <li>
                             <a href="/gardener/{{userState.currentUser.username}}">
-                                <span class="glyphicon glyphicon-link"></span>&nbsp;{{'msg.link'|translate}}</a>
+                                <span class="glyphicon glyphicon-link"></span>&nbsp;<span so-msg="msg.link"></span></a>
                         </li>
                     </ul>
                 </div>

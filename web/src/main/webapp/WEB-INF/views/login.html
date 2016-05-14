@@ -1,11 +1,11 @@
 <div class="container">
     <div class="page-header text-center">
-        <h1>{{viewModel.pageMessageKey | translate}}</h1>
+        <h1 so-msg="{{viewModel.pageMessageKey}}"></h1>
     </div>
 
     <div class="row">
         <div class="col-sm-5">
-            <h3>{{'msg.useanotheraccount' | translate}}</h3>
+            <h3 so-msg="msg.useanotheraccount"></h3>
 
             <div>
                 <a onClick="$('#facebookSignin').submit()" href="" class="list-group-item"><span class="social-sprite facebook" style="margin-right: 10px;"></span>Facebook</a>
@@ -15,7 +15,7 @@
             </div>
 
             <form name="fb_signin" id="facebookSignin" action="/auth/facebook" method="POST">
-                <input type="hidden" name="scope" value="public_profile,email"></input>
+                <input type="hidden" name="scope" value="public_profile,email">
             </form>
 
             <form action="login-openid" id="googleOpenId" method="post">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="col-sm-5 col-sm-offset-2">
-            <h3>{{'msg.usesmigoaccount' | translate}}</h3>
+            <h3 so-msg="msg.usesmigoaccount"></h3>
 
             <form name="loginOrRegisterform" role="form" novalidate="" ng-submit="submitLoginOrRegisterForm(loginOrRegisterform,formModel)">
                 <div class="has-error">
@@ -52,13 +52,13 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && (loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted)}">
-                    <label for="username">{{'username' | translate}}</label>
+                    <label for="username" so-msg="username"></label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="{{'username' | translate}}"
                            ng-model="formModel.username" ng-required="true" ng-minlength="{{viewModel.usernameMin}}"
                            ng-maxlength="{{viewModel.usernameMax}}" ng-pattern="viewModel.usernamePattern"/>
 
                     <div ng-if="loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted">
-                        <span ng-show="loginOrRegisterform.username.$error.required" class="help-block">{{'msg.required' | translate}}</span>
+                        <span ng-show="loginOrRegisterform.username.$error.required" class="help-block" so-msg="msg.required"></span>
                         <span ng-show="loginOrRegisterform.username.$error.minlength" class="help-block">{{'msg.minlength' | translate:5}}</span>
                         <span ng-show="loginOrRegisterform.username.$error.maxlength" class="help-block">{{'msg.maxlength' | translate:40}}</span>
                         <span ng-show="loginOrRegisterform.username.$error.pattern" class="help-block">{{'msg.usecharactersonly' | translate}}</span>
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid && (loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted)}">
-                    <label for="password">{{'password' | translate}}</label>
+                    <label for="password" so-msg="password"></label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="{{'password' | translate}}"
                            ng-model="formModel.password" ng-required="true" ng-minlength="{{viewModel.passwordMin}}"/>
 
@@ -77,28 +77,28 @@
                 </div>
 
                 <div class="form-group" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.passwordagain.$invalid && loginOrRegisterform.passwordagain.$dirty}">
-                    <label for="password-again">{{'passwordagain' | translate}}</label>
+                    <label for="password-again" so-msg="passwordagain"></label>
                     <input type="password" class="form-control" id="password-again" name="passwordagain" placeholder="{{'passwordagain' | translate}}"
                            ng-model="passwordAgain" equals="{{formModel.password}}"/>
 
                     <div ng-if="loginOrRegisterform.passwordagain.$dirty">
-                        <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block">{{'msg.entersamevalueagain' | translate}}</span>
+                        <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block" so-msg="msg.entersamevalueagain"></span>
                     </div>
                 </div>
 
                 <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.submitted}">
                     <label for="termsOfService" class="checkbox">
                         <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required/>
-                        {{'msg.agreetos' | translate}}
-                        <a target="_blank" href=/static/terms-of-service.html rel="nofollow">{{'termsofservice' | translate}}</a>
+                        <span so-msg="msg.agreetos"></span>
+                        <a target="_blank" href=/static/terms-of-service.html rel="nofollow" so-msg="termsofservice"></a>
                     </label>
-                    <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.submitted" class="help-block">{{'msg.required' | translate}}</span>
+                    <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.submitted" class="help-block" so-msg="msg.required"></span>
                 </div>
 
                 <div class="form-group checkbox" ng-if="viewModel.login">
                     <label for="remember-me" class="checkbox">
                         <input type="checkbox" id="remember-me" name="remember-me" ng-model="formModel['remember-me']"/>
-                        {{'msg.rememberme' | translate}}
+                        <span so-msg="msg.rememberme"></span>
                     </label>
                 </div>
 
@@ -107,7 +107,7 @@
             </form>
 
             <div ng-if="viewModel.login">
-                <a id="request-password-link" class="pull-right" href="/request-password-link">{{'msg.forgotpassword' | translate}}</a>
+                <a id="request-password-link" class="pull-right" href="/request-password-link" so-msg="msg.forgotpassword"></a>
             </div>
 
         </div>
