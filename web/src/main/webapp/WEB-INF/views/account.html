@@ -18,7 +18,7 @@
             <label for="inputEmail3" class="col-sm-2 control-label" so-msg="email"> </label>
 
             <div class="col-sm-10">
-                <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="{{'email' | translate}}>" ng-model="userBean.email"/>
+                <input type="email" name="email" class="form-control" id="inputEmail3" so-msg-attr="placeholder=email" ng-model="userBean.email"/>
                 <span ng-show="accountDetailsForm.email.$invalid" class="help-block" so-msg="msg.pleaseentervalidemail"></span>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <label for="inputName3" class="col-sm-2 control-label" so-msg="name"></label>
 
             <div class="col-sm-10">
-                <input type="text" name="displayName" class="form-control" id="inputName3" placeholder="{{'name' | translate}}" ng-model="userBean.displayName">
+                <input type="text" name="displayName" class="form-control" id="inputName3" so-msg-attr="placeholder=name" ng-model="userBean.displayName">
             </div>
         </div>
 
@@ -47,7 +47,7 @@
             <label for="inputAbout3" class="col-sm-2 control-label" so-msg="about"></label>
 
             <div class="col-sm-10">
-                <textarea rows="5" maxlength="4000" name="about" class="form-control" id="inputAbout3" placeholder="{{'about' | translate}}" ng-model="userBean.about"/>
+                <textarea rows="5" maxlength="4000" name="about" class="form-control" id="inputAbout3" so-msg-attr="placeholder=about" ng-model="userBean.about"/>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
             <label for="old-password-input" class="col-sm-2 control-label" so-msg="account.currentpassword"></label>
 
             <div class="col-sm-10">
-                <input type="password" name="oldPassword" class="form-control" id="old-password-input" placeholder="{{'account.currentpassword' | translate}}"
+                <input type="password" name="oldPassword" class="form-control" id="old-password-input" so-msg-attr="placeholder=account.currentpassword"
                        ng-model="passwordBean.oldPassword" ng-required="true">
 
                 <div ng-if="passwordForm.oldPassword.$dirty">
@@ -91,7 +91,7 @@
             <label for="new-password-input" class="col-sm-2 control-label" so-msg="msg.newpassword"></label>
 
             <div class="col-sm-10">
-                <input type="password" name="newPassword" class="form-control" id="new-password-input" placeholder="{{'msg.newpassword' | translate}}"
+                <input type="password" name="newPassword" class="form-control" id="new-password-input" so-msg-attr="placeholder=msg.newpassword"
                        ng-model="passwordBean.newPassword" ng-required="true" ng-minlength="6">
 
                 <div ng-if="passwordForm.newPassword.$dirty">
@@ -106,7 +106,7 @@
             <label for="verify-password-input" class="col-sm-2 control-label" so-msg="passwordagain"></label>
 
             <div class="col-sm-10">
-                <input type="password" name="verifyPassword" class="form-control" id="verify-password-input" placeholder="{{'passwordagain' | translate}}"
+                <input type="password" name="verifyPassword" class="form-control" id="verify-password-input" so-msg-attr="placeholder=passwordagain"
                        ng-model="verifyPassword" equals="{{passwordBean.newPassword}}">
 
                 <div ng-if="passwordForm.verifyPassword.$dirty">

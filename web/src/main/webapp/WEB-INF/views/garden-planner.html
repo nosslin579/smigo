@@ -6,7 +6,7 @@
                 <div class="btn-group btn-group-justified" id="scroll-top">
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
-                                ng-click="speciesState.action = 'info'" title="{{'view' | translate}}"
+                                ng-click="speciesState.action = 'info'" so-msg-attr="title=view"
                                 uib-tooltip="{{'view' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-info-sign"></span>
                             <span class="visible-lg-inline" so-msg="view"></span>
@@ -14,7 +14,7 @@
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-success': speciesState.action == 'add'}"
-                                ng-click="speciesState.action = 'add'" title="{{'add' | translate}}"
+                                ng-click="speciesState.action = 'add'" so-msg-attr="title=add"
                                 uib-tooltip="{{'add' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-plus-sign"></span>
                             <span class="visible-lg-inline" so-msg="add"></span>
@@ -22,7 +22,7 @@
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
-                                ng-click="speciesState.action = 'delete'" title="{{'delete' | translate}}"
+                                ng-click="speciesState.action = 'delete'" so-msg-attr="title=delete"
                                 uib-tooltip="{{'delete' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-remove-sign"></span>
                             <span class="visible-lg-inline" so-msg="delete"></span>
@@ -33,7 +33,7 @@
                 <!--##### Search field #####-->
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search,$event)">
                     <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" id="add-search-input"
-                           placeholder="{{'search' | translate}} / {{'add' | translate}}" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
+                           so-msg-attr="placeholder=msg.searchoradd" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
                            uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="pressEnterToSelectTooltipEnable">
                 </form>
                 <!--##### Species list #####-->

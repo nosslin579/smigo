@@ -10,3 +10,17 @@ angular.module('smigoModule').directive('soMsg', function TranslateDirective($lo
         }
     }
 });
+
+angular.module('smigoModule').directive('soMsgAttr', function AttributeTranslateDirective($log, TranslateService) {
+    return {
+        link: function (scope, element, attrs) {
+            var split = attrs.soMsgAttr.split('=');
+            attrs.$set(split[0], TranslateService.translate(split[1]));
+            scope.$on('get-translation-success', function (event, allMessages) {
+                //$log.info('AttributeTranslateDirective get-translation-success ' + attrs.soMsg, [scope, element, attrs, allMessages]);
+                var split = attrs.soMsgAttr.split('=');
+                attrs.$set(split[0], TranslateService.translate(split[1]));
+            });
+        }
+    };
+});

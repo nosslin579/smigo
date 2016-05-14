@@ -69,7 +69,7 @@
                         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </li>
                 <li role="presentation">&#8288;</li>
-                <input class="form-control" type="text" id="add-vernacular-input" ng-model="vernacularOtherEdit.name" placeholder="{{'add' | translate}}"
+                <input class="form-control" type="text" id="add-vernacular-input" ng-model="vernacularOtherEdit.name" so-msg-attr="placeholder=add"
                        autofocus autocomplete="off"
                        ng-keydown="$event.which === 27 && !($event.preventDefault()) && (vernacularOtherEdit.visible = false)"><!-- Do not close modal on escape(27) if edit is in focus. -->
             </ul>
@@ -144,7 +144,7 @@
             </div>
             <div class="form-group" ng-class="{'has-error':editVariety.objectErrors}">
                 <label for="add-variety-input"></label>
-                <input class="form-control" type="text" id="add-variety-input" placeholder="{{'msg.variety' | translate}}" ng-model="editVariety.value"
+                <input class="form-control" type="text" id="add-variety-input" so-msg-attr="placeholder=msg.variety" ng-model="editVariety.value"
                        autofocus autocomplete="off" ng-blur="editVariety.visible=false"
                        ng-keydown="$event.which === 27 && !($event.preventDefault()) && (editVariety.visible = false)">
             </div>
