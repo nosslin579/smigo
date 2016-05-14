@@ -17,10 +17,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
 
     augmentSpecies(state.speciesArray);
 
-    $rootScope.$on('messages-reloaded', function (event, msg) {
-        augmentSpecies(state.speciesArray);
-    });
-
     function Variety(name, speciesId) {
         this.name = name;
         this.speciesId = speciesId;

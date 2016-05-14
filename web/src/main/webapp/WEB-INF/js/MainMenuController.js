@@ -1,11 +1,4 @@
-function MainMenuController($log, $scope, $timeout, UserService) {
-
-    $scope.$on('messages-reloaded', function () {
-        $scope.uglyHackToReloadMenu = true;
-        $timeout(function () {
-            $scope.uglyHackToReloadMenu = false;
-        }, 0);
-    });
+function MainMenuController($log, $scope, UserService) {
 
     $scope.userState = UserService.getState();
     $scope.menuIsCollapsed = true;

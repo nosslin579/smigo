@@ -87,6 +87,10 @@
         <%@ include file="../js/user/UserService.js" %>
         <%@ include file="../js/user/RequestPasswordLinkController.js" %>
 
+        <%@ include file="../js/translation/TranslateService.js" %>
+        <%@ include file="../js/translation/TranslateDirective.js" %>
+        <%@ include file="../js/translation/TranslateFilter.js" %>
+
         <%@ include file="../js/forum/ForumController.js" %>
 
         <%@ include file="../js/wall/WallController.js" %>
@@ -98,7 +102,6 @@
         <%@ include file="../js/MainMenuController.js" %>
 
         <%@ include file="../js/EqualsDirective.js" %>
-        <%@ include file="../js/TranslateFilter.js" %>
         <%@ include file="../js/VernacularFilter.js" %>
     })();
 </script>

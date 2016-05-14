@@ -3,7 +3,7 @@ function VernacularService($http, $rootScope, $log, $q) {
 
     $log.log('VernacularService', state);
 
-    $rootScope.$on('messages-reloaded', reloadVernacular);
+    $rootScope.$on('current-user-changed', reloadVernacular);
 
     reloadVernacular();
 

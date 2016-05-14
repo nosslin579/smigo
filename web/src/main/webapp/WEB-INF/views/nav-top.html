@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default" role="navigation" ng-controller="MainMenuController">
-    <div class="container-fluid" ng-if="!uglyHackToReloadMenu">
+    <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-click="menuIsCollapsed = !menuIsCollapsed">
                 <span class="sr-only">Toggle navigation</span>
@@ -7,21 +7,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/" target="_self">Smigo<span class="hidden-sm hidden-xs"> - {{'general.smigoslogan' | translate}}</span></a>
+            <a class="navbar-brand" href="/" target="_self">Smigo - <span class="hidden-sm hidden-xs" so-msg="general.smigoslogan"></span></a>
         </div>
         <div class="navbar-collapse collapse" uib-collapse="menuIsCollapsed">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/garden-planner">{{'garden' | translate}}</a></li>
-                <li><a href="/forum" id="forum-link">{{'msg.forum' | translate}}</a></li>
-                <li><a href="/help" target="_self">{{'help' | translate}}</a></li>
+                <li><a href="/garden-planner" so-msg="garden"></a></li>
+                <li><a href="/forum" id="forum-link" so-msg="msg.forum">qwer</a></li>
+                <li><a href="/help" target="_self" so-msg="help"></a></li>
                 <li ng-class="{hidden: userState.currentUser}">
-                    <a href="/register" id="register-link">{{'msg.account.register' | translate}}</a></li>
+                    <a href="/register" id="register-link" so-msg="msg.account.register"></a></li>
                 <li ng-class="{hidden: userState.currentUser}">
-                    <a href="/login" id="login-link">{{'account.login' | translate}}</a></li>
+                    <a href="/login" id="login-link" so-msg="account.login"></a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
-                    <a href="/account" id="account-link">{{'msg.settings' | translate}}</a></li>
+                    <a href="/account" id="account-link" so-msg="msg.settings"></a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
-                    <a href="/logout" target="_self" id="logout-link">{{'account.logout' | translate}}</a></li>
+                    <a href="/logout" target="_self" id="logout-link" so-msg="account.logout"></a></li>
             </ul>
         </div>
     </div>
