@@ -62,7 +62,6 @@ public class HomeController {
         model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getDefaultSpecies());
         model.addAttribute("plantData", plantHandler.getPlants(user));
-        model.addAttribute("messages", messageSource.getAllMessages(locale));
         model.addAttribute("rules", speciesHandler.getRules());
         model.addAttribute("varieties", varietyDao.getVarieties());
     }

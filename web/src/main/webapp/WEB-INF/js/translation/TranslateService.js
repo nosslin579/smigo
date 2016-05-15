@@ -46,7 +46,9 @@ function TranslateService($log, $http, $rootScope) {
                 translatedMessage = state.allMessages[messageKey];
 
             if (!translatedMessage) {
-                $log.error('Could not translate(missing key):', [messageKey, messageParameter1, messageParameter2, state]);
+                if (Object.keys(state.allMessages).length > 0) {
+                    $log.error('Could not translate(missing key):', [messageKey, messageParameter1, messageParameter2, state]);
+                }
                 return '-';
             }
 

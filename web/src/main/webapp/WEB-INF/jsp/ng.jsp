@@ -62,8 +62,7 @@
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
             rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>,
             plantDataArray: <c:out escapeXml="false" value="${f:toJson(plantData)}"/>,
-            varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>,
-            messages: <c:out escapeXml="false" value="${f:toJson(messages)}" />
+            varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>
         };
         console.log('Init data', initData);
 
