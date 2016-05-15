@@ -24,3 +24,23 @@ angular.module('smigoModule').directive('soMsgAttr', function AttributeTranslate
         }
     };
 });
+
+angular.module('smigoModule').directive('soMsgScope', function ScopeTranslateDirective($log, TranslateService) {
+
+    function addTranslationsToScope(scope, attrs) {
+        scope.msg = scope.msg || {};
+        attrs.soMsgScope.split(',').forEach(function (key) {
+            scope.msg[key] = TranslateService.translate(key);
+        });
+    }
+
+    return {
+        link: function (scope, element, attrs) {
+            //$log.info('ScopeTranslateDirective ' + attrs.soMsgScope, [scope, element, attrs]);
+            addTranslationsToScope(scope, attrs);
+            scope.$on('get-translation-success', function (event, allMessages) {
+                addTranslationsToScope(scope, attrs);
+            });
+        }
+    };
+});

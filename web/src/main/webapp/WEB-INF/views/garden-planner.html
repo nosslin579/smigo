@@ -1,4 +1,4 @@
-<div class="container-fluid full-height">
+<div class="container-fluid full-height" so-msg-scope="add,delete,search,view,msg.clickagaintoopen">
     <div class="row full-height">
         <div id="species-frame" class="col-xs-3 full-height">
             <div class="species-wrapper">
@@ -6,24 +6,24 @@
                 <div class="btn-group btn-group-justified" id="scroll-top">
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-info': speciesState.action == 'info'}"
-                                ng-click="speciesState.action = 'info'" so-msg-attr="title=view"
-                                uib-tooltip="{{'view' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                ng-click="speciesState.action = 'info'" title="{{msg['view']}}"
+                                uib-tooltip="{{msg['view']}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-info-sign"></span>
                             <span class="visible-lg-inline" so-msg="view"></span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-success': speciesState.action == 'add'}"
-                                ng-click="speciesState.action = 'add'" so-msg-attr="title=add"
-                                uib-tooltip="{{'add' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                ng-click="speciesState.action = 'add'" title="{{msg['add']}}"
+                                uib-tooltip="{{msg['add']}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-plus-sign"></span>
                             <span class="visible-lg-inline" so-msg="add"></span>
                         </button>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-block btn-default" ng-class="{'btn-danger': speciesState.action == 'delete'}"
-                                ng-click="speciesState.action = 'delete'" so-msg-attr="title=delete"
-                                uib-tooltip="{{'delete' | translate}}" tooltip-placement="bottom" tooltip-trigger="click">
+                                ng-click="speciesState.action = 'delete'" title="{{msg['delete']}}"
+                                uib-tooltip="{{msg['delete']}}" tooltip-placement="bottom" tooltip-trigger="click">
                             <span class="glyphicon glyphicon-remove-sign"></span>
                             <span class="visible-lg-inline" so-msg="delete"></span>
                         </button>
@@ -42,7 +42,7 @@
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s, $event)">
                         <a class="select-species-link" href=""
-                           uib-tooltip="{{'msg.clickagaintoopen'|translate}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
+                           uib-tooltip="{{msg['msg.clickagaintoopen']}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
                            ng-click="openSpeciesModal(s)">{{getVernacular(s.id).vernacularName}} {{s.variety ? ' - ':''}} {{s.variety.name}}</a>
                     </li>
                 </ul>

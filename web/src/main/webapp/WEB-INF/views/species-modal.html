@@ -1,4 +1,5 @@
-<div class="modal-header" ng-init="editVernacular={visible:false, name:getVernacular(species.id).vernacularName, locale:currentUser.locale};editIcon={field:'iconFileName'}">
+<div class="modal-header" so-msg-scope="msg.needmoderatorreview,msg.clicktoselect,msg.clicktoedit"
+     ng-init="editVernacular={visible:false, name:getVernacular(species.id).vernacularName, locale:currentUser.locale};editIcon={field:'iconFileName'}">
     <button type="button" class="close" ng-click="$dismiss()">
         <span aria-hidden="true">&times;</span><span class="sr-only">{{'msg.close' | translate}}</span>
     </button>
@@ -8,9 +9,9 @@
         <div class="has-error">
             <span ng-repeat="error in editIcon.objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments:editIcon.errorName}}</span>
         </div>
-        <span uib-dropdown on-toggle="toggled(open)" uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editIcon.displayModReview" tooltip-trigger="none" tooltip-placement="left">
+        <span uib-dropdown on-toggle="toggled(open)" uib-tooltip="{{msg['msg.needmoderatorreview']}}" tooltip-is-open="editIcon.displayModReview" tooltip-trigger="none" tooltip-placement="left">
           <a href id="simple-dropdown" uib-dropdown-toggle>
-              <img ng-src="{{'/static/species/' + species.iconFileName}}" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom"/>
+              <img ng-src="{{'/static/species/' + species.iconFileName}}" uib-tooltip="{{msg['msg.clicktoedit']}}" tooltip-placement="bottom"/>
           </a>
           <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown" style="min-width: 118px">
               <li ng-repeat="iconName in ['1','2','4','6','7','8','9','10','11','12','13','15','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','42','43','44','45','47','48','49','50','51','53','54','57','59','61','63','65','66','68','69','70','72','73','79','84','85','87','88','89','93','94','97','99','100','102','103','104','105','107','108','109','115','116','118','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','173','174','179','180','182','183','184','defaulticon']">
@@ -19,8 +20,8 @@
           </ul>
         </span>
         <!--#### Vernacular primary title ####-->
-        <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="bottom">{{getVernacular(species.id).vernacularName}}</strong>
-        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
+        <strong ng-click="editVernacular.visible=true" id="editable-vernacular-title" uib-tooltip="{{msg['msg.clicktoedit']}}" tooltip-placement="bottom">{{getVernacular(species.id).vernacularName}}</strong>
+        <span uib-tooltip="{{msg['msg.needmoderatorreview']}}" tooltip-is-open="editVernacular.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </h4>
 
     <!--#### Vernacular primary form ####-->
@@ -45,11 +46,11 @@
     <div ng-if="!vernacularOtherEdit.visible">
         <strong>{{'msg.aka' | translate}}: </strong>
         <!--First element in array is the primary thus excluding -->
-        <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{'msg.clicktoedit' | translate}}"
+        <span ng-click="vernacularOtherEdit.visible=true" uib-tooltip="{{msg['msg.clicktoedit']}}"
               ng-if="!$first" ng-repeat="v in getVernaculars(species.id)">{{v.vernacularName}} </span>
         <a href="#" ng-click="vernacularOtherEdit.visible=true" ng-if="getVernaculars(species.id).length<=1" id="add-vernacular-link">&lt;{{'edit' | translate}}&gt;</a>
         <!--WORD JOINER (U+2060)-->
-        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
+        <span uib-tooltip="{{msg['msg.needmoderatorreview']}}" tooltip-is-open="vernacularOtherEdit.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span>
     </div>
 
 
@@ -82,9 +83,9 @@
     <!--#### Scientific name ####-->
     <div ng-if="!editScientific.visible">
         <strong>{{'scientificname'|translate}}: </strong>
-        <em ng-if="species.scientificName" id="editable-scientific-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
+        <em ng-if="species.scientificName" id="editable-scientific-value" uib-tooltip="{{msg['msg.clicktoedit']}}" tooltip-placement="top" ng-click="editScientific.visible=true">{{species.scientificName}}</em>
         <a href="#" ng-if="!species.scientificName" id="empty-scientific-value" ng-click="editScientific.visible=true">&lt;{{'edit' | translate}}&gt;</a>
-        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editScientific.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
+        <span uib-tooltip="{{msg['msg.needmoderatorreview']}}" tooltip-is-open="editScientific.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
 
 
@@ -105,9 +106,9 @@
     <div ng-init="editFamily = {visible:false, field:'family', value:null}"></div>
     <div ng-if="!editFamily.visible">
         <strong>{{'family'|translate}}:</strong>
-        <span ng-if="species.family" ng-click="editFamily.visible=true" id="editable-family-value" uib-tooltip="{{'msg.clicktoedit' | translate}}" tooltip-placement="top">{{species.family.messageKey | translate}} - <em>{{species.family.name}}</em></span>
+        <span ng-if="species.family" ng-click="editFamily.visible=true" id="editable-family-value" uib-tooltip="{{msg['msg.clicktoedit']}}" tooltip-placement="top">{{species.family.messageKey | translate}} - <em>{{species.family.name}}</em></span>
         <a href="#" ng-if="!species.family" ng-click="editFamily.visible=true">&lt;{{'edit' | translate}}&gt;</a>
-        <span uib-tooltip="{{'msg.needmoderatorreview' | translate}}" tooltip-is-open="editFamily.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
+        <span uib-tooltip="{{msg['msg.needmoderatorreview']}}" tooltip-is-open="editFamily.displayModReview" tooltip-trigger="none" tooltip-placement="right">&#8288;</span><!--WORD JOINER (U+2060)-->
     </div>
 
     <!--#### Family form ####-->
@@ -132,7 +133,7 @@
         <ul class="nav nav-pills">
             <li ng-class="{active: species.variety==v}" role="presentation" ng-repeat="v in varieties | filter:{speciesId:species.id}:true | orderBy:'name'">
                 <a tabindex="-1" ng-click="toggleVariety(v, species, $event)" href="#"
-                   uib-tooltip="{{'msg.clicktoselect' | translate}}">{{v.name}}</a>
+                   uib-tooltip="{{msg['msg.clicktoselect']}}">{{v.name}}</a>
             </li>
         </ul>
         <button ng-click="editVariety.visible=true" class="btn btn-primary btn-sm" ng-if="!editVariety.visible" id="show-add-variety-button">
