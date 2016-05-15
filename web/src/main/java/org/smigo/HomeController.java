@@ -49,8 +49,6 @@ public class HomeController {
     @Autowired
     private UserHandler userHandler;
     @Autowired
-    private UserAdaptiveMessageSource messageSource;
-    @Autowired
     private PlantHandler plantHandler;
     @Autowired
     private SpeciesHandler speciesHandler;
