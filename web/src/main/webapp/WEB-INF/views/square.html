@@ -2,7 +2,8 @@
     <table class="table table-bordered">
         <tr>
             <th ng-repeat="p in square.plantArray">
-                <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/> {{p.species.id|vernacular}}{{p.variety ? ' - ':''}}{{p.variety.name}}
+                <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/>
+                {{p.species.id|vernacular}}{{p.varietyId && ' - ' + getVariety(p.varietyId).name}}
             </th>
         </tr>
 

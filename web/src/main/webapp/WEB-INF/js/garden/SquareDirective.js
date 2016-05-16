@@ -1,9 +1,11 @@
-angular.module('smigoModule').directive('soSquare', function SquareDirective($log, $timeout, SpeciesService, GardenService, isTouchDevice) {
+angular.module('smigoModule').directive('soSquare', function SquareDirective($log, $timeout, SpeciesService, GardenService, VarietyService, isTouchDevice) {
     return {
         link: function link(scope, squareElement, attrs) {
             var showTooltipPromise,
                 tooltipElement = squareElement.find('.square-tooltip'),
                 squareContentElement = squareElement.find('.square-content');
+
+            scope.getVariety = VarietyService.getVariety;
 
 //            $log.log('square info link', [scope, squareElement, attrs, isTouchDevice]);
 

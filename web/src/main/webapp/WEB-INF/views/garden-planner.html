@@ -43,7 +43,7 @@
                         ng-click="selectSpecies(s, $event)">
                         <a class="select-species-link" href=""
                            uib-tooltip="{{msg['msg.clickagaintoopen']}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
-                           ng-click="openSpeciesModal(s)">{{getVernacular(s.id).vernacularName}} {{s.variety ? ' - ':''}} {{s.variety.name}}</a>
+                           ng-click="openSpeciesModal(s)">{{getVernacular(s.id).vernacularName}} {{s.variety && ' - ' + s.variety.name}}</a>
                     </li>
                 </ul>
                 <hr/>

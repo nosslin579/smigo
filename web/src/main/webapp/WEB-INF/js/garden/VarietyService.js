@@ -1,6 +1,8 @@
 function VarietyService($log, $http) {
     var state = {varieties: []};
 
+    $log.log('VarietyService', state);
+
     reloadVarieties();
 
     function reloadVarieties() {
@@ -28,18 +30,20 @@ function VarietyService($log, $http) {
                 return;
             }
             var variety = new Variety(editObj.value.capitalize(), speciesId);
-            return $http.post('/rest/variety/', variety)
-                .then(function (response) {
-                    $log.log('Response from add variety', response);
-                    variety.id = response.data;
-                    state.varieties.push(variety);
-                    editObj.value = '';
-                    editObj.visible = false;
-                    delete editObj.objectErrors;
-                }).catch(function (response) {
-                    $log.log('Add Variety failed:', response);
-                    editObj.objectErrors = response.data;
-                });
+            return $http.post('/rest/variety/', variety).then(function (response) {
+                $log.log('Response from add variety', response);
+                variety.id = response.data;
+                state.varieties.push(variety);
+                editObj.value = '';
+                editObj.visible = false;
+                delete editObj.objectErrors;
+            }).catch(function (response) {
+                $log.log('Add Variety failed:', response);
+                editObj.objectErrors = response.data;
+            });
+        },
+        getVariety: function (varietyId) {
+            return state.varieties.smigoFind(varietyId, 'id');
         },
         getAllVarieties: function () {
             return state.varieties;

@@ -1,4 +1,4 @@
-function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService, VarietyService) {
+function GardenService($http, $log, SpeciesService) {
 
     function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
@@ -8,8 +8,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 var plantData = plantDataArray[i];
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 var square = gardenSelf.getSquare(plantData.year, plantData.x, plantData.y);
-                species.variety = plantData.varietyId == 0 ? null : VarietyService.getAllVarieties().smigoFind(plantData.varietyId, 'id');
-                square.plantArray.push(new Plant(plantData.id, species, square.location));
+                square.plantArray.push(new Plant(plantData.id, species, square.location, plantData.varietyId));
             }
 
 
@@ -27,8 +26,8 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.y = plant.location.y;
             this.x = plant.location.x;
             this.speciesId = plant.species.id;
-            if (plant.variety) {
-                this.varietyId = plant.variety.id;
+            if (plant.varietyId) {
+                this.varietyId = plant.varietyId;
             }
         }
 
@@ -41,12 +40,12 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             this.y = +y;
         }
 
-        function Plant(id, species, location) {
+        function Plant(id, species, location, varietyId) {
             var plantSelf = this;
             this.id = id;
             this.species = species;
             this.location = location;
-            this.variety = species.variety;
+            this.varietyId = varietyId;
 
             function hasRuleHint(rule, location) {
                 var radius = 1,
@@ -99,7 +98,8 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
             };
             this.addPlant = function (species) {
                 if (squareSelf.plantArray.length <= 4 && mutable) {
-                    var plant = new Plant(0, species, squareSelf.location);
+                    var varietyId = species.variety && species.variety.id;
+                    var plant = new Plant(0, species, squareSelf.location, varietyId);
                     squareSelf.plantArray.push(plant);
                     $http.post('/rest/plant', new PlantData(plant)).then(function (response) {
                         plant.id = response.data;
