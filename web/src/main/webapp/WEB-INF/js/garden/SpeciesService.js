@@ -5,7 +5,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     state.action = 'add';
     state.speciesArray = initData.species;
     state.selectedSpecies = initData.species.smigoFind(28, 'id');
-    state.varieties = initData.varieties;
     state.rules = initData.rules;
 
     $log.log('SpeciesService', state);
@@ -16,11 +15,6 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
     });
 
     augmentSpecies(state.speciesArray);
-
-    function Variety(name, speciesId) {
-        this.name = name;
-        this.speciesId = speciesId;
-    }
 
     function augmentSpecies(speciesArray) {
         $log.info('Augmenting species', [speciesArray]);
@@ -236,33 +230,7 @@ function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter,
         getAllSpecies: function () {
             return state.speciesArray;
         },
-        getSpecies: getSpecies,
-        addVariety: function (editObj, speciesId) {
-            var duplicate = state.varieties.some(function (v) {
-                return v.speciesId === speciesId && v.name.toUpperCase() === editObj.value.toUpperCase();
-            });
-            $log.log('Add Variety:', [editObj, speciesId, duplicate]);
-            if (!editObj.value || duplicate) {
-                editObj.visible = false;
-                return;
-            }
-            var variety = new Variety(editObj.value.capitalize(), speciesId);
-            return $http.post('/rest/variety/', variety)
-                .then(function (response) {
-                    $log.log('Response from add variety', response);
-                    variety.id = response.data;
-                    state.varieties.push(variety);
-                    editObj.value = '';
-                    editObj.visible = false;
-                    delete editObj.objectErrors;
-                }).catch(function (response) {
-                    $log.log('Add Variety failed:', response);
-                    editObj.objectErrors = response.data;
-                });
-        },
-        getAllVarieties: function () {
-            return state.varieties;
-        }
+        getSpecies: getSpecies
     }
 }
 angular.module('smigoModule').factory('SpeciesService', SpeciesService);

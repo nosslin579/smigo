@@ -61,13 +61,13 @@
             user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
             rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>,
-            plantDataArray: <c:out escapeXml="false" value="${f:toJson(plantData)}"/>,
-            varieties: <c:out escapeXml="false" value="${f:toJson(varieties)}"/>
+            plantDataArray: <c:out escapeXml="false" value="${f:toJson(plantData)}"/>
         };
         console.log('Init data', initData);
 
         <%@ include file="../js/app.js" %>
         <%@ include file="../js/garden/VernacularService.js" %>
+        <%@ include file="../js/garden/VarietyService.js" %>
         <%@ include file="../js/garden/SpeciesFilter.js" %>
         <%@ include file="../js/garden/GardenController.js" %>
         <%@ include file="../js/garden/AddYearModalController.js" %>

@@ -52,8 +52,6 @@ public class HomeController {
     private PlantHandler plantHandler;
     @Autowired
     private SpeciesHandler speciesHandler;
-    @Autowired
-    private VarietyDao varietyDao;
 
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
@@ -61,7 +59,6 @@ public class HomeController {
         model.addAttribute("species", speciesHandler.getDefaultSpecies());
         model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("rules", speciesHandler.getRules());
-        model.addAttribute("varieties", varietyDao.getVarieties());
     }
 
     @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link"}, method = RequestMethod.GET)

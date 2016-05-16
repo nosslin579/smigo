@@ -1,4 +1,4 @@
-function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService) {
+function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesService, VarietyService) {
 
     function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
@@ -8,7 +8,7 @@ function GardenService($http, $window, $timeout, $rootScope, $q, $log, SpeciesSe
                 var plantData = plantDataArray[i];
                 var species = SpeciesService.getSpecies(plantData.speciesId);
                 var square = gardenSelf.getSquare(plantData.year, plantData.x, plantData.y);
-                species.variety = plantData.varietyId == 0 ? null : SpeciesService.getAllVarieties().smigoFind(plantData.varietyId, 'id');
+                species.variety = plantData.varietyId == 0 ? null : VarietyService.getAllVarieties().smigoFind(plantData.varietyId, 'id');
                 square.plantArray.push(new Plant(plantData.id, species, square.location));
             }
 
