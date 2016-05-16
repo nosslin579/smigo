@@ -30,6 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.FilterRegistration;
@@ -79,6 +80,9 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         characterEncodingFilter.setInitParameter("encoding", "UTF-8");
         characterEncodingFilter.setInitParameter("forceEncoding", "true");
         characterEncodingFilter.addMappingForUrlPatterns(null, false, "/*");
+
+        FilterRegistration.Dynamic etagFilter = servletContext.addFilter("EtagFilter", new ShallowEtagHeaderFilter());
+        etagFilter.addMappingForUrlPatterns(null, false, "/*");
 
         servletContext.addListener(new RequestContextListener());
         servletContext.addListener(new ContextLoaderListener(context));
