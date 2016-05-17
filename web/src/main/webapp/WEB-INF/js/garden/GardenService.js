@@ -1,5 +1,5 @@
 function GardenService($http, $log, SpeciesService) {
-
+    'use strict';
     function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
 
@@ -139,7 +139,7 @@ function GardenService($http, $log, SpeciesService) {
 
 
             this.containsFamily = function (familyId) {
-                for (i in squareSelf.plantArray) {
+                for (var i in squareSelf.plantArray) {
                     var plant = squareSelf.plantArray[i];
                     if (plant.species && plant.species.family && plant.species.family.id === familyId) {
                         return true;
@@ -148,7 +148,7 @@ function GardenService($http, $log, SpeciesService) {
                 return false;
             };
             this.containsSpecies = function (speciesId) {
-                for (i in squareSelf.plantArray) {
+                for (var i in squareSelf.plantArray) {
                     var plant = squareSelf.plantArray[i];
                     if (plant.species && plant.species.id === speciesId) {
                         return true;

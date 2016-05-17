@@ -1,4 +1,5 @@
-function SpeciesService($uibModal, $timeout, $http, $rootScope, translateFilter, $log, VernacularService) {
+function SpeciesService($uibModal, $timeout, $http, translateFilter, $log, VernacularService) {
+    'use strict';
     var state = {},
         ruleMap = {};
 

@@ -1,4 +1,5 @@
 function TwitterDirective($log, $timeout) {
+    'use strict';
     return {
         restrict: 'A',
         scope: {

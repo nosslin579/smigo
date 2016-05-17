@@ -1,4 +1,5 @@
 angular.module('smigoModule').directive('soMsg', function TranslateDirective($log, TranslateService) {
+    'use strict';
     return {
         link: function (scope, element, attrs) {
             //$log.log('TranslateDirective link', [scope, element, attrs]);
@@ -12,6 +13,7 @@ angular.module('smigoModule').directive('soMsg', function TranslateDirective($lo
 });
 
 angular.module('smigoModule').directive('soMsgAttr', function AttributeTranslateDirective($log, TranslateService) {
+    'use strict';
     return {
         link: function (scope, element, attrs) {
             var split = attrs.soMsgAttr.split('=');
@@ -26,7 +28,7 @@ angular.module('smigoModule').directive('soMsgAttr', function AttributeTranslate
 });
 
 angular.module('smigoModule').directive('soMsgScope', function ScopeTranslateDirective($log, TranslateService) {
-
+    'use strict';
     function addTranslationsToScope(scope, attrs) {
         scope.msg = scope.msg || {};
         attrs.soMsgScope.split(',').forEach(function (key) {

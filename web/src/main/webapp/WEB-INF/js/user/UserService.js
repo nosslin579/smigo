@@ -1,5 +1,5 @@
 function UserService($log, $http, $rootScope, $q, $location) {
-
+    'use strict';
     $log.log('UserService', [$http.defaults.headers]);
 
     var state = {};

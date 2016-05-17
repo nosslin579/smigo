@@ -1,4 +1,5 @@
 function VarietyService($log, $http) {
+    'use strict';
     var state = {varieties: []};
 
     $log.log('VarietyService', state);

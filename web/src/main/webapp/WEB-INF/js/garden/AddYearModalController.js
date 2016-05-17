@@ -1,5 +1,5 @@
 function AddYearModalController($scope, $log, garden) {
-
+    'use strict';
     $log.log('AddYearModalController', $scope);
 
     var last = garden.getAvailableYears().smigoLast();

@@ -1,4 +1,5 @@
 function RequestPasswordLinkController($http, $scope, $log) {
+    'use strict';
     $scope.resetBean = {};
 //    $scope.resetBean = {email: 'user7389327855123@mailinator.com'};
 

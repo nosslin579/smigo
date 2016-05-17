@@ -1,4 +1,5 @@
 function VernacularService($http, $rootScope, $log, $q) {
+    'use strict';
     var state = {vernaculars: []};
 
     $log.log('VernacularService', state);
@@ -42,7 +43,7 @@ function VernacularService($http, $rootScope, $log, $q) {
             }
             var ret = new Vernacular(speciesId);
             state.vernaculars.push(ret);
-            $http.get('/rest/vernacular/', {params: {speciesid: speciesId}}).then(function (response) {
+            $http.get('/rest/vernacular', {params: {speciesid: speciesId}}).then(function (response) {
                 $log.log('Response from /rest/vernacular/', response);
                 if (response.data.length) {
                     angular.extend(ret, response.data.shift());

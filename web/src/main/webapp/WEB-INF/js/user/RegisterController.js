@@ -1,4 +1,5 @@
-function RegisterController($timeout, $scope, $location, $http, UserService) {
+function RegisterController($scope, UserService) {
+    'use strict';
     $scope.viewModel = {
         register: true,
         usernameMin: 5,

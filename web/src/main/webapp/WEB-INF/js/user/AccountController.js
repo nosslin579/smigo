@@ -1,5 +1,5 @@
 function AccountController($scope, $http, $log, UserService) {
-
+    'use strict';
     $scope.userBean = angular.copy(UserService.getState().currentUser);
 
     $http.get('locales').then(function (resopnse) {

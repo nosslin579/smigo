@@ -1,4 +1,5 @@
 function SpeciesModalController($log, $scope, $rootScope, UserService, SpeciesService, VernacularService, VarietyService) {
+    'use strict';
     $scope.species = SpeciesService.getState().selectedSpecies;
     $scope.currentUser = UserService.getState().currentUser;
     $scope.varieties = VarietyService.getAllVarieties();

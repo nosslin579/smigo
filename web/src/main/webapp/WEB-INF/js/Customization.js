@@ -1,4 +1,3 @@
-//todo rename
 Object.defineProperty(String.prototype, 'capitalize', {
     enumerable: false,
     configurable: false,

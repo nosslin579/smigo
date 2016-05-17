@@ -1,5 +1,5 @@
 function ForumController($scope, $http, $log, UserService) {
-
+    'use strict';
     $scope.message = {};
     $scope.pagination = {
         page: 0,

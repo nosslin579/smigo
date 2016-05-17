@@ -1,4 +1,5 @@
 function LoginController($scope, UserService) {
+    'use strict';
     $scope.viewModel = {
         login: true,
         usernameMin: 0,

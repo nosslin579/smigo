@@ -1,4 +1,5 @@
 angular.module('smigoModule').directive('soGrid', function ($log, $timeout, SpeciesService, GardenService, isTouchDevice) {
+    'use strict';
     return {
         link: function link(scope, element, attrs) {
             $log.log('grid', [scope, element, attrs]);

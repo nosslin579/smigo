@@ -1,4 +1,5 @@
 angular.module('smigoModule').directive('soSquare', function SquareDirective($log, $timeout, SpeciesService, GardenService, VarietyService, isTouchDevice) {
+    'use strict';
     return {
         link: function link(scope, squareElement, attrs) {
             var showTooltipPromise,

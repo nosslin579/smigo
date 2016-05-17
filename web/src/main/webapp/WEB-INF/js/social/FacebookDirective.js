@@ -1,4 +1,5 @@
-function FacebookDirective($log, $window, $timeout) {
+function FacebookDirective($log) {
+    'use strict';
     $log.debug('Creating facebook directive');
 
     return {

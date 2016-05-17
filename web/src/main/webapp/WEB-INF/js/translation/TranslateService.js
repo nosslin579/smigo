@@ -1,4 +1,5 @@
 function TranslateService($log, $http, $rootScope) {
+    'use strict';
     var state = {
         allMessages: {}
     };

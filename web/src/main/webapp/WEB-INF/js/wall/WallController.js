@@ -1,5 +1,5 @@
-function WallController($scope, $http, $log, $routeParams, GardenService, WallService) {
-
+function WallController($scope, $http, $log, $routeParams, GardenService) {
+    'use strict';
     $http.get('/rest/user/' + $routeParams.username)
         .then(function (response) {
             $scope.hostUser = response.data;

@@ -1,5 +1,5 @@
 function PasswordController($scope, $http, $log) {
-
+    'use strict';
     $scope.passwordBean = {};
 
     $scope.submitForm = function (form, passwordBean) {

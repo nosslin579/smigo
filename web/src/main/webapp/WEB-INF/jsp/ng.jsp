@@ -93,7 +93,6 @@
         <%@ include file="../js/forum/ForumController.js" %>
 
         <%@ include file="../js/wall/WallController.js" %>
-        <%@ include file="../js/wall/WallService.js" %>
 
         <%@ include file="../js/social/FacebookDirective.js" %>
         <%@ include file="../js/social/TwitterDirective.js" %>

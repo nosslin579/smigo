@@ -1,5 +1,5 @@
 function GardenController($http, $log, $uibModal, $scope, $filter, $location, $anchorScroll, $timeout, GardenService, SpeciesService, UserService, VernacularService) {
-
+    'use strict';
     $scope.search = {query: '', proccessing: false};
     $scope.pressEnterToSelectTooltipEnable = true;
     $scope.clickAgainToOpenTooltipEnable = true;

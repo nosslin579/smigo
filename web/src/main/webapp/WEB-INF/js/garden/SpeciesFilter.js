@@ -1,5 +1,5 @@
 function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) {
-
+    'use strict';
     var vernaculars = VernacularService.getState().vernaculars;
 
     /**
