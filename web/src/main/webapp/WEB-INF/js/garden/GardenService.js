@@ -99,7 +99,7 @@ function GardenService($http, $log, SpeciesService) {
             this.addPlant = function (species) {
                 if (squareSelf.plantArray.length <= 4 && mutable) {
                     var varietyId = species.variety && species.variety.id;
-                    var plant = new Plant(0, species, squareSelf.location, varietyId);
+                    var plant = new Plant(null, species, squareSelf.location, varietyId);
                     squareSelf.plantArray.push(plant);
                     $http.post('/rest/plant', new PlantData(plant)).then(function (response) {
                         plant.id = response.data;
@@ -125,13 +125,16 @@ function GardenService($http, $log, SpeciesService) {
                     removeObj.plant = squareSelf.plantArray.pop();
                 }
 
-                $http.delete('/rest/plant/' + removeObj.plant.id).then(function (response) {
-                    $log.log('Response from /rest/plant/' + removeObj.plant.id, [response, removeObj])
-                }).catch(function (response) {
+                if (removeObj.plant.id) {
+                    $http.delete('/rest/plant/' + removeObj.plant.id).then(function (response) {
+                        $log.log('Response from /rest/plant/' + removeObj.plant.id, [response, removeObj])
+                    }).catch(function (response) {
+                        squareSelf.plantArray.push(removeObj.plant);
+                        $log.error('Remove plant failed', [response, removeObj]);
+                    });
+                } else {
                     squareSelf.plantArray.push(removeObj.plant);
-                    $log.error('Remove plant failed', [response, removeObj]);
-                }).finally(function () {
-                });
+                }
             };
 
 
