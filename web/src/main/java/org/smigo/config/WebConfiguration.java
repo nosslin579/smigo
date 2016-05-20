@@ -62,7 +62,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     private String databasePassword;
     @Value("${databaseUrl}")
     private String databaseUrl;
-    @Value("${resourceCachePeriod:3600}")
+    @Value("${resourceCachePeriod}")
     private Integer resourceCachePeriod;
 
     @Bean(name = "dataSource")

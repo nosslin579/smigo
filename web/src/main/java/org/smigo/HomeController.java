@@ -24,13 +24,10 @@ package org.smigo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.plants.PlantHandler;
 import org.smigo.species.SpeciesHandler;
-import org.smigo.species.varieties.VarietyDao;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.UserAdaptiveMessageSource;
-import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 @Controller
@@ -47,22 +45,20 @@ public class HomeController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserHandler userHandler;
-    @Autowired
-    private PlantHandler plantHandler;
-    @Autowired
     private SpeciesHandler speciesHandler;
+    @Value("${resourceCachePeriod}")
+    private Integer resourceCachePeriod;
+
 
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
-        model.addAttribute("user", userHandler.getUser(user));
         model.addAttribute("species", speciesHandler.getDefaultSpecies());
-        model.addAttribute("plantData", plantHandler.getPlants(user));
         model.addAttribute("rules", speciesHandler.getRules());
     }
 
     @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link"}, method = RequestMethod.GET)
-    public String getGarden(Model model, HttpServletRequest request) {
+    public String getGarden(Model model, HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("cache-control", "max-age=" + resourceCachePeriod);
         final String path = request.getServletPath().replace("/", "");
         model.addAttribute("msgTitle", "msg.concat.title." + path);
         model.addAttribute("msgDescription", "msg.concat.metadescription." + path);

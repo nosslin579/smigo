@@ -1,10 +1,12 @@
 function UserService($log, $http, $rootScope, $q, $location) {
     'use strict';
-    $log.log('UserService', [$http.defaults.headers]);
+    var state = {currentUser: null};
 
-    var state = {};
+    $log.log('UserService', [$http.defaults.headers, state]);
 
-    setUser(null, initData.user);
+    $http.get('/rest/user').then(function (response) {
+        setUser(null, response.data);
+    });
 
     $rootScope.$on('current-user-changed', setUser);
 

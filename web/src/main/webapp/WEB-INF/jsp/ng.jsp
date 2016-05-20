@@ -58,7 +58,6 @@
     (function () {
 
         var initData = {
-            user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
             rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>
         };
