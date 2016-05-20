@@ -116,6 +116,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addStatusController("/wordpress/", HttpStatus.NOT_FOUND);
         registry.addStatusController("/HNAP1/", HttpStatus.NOT_FOUND);
         registry.addStatusController("/blog/robots.txt", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/apple-touch-icon-precomposed.png", HttpStatus.NOT_FOUND);
+        registry.addStatusController("/apple-touch-icon.png", HttpStatus.NOT_FOUND);
     }
 
     @Bean
