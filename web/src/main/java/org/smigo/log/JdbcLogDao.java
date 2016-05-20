@@ -87,7 +87,7 @@ class JdbcLogDao implements LogDao {
                 "  LEFT JOIN USERS ON activeusers.username = users.username\n" +
                 "  LEFT JOIN (SELECT user_id,count(*) AS plants,group_concat(DISTINCT year) AS years FROM plants GROUP BY user_id) AS p ON p.user_id = users.id\n" +
                 "  LEFT JOIN (SELECT creator AS speciescreator,count(creator) AS speciescreated FROM species GROUP BY creator) AS sc ON sc.speciescreator = users.id\n" +
-                "ORDER BY lastactive DESC\n" +
+                "ORDER BY createdate DESC\n" +
                 "LIMIT 50;";
 
         final List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
