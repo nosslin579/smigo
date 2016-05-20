@@ -22,6 +22,7 @@ package org.smigo.species.varieties;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -31,6 +32,7 @@ public class Variety {
     @Size(min = 2, max = 40, message = "msg.minandmaxlength")
     @NotEmpty(message = "msg.required")
     private String name;
+    @JsonIgnore
     private int userId;
     private int speciesId;
 

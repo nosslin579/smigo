@@ -60,8 +60,7 @@
         var initData = {
             user: <c:out escapeXml="false" value="${f:toJson(user)}"/>,
             species: <c:out escapeXml="false" value="${f:toJson(species)}"/>,
-            rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>,
-            plantDataArray: <c:out escapeXml="false" value="${f:toJson(plantData)}"/>
+            rules: <c:out escapeXml="false" value="${f:toJson(rules)}"/>
         };
         console.log('Init data', initData);
 

@@ -12,7 +12,7 @@ function TranslateService($log, $http, $rootScope) {
 
     function reloadMessages() {
         return $http.get('/rest/translation').then(function (response) {
-            $log.info('Messages reloaded', [state, response.data]);
+            $log.info('Messages reloaded', [state, response]);
             angular.extend(state.allMessages, response.data);
             $rootScope.$broadcast('get-translation-success', state.allMessages);
         });
