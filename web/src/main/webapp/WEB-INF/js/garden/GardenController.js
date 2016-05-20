@@ -4,7 +4,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.pressEnterToSelectTooltipEnable = true;
     $scope.clickAgainToOpenTooltipEnable = true;
 
-    $scope.garden = GardenService.getGarden('', true);
+    $scope.garden = GardenService.getState().garden;
 
     $scope.speciesState = SpeciesService.getState();
     $scope.userState = UserService.getState();

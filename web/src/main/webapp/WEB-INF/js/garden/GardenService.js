@@ -1,5 +1,20 @@
-function GardenService($http, $log, SpeciesService) {
+function GardenService($http, $log, $rootScope, SpeciesService) {
     'use strict';
+
+    var state = {garden: new Garden([], true)};
+
+    $log.log('GardenService', state);
+
+    $http.get('/rest/plant').then(function (response) {
+        state.garden.setPlants(response.data);
+    });
+
+    $rootScope.$on('current-user-changed', function (event, user) {
+        $http.get('/rest/plant').then(function (response) {
+            state.garden.setPlants(response.data);
+        });
+    });
+
     function Garden(plantDataArray, mutable) {
         var gardenSelf = this;
 
@@ -219,8 +234,11 @@ function GardenService($http, $log, SpeciesService) {
     }
 
     return {
-        getGarden: function (username, mutable) {
-            var garden = new Garden([], mutable);
+        getState: function () {
+            return state;
+        },
+        getGarden: function (username) {
+            var garden = new Garden([], false);
             $http.get('/rest/plant/' + username).then(function (response) {
                 garden.setPlants(response.data);
             });
