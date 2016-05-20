@@ -41,12 +41,20 @@ public class UsernameUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final List<User> userDetails = userDao.getUsersByUsername(username);
-        if (userDetails.isEmpty()) {
-            throw new UsernameNotFoundException("User not found:" + username);
-        }
-        final User user = userDetails.get(0);
+        final User user = getUser(username);
         //Because security this will never grant more than user authority
         return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword(), AuthenticatedUser.USER_AUTHORITY);
+    }
+
+    public User getUser(String username) {
+        final List<User> byUsername = userDao.getUsersByUsername(username);
+        if (!byUsername.isEmpty()) {
+            return byUsername.get(0);
+        }
+        final List<User> byEmail = userDao.getUsersByEmail(username);
+        if (!byEmail.isEmpty()) {
+            return byEmail.get(0);
+        }
+        throw new UsernameNotFoundException("User not found:" + username);
     }
 }
