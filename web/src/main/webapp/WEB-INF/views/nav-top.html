@@ -12,16 +12,15 @@
         <div class="navbar-collapse collapse" uib-collapse="menuIsCollapsed">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/garden-planner" so-msg="garden"></a></li>
-                <li><a href="/forum" id="forum-link" so-msg="msg.forum">qwer</a></li>
+                <li><a href="/forum" id="forum-link" so-msg="msg.forum"></a></li>
                 <li><a href="/help" target="_self" so-msg="help"></a></li>
                 <li ng-class="{hidden: userState.currentUser}">
                     <a href="/register" id="register-link" so-msg="msg.account.register"></a></li>
                 <li ng-class="{hidden: userState.currentUser}">
                     <a href="/login" id="login-link" so-msg="account.login"></a></li>
                 <li ng-class="{hidden: !userState.currentUser}">
-                    <a href="/account" id="account-link" so-msg="msg.settings"></a></li>
-                <li ng-class="{hidden: !userState.currentUser}">
-                    <a href="/logout" target="_self" id="logout-link" so-msg="account.logout"></a></li>
+                    <a href="/account" id="account-link">{{userState.currentUser.displayName || userState.currentUser.username}}</a>
+                </li>
             </ul>
         </div>
     </div>

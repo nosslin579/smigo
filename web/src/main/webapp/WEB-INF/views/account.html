@@ -1,12 +1,17 @@
-<div class="container">
-    <div class="page-header text-center">
-        <h1 so-msg="msg.settings"></h1>
-    </div>
+<div class="container" ng-controller="AccountController">
+    <ul class="nav nav-pills nav-justified">
+        <li role="presentation"><a href="" ng-click="goTo('settings-anchor')" so-msg="msg.settings"></a></li>
+        <li role="presentation"><a href="" ng-click="goTo('password-anchor')" so-msg="password"></a></li>
+        <li role="presentation"><a href="/logout" target="_self" so-msg="account.logout"></a></li>
+    </ul>
 
     <hr/>
 
-    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate=""
-          ng-controller="AccountController">
+    <div id="settings-anchor" class="text-center">
+        <h2 so-msg="msg.settings"></h2>
+    </div>
+
+    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate="">
         <div class="alert alert-success" role="alert" ng-if="updateSuccessful" so-msg="msg.accountupdatesuccess">
         </div>
         <div class="has-error">
@@ -61,7 +66,10 @@
 
     </form>
 
-    <hr/>
+    <!--#### Change password ####-->
+    <div id="password-anchor" class="text-center">
+        <h2 so-msg="password"></h2>
+    </div>
 
     <form name="passwordForm" class="form-horizontal" role="form" novalidate=""
           ng-submit="submitForm(passwordForm,passwordBean)" ng-controller="PasswordController">

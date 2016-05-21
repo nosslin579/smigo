@@ -17,8 +17,7 @@
                 <li><a href="/login" id="login-link"><spring:message code="account.login"/></a></li>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
-                <li><a href="/account" id="account-link"><spring:message code="msg.settings"/></a></li>
-                <li><a href="/logout" id="logout-link"><spring:message code="account.logout"/></a></li>
+                <li><a href="/account" id="account-link">${pageContext.request.userPrincipal.name}</a></li>
             </sec:authorize>
         </ul>
     </div>
