@@ -77,6 +77,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
     private static final By SEARCH_BOX = By.id("add-search-input");
     private static final By SQUARE = By.className("square-content");
     public static final By LOGOUT_LINK = By.id("logout-link");
+    public static final By ACCOUNT_LINK = By.id("account-link");
     public static final By LOGIN_LINK = By.id("login-link");
 
     @Autowired
@@ -153,8 +154,9 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         final WebElement plant = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         Assert.assertEquals(plant.getTagName(), "img");
-        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
+        Assert.assertEquals(d.findElements(ACCOUNT_LINK).size(), 1);
 
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
         Thread.sleep(3000);
 
@@ -163,7 +165,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         final WebElement plant2 = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         Assert.assertEquals(plant2.getTagName(), "img");
-        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
+        Assert.assertEquals(d.findElements(ACCOUNT_LINK).size(), 1);
     }
 
     @Test(enabled = true)
@@ -225,6 +227,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.className("square")).click();
         Thread.sleep(1000);
 
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
 
         d.get(HOST_URL + "/gardener/" + username);
@@ -280,7 +283,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         login(username, PASSWORD);
 
         //go to account details
-        d.findElement(By.id("account-link")).click();
+        d.findElement(ACCOUNT_LINK).click();
 
         //change password
         d.findElement(By.name("oldPassword")).sendKeys(PASSWORD);
@@ -288,11 +291,12 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("verifyPassword")).sendKeys(NEW_PASSWORD);
         d.findElement(By.id("submit-password-button")).click();
         w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
 
         //login again
         login(username, NEW_PASSWORD);
-        Assert.assertEquals(d.findElements(LOGOUT_LINK).size(), 1);
+        Assert.assertEquals(d.findElements(ACCOUNT_LINK).size(), 1);
         log.info("Change password finished successfully. Username:" + username);
     }
 
@@ -317,7 +321,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.id("submit-account-button")).click();
         Thread.sleep(2000);
         Assert.assertTrue(d.getPageSource().contains(messageText));
-        Assert.assertEquals(d.findElements(By.partialLinkText(username)).size(), 1);
+        Assert.assertEquals(d.findElements(By.partialLinkText(username)).size(), 2);
     }
 
     @Test(enabled = true)
@@ -345,6 +349,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         //login
         login(user.getUsername(), NEW_PASSWORD);
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
 
         //reset password again with same key
@@ -379,7 +384,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         final String username = addUser();
         login(username, PASSWORD);
 
-        d.findElement(By.id("account-link")).click();
+        d.findElement(ACCOUNT_LINK).click();
 
         Assert.assertEquals(d.findElements(By.tagName("input")).size(), 5);
 
@@ -389,14 +394,15 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("about")).sendKeys(NON_LATIN_LETTERS);
         d.findElement(By.id("submit-account-button")).click();
 
-//        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+        w.until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
 
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
 
         Thread.sleep(1000);
         login(username, PASSWORD);
 
-        d.findElement(By.id("account-link")).click();
+        d.findElement(ACCOUNT_LINK).click();
 
         Thread.sleep(1000);
 
@@ -433,6 +439,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         //add plant
         d.findElement(By.className("square-content")).click();
 
+        d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();
         login(username, PASSWORD);
 

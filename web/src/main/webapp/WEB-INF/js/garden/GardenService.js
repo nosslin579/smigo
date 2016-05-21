@@ -17,6 +17,7 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
 
     function Garden(mutable) {
         var gardenSelf = this;
+        gardenSelf.mutable = mutable;
 
         function addRawPlantData(plantDataArray) {
             for (var i = 0; i < plantDataArray.length; i++) {
@@ -26,13 +27,7 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
                 square.plantArray.push(new Plant(plantData.id, species, square.location, plantData.varietyId));
             }
 
-
             gardenSelf.selectedYear = gardenSelf.getAvailableYears().smigoLast();
-            if (!mutable) {
-                gardenSelf.getSquare = function () {
-                    return new Square(new Location(0, 0, 0));
-                };
-            }
             $log.info("Garden initialized:", gardenSelf);
         }
 
