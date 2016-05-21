@@ -22,11 +22,11 @@ function VarietyService($log, $http) {
 
     return {
         addVariety: function (editObj, speciesId) {
-            var duplicate = state.varieties.some(function (v) {
+            $log.log('Add Variety:', [editObj, speciesId]);
+            var duplicate = function (v) {
                 return v.speciesId === speciesId && v.name.toUpperCase() === editObj.value.toUpperCase();
-            });
-            $log.log('Add Variety:', [editObj, speciesId, duplicate]);
-            if (!editObj.value || duplicate) {
+            };
+            if (!editObj.value || state.varieties.some(duplicate)) {
                 editObj.visible = false;
                 return;
             }
