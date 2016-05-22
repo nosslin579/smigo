@@ -6,6 +6,12 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
         $locationProvider.html5Mode(true);
 
         $routeProvider.
+            when('/', {
+                templateUrl: '?hide-nav=true'
+            }).
+            when('/help', {
+                templateUrl: 'help?hide-nav=true'
+            }).
             when('/request-password-link', {
                 templateUrl: 'views/request-password-link.html'
             }).

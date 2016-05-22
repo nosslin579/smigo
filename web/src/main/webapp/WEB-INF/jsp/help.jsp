@@ -11,8 +11,9 @@
     <jsp:include page="head-common.jsp"/>
 </head>
 
-<jsp:include page="nav-top.jsp"/>
-
+<c:if test="${empty param['hide-nav']}">
+    <jsp:include page="nav-top.jsp"/>
+</c:if>
 
 <body>
 <div class="container">

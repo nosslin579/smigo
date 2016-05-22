@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -10,8 +11,9 @@
 
 </head>
 <body>
-
-<jsp:include page="nav-top.jsp"/>
+<c:if test="${empty param['hide-nav']}">
+    <jsp:include page="nav-top.jsp"/>
+</c:if>
 <div class="jumbotron" style="text-align: center;">
     <div class="container">
 
