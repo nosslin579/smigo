@@ -58,9 +58,10 @@ class JdbcVernacularDao implements VernacularDao {
     }
 
     @Override
-    public List<Vernacular> getVernacular(Locale locale) {
-        final String sql = "SELECT * FROM VERNACULARS WHERE LANGUAGE=? AND (COUNTRY=? OR COUNTRY='');";
-        return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry());
+    public List<Vernacular> getVernacularsByLocale(Locale locale) {
+        //if country exists and matches, sort first, else by id
+        final String sql = "SELECT * FROM VERNACULARS WHERE LANGUAGE = ? ORDER BY COUNTRY = ? OR ?='' DESC, ID;";
+        return jdbcTemplate.query(sql, vernacularRowMapper, locale.getLanguage(), locale.getCountry(), locale.getCountry());
     }
 
     @Override
@@ -78,7 +79,7 @@ class JdbcVernacularDao implements VernacularDao {
 
     @Override
     public List<Vernacular> getVernacularBySpecies(int speciesId) {
-        final String sql = "SELECT * FROM VERNACULARS WHERE SPECIES_ID=?";
+        final String sql = "SELECT * FROM VERNACULARS WHERE SPECIES_ID=? ORDER BY ID";
         return jdbcTemplate.query(sql, vernacularRowMapper, speciesId);
     }
 

@@ -62,7 +62,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
         public boolean isValid(String vernacularName, ConstraintValidatorContext constraintContext) {
             final Locale locale = userHandler.getLocale();
-            List<Vernacular> vernacular = vernacularDao.getVernacular(locale);
+            List<Vernacular> vernacular = vernacularDao.getVernacularsByLocale(locale);
             return !vernacular.stream().anyMatch(v -> v.getVernacularName().equalsIgnoreCase(vernacularName));
         }
 

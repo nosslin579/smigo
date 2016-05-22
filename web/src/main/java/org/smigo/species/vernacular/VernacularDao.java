@@ -28,7 +28,7 @@ import java.util.Locale;
 interface VernacularDao {
     void deleteVernacular(int vernacularId);
 
-    List<Vernacular> getVernacular(Locale locale);
+    List<Vernacular> getVernacularsByLocale(Locale locale);
 
     int insertVernacular(Vernacular vernacular);
 

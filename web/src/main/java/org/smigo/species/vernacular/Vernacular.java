@@ -23,10 +23,9 @@ package org.smigo.species.vernacular;
  */
 
 import javax.validation.constraints.Size;
-import java.util.Comparator;
 
 
-public class Vernacular implements Comparator<Vernacular>, Comparable<Vernacular> {
+public class Vernacular {
     private int id;
 
     private int speciesId;
@@ -88,21 +87,5 @@ public class Vernacular implements Comparator<Vernacular>, Comparable<Vernacular
                 ", country='" + country + '\'' +
                 ", vernacularName='" + vernacularName + '\'' +
                 '}';
-    }
-
-    @Override
-    public int compare(Vernacular o1, Vernacular o2) {
-        if (!o2.getLanguage().equals(o1.getLanguage())) {
-            return Integer.compare(o1.getId(), o2.getId());
-        }
-        if (!o2.getCountry().equals(o1.getCountry())) {
-            return o2.getCountry().compareTo(o1.getCountry());
-        }
-        return Integer.compare(o1.getId(), o2.getId());
-    }
-
-    @Override
-    public int compareTo(Vernacular vernacular) {
-        return compare(this, vernacular);
     }
 }

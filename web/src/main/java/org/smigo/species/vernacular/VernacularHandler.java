@@ -34,7 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -58,13 +57,11 @@ public class VernacularHandler {
     private String replaceSpeciesKey;
 
 
-    public List<Vernacular> getVernacular(Locale locale) {
-        List<Vernacular> ret = vernacularDao.getVernacular(locale);
-        Collections.sort(ret);
-        return ret;
+    public List<Vernacular> getVernacularsByLocale(Locale locale) {
+        return vernacularDao.getVernacularsByLocale(locale);
     }
 
-    public List<Vernacular> getVernacular(int speciesId, Locale locale) {
+    public List<Vernacular> getAnyVernaculars(int speciesId, Locale locale) {
         List<Vernacular> ret = vernacularDao.getVernacularBySpecies(speciesId);
 
         //this is most likely a user species
@@ -75,9 +72,7 @@ public class VernacularHandler {
         //filter by locale
         Predicate<Vernacular> localeMatcher = vernacular -> vernacular.getLanguage().equals(locale.getLanguage()) && (vernacular.getCountry().isEmpty() || vernacular.getCountry().equals(locale.getCountry()));
         if (ret.stream().anyMatch(localeMatcher)) {
-            List<Vernacular> vernacularLocaleFiltered = ret.stream().filter(localeMatcher).collect(Collectors.toList());
-            Collections.sort(vernacularLocaleFiltered);
-            return vernacularLocaleFiltered;
+            return ret.stream().filter(localeMatcher).collect(Collectors.toList());
         }
 
         //return english vernaculars
