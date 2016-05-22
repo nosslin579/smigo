@@ -58,7 +58,11 @@ public class VernacularHandler {
 
 
     public List<Vernacular> getVernacularsByLocale(Locale locale) {
-        return vernacularDao.getVernacularsByLocale(locale);
+        List<Vernacular> ret = vernacularDao.getVernacularsByLocale(locale);
+        if (ret.isEmpty()) {
+            return vernacularDao.getVernacularsByLocale(Locale.ENGLISH);
+        }
+        return ret;
     }
 
     public List<Vernacular> getAnyVernaculars(int speciesId, Locale locale) {

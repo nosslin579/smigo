@@ -31,9 +31,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Locale resolver that gets locale from user setting
@@ -58,18 +56,13 @@ public class UserSetLocaleResolver implements LocaleResolver {
             }
         }
 
-        final String subdomain = req.getServerName().split("\\.")[0];
-        final Locale localeFromURL = new Locale(subdomain);
-        if (Language.contains(localeFromURL)) {
-            return localeFromURL;
-        }
-
-        final Set<String> availableLocales = Language.getTransalationMap().keySet();
-        for (Locale locale : Collections.list(req.getLocales())) {
-            if (Language.contains(locale)) {
-                return locale;
+        final String subDomain = req.getServerName().split("\\.")[0];
+        for (Language language : Language.values()) {
+            if (language.getLocale().getLanguage().equals(subDomain)) {
+                return new Locale(subDomain);
             }
         }
+
         return req.getLocale() == null ? Locale.ENGLISH : req.getLocale();
     }
 

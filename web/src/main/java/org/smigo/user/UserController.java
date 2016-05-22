@@ -37,6 +37,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Collections;
@@ -112,8 +113,8 @@ public class UserController {
 
     @RequestMapping(value = "/locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public java.util.Map<String, String> getLocales() {
-        return Language.getTransalationMap();
+    public java.util.Map<String, String> getLocales(HttpServletRequest request) {
+        return Language.getLanguagesForDisplay(request.getLocales());
     }
 
     @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

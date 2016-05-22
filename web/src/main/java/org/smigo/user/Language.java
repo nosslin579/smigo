@@ -24,10 +24,7 @@ package org.smigo.user;
 
 import org.springframework.util.StringUtils;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 enum Language {
     ENGLISH(Locale.ENGLISH),
@@ -52,10 +49,14 @@ enum Language {
         this.locale = locale;
     }
 
-    public static Map<String, String> getTransalationMap() {
-        SortedMap<String, String> ret = new TreeMap<String, String>();
+    public static Map<String, String> getLanguagesForDisplay(Enumeration<Locale> locales) {
+        SortedMap<String, String> ret = new TreeMap<>();
         for (Language t : Language.values()) {
             ret.put(t.locale.toString(), StringUtils.capitalize(t.locale.getDisplayName(t.locale)));
+        }
+        while (locales.hasMoreElements()) {
+            Locale locale = locales.nextElement();
+            ret.put(locale.toString(), StringUtils.capitalize(locale.getDisplayName(locale)));
         }
         return ret;
     }
@@ -68,13 +69,4 @@ enum Language {
         return this.locale;
     }
 
-    static boolean contains(Locale l) {
-        for (Language language : values()) {
-            final Locale l1 = language.getLocale();
-            if (l1.equals(l) || (l1.getLanguage().equals(l.getLanguage()) && l1.getCountry().isEmpty())) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
