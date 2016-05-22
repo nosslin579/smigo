@@ -11,11 +11,11 @@
         <h2 so-msg="msg.settings"></h2>
     </div>
 
-    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="submitAccountDetailsForm(accountDetailsForm,userBean)" novalidate="">
-        <div class="alert alert-success" role="alert" ng-if="updateSuccessful" so-msg="msg.accountupdatesuccess">
+    <form name="accountDetailsForm" class="form-horizontal" role="form" ng-submit="updateUser(accountDetailsForm,userBean)" novalidate="">
+        <div class="alert alert-success" role="alert" ng-if="accountDetailsForm.updateSuccessful" so-msg="msg.accountupdatesuccess">
         </div>
         <div class="has-error">
-            <span ng-repeat="error in objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
+            <span ng-repeat="error in accountDetailsForm.objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
         </div>
 
         <!--#### Email ####-->

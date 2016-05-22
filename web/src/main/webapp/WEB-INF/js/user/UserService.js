@@ -20,13 +20,6 @@ function UserService($log, $http, $rootScope, $q, $location) {
         }
     }
 
-    function updateUser(userBean) {
-        return $http.put('/rest/user', userBean)
-            .then(function (response) {
-                $log.info('Update user success', [userBean, response]);
-            });
-    }
-
     function validateForm(form, skipValidate) {
         form.objectErrors = [];
         form.submitted = true;
@@ -91,7 +84,29 @@ function UserService($log, $http, $rootScope, $q, $location) {
                 });
         },
         login: login,
-        updateUser: updateUser,
+        updateUser: function updateUser(form, userBean) {
+            $log.log('Update user', [form, userBean]);
+            form.pendingSave = true;
+            form.updateSuccessful = false;
+            form.objectErrors = [];
+            if (form.$invalid) {
+                $log.log('Form is invalid', form);
+                return;
+            }
+
+            return $http.put('/rest/user', userBean).then(function (response) {
+                $log.info('Update user success', [userBean, response]);
+                form.pendingSave = false;
+                form.updateSuccessful = true;
+                $rootScope.$broadcast('current-user-changed', userBean);
+            }).catch(function (response) {
+                $log.error('Update user failed', response);
+                form.objectErrors = response.data;
+                form.pendingSave = false;
+                form.updateSuccessful = false;
+            });
+
+        },
         requestFeature: function (feature) {
             $http.post('/rest/log/feature', {feature: feature});
             alert("This service is not yet available. Please try again later.");
