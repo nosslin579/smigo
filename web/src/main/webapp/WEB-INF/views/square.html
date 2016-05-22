@@ -3,7 +3,7 @@
         <tr>
             <th ng-repeat="p in square.plantArray">
                 <img class="small-species" ng-src="{{'/static/species/' + p.species.iconFileName}}"/>
-                {{p.species.id|vernacular}}{{p.varietyId && ' - ' + getVariety(p.varietyId).name}}
+                <span so-vernacular="{{p.species.id}}"></span>{{p.varietyId && ' - ' + getVariety(p.varietyId).name}}
             </th>
         </tr>
 

@@ -76,6 +76,8 @@
         <%@ include file="../js/garden/FocusOnKeyPressedDirective.js" %>
 
         <%@ include file="../js/species/SpeciesModalController.js" %>
+        <%@ include file="../js/species/VernacularFilter.js" %>
+        <%@ include file="../js/species/VernacularDirective.js" %>
 
         <%@ include file="../js/user/RegisterController.js" %>
         <%@ include file="../js/user/LoginController.js" %>
@@ -98,7 +100,6 @@
         <%@ include file="../js/MainMenuController.js" %>
 
         <%@ include file="../js/EqualsDirective.js" %>
-        <%@ include file="../js/VernacularFilter.js" %>
     })();
 </script>
 

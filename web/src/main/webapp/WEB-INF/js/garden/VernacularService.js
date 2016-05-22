@@ -13,6 +13,7 @@ function VernacularService($http, $rootScope, $log, $q) {
             $log.log('Response from /rest/vernacular', response);
             state.vernaculars.length = 0;
             Array.prototype.push.apply(state.vernaculars, response.data);
+            $rootScope.$broadcast('vernaculars-changed', state.vernaculars);
         });
     }
 
@@ -33,7 +34,7 @@ function VernacularService($http, $rootScope, $log, $q) {
             return state;
         },
         getVernacular: function (speciesId) {
-            //$log.log('getVernaclar',speciesId);
+            //$log.log('getVernaclar '+speciesId,state);
             if (!state.vernaculars.length) {
                 return new Vernacular(speciesId);
             }
@@ -48,6 +49,7 @@ function VernacularService($http, $rootScope, $log, $q) {
                 if (response.data.length) {
                     angular.extend(ret, response.data.shift());
                     Array.prototype.push.apply(state.vernaculars, response.data);
+                    $rootScope.$broadcast('vernaculars-changed', state.vernaculars);
                 }
             });
             return ret;
