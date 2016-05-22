@@ -1,4 +1,4 @@
-function RegisterController($scope, UserService, TranslateService) {
+function RegisterController($scope, UserService) {
     'use strict';
     $scope.viewModel = {
         register: true,
@@ -6,8 +6,7 @@ function RegisterController($scope, UserService, TranslateService) {
         usernameMax: 40,
         usernamePattern: /^[\w]+$/,
         passwordMin: 6,
-        pageMessageKey: 'msg.account.register',
-        usernameTitle: TranslateService.translate('username')
+        pageMessageKey: 'msg.account.register'
     };
 
 //     var newName = 'testreg' + Math.floor(Math.random() * 999999999);

@@ -1,4 +1,4 @@
-function LoginController($scope, UserService, TranslateService) {
+function LoginController($scope, UserService) {
     'use strict';
     $scope.viewModel = {
         login: true,
@@ -6,8 +6,7 @@ function LoginController($scope, UserService, TranslateService) {
         usernameMax: 999,
         usernamePattern: /.+/,
         passwordMin: 0,
-        pageMessageKey: 'account.login',
-        usernameTitle: TranslateService.translate('username') + ' / ' + TranslateService.translate('email')
+        pageMessageKey: 'account.login'
     };
     $scope.formModel = {
         username: '',

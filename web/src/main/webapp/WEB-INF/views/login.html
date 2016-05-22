@@ -52,8 +52,8 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && (loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted)}">
-                    <label for="username">{{viewModel.usernameTitle}}</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="{{viewModel.usernameTitle}}"
+                    <label for="username"><span so-msg="username"></span><span ng-if="viewModel.login" so-msg="email"> / </span></label>
+                    <input type="text" class="form-control" id="username" name="username" so-msg-attr="placeholder=username"
                            ng-model="formModel.username" ng-required="true" ng-minlength="{{viewModel.usernameMin}}"
                            ng-maxlength="{{viewModel.usernameMax}}" ng-pattern="viewModel.usernamePattern"/>
 
