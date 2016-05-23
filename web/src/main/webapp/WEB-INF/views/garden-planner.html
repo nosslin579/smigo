@@ -38,7 +38,7 @@
                 </form>
                 <!--##### Species list #####-->
                 <ul class="nav nav-pills nav-stacked">
-                    <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" id="select-species-{{s.id}}"
+                    <li ng-repeat="s in speciesState.speciesArray | speciesQuery:search.query" id="select-species-{{s.id}}"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
                         ng-click="selectSpecies(s)">
                         <a class="select-species-link" href=""

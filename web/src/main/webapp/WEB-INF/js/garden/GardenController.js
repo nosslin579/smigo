@@ -1,4 +1,4 @@
-function GardenController($http, $log, $uibModal, $scope, $filter, $anchorScroll, GardenService, SpeciesService, UserService, VernacularService) {
+function GardenController($log, $uibModal, $scope, speciesQueryFilter, GardenService, SpeciesService, UserService, VernacularService) {
     'use strict';
     $scope.search = {query: '', proccessing: false, pressEnterToSelectTooltipEnable: true};
 
@@ -15,7 +15,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $anchorScroll
     $scope.getVernacular = VernacularService.getVernacular;
 
     $scope.getTopResult = function (query) {
-        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
+        var topResult = speciesQueryFilter(SpeciesService.getAllSpecies(), query)[0];
         return topResult ? VernacularService.getVernacular(topResult.id).vernacularName : '-';
     };
     $scope.openAddYearModal = function () {
@@ -39,10 +39,7 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $anchorScroll
             $uibModal.open({
                 templateUrl: 'views/species-modal.html',
                 controller: SpeciesModalController
-            }).result.then(function (x) {
-                    $log.log('Modal close', x);
-                    $anchorScroll('select-species-' + SpeciesService.getState().selectedSpecies.id);
-                });
+            });
         }
     };
 }

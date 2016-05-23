@@ -45,4 +45,4 @@ function SpeciesFilter($log, orderByFilter, translateFilter, VernacularService) 
     };
 }
 
-angular.module('smigoModule').filter('speciesFilter', SpeciesFilter);
+angular.module('smigoModule').filter('speciesQuery', SpeciesFilter);

@@ -1,4 +1,4 @@
-function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilter, $log, VernacularService, speciesFilterFilter) {
+function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilter, $log, VernacularService, speciesQueryFilter) {
     'use strict';
     var state = {},
         ruleMap = {};
@@ -127,7 +127,7 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
 
     function scrollToVisibleSpecies(species) {
         $timeout(function () {
-            var speciesArrayAlphabetically = speciesFilterFilter(state.speciesArray, '');
+            var speciesArrayAlphabetically = speciesQueryFilter(state.speciesArray, '');
             var indexOfSelectedSpecies = speciesArrayAlphabetically.indexOf(species);
             var speciesAboveSelected = speciesArrayAlphabetically[(indexOfSelectedSpecies - 4)];
             $log.log('Scrolling to(or not if undefined):', speciesAboveSelected);
@@ -148,7 +148,7 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
             } else if (selectObj.hasOwnProperty('query')) {
                 $log.log('Setting species from', [selectObj]);
                 selectObj.pressEnterToSelectTooltipEnable = false;
-                var topResult = speciesFilterFilter(state.speciesArray, selectObj.query)[0];
+                var topResult = speciesQueryFilter(state.speciesArray, selectObj.query)[0];
                 state.selectedSpecies = topResult || state.selectedSpecies;
                 selectObj.query = '';
             } else {

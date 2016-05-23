@@ -1,4 +1,4 @@
-angular.module('smigoModule').directive('soFocusOnKeyPressed', function FocusOnKeyPressedDirective($log, $timeout, SpeciesService, GardenService, isTouchDevice) {
+angular.module('smigoModule').directive('soFocusOnKeyPressed', function FocusOnKeyPressedDirective($log) {
     'use strict';
     return function (scope, element, attrs) {
         //$log.log('FocusOnKeyPressedDirective', [scope, element, attrs]);
