@@ -129,9 +129,8 @@ function SpeciesService($uibModal, $timeout, $http, translateFilter, $log, Verna
         getState: function () {
             return state;
         },
-        selectSpecies: function (species, event) {
-            $log.log('Species select:', [species, state, event]);
-            event && event.preventDefault();
+        selectSpecies: function (species) {
+            $log.log('Species select:', [species, state]);
             if (state.speciesArray.indexOf(species) != -1) {
                 state.selectedSpecies = species;
             } else if (angular.isNumber(species)) {

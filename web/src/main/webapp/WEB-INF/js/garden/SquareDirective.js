@@ -17,18 +17,22 @@ angular.module('smigoModule').directive('soSquare', function SquareDirective($lo
 
             function onSquareClick(clickEvent) {
                 $log.log('Square clicked', [clickEvent, scope.square, SpeciesService.getState().selectedSpecies, SpeciesService.getState().action]);
-                if (clickEvent.shiftKey || SpeciesService.getState().action === 'delete') {
+                if (clickEvent.ctrlKey) {
+                    $log.log('clickEvent.ctrlKey');
+                    scope.$apply(function () {
+                        var plantArray = scope.square.plantArray;
+                        plantArray.length && SpeciesService.selectSpecies(plantArray[0].species);
+                    });
+                } else if (clickEvent.shiftKey || SpeciesService.getState().action === 'delete') {
                     scope.square.removePlant();
                 } else if (SpeciesService.getState().action === 'info') {
                     openSquareTooltip(clickEvent, 1);
-                } else if (clickEvent.ctrlKey) {
-                    $log.log('Copy species');
                 } else if (SpeciesService.getState().action === 'add') {
                     scope.square.togglePlant(SpeciesService.getState().selectedSpecies);
                 }
                 clickEvent.stopPropagation();
                 clickEvent.preventDefault();
-            };
+            }
 
             //open popup after 1sec on mouseenter if not already open
             function openSquareTooltip(event, _delay) {
@@ -39,10 +43,10 @@ angular.module('smigoModule').directive('soSquare', function SquareDirective($lo
                     });
                     $timeout(function () {
                         var mousePositionInLeftDocumentHalf = (event.pageX > ($(document).width() + $('#species-frame').width()) / 2);
-                        tooltipElement.css('left', mousePositionInLeftDocumentHalf ? -tooltipElement.width() - 24 : 72)
+                        tooltipElement.css('left', mousePositionInLeftDocumentHalf ? -tooltipElement.width() - 24 : 72);
 
                         var mousePositionInLowerDocumentHalf = (event.pageY > ($(document).height() + 100) / 2);
-                        tooltipElement.css('top', mousePositionInLowerDocumentHalf ? -tooltipElement.height() - 24 : 72)
+                        tooltipElement.css('top', mousePositionInLowerDocumentHalf ? -tooltipElement.height() - 24 : 72);
                         tooltipElement.show();
                         $log.log('Showing square info', [scope.square, event, tooltipElement]);
                     }, 0);

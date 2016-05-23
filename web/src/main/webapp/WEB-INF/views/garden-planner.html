@@ -34,13 +34,13 @@
                 <form class="navbar-form" ng-submit="selectedSpeciesFromTopResult(search,$event)">
                     <input class="form-control full-width" ng-class="{loadinggif: search.proccessing}" type="text" id="add-search-input" autocomplete="off"
                            so-msg-attr="placeholder=msg.searchoradd" ng-model="search.query" ng-change="searchSpecies(search)" so-focus-on-key-pressed=""
-                           uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="pressEnterToSelectTooltipEnable">
+                           uib-tooltip="{{'msg.pressentertoselect' | translate:getTopResult(search.query)}}" tooltip-trigger="focus" tooltip-enable="search.pressEnterToSelectTooltipEnable">
                 </form>
                 <!--##### Species list #####-->
                 <ul class="nav nav-pills nav-stacked">
                     <li ng-repeat="s in speciesState.speciesArray | speciesFilter:search.query" id="select-species-{{s.id}}"
                         ng-class="{active: speciesState.selectedSpecies.id === s.id && speciesState.action == 'add'}"
-                        ng-click="selectSpecies(s, $event)">
+                        ng-click="selectSpecies(s)">
                         <a class="select-species-link" href=""
                            uib-tooltip="{{msg['msg.clickagaintoopen']}}" tooltip-trigger="click" tooltip-enable="clickAgainToOpenTooltipEnable"
                            ng-click="openSpeciesModal(s)">{{getVernacular(s.id).vernacularName}} {{s.variety && ' - ' + s.variety.name}}</a>
