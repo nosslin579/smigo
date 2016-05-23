@@ -1,7 +1,7 @@
-function GardenController($http, $log, $uibModal, $scope, $filter, $location, $anchorScroll, $timeout, GardenService, SpeciesService, UserService, VernacularService) {
+function GardenController($http, $log, $uibModal, $scope, $filter, $anchorScroll, GardenService, SpeciesService, UserService, VernacularService) {
     'use strict';
-    $scope.search = {query: '', proccessing: false};
-    $scope.pressEnterToSelectTooltipEnable = true;
+    $scope.search = {query: '', proccessing: false, pressEnterToSelectTooltipEnable: true};
+
     $scope.clickAgainToOpenTooltipEnable = true;
 
     $scope.garden = GardenService.getState().garden;
@@ -14,25 +14,6 @@ function GardenController($http, $log, $uibModal, $scope, $filter, $location, $a
     $scope.searchSpecies = SpeciesService.searchSpecies;
     $scope.getVernacular = VernacularService.getVernacular;
 
-    $scope.selectedSpeciesFromTopResult = function (search, event) {
-        $log.log('Setting species from', [search, event]);
-        $scope.pressEnterToSelectTooltipEnable = false;
-        var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), search.query)[0];
-        if (topResult) {
-            SpeciesService.selectSpecies(topResult);
-        }
-        search.query = '';
-
-        //make sure selected species is visible in species scroll list
-        $timeout(function () {
-            var speciesArrayAlphabetically = $filter('speciesFilter')(SpeciesService.getAllSpecies(), '');
-            var indexOfSelectedSpecies = speciesArrayAlphabetically.indexOf(topResult);
-            var speciesAboveSelected = speciesArrayAlphabetically[(indexOfSelectedSpecies - 4)];
-            $log.log('Scrolling to(or not if undefined):', speciesAboveSelected);
-            speciesAboveSelected && $anchorScroll('select-species-' + speciesAboveSelected.id);
-            event.currentTarget[0].blur();
-        });
-    };
     $scope.getTopResult = function (query) {
         var topResult = $filter('speciesFilter')(SpeciesService.getAllSpecies(), query)[0];
         return topResult ? VernacularService.getVernacular(topResult.id).vernacularName : '-';

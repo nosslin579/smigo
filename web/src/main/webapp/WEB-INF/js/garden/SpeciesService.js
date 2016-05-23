@@ -1,4 +1,4 @@
-function SpeciesService($uibModal, $timeout, $http, translateFilter, $log, VernacularService) {
+function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilter, $log, VernacularService, speciesFilterFilter) {
     'use strict';
     var state = {},
         ruleMap = {};
@@ -125,19 +125,36 @@ function SpeciesService($uibModal, $timeout, $http, translateFilter, $log, Verna
         return ret;
     }
 
+    function scrollToVisibleSpecies(species) {
+        $timeout(function () {
+            var speciesArrayAlphabetically = speciesFilterFilter(state.speciesArray, '');
+            var indexOfSelectedSpecies = speciesArrayAlphabetically.indexOf(species);
+            var speciesAboveSelected = speciesArrayAlphabetically[(indexOfSelectedSpecies - 4)];
+            $log.log('Scrolling to(or not if undefined):', speciesAboveSelected);
+            speciesAboveSelected && $anchorScroll('select-species-' + speciesAboveSelected.id);
+        });
+    }
+
     return {
         getState: function () {
             return state;
         },
-        selectSpecies: function (species) {
-            $log.log('Species select:', [species, state]);
-            if (state.speciesArray.indexOf(species) != -1) {
-                state.selectedSpecies = species;
-            } else if (angular.isNumber(species)) {
-                state.selectedSpecies = getSpecies(species);
+        selectSpecies: function (selectObj, scroll) {
+            $log.log('Species select:', [selectObj, scroll, state]);
+            if (state.speciesArray.indexOf(selectObj) != -1) {
+                state.selectedSpecies = selectObj;
+            } else if (angular.isNumber(selectObj)) {
+                state.selectedSpecies = getSpecies(selectObj);
+            } else if (selectObj.hasOwnProperty('query')) {
+                $log.log('Setting species from', [selectObj]);
+                selectObj.pressEnterToSelectTooltipEnable = false;
+                var topResult = speciesFilterFilter(state.speciesArray, selectObj.query)[0];
+                state.selectedSpecies = topResult || state.selectedSpecies;
+                selectObj.query = '';
             } else {
-                throw 'SpeciesService.selectSpecies got invalid parameter: ' + species;
+                throw 'SpeciesService.selectSpecies got invalid parameter: ' + selectObj;
             }
+            scroll && scrollToVisibleSpecies(state.selectedSpecies);
             state.action = 'add';
         },
         deleteSpecies: function (species) {

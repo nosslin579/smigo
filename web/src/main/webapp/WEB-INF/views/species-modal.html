@@ -160,7 +160,7 @@
         <strong>{{'rule.goodcompanion'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'goodcompanion'} | orderBy:'host'" ng-click="$close('Selected species')">
-                <a href="" ng-click="selectSpecies(r.arg.id)">{{getVernacular(r.arg.id).vernacularName}}</a>
+                <a href="" ng-click="selectSpecies(r.arg.id,true)">{{getVernacular(r.arg.id).vernacularName}}</a>
             </li>
         </ul>
     </div>

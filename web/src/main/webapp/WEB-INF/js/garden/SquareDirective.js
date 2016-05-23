@@ -21,7 +21,7 @@ angular.module('smigoModule').directive('soSquare', function SquareDirective($lo
                     $log.log('clickEvent.ctrlKey');
                     scope.$apply(function () {
                         var plantArray = scope.square.plantArray;
-                        plantArray.length && SpeciesService.selectSpecies(plantArray[0].species);
+                        plantArray.length && SpeciesService.selectSpecies(plantArray[0].species, true);
                     });
                 } else if (clickEvent.shiftKey || SpeciesService.getState().action === 'delete') {
                     scope.square.removePlant();
