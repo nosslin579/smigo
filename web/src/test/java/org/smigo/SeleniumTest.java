@@ -444,8 +444,12 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         login(username, PASSWORD);
 
         d.get(HOST_URL + "/wall/" + username);
-        Thread.sleep(3000);
-        Assert.assertTrue(d.getPageSource().contains(speciesText));
+        Thread.sleep(1000);
+        d.findElement(SQUARE).click();
+        WebElement tooltip = d.findElement(By.className("square-tooltip"));
+        Thread.sleep(1000);
+        Assert.assertTrue(tooltip.isDisplayed());
+        Assert.assertEquals(tooltip.findElement(By.tagName("tr")).getText(), speciesText);
     }
 
     @Test(enabled = true)
