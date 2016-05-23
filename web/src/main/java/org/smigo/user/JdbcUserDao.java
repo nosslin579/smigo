@@ -90,9 +90,9 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void updateUser(User u) {
-        String sql = "UPDATE users SET email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ?, password = ? WHERE id = ?";
-        Object[] args = {u.getEmail(), u.isTermsOfService(), u.getAbout(), u.getLocale(), u.getDisplayName(), u.getPassword(), u.getId()};
-        int[] types = {Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+        String sql = "UPDATE users SET username = ?, email = ?, termsofservice = ?, about = ?, locale = ? , displayname = ?, password = ? WHERE id = ?";
+        Object[] args = {u.getUsername(), u.getEmail(), u.isTermsOfService(), u.getAbout(), u.getLocale(), u.getDisplayName(), u.getPassword(), u.getId()};
+        int[] types = {Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(sql, args, types);
     }
 

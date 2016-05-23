@@ -2,7 +2,9 @@
     <ul class="nav nav-pills nav-justified">
         <li role="presentation"><a href="" ng-click="goTo('settings-anchor')" so-msg="msg.settings"></a></li>
         <li role="presentation"><a href="" ng-click="goTo('password-anchor')" so-msg="password"></a></li>
-        <li role="presentation"><a href="/logout" target="_self" id="logout-link" so-msg="account.logout"></a></li>
+        <li role="presentation"><a href="/logout" target="_self" id="logout-link" so-msg="account.logout" class="btn btn-default">
+            <span class="glyphicon glyphicon-log-out"></span> </a>
+        </li>
     </ul>
 
     <hr/>
@@ -16,6 +18,16 @@
         </div>
         <div class="has-error">
             <span ng-repeat="error in accountDetailsForm.objectErrors" class="help-block">{{error.rejectedValue}} : {{error.defaultMessage | translate}}</span>
+        </div>
+
+        <!--#### Username ####-->
+        <div class="form-group">
+            <label for="inputUsername3" class="col-sm-2 control-label" so-msg="username"> </label>
+
+            <div class="col-sm-10">
+                <input type="username" name="username" class="form-control" id="inputUsername3" so-msg-attr="placeholder=username" ng-model="userBean.username" ng-disabled="!enableUsernameInput"/>
+                <span ng-show="accountDetailsForm.username.$invalid" class="help-block" so-msg="msg.usecharactersonly"></span>
+            </div>
         </div>
 
         <!--#### Email ####-->

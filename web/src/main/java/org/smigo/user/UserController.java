@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -96,6 +97,7 @@ public class UserController {
         return Collections.emptyList();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/user", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<ObjectError> updateUser(@RequestBody @Valid User userBean, BindingResult result,

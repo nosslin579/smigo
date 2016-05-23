@@ -56,6 +56,8 @@ public class UserHandler {
     private UserDao userDao;
     @Autowired
     private MessageHandler messageHandler;
+    @Autowired
+    private MailHandler mailHandler;
 
     public User createUser() {
         for (int tries = 0; tries < 5; tries++) {
@@ -121,13 +123,16 @@ public class UserHandler {
         return null;
     }
 
-    public void updateUser(int userId, User user) {
-        final User u = userDao.getUserById(userId);
-        u.setAbout(user.getAbout());
-        u.setDisplayName(user.getDisplayName());
-        u.setEmail(user.getEmail());
-        u.setLocale(user.getLocale());
-        userDao.updateUser(u);
+    public void updateUser(int userId, User update) {
+        final User current = userDao.getUserById(userId);
+        log.info("User updated account. Current:" + current + " Update:" + update);
+        mailHandler.sendAdminNotification("user updated account", "Current:" + current + System.lineSeparator() + "Update:" + update);
+        current.setAbout(update.getAbout());
+        current.setDisplayName(update.getDisplayName());
+        current.setEmail(update.getEmail());
+        current.setLocale(update.getLocale());
+        current.setUsername(update.getUsername());
+        userDao.updateUser(current);
     }
 
     public Locale getLocale() {
