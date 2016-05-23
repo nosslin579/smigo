@@ -82,7 +82,6 @@
         <%@ include file="../js/user/RegisterController.js" %>
         <%@ include file="../js/user/LoginController.js" %>
         <%@ include file="../js/user/AccountController.js" %>
-        <%@ include file="../js/user/PasswordController.js" %>
         <%@ include file="../js/user/UserService.js" %>
         <%@ include file="../js/user/RequestPasswordLinkController.js" %>
 

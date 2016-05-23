@@ -69,6 +69,33 @@ function UserService($log, $http, $rootScope, $q, $location) {
     }
 
     return {
+        changePassword: function (form, passwordBean) {
+            $log.log('changePassword', [form, passwordBean]);
+            form.updateSuccessful = false;
+            form.pendingSave = true;
+            form.objectErrors = [];
+            if (form.$invalid) {
+                $log.warn('Form is invalid', form);
+                form.pendingSave = false;
+                return;
+            }
+
+            form.$setPristine();
+
+            $http.post('/change-password', passwordBean).then(function (response) {
+                $log.log('Update password success', response);
+                form.updateSuccessful = true;
+                form.pendingSave = false;
+            }).catch(function (response) {
+                $log.error('Update password failed', response);
+                form.objectErrors = response.data;
+                form.pendingSave = false;
+            }).finally(function () {
+                passwordBean.oldPassword = '';
+                passwordBean.newPassword = '';
+                passwordBean.verifyPassword = '';
+            });
+        },
         register: function (form, formModel) {
             validateForm(form)
                 .then(function () {

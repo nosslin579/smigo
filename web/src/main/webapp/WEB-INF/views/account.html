@@ -71,13 +71,12 @@
         <h2 so-msg="password"></h2>
     </div>
 
-    <form name="passwordForm" class="form-horizontal" role="form" novalidate=""
-          ng-submit="submitForm(passwordForm,passwordBean)" ng-controller="PasswordController">
+    <form name="passwordForm" class="form-horizontal" role="form" novalidate="" ng-submit="changePassword(passwordForm,passwordBean)">
 
-        <div class="alert alert-success" role="alert" ng-if="updateSuccessful" so-msg="msg.changepasswordsuccess">
+        <div class="alert alert-success" role="alert" ng-if="passwordForm.updateSuccessful" so-msg="msg.changepasswordsuccess">
         </div>
         <div class="has-error">
-            <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
+            <span ng-repeat="error in passwordForm.objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
         </div>
 
         <!--#### Current password ####-->
@@ -115,7 +114,7 @@
 
             <div class="col-sm-10">
                 <input type="password" name="verifyPassword" class="form-control" id="verify-password-input" so-msg-attr="placeholder=passwordagain"
-                       ng-model="verifyPassword" equals="{{passwordBean.newPassword}}">
+                       ng-model="passwordBean.verifyPassword" equals="{{passwordBean.newPassword}}">
 
                 <div ng-if="passwordForm.verifyPassword.$dirty">
                     <span ng-show="passwordForm.verifyPassword.$error.equals" class="help-block" so-msg="msg.entersamevalueagain"></span>
