@@ -4,8 +4,11 @@ angular.module('smigoModule').directive('soFocusOnKeyPressed', function FocusOnK
         //$log.log('FocusOnKeyPressedDirective', [scope, element, attrs]);
 
         var handler = function (e) {
-            if (!element.is(':focus')) {
-                $log.log('FocusOnKeyPressedDirective keypressed', [e, document.activeElement]);
+            //http://stackoverflow.com/questions/302122/jquery-event-keypress-which-key-was-pressed
+            var code = e.keyCode || e.which;
+            var arrowKey = code > 36 && code < 41;
+            if (!element.is(':focus') && !arrowKey) {
+                $log.log('FocusOnKeyPressedDirective keypressed', [e.which, e.code, e.key, e.keyCode, e.char, e.charCode, e, document.activeElement]);
                 element.focus();
                 scope.$apply(function () {
                     scope.search.query = '';
