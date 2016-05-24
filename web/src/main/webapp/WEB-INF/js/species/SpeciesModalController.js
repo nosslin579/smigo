@@ -1,4 +1,4 @@
-function SpeciesModalController($log, $scope, $rootScope, UserService, SpeciesService, VernacularService, VarietyService) {
+function SpeciesModalController($log, $scope, UserService, SpeciesService, VernacularService, VarietyService) {
     'use strict';
     $scope.species = SpeciesService.getState().selectedSpecies;
     $scope.currentUser = UserService.getState().currentUser;
@@ -19,11 +19,6 @@ function SpeciesModalController($log, $scope, $rootScope, UserService, SpeciesSe
         species.variety = species.variety == variety ? null : variety;
         event.currentTarget.blur();
     };
-    $rootScope.$broadcast('species-modal-open', $scope.species);
-    $scope.$on('modal.closing', function () {
-        $rootScope.$broadcast('species-modal-close', $scope.species);
-    });
-
 }
 
 angular.module('smigoModule').controller('SpeciesModalController', SpeciesModalController);

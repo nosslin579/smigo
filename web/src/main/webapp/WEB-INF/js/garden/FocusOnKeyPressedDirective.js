@@ -13,16 +13,12 @@ angular.module('smigoModule').directive('soFocusOnKeyPressed', function FocusOnK
             }
         };
 
-        scope.$on('species-modal-open', function () {
-            document.removeEventListener('keypress', handler, false);
-        });
-        scope.$on('species-modal-close', function () {
-            document.addEventListener('keypress', handler, false);
-        });
-
-        document.addEventListener('keypress', handler, false);
+        var sourceElement = document.getElementById(attrs.soFocusOnKeyPressed);
+        sourceElement.tabIndex = 0;//must be focusable for event listener to catch event
+        sourceElement.style['outline-style'] = 'none';
+        sourceElement.addEventListener('keypress', handler, false);
         scope.$on('$destroy', function () {
-            document.removeEventListener('keypress', handler, false);
+            document.getElementById(attrs.soFocusOnKeyPressed).removeEventListener('keypress', handler, false);
         });
     };
 })
