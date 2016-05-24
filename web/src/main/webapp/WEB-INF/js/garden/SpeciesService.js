@@ -83,7 +83,7 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
             case 7:
                 return new Rule(rule, 'speciesrepetition', 1, rule.param, hasCauser.repetition, rule.param, rawGetArgsAsText);
             default :
-                throw "No such rule type " + rule.type;
+                throw new TypeError("No such rule type " + rule.type);
         }
     }
 
@@ -109,7 +109,7 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
 
     function getSpecies(id) {
         if (!id) {
-            throw "Can not get species with no id";
+            throw new ReferenceError("Can not get species with no id");
         }
         var species = state.speciesArray.smigoFind(id, 'id');
         if (species) {
@@ -152,7 +152,7 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
                 state.selectedSpecies = topResult || state.selectedSpecies;
                 selectObj.query = '';
             } else {
-                throw 'SpeciesService.selectSpecies got invalid parameter: ' + selectObj;
+                throw new TypeError('SpeciesService.selectSpecies got invalid parameter: ' + selectObj);
             }
             scroll && scrollToVisibleSpecies(state.selectedSpecies);
             state.action = 'add';

@@ -43,7 +43,7 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
 
         function Location(year, x, y) {
             if (!$.isNumeric(year) || !$.isNumeric(x) || !$.isNumeric(y)) {
-                throw "Location takes Numeric parameter only. x:" + x + " y:" + y + " year:" + year;
+                throw TypeError("Location takes Numeric parameter only. x:" + x + " y:" + y + " year:" + year);
             }
             this.year = +year;
             this.x = +x;
@@ -94,7 +94,7 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
 
         function Square(location) {
             if (!location instanceof Location) {
-                throw "Square.location must be a Location object. location:" + location;
+                throw new TypeError("Square.location must be a Location object. location:" + location);
             }
             var squareSelf = this;
             this.location = location;
@@ -205,7 +205,7 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
 
         this.addYear = function (year) {
             if (gardenSelf.yearSquareMap[year]) {
-                throw 'Cant add year that already exists';
+                throw new ReferenceError('Cant add year that already exists. Year:' + year);
             }
 
             $http.put('/rest/plant/add-year/' + year).then(function (response) {
