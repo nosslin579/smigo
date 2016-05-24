@@ -105,6 +105,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addRedirectViewController("/_=_", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/wall/{username}/**", "/gardener/{username}").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/tos.html", "/static/terms-of-service.html").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addStatusController("update-species", HttpStatus.GONE);
+        registry.addStatusController("/rest/species/search", HttpStatus.GONE);
         registry.addStatusController("/addyear/**", HttpStatus.GONE);
         registry.addStatusController("/deletespecies/**", HttpStatus.GONE);
         registry.addStatusController("/species/**", HttpStatus.NOT_FOUND);

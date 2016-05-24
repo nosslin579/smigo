@@ -221,28 +221,21 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
             });
         },
         searchSpecies: function (sq) {
-            sq.objectErrors = [];
-            var queryLowerCase = sq.query.toLocaleLowerCase();
-            //Cancel search if new search within 2sec
-            $timeout.cancel(sq.promise);
             sq.proccessing = false;
-            if (!sq.query || sq.query.length < 2) {
+            if (!sq.query || sq.query.length < 3) {
                 return;
             }
             sq.proccessing = true;
-            sq.promise = $timeout(function () {
-                $log.debug('Search with query', sq);
-                $http.post('/rest/species/search', {query: sq.query}).then(function (response) {
-                    response.data.forEach(function (species) {
-                        if (!state.speciesArray.smigoFind(species.id, 'id')) {
-                            state.speciesArray.push(species);
-                            augmentSpecies([species]);
-                        }
-                    });
-                    $log.debug('Response from search ' + queryLowerCase, response);
-                    sq.proccessing = false;
+            $http.get('/rest/species', {params: {query: sq.query}, cache: true}).then(function (response) {
+                $log.log('Response from search ' + sq.query, [sq, response]);
+                response.data.forEach(function (species) {
+                    if (!state.speciesArray.smigoFind(species.id, 'id')) {
+                        state.speciesArray.push(species);
+                        augmentSpecies([species]);
+                    }
                 });
-            }, 2000);
+                sq.proccessing = false;
+            });
         },
         getAllSpecies: function () {
             return state.speciesArray;

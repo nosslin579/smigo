@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,7 +38,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -45,11 +45,21 @@ public class SpeciesController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(SpeciesController.class);
     @Autowired
     private SpeciesHandler speciesHandler;
+    @Value("${resourceCachePeriod}")
+    private Integer resourceCachePeriod;
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Species> getSpecies(Locale locale) {
+    public Collection<Species> getSpecies(Locale locale, HttpServletResponse response) {
+        response.setHeader("cache-control", "max-age=" + resourceCachePeriod);
         return speciesHandler.getDefaultSpecies();
+    }
+
+    @RequestMapping(value = "/rest/species", method = RequestMethod.GET, params = {"query"})
+    @ResponseBody
+    public Collection<Species> searchSpecies(@RequestParam String query, Locale locale, HttpServletResponse response) {
+        log.info("Searching species, query:" + query);
+        return speciesHandler.searchSpecies(query);
     }
 
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.GET)
@@ -88,23 +98,11 @@ public class SpeciesController implements Serializable {
         return speciesHandler.getSpecies(id);
     }
 
-    @RequestMapping(value = "/rest/species/search", method = RequestMethod.POST)
-    @ResponseBody
-    public List<Species> searchSpecies(@Valid @RequestBody SpeciesSearch species, Locale locale) {
-        log.info("Searching species, query:" + species.getQuery());
-        return speciesHandler.searchSpecies(species.getQuery());
-    }
-
     @PreAuthorize("hasAuthority('" + AuthenticatedUser.MOD_AUTHORITY + "')")
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteSpecies(Locale locale, @PathVariable int id) {
         speciesHandler.deleteSpecies(id);
-    }
-
-    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
-    @RequestMapping(value = "/rest/species/search", method = RequestMethod.GET)
-    public void searchSpecies() {
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
