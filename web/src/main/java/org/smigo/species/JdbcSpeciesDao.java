@@ -36,6 +36,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
@@ -76,11 +77,11 @@ class JdbcSpeciesDao implements SpeciesDao {
     }
 
     @Override
-    public List<Species> searchSpecies(String search) {
+    public List<Species> searchSpecies(String search, Locale locale) {
         String query = (search.length() >= 5 ? "%" : "") + search.toUpperCase() + (search.length() >= 3 ? "%" : "");
-        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM VERNACULARS WHERE upper(VERNACULAR_NAME) LIKE ?) OR upper(SCIENTIFIC_NAME) LIKE ? OR upper(FAMILIES.NAME) LIKE ? OR CAST(SPECIES.ID AS TEXT) LIKE ?";
+        final String whereClause = "SPECIES.ID IN (SELECT SPECIES_ID FROM VERNACULARS WHERE upper(VERNACULAR_NAME) LIKE ? AND LANGUAGE=?) OR upper(SCIENTIFIC_NAME) LIKE ? OR upper(FAMILIES.NAME) LIKE ? OR CAST(SPECIES.ID AS TEXT) LIKE ?";
         final String sql = String.format(SELECT, whereClause, 10);
-        return jdbcTemplate.query(sql, new Object[]{query, query, query, search}, rowMapper);
+        return jdbcTemplate.query(sql, new Object[]{query, locale.getLanguage(), query, query, search}, rowMapper);
     }
 
     @Override

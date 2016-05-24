@@ -63,9 +63,9 @@ public class SpeciesHandler {
         return speciesDao.getSpecies(id);
     }
 
-    public List<Species> searchSpecies(String query) {
+    public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        return speciesDao.searchSpecies(query);
+        return speciesDao.searchSpecies(query, locale);
     }
 
     public List<Rule> getRules() {

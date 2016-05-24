@@ -59,7 +59,7 @@ public class SpeciesController implements Serializable {
     @ResponseBody
     public Collection<Species> searchSpecies(@RequestParam String query, Locale locale, HttpServletResponse response) {
         log.info("Searching species, query:" + query);
-        return speciesHandler.searchSpecies(query);
+        return speciesHandler.searchSpecies(query, locale);
     }
 
     @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.GET)
