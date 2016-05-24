@@ -34,32 +34,30 @@ function TranslateService($log, $http, $rootScope) {
 
     return {
         translate: function (messageKey, messageParameter1, messageParameter2) {
-            if (!messageParameter1) {
-                return state.allMessages[messageKey];
-            }
+            var ret = state.allMessages[messageKey];
 
-            if (!messageKey || typeof messageKey !== 'string') {
-                $log.error('Can not translate(invalid message key)', [messageKey, messageParameter1, messageParameter2]);
-                return 'n/a';
-            }
-
-            var paramArray = getParameter(messageParameter1, messageParameter2),
-                translatedMessage = state.allMessages[messageKey];
-
-            if (!translatedMessage) {
+            if (!ret) {
                 if (Object.keys(state.allMessages).length > 0) {
-                    $log.error('Could not translate(missing key):', [messageKey, messageParameter1, messageParameter2, state]);
+                    $log.error('Could not translate:', [messageKey, messageParameter1, messageParameter2, state]);
+                    state.allMessages[messageKey] = '-';
+                    throw new ReferenceError('Could not translate: ' + messageKey);
                 }
-                return '-';
+                return '';
             }
+
+            if (!messageParameter1 && !messageParameter2) {
+                return ret;
+            }
+
+            var paramArray = getParameter(messageParameter1, messageParameter2);
 
             //String interpolate params
             for (var i = 0; i < paramArray.length; i++) {
                 var param = paramArray[i];
-                translatedMessage = translatedMessage.replace(new RegExp('\\{' + i + '\\}', 'g'), param);
+                ret = ret.replace(new RegExp('\\{' + i + '\\}', 'g'), param);
             }
             //$log.debug('Translate:' + translatedMessage, [msg, message, paramArray]);
-            return translatedMessage;
+            return ret;
         },
         getState: function () {
             return state;
