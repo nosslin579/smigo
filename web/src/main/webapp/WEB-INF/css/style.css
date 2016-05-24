@@ -155,6 +155,7 @@ body > .angular-view {
 }
 
 .peephole {
+    outline: none;
     overflow: auto;
     position: absolute;
     bottom: 0;

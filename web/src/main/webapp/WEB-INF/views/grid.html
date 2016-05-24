@@ -1,4 +1,4 @@
-<div class="peephole">
+<div class="peephole" tabindex="0">
     <div class="square-container" ng-style="getGridSizeCss(garden)">
         <div ng-repeat="s in garden.getSquares()" class="square" so-square="s"></div>
         <div ng-repeat="s in garden.getTrailingSquares()" class="visible-remainder" ng-if="s.plantArray.length > 0" ng-style="getSquarePositionCss(s)"></div>
