@@ -1,5 +1,5 @@
 #System properties:
--Dlogback.configurationFile=web/logback-dev.xml
+-Dlogback.configurationFile=logback-dev.xml
 -Dmail.debug=true
 -XX:MaxMetaspaceSize=130M
 -DsmigoProfile=dev
