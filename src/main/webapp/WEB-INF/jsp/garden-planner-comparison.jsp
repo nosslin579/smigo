@@ -3,18 +3,20 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title><spring:message code="msg.title.vegetablegardenplannercomparison"/></title>
-    <meta name="description" content="<spring:message code="msg.metadescription.vegetablegardenplannercomparison"/>">
-    <jsp:include page="head-common.jsp"/>
-</head>
+<c:if test="${empty param['hide-nav']}">
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title><spring:message code="msg.title.vegetablegardenplannercomparison"/></title>
+        <meta name="description" content="<spring:message code="msg.metadescription.vegetablegardenplannercomparison"/>">
+        <jsp:include page="head-common.jsp"/>
+    </head>
 
-<jsp:include page="nav-top.jsp"/>
+    <jsp:include page="nav-top.jsp"/>
 
 
-<body>
+    <body>
+</c:if>
 <div class="container">
     <div class="page-header text-center">
         <h1>
@@ -127,5 +129,7 @@
 
     <jsp:include page="nav-bottom.jsp"/>
 </div>
-</body>
-</html>
+<c:if test="${empty param['hide-nav']}">
+    </body>
+    </html>
+</c:if>

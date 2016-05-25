@@ -12,6 +12,9 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
             when('/help', {
                 templateUrl: 'help?hide-nav=true'
             }).
+            when('/garden-planner-comparison', {
+                templateUrl: 'garden-planner-comparison?hide-nav=true'
+            }).
             when('/request-password-link', {
                 templateUrl: 'views/request-password-link.html'
             }).
