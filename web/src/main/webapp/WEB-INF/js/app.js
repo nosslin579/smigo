@@ -81,6 +81,11 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
             }
         }
 
+        //notify if any 3rd party library failed to load
+        window.missingLibraries && $http.post('/rest/log/error', {
+            message: 'Missing 3rd party libraries:' + JSON.stringify(window.missingLibraries)
+        });
+
         /*
          $rootScope.$on('current-user-changed', function (event, user) {
          $log.log('Broadcast: current-user-changed', [event, user]);
