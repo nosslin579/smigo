@@ -72,9 +72,14 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
 
         $uibTooltipProvider.setTriggers({'click': 'blur'});
     })
-    .run(function ($rootScope, $log, isTouchDevice) {
+    .run(function ($route, $templateCache, $http, $rootScope, $log, isTouchDevice) {
         'use strict';
         $log.log("App run. isTouchDevice:" + isTouchDevice, initData);
+        for (var i in $route.routes) {
+            if ($route.routes[i].templateUrl) {
+                $http.get($route.routes[i].templateUrl, {cache: $templateCache});
+            }
+        }
 
         /*
          $rootScope.$on('current-user-changed', function (event, user) {

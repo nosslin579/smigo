@@ -4,12 +4,19 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title><spring:message code="msg.title.front"/> | Smigo</title>
     <meta name="description" content="<spring:message code="msg.metadescription.front"/>">
     <jsp:include page="head-common.jsp"/>
-
+    <link rel="prefetch" href="/garden-planner"/>
+    <link rel="prefetch" href="/rest/translation"/>
+    <link rel="prefetch" href="/rest/vernacular"/>
+    <link rel="prefetch" href="/views/garden-planner.html"/>
+    <link rel="prefetch" href="/views/grid.html"/>
+    <link rel="prefetch" href="/views/square.html"/>
 </head>
+
 <body>
 <c:if test="${empty param['hide-nav']}">
     <jsp:include page="nav-top.jsp"/>
@@ -53,4 +60,5 @@
 </div>
 <jsp:include page="nav-bottom.jsp"/>
 </body>
+
 </html>
