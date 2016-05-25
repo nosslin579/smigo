@@ -82,6 +82,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/google5fc09c8757ef21fa.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
         registry.addResourceHandler("/views/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
         registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(resourceCachePeriod);
+        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/").setCachePeriod(resourceCachePeriod);
     }
 
     @Override
