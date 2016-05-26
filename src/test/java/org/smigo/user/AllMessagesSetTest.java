@@ -36,6 +36,7 @@ public class AllMessagesSetTest {
 
     private static final Logger log = LoggerFactory.getLogger(AllMessagesSetTest.class);
 
+    public static final List<Object> ALL_EXCLUDES = Arrays.asList("family7229", "family7230", "msg.concat.metadescription.accept-terms-of-service", "msg.concat.title.accept-terms-of-service");
     public static final List<Object> ES_EXCLUDES = Arrays.asList("family7204", "family7219", "family7218", "family7220", "family7227", "family7224", "family7226", "msg.title.species", "visible", "no", "error", "ok");
     public static final List<Object> SV_EXCLUDES = Arrays.asList("ok", "msg.front.head1");
     public static final List<Object> DE_EXCLUDES = Arrays.asList("name", "msg.title.species", "msg.anemailhasbeensent", "msg.link", "msg.twittersharetext", "ok", "msg.changepasswordsuccess", "msg.front.head1", "msg.clicktoselect");
@@ -49,20 +50,23 @@ public class AllMessagesSetTest {
         final Map<Object, Object> germanMessages = messageSource.getAllMessages(Language.GERMAN.getLocale());
         final Map<Object, Object> spanishMessages = messageSource.getAllMessages(Language.SPANISH.getLocale());
         for (Object key : englishMessages.keySet()) {
+            if (ALL_EXCLUDES.contains(key)) {
+                continue;
+            }
             String enTranslation = englishMessages.get(key).toString();
             String svTranslation = swedishMessages.get(key).toString();
             String deTranslation = germanMessages.get(key).toString();
             String esTranslation = spanishMessages.get(key).toString();
             if (!SV_EXCLUDES.contains(key) && enTranslation.equals(svTranslation)) {
-                System.out.println(key + "=sv_missing" + enTranslation);
+                System.out.println(key + "=sv_missing " + enTranslation);
                 ok = false;
             }
             if (!DE_EXCLUDES.contains(key) && enTranslation.equals(deTranslation)) {
-                System.out.println(key + "=de_missing" + enTranslation + svTranslation);
+                System.out.println(key + "=de_missing " + enTranslation + svTranslation);
                 ok = false;
             }
             if (!ES_EXCLUDES.contains(key) && enTranslation.equals(esTranslation)) {
-                System.out.println(key + "=es_missing" + enTranslation + esTranslation);
+                System.out.println(key + "=es_missing " + enTranslation + esTranslation);
                 ok = false;
             }
         }
