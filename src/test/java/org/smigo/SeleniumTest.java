@@ -150,7 +150,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("login")).click();
         //accept tos
         d.findElement(By.name("termsOfService")).click();
-        d.findElement(By.tagName("button")).click();
+        d.findElement(By.id("submit-accept-terms-of-service-button")).click();
 
         final WebElement plant = w.until(ExpectedConditions.presenceOfElementLocated(By.className("plant")));
         Assert.assertEquals(plant.getTagName(), "img");
@@ -386,7 +386,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
         d.findElement(ACCOUNT_LINK).click();
 
-        Assert.assertEquals(d.findElements(By.tagName("input")).size(), 5);
+        Assert.assertEquals(d.findElements(By.tagName("input")).size(), 6);
 
         d.findElement(By.name("email")).sendKeys(username + EMAIL_PROVIDER);
         d.findElement(By.name("displayName")).sendKeys(DISPLAY_NAME);

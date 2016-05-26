@@ -18,6 +18,7 @@ function RegisterController($scope, UserService) {
 
     $scope.submitLoginOrRegisterForm = UserService.register;
     $scope.requestFeature = UserService.requestFeature;
+    $scope.formModel = {};
 }
 
 angular.module('smigoModule').controller('RegisterController', RegisterController);

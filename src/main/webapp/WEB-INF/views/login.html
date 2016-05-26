@@ -51,6 +51,7 @@
                     <span ng-repeat="error in loginOrRegisterform.objectErrors" id="{{error.objectName}}" class="help-block">{{error.defaultMessage | translate}}</span>
                 </div>
 
+                <!--#### Username ####-->
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.username.$invalid && (loginOrRegisterform.username.$dirty || loginOrRegisterform.submitted)}">
                     <label for="username"><span so-msg="username"></span><span ng-if="viewModel.login" so-msg="email"> / </span></label>
                     <input type="text" class="form-control" id="username" name="username" so-msg-attr="placeholder=username"
@@ -65,6 +66,7 @@
                     </div>
                 </div>
 
+                <!--#### Password ####-->
                 <div class="form-group" ng-class="{'has-error':loginOrRegisterform.password.$invalid && (loginOrRegisterform.password.$dirty || loginOrRegisterform.submitted)}">
                     <label for="password" so-msg="password"></label>
                     <input type="password" class="form-control" id="password" name="password" so-msg-attr="placeholder=password"
@@ -76,6 +78,7 @@
                     </div>
                 </div>
 
+                <!--#### Password again ####-->
                 <div class="form-group" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.passwordagain.$invalid && loginOrRegisterform.passwordagain.$dirty}">
                     <label for="password-again" so-msg="passwordagain"></label>
                     <input type="password" class="form-control" id="password-again" name="passwordagain" so-msg-attr="placeholder=passwordagain"
@@ -86,15 +89,17 @@
                     </div>
                 </div>
 
+                <!--#### Terms of service ####-->
                 <div class="form-group checkbox" ng-if="viewModel.register" ng-class="{'has-error':loginOrRegisterform.termsOfService.$invalid && loginOrRegisterform.submitted}">
                     <label for="termsOfService" class="checkbox">
                         <input type="checkbox" id="termsOfService" name="termsOfService" ng-model="formModel.termsOfService" required/>
                         <span so-msg="msg.agreetos"></span>
-                        <a target="_blank" href=/static/terms-of-service.html rel="nofollow" so-msg="termsofservice"></a>
+                        <a href=/accept-terms-of-service rel="nofollow" so-msg="termsofservice"></a>
                     </label>
                     <span ng-show="loginOrRegisterform.termsOfService.$error.required && loginOrRegisterform.submitted" class="help-block" so-msg="msg.required"></span>
                 </div>
 
+                <!--#### Remember me ####-->
                 <div class="form-group checkbox" ng-if="viewModel.login">
                     <label for="remember-me" class="checkbox">
                         <input type="checkbox" id="remember-me" name="remember-me" ng-model="formModel['remember-me']"/>

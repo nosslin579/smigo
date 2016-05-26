@@ -39,7 +39,7 @@ public class UserAdd {
     @NewPassword
     private String password = "";
 
-    @AssertTrue
+    @AssertTrue(message = "AssertTrue")
     private boolean termsOfService;
 
     private Locale locale = Locale.ENGLISH;
