@@ -177,7 +177,7 @@
         <strong>{{'rule.goodcroprotation'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'goodcroprotation'}">
-                {{r.arg[1] | translate}}
+                {{r.arg[1].messageKey | translate}}
             </li>
         </ul>
     </div>
@@ -185,7 +185,7 @@
         <strong>{{'rule.badcroprotation'|translate}}</strong>
         <ul>
             <li ng-repeat="r in species.rules | filter:{category:'badcroprotation'}">
-                {{r.arg[1] | translate}}
+                {{r.arg[1].messageKey | translate}}
             </li>
         </ul>
     </div>

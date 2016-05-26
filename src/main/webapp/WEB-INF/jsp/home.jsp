@@ -28,7 +28,7 @@
         <p>
             <spring:message code="msg.front.intro"/>
         </p>
-        <p><a class="btn btn-primary btn-lg" href="/garden" role="button"><spring:message code="msg.front.tryit"/></a>
+        <p><a class="btn btn-primary btn-lg" href="/garden-planner" role="button"><spring:message code="msg.front.tryit"/></a>
         </p>
     </div>
 </div>
