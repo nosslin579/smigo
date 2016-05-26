@@ -38,7 +38,7 @@ public class User {
     private String username;
     private Locale locale;
     private Date createDate;
-    @AssertTrue
+    @AssertTrue(message = "AssertTrue")
     private boolean termsOfService;
     @Email
     private String email;

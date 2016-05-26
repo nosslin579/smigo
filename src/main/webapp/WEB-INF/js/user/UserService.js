@@ -4,8 +4,21 @@ function UserService($log, $http, $rootScope, $q, $location) {
 
     $log.log('UserService', [$http.defaults.headers, state]);
 
+    $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
+        $log.log('$routeChangeStart', [angularEvent, next, current]);
+        //when user tries to avoid accepting terms of service page
+        if (state.currentUser && !state.currentUser.termsOfService) {
+            $location.url('/accept-terms-of-service');
+        }
+    });
+
     $http.get('/rest/user').then(function (response) {
-        setUser(null, response.data);
+        var newUser = response.data;
+        setUser(null, newUser);
+        //on page load, check that user has accepted terms of service
+        if (newUser && !newUser.termsOfService) {
+            $location.url('/accept-terms-of-service');
+        }
     });
 
     $rootScope.$on('current-user-changed', setUser);
@@ -111,7 +124,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
                 });
         },
         login: login,
-        updateUser: function updateUser(form, userBean) {
+        updateUser: function updateUser(form, userBean, redirectOnSuccess) {
             $log.log('Update user', [form, userBean]);
             form.pendingSave = true;
             form.updateSuccessful = false;
@@ -126,6 +139,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
                 form.pendingSave = false;
                 form.updateSuccessful = true;
                 $rootScope.$broadcast('current-user-changed', userBean);
+                redirectOnSuccess && $location.url(redirectOnSuccess);
             }).catch(function (response) {
                 $log.error('Update user failed', response);
                 form.objectErrors = response.data;

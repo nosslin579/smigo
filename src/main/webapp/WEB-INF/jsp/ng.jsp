@@ -9,6 +9,10 @@
     <title><spring:message code="${msgTitle}" arguments="${titleArg}"/> | Smigo</title>
     <meta name="description" content="<spring:message code="${msgDescription}" arguments="${descriptionArg}"/>">
 
+    <c:if test="${requestScope['javax.servlet.forward.request_uri'] eq '/accept-terms-of-service'}">
+        <meta name="robots" content="noindex">
+    </c:if>
+
     <jsp:include page="head-common.jsp"/>
 
     <base href="/">

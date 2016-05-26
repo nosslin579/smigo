@@ -56,7 +56,7 @@ public class HomeController {
         model.addAttribute("rules", speciesHandler.getRules());
     }
 
-    @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link", "/accept-terms-of-service"}, method = RequestMethod.GET)
     public String getGarden(Model model, HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("cache-control", "max-age=" + resourceCachePeriod);
         final String path = request.getServletPath().replace("/", "");

@@ -1,0 +1,27 @@
+<div class="container" ng-controller="AccountController">
+
+    <div ng-include="'/views/terms-of-service.html'"></div>
+
+
+    <form name="acceptForm" role="form" ng-submit="updateUser(acceptForm, state.currentUser, '/garden-planner')" novalidate="" ng-if="state.currentUser">
+        <div class="has-error">
+            <span ng-repeat="error in acceptForm.objectErrors" class="help-block">{{error.defaultMessage | translate}}</span>
+        </div>
+
+        <!--#### TermsOfService ####-->
+        <div class="form-group checkbox">
+            <label>
+                <input type="checkbox" name="termsOfService" ng-model="state.currentUser.termsOfService">
+                <span so-msg="msg.agreetos"></span>
+            </label>
+        </div>
+
+        <!--#### Save button ####-->
+        <button type="submit" class="btn btn-default" so-msg="ok"></button>
+        <img ng-if="acceptForm.pendingSave" ng-src="http://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-spinner.gif"/>
+        <a href="/logout" target="_self" class="btn btn-default" so-msg="cancel"> </a>
+    </form>
+
+    <div ng-include="'footer.html'"></div>
+
+</div>

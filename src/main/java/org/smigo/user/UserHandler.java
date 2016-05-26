@@ -132,6 +132,7 @@ public class UserHandler {
         current.setEmail(update.getEmail());
         current.setLocale(update.getLocale());
         current.setUsername(update.getUsername());
+        current.setTermsOfService(update.isTermsOfService());
         userDao.updateUser(current);
     }
 

@@ -21,6 +21,9 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
             when('/account', {
                 templateUrl: 'views/account.html'
             }).
+            when('/accept-terms-of-service', {
+                templateUrl: 'views/accept-terms-of-service.html'
+            }).
             when('/login', {
                 templateUrl: 'views/login.html',
                 controller: 'LoginController'

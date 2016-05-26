@@ -1,6 +1,9 @@
 function AccountController($anchorScroll, $scope, $http, $log, $location, $routeParams, UserService) {
     'use strict';
+    //todo these values can me merged
     $scope.userBean = angular.copy(UserService.getState().currentUser);
+    $scope.state = UserService.getState();
+
     $scope.passwordBean = {};
     $scope.updateUser = UserService.updateUser;
     $scope.changePassword = UserService.changePassword;
