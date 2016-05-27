@@ -126,7 +126,6 @@ function UserService($log, $http, $rootScope, $q, $location) {
         login: login,
         updateUser: function updateUser(form, userBean, redirectOnSuccess) {
             $log.log('Update user', [form, userBean]);
-            form.pendingSave = true;
             form.updateSuccessful = false;
             form.objectErrors = [];
             if (form.$invalid) {
@@ -134,6 +133,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
                 return;
             }
 
+            form.pendingSave = true;
             return $http.put('/rest/user', userBean).then(function (response) {
                 $log.info('Update user success', [userBean, response]);
                 form.pendingSave = false;
