@@ -35,9 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class LogHandler {
@@ -59,12 +61,15 @@ public class LogHandler {
         s.append(Log.create(request, response).toString()).append(separator);
         s.append("Auth type:").append(request.getAuthType()).append(separator);
         s.append("Principal:").append(request.getUserPrincipal()).append(separator);
-        s.append("Headers:").append(separator);
+        s.append("Request headers:").append(separator);
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
         }
+
+        s.append("Resp headers:").append(separator);
+        s.append(response.getHeaderNames().stream().map(rh -> rh + "=" + response.getHeader(rh)).collect(Collectors.joining(separator)));
 
         final Long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
         if (start != null) {

@@ -21,6 +21,7 @@
     <logger name="org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor" level="INFO"/>
     <!--Stacktrace for H2 JdbcResultSet not implementing method-->
     <logger name="org.springframework.jdbc.support.JdbcUtils" level="INFO"/>
+    <logger name="org.springframework.web.filter.ShallowEtagHeaderFilter" level="TRACE"/>
 
 
     <root level="WARN">
