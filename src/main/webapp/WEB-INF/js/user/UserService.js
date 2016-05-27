@@ -14,23 +14,19 @@ function UserService($log, $http, $rootScope, $q, $location) {
 
     $http.get('/rest/user').then(function (response) {
         var newUser = response.data;
-        setUser(null, newUser);
+        setUser(newUser, true);
         //on page load, check that user has accepted terms of service
         if (newUser && !newUser.termsOfService) {
             $location.url('/accept-terms-of-service');
         }
     });
 
-    $rootScope.$on('current-user-changed', setUser);
-
-    function setUser(event, newUser) {
-        if (newUser) {
-            state.currentUser = newUser;
-            $http.defaults.headers.common.SmigoUser = newUser.username;
-        } else {
-            state.currentUser = null;
-            delete $http.defaults.headers.common.SmigoUser;
-        }
+    function setUser(newUser, initial) {
+        $log.log('Setting user', newUser, state.currentUser);
+        var oldUser = state.currentUser;
+        state.currentUser = newUser;
+        $http.defaults.headers.common.SmigoUser = newUser ? newUser.username : null;
+        $rootScope.$broadcast('current-user-changed', newUser, oldUser, initial);
     }
 
     function validateForm(form, skipValidate) {
@@ -72,7 +68,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
             })
             .then(function (response) {
                 $location.path('/garden-planner');
-                $rootScope.$broadcast('current-user-changed', response.data);
+                setUser(response.data);
             })
             .catch(function (errorReason) {
                 $log.log('Login failed, reason:', errorReason);
@@ -138,7 +134,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
                 $log.info('Update user success', [userBean, response]);
                 form.pendingSave = false;
                 form.updateSuccessful = true;
-                $rootScope.$broadcast('current-user-changed', userBean);
+                setUser(userBean);
                 redirectOnSuccess && $location.url(redirectOnSuccess);
             }).catch(function (response) {
                 $log.error('Update user failed', response);

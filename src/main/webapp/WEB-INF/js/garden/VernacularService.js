@@ -4,7 +4,13 @@ function VernacularService($http, $rootScope, $log, $q) {
 
     $log.log('VernacularService', state);
 
-    $rootScope.$on('current-user-changed', reloadVernacular);
+    $rootScope.$on('current-user-changed', function (event, newUser, oldUser, initialChange) {
+        var newLocale = newUser && newUser.locale,
+            oldLocale = oldUser && oldUser.locale;
+        if (!initialChange && oldLocale !== newLocale) {
+            reloadVernacular();
+        }
+    });
 
     reloadVernacular();
 

@@ -9,10 +9,14 @@ function GardenService($http, $log, $rootScope, SpeciesService) {
         state.garden.setPlants(response.data);
     });
 
-    $rootScope.$on('current-user-changed', function (event, user) {
-        $http.get('/rest/plant').then(function (response) {
-            state.garden.setPlants(response.data);
-        });
+    $rootScope.$on('current-user-changed', function (event, newUser, oldUser, initialChange) {
+        var newUserName = newUser && newUser.username,
+            oldUserName = oldUser && oldUser.username;
+        if (!initialChange && oldUserName !== newUserName) {
+            $http.get('/rest/plant').then(function (response) {
+                state.garden.setPlants(response.data);
+            });
+        }
     });
 
     function Garden(mutable) {

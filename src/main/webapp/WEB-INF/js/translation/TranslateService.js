@@ -8,7 +8,13 @@ function TranslateService($log, $http, $rootScope) {
 
     reloadMessages();
 
-    $rootScope.$on('current-user-changed', reloadMessages);
+    $rootScope.$on('current-user-changed', function (event, newUser, oldUser, initialChange) {
+        var newLocale = newUser && newUser.locale,
+            oldLocale = oldUser && oldUser.locale;
+        if (!initialChange && oldLocale !== newLocale) {
+            reloadMessages();
+        }
+    });
 
     function reloadMessages() {
         return $http.get('/rest/translation').then(function (response) {
