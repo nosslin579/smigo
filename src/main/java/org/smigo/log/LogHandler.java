@@ -57,7 +57,7 @@ public class LogHandler {
     }
 
     public String getRequestDump(HttpServletRequest request, HttpServletResponse response, String separator) {
-        StringBuilder s = new StringBuilder("REQUEST ").append(request.getMethod()).append(" ").append(request.getRequestURL()).append(separator);
+        StringBuilder s = new StringBuilder("####REQUEST ").append(request.getMethod()).append(" ").append(request.getRequestURL()).append(separator);
         s.append("Auth type:").append(request.getAuthType()).append(separator);
         s.append("Principal:").append(request.getUserPrincipal()).append(separator);
         s.append(Log.create(request, response).toString()).append(separator);
@@ -67,7 +67,8 @@ public class LogHandler {
             String headerName = headerNames.nextElement();
             s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
         }
-        s.append(separator).append(separator).append("RESPONSE").append(separator);
+        s.append(separator);
+        s.append("####RESPONSE").append(separator);
         s.append("Status:").append(response.getStatus()).append(separator);
         s.append("Char encoding:").append(response.getCharacterEncoding()).append(separator);
         s.append("Locale:").append(response.getLocale()).append(separator);
@@ -79,7 +80,7 @@ public class LogHandler {
         final Long start = (Long) request.getAttribute(RequestLogFilter.REQUEST_TIMER);
         if (start != null) {
             final long elapsedTime = System.nanoTime() - start;
-            s.append(separator).append("Request time elapsed:").append(elapsedTime);
+            s.append(separator).append("####Request time elapsed:").append(elapsedTime);
             s.append("ns which is ").append(elapsedTime / 1000000).append("ms").append(separator);
         }
         return s.toString();

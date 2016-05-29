@@ -46,7 +46,7 @@ function TranslateService($log, $http, $rootScope) {
                 if (Object.keys(state.allMessages).length > 0) {
                     $log.error('Could not translate:', [messageKey, messageParameter1, messageParameter2, state]);
                     state.allMessages[messageKey] = '-';
-                    throw new ReferenceError('Could not translate: ' + messageKey);
+                    $http.post('/rest/note', {message: 'Could not translate: ' + messageKey});
                 }
                 return '';
             }

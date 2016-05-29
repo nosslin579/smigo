@@ -72,14 +72,15 @@ public class LogController implements Serializable {
         mailHandler.sendAdminNotification("feature request", feature.getFeature() + logHandler.getRequestDump(request, response, System.lineSeparator()));
     }
 
-    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
-    @RequestMapping(value = "/rest/log/error", method = RequestMethod.GET)
-    public void logError() {
+    @RequestMapping(value = {"/rest/note"}, method = RequestMethod.POST)
+    @ResponseBody
+    public void adminNote(@RequestBody AdminNote note, HttpServletRequest request, HttpServletResponse response) {
+        String msg = note.getMessage() + System.lineSeparator() + logHandler.getRequestDump(request, response, System.lineSeparator());
+        mailHandler.sendAdminNotification("frontend note", msg);
     }
 
-
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
-    @RequestMapping(value = "/rest/log/feature", method = RequestMethod.GET)
+    @RequestMapping(value = {"/rest/log/error", "/rest/log/feature", "/rest/note"}, method = RequestMethod.GET)
     public void logFeatureRequest() {
     }
 
