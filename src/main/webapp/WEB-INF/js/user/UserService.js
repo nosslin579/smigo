@@ -25,7 +25,11 @@ function UserService($log, $http, $rootScope, $q, $location) {
         $log.log('Setting user', newUser, state.currentUser);
         var oldUser = state.currentUser;
         state.currentUser = newUser;
-        $http.defaults.headers.common.SmigoUser = newUser ? newUser.username : null;
+        if (newUser) {
+            $http.defaults.headers.common.SmigoUser = newUser.username;
+        } else {
+            delete $http.defaults.headers.common.SmigoUser;
+        }
         $rootScope.$broadcast('current-user-changed', newUser, oldUser, initial);
     }
 
