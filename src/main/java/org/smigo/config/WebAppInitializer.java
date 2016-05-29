@@ -33,9 +33,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
+import javax.servlet.*;
 import java.util.Enumeration;
+import java.util.EventListener;
 import java.util.Map;
 
 public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer {
@@ -81,8 +81,11 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         characterEncodingFilter.setInitParameter("forceEncoding", "true");
         characterEncodingFilter.addMappingForUrlPatterns(null, false, "/*");
 
-        FilterRegistration.Dynamic etagFilter = servletContext.addFilter("EtagFilter", new ShallowEtagHeaderFilter());
-        etagFilter.addMappingForUrlPatterns(null, false, "/*");
+//        FilterRegistration.Dynamic etagFilter = servletContext.addFilter("EtagFilter", new ShallowEtagHeaderFilter());
+//        etagFilter.addMappingForUrlPatterns(null, false, "/*");
+
+        FilterRegistration.Dynamic logStatusCode = servletContext.addFilter("logStatusCode", new LogStatusCodeFilter());
+        logStatusCode.addMappingForUrlPatterns(null, false, "/*");
 
         servletContext.addListener(new RequestContextListener());
         servletContext.addListener(new ContextLoaderListener(context));

@@ -17,29 +17,6 @@
 
     <base href="/">
 
-    <script>
-        'use strict';
-        //http://stackoverflow.com/questions/1014203/best-way-to-use-googles-hosted-jquery-but-fall-back-to-my-hosted-library-on-go
-        var externalLibraries = [
-            {windowProperty: window.jQuery, src: '/static/jquery-2.1.3.min.js'},
-            {windowProperty: window.angular, src: '/static/angular/angular.min.js'},
-            {ngModule: 'ngSanitize', src: '/static/angular/angular-sanitize.min.js'},
-            {ngModule: 'ngRoute', src: '/static/angular/angular-route.min.js'},
-            {ngModule: 'ui.bootstrap', src: '/static/ui-bootstrap-tpls-1.3.2.min.js'}
-        ];
-        externalLibraries.forEach(function (m) {
-            try {
-                m.ngModule && window.angular.module(m.ngModule);//this will throw error if not found
-                !m.ngModule && m.windowProperty.toString();//this will throw error if undefined
-            } catch (e) {
-                window.missingLibraries = window.missingLibraries || [];
-                window.missingLibraries.push(m);
-                console.error('Missing library:', m, e);
-                document.write('<script src="' + m.src + '">\x3C/script>');
-            }
-        });
-    </script>
-
 </head>
 
 <body ng-app="smigoModule">

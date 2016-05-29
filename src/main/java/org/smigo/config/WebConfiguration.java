@@ -78,11 +78,12 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/").setCachePeriod(Integer.MAX_VALUE);
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/other/").setCachePeriod(Integer.MAX_VALUE);
         registry.addResourceHandler("/google5fc09c8757ef21fa.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
         registry.addResourceHandler("/views/*.html").addResourceLocations("/WEB-INF/views/").setCachePeriod(resourceCachePeriod);
         registry.addResourceHandler("/css/*.css").addResourceLocations("/WEB-INF/css/").setCachePeriod(resourceCachePeriod);
-        registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/").setCachePeriod(resourceCachePeriod);
+        registry.addResourceHandler("/angular/**").addResourceLocations("/WEB-INF/angular/").setCachePeriod(resourceCachePeriod);
     }
 
     @Override

@@ -46,9 +46,6 @@ public class HomeController {
 
     @Autowired
     private SpeciesHandler speciesHandler;
-    @Value("${resourceCachePeriod}")
-    private Integer resourceCachePeriod;
-
 
     @ModelAttribute
     public void addDefaultModel(Model model, Locale locale, @AuthenticationPrincipal AuthenticatedUser user) {
@@ -58,7 +55,6 @@ public class HomeController {
 
     @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link", "/accept-terms-of-service"}, method = RequestMethod.GET)
     public String getGarden(Model model, HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("cache-control", "max-age=" + resourceCachePeriod);
         final String path = request.getServletPath().replace("/", "");
         model.addAttribute("msgTitle", "msg.concat.title." + path);
         model.addAttribute("msgDescription", "msg.concat.metadescription." + path);

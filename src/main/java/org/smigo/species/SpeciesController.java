@@ -45,13 +45,10 @@ public class SpeciesController implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(SpeciesController.class);
     @Autowired
     private SpeciesHandler speciesHandler;
-    @Value("${resourceCachePeriod}")
-    private Integer resourceCachePeriod;
 
     @RequestMapping(value = "/rest/species", method = RequestMethod.GET)
     @ResponseBody
     public Collection<Species> getSpecies(Locale locale, HttpServletResponse response) {
-        response.setHeader("cache-control", "max-age=" + resourceCachePeriod);
         return speciesHandler.getDefaultSpecies();
     }
 
