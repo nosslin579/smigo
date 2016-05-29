@@ -78,6 +78,18 @@
 <script type="text/ng-template" id="footer.html" charset="UTF-8">
     <jsp:include page="nav-bottom.jsp"/>
 </script>
+<script type="text/ng-template" id="views/garden-planner.html" charset="UTF-8">
+    <%@include file="../views/garden-planner.html" %>
+</script>
+<script type="text/ng-template" id="views/square.html" charset="UTF-8">
+    <%@include file="../views/square.html" %>
+</script>
+<script type="text/ng-template" id="views/grid.html" charset="UTF-8">
+    <%@include file="../views/grid.html" %>
+</script>
+<script type="text/ng-template" id="views/login.html" charset="UTF-8">
+    <%@include file="../views/login.html" %>
+</script>
 
 </body>
 </html>
