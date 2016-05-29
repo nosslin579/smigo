@@ -30,12 +30,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
 import java.util.Enumeration;
-import java.util.EventListener;
 import java.util.Map;
 
 public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer {
@@ -81,10 +79,7 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         characterEncodingFilter.setInitParameter("forceEncoding", "true");
         characterEncodingFilter.addMappingForUrlPatterns(null, false, "/*");
 
-//        FilterRegistration.Dynamic etagFilter = servletContext.addFilter("EtagFilter", new ShallowEtagHeaderFilter());
-//        etagFilter.addMappingForUrlPatterns(null, false, "/*");
-
-        FilterRegistration.Dynamic logStatusCode = servletContext.addFilter("logStatusCode", new LogStatusCodeFilter());
+        FilterRegistration.Dynamic logStatusCode = servletContext.addFilter("RequestLogFilter", new RequestLogFilter(context));
         logStatusCode.addMappingForUrlPatterns(null, false, "/*");
 
         servletContext.addListener(new RequestContextListener());

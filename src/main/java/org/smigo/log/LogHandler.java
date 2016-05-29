@@ -25,6 +25,7 @@ package org.smigo.log;
 import com.google.inject.internal.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.config.RequestLogFilter;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,7 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -57,21 +57,26 @@ public class LogHandler {
     }
 
     public String getRequestDump(HttpServletRequest request, HttpServletResponse response, String separator) {
-        StringBuilder s = new StringBuilder("Request dump").append(separator);
-        s.append(Log.create(request, response).toString()).append(separator);
+        StringBuilder s = new StringBuilder("REQUEST ").append(request.getMethod()).append(" ").append(request.getRequestURL()).append(separator);
         s.append("Auth type:").append(request.getAuthType()).append(separator);
         s.append("Principal:").append(request.getUserPrincipal()).append(separator);
-        s.append("Request headers:").append(separator);
+        s.append(Log.create(request, response).toString()).append(separator);
+        s.append("Headers:").append(separator);
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
         }
+        s.append(separator).append(separator).append("RESPONSE").append(separator);
+        s.append("Status:").append(response.getStatus()).append(separator);
+        s.append("Char encoding:").append(response.getCharacterEncoding()).append(separator);
+        s.append("Locale:").append(response.getLocale()).append(separator);
+        s.append("Content type:").append(response.getContentType()).append(separator);
 
-        s.append("Resp headers:").append(separator);
+        s.append("Headers:").append(separator);
         s.append(response.getHeaderNames().stream().map(rh -> rh + "=" + response.getHeader(rh)).collect(Collectors.joining(separator)));
 
-        final Long start = (Long) request.getAttribute(VisitLogger.REQUEST_TIMER);
+        final Long start = (Long) request.getAttribute(RequestLogFilter.REQUEST_TIMER);
         if (start != null) {
             final long elapsedTime = System.nanoTime() - start;
             s.append(separator).append("Request time elapsed:").append(elapsedTime);

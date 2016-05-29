@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smigo.log.VisitLogger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyOverrideConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -87,11 +86,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(visitLogger());
-    }
-
-    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
@@ -125,11 +119,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addStatusController("/blog/robots.txt", HttpStatus.NOT_FOUND);
         registry.addStatusController("/apple-touch-icon-precomposed.png", HttpStatus.NOT_FOUND);
         registry.addStatusController("/apple-touch-icon.png", HttpStatus.NOT_FOUND);
-    }
-
-    @Bean
-    public VisitLogger visitLogger() {
-        return new VisitLogger();
     }
 
     @Bean

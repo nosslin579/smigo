@@ -80,12 +80,6 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
     })
     .run(function ($route, $templateCache, $http, $rootScope, $log, isTouchDevice) {
         'use strict';
-        $log.log("App run. isTouchDevice:" + isTouchDevice, initData);
-        for (var i in $route.routes) {
-            if ($route.routes[i].templateUrl) {
-                $http.get($route.routes[i].templateUrl, {cache: $templateCache});
-            }
-        }
 
         //notify if any 3rd party library failed to load
         window.missingLibraries && $http.post('/rest/log/error', {
