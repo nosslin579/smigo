@@ -115,8 +115,8 @@ public class UserController {
 
     @RequestMapping(value = "/locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public java.util.Map<String, String> getLocales(HttpServletRequest request) {
-        return Language.getLanguagesForDisplay(request.getLocales());
+    public java.util.Map<String, String> getLocales(HttpServletRequest request, Locale locale) {
+        return Language.getLanguagesForDisplay(request.getLocales(),locale);
     }
 
     @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

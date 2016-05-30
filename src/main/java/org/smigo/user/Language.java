@@ -49,7 +49,7 @@ enum Language {
         this.locale = locale;
     }
 
-    public static Map<String, String> getLanguagesForDisplay(Enumeration<Locale> locales) {
+    public static Map<String, String> getLanguagesForDisplay(Enumeration<Locale> locales, Locale additionalLocale) {
         SortedMap<String, String> ret = new TreeMap<>();
         for (Language t : Language.values()) {
             ret.put(t.locale.toString(), StringUtils.capitalize(t.locale.getDisplayName(t.locale)));
@@ -58,6 +58,7 @@ enum Language {
             Locale locale = locales.nextElement();
             ret.put(locale.toString(), StringUtils.capitalize(locale.getDisplayName(locale)));
         }
+        ret.put(additionalLocale.toString(), StringUtils.capitalize(additionalLocale.getDisplayName(additionalLocale)));
         return ret;
     }
 
