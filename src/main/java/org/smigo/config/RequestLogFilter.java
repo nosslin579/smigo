@@ -25,7 +25,8 @@ package org.smigo.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.log.LogHandler;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -35,12 +36,7 @@ import java.io.IOException;
 public class RequestLogFilter implements Filter {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     public static final String REQUEST_TIMER = "org.smigo.config.request-timer";
-    private final WebApplicationContext context;
     private LogHandler logHandler;
-
-    public RequestLogFilter(WebApplicationContext context) {
-        this.context = context;
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -54,7 +50,8 @@ public class RequestLogFilter implements Filter {
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        logHandler = context.getBean(LogHandler.class);
+        ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        logHandler = ctx.getBean(LogHandler.class);
     }
 
     @Override

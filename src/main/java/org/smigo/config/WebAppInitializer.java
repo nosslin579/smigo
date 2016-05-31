@@ -79,9 +79,6 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         characterEncodingFilter.setInitParameter("forceEncoding", "true");
         characterEncodingFilter.addMappingForUrlPatterns(null, false, "/*");
 
-        FilterRegistration.Dynamic logStatusCode = servletContext.addFilter("RequestLogFilter", new RequestLogFilter(context));
-        logStatusCode.addMappingForUrlPatterns(null, false, "/*");
-
         servletContext.addListener(new RequestContextListener());
         servletContext.addListener(new ContextLoaderListener(context));
 
@@ -93,4 +90,11 @@ public class WebAppInitializer extends AbstractSecurityWebApplicationInitializer
         servletContext.addServlet("dispatcher", dispatcherServlet).addMapping("/");
     }
 
+    @Override
+    protected void afterSpringSecurityFilterChain(ServletContext servletContext) {
+        //Adding filter here so we can use request.getUserPrincipal()
+        super.afterSpringSecurityFilterChain(servletContext);
+        FilterRegistration.Dynamic logStatusCode = servletContext.addFilter("RequestLogFilter", new RequestLogFilter());
+        logStatusCode.addMappingForUrlPatterns(null, false, "/*");
+    }
 }

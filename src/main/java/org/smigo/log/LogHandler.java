@@ -50,10 +50,9 @@ public class LogHandler {
     @Autowired
     private LogDao logDao;
 
-
     public void log(HttpServletRequest request, HttpServletResponse response) {
         String requestURI = request.getRequestURI();
-        if (!requestURI.endsWith(".css") && !requestURI.endsWith(".png")) {
+        if (!requestURI.endsWith(".png")) {
             log.info(getRequestDump(request, response, ",  "));
             logDao.log(Log.create(request, response));
         }
@@ -68,7 +67,7 @@ public class LogHandler {
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
-            s.append(headerName).append("=").append(request.getHeader(headerName)).append("  ");
+            s.append(headerName).append("=").append(request.getHeader(headerName)).append(separator);
         }
         s.append(separator);
         s.append("####RESPONSE").append(separator);
