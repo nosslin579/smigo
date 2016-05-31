@@ -69,7 +69,7 @@ public @interface UserHeaderAndAuthenticatedUserMatch {
             final String headerUser = request.getHeader("SmigoUser");
             boolean clientServerMatch = Objects.equals(remoteUser, headerUser);
             if (!clientServerMatch) {
-                mailHandler.sendAdminNotification("header SmigoUser mismatch", "RemoteUser:" + remoteUser + " Header:" + headerUser);
+                mailHandler.sendAdminNotification("header mismatch", "Backend: " + remoteUser + " Frontend: " + headerUser);
             }
             return clientServerMatch;
         }
