@@ -52,8 +52,11 @@ public class LogHandler {
 
 
     public void log(HttpServletRequest request, HttpServletResponse response) {
-        log.info(getRequestDump(request, response, ",  "));
-        logDao.log(Log.create(request, response));
+        String requestURI = request.getRequestURI();
+        if (!requestURI.endsWith(".css") && !requestURI.endsWith(".png")) {
+            log.info(getRequestDump(request, response, ",  "));
+            logDao.log(Log.create(request, response));
+        }
     }
 
     public String getRequestDump(HttpServletRequest request, HttpServletResponse response, String separator) {
