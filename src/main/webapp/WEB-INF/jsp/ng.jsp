@@ -56,6 +56,7 @@
         <%@ include file="../js/user/LoginController.js" %>
         <%@ include file="../js/user/AccountController.js" %>
         <%@ include file="../js/user/UserService.js" %>
+        <%@ include file="../js/user/UserInterceptor.js" %>
         <%@ include file="../js/user/RequestPasswordLinkController.js" %>
 
         <%@ include file="../js/translation/TranslateService.js" %>

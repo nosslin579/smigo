@@ -53,7 +53,7 @@ public class HomeController {
         model.addAttribute("rules", speciesHandler.getRules());
     }
 
-    @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link", "/accept-terms-of-service"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/garden-planner", "/login", "/register", "/forum", "/account", "/request-password-link", "/accept-terms-of-service", "/welcome-back"}, method = RequestMethod.GET)
     public String getGarden(Model model, HttpServletRequest request, HttpServletResponse response) {
         final String path = request.getServletPath().replace("/", "");
         model.addAttribute("msgTitle", "msg.concat.title." + path);

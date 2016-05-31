@@ -10,7 +10,9 @@ function AccountController($anchorScroll, $scope, $http, $log, $location, $route
     $scope.passwordBean = {};
     $scope.updateUser = UserService.updateUser;
     $scope.changePassword = UserService.changePassword;
+    $scope.logout= UserService.logout;
     $scope.enableUsernameInput = $routeParams.enableUsernameInput === 'true';
+
 
     $scope.goTo = function (id) {
         $log.log('Scrolling to ', id);

@@ -1,6 +1,9 @@
 angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
-    .config(function ($routeProvider, $logProvider, $provide, $locationProvider, $uibTooltipProvider) {
+    .config(function ($routeProvider, $logProvider, $provide, $locationProvider, $uibTooltipProvider, $httpProvider) {
         'use strict';
+
+        $httpProvider.interceptors.push('UserInterceptor');
+
         $logProvider.debugEnabled(false);
 
         $locationProvider.html5Mode(true);
@@ -11,6 +14,9 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
             }).
             when('/help', {
                 templateUrl: 'help?hide-nav=true'
+            }).
+            when('/welcome-back', {
+                templateUrl: 'views/welcome-back.html'
             }).
             when('/garden-planner-comparison', {
                 templateUrl: 'garden-planner-comparison?hide-nav=true'
@@ -78,35 +84,13 @@ angular.module('smigoModule', ['ngRoute', 'ui.bootstrap', 'ngSanitize'])
 
         $uibTooltipProvider.setTriggers({'click': 'blur'});
     })
-    .run(function ($route, $templateCache, $http, $rootScope, $log, isTouchDevice) {
+    .run(function ($http) {
         'use strict';
 
         //notify if any 3rd party library failed to load
         window.missingLibraries && $http.post('/rest/log/error', {
             message: 'Missing 3rd party libraries:' + JSON.stringify(window.missingLibraries)
         });
-
-        /*
-         $rootScope.$on('current-user-changed', function (event, user) {
-         $log.log('Broadcast: current-user-changed', [event, user]);
-         });
-
-         $rootScope.$on('$locationChangeSuccess', function (param1, param2, param3) {
-         $log.log('Broadcast: $locationChangeSuccess', [param1, param2, param3]);
-         });
-
-         $rootScope.$on('$locationChangeStart', function (param1, param2, param3) {
-         $log.info('Broadcast: locationChangeStart', [param1, param2, param3]);
-         });
-
-         $rootScope.$on('$routeChangeStart', function (param1, param2, param3) {
-         $log.info('Broadcast: routeChangeStart', [param1, param2, param3]);
-         });
-
-         $rootScope.$on('newMessagesAvailable', function (param1, param2, param3) {
-         $log.info('Broadcast: newMessagesAvailable', [param1, param2, param3]);
-         });
-         */
 
     })
     .value('isTouchDevice', !!('ontouchstart' in window));

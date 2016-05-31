@@ -42,6 +42,7 @@ public class RequestLogFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
+        resp.addHeader("SmigoUser", req.getRemoteUser());
         log.info("Incoming request:" + req.getMethod() + req.getRequestURL().toString());
         request.setAttribute(REQUEST_TIMER, System.nanoTime());
         chain.doFilter(request, response);

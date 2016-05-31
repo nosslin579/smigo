@@ -38,6 +38,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -124,4 +125,13 @@ public class UserController {
     public java.util.Map<Object, Object> getDefaultTranslation(Locale locale) {
         return messageSource.getAllMessages(locale);
     }
+
+
+    @RequestMapping(value = {"/rest/logout"}, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void logout(HttpServletRequest request) throws ServletException {
+        request.logout();
+    }
+
+
 }

@@ -40,7 +40,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
@@ -90,10 +93,9 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/garden-planner-comparison").setViewName("garden-planner-comparison.jsp");
         registry.addViewController("/").setViewName("home.jsp");
         registry.addViewController("/help").setViewName("help.jsp");
-        registry.addViewController("/welcome-back").setViewName("welcome-back.jsp");
         registry.addViewController("/robots.txt").setViewName("robots-txt.jsp");
         registry.addViewController("/sitemap.xml").setViewName("sitemap-xml.jsp");
-        registry.addRedirectViewController("/garden-planner.html","/views/garden-planner.html").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        registry.addRedirectViewController("/garden-planner.html", "/views/garden-planner.html").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/garden/**", "/garden-planner").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/hasta-luego/**", "/welcome-back").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         registry.addRedirectViewController("/beta/**", "/").setStatusCode(HttpStatus.MOVED_PERMANENTLY);

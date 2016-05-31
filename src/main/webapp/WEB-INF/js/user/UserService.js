@@ -12,6 +12,17 @@ function UserService($log, $http, $rootScope, $q, $location) {
         }
     });
 
+    $rootScope.$on('response-received', function (event, response) {
+        var username = state.currentUser ? state.currentUser.username : null;
+        if (response.headers('SmigoUser') !== username) {
+            $log.warn("User header mismatch", [response.headers(), state]);
+            $http.get('/rest/user').then(function (response) {
+                setUser(response.data);
+            });
+        }
+    });
+
+
     $http.get('/rest/user').then(function (response) {
         var newUser = response.data;
         setUser(newUser, true);
@@ -82,6 +93,12 @@ function UserService($log, $http, $rootScope, $q, $location) {
     }
 
     return {
+        logout:function () {
+            $http.post('/rest/logout').then(function () {
+                $location.url('/welcome-back');
+                setUser(null);
+            });
+        },
         changePassword: function (form, passwordBean) {
             $log.log('changePassword', [form, passwordBean]);
             form.updateSuccessful = false;
