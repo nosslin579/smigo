@@ -31,7 +31,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.*;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer;
 import org.springframework.security.config.annotation.web.configurers.openid.OpenIDLoginConfigurer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -98,9 +101,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         CsrfConfigurer<HttpSecurity> csrf = http.csrf();
         csrf.disable();
-
-        //disables CacheControlHeadersWriter
-        http.headers().cacheControl().disable();
 
         OpenIDLoginConfigurer<HttpSecurity> openidLogin = http.openidLogin();
         openidLogin.loginPage("/login");

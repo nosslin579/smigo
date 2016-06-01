@@ -5,7 +5,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
     $log.log('UserService', [$http.defaults.headers, state]);
 
     $rootScope.$on('$routeChangeStart', function (angularEvent, next, current) {
-        $log.log('$routeChangeStart', [angularEvent, next, current]);
+        //$log.log('$routeChangeStart', [angularEvent, next, current]);
         //when user tries to avoid accepting terms of service page
         if (state.currentUser && !state.currentUser.termsOfService) {
             $location.url('/accept-terms-of-service');
@@ -15,7 +15,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
     $rootScope.$on('response-received', function (event, response) {
         var username = state.currentUser ? state.currentUser.username : null;
         if (response.headers('SmigoUser') !== username) {
-            $log.warn("User header mismatch", [response.headers(), state]);
+            $log.warn('User header mismatch', response.headers(), state);
             $http.get('/rest/user').then(function (response) {
                 setUser(response.data);
             });
@@ -33,7 +33,7 @@ function UserService($log, $http, $rootScope, $q, $location) {
     });
 
     function setUser(newUser, initial) {
-        $log.log('Setting user', newUser, state.currentUser);
+        $log.log('Setting user', newUser, state.currentUser, initial);
         var oldUser = state.currentUser;
         state.currentUser = newUser;
         if (newUser) {
@@ -42,20 +42,6 @@ function UserService($log, $http, $rootScope, $q, $location) {
             delete $http.defaults.headers.common.SmigoUser;
         }
         $rootScope.$broadcast('current-user-changed', newUser, oldUser, initial);
-    }
-
-    function validateForm(form, skipValidate) {
-        form.objectErrors = [];
-        form.submitted = true;
-        form.processing = true;
-        var deferred = $q.defer();
-        if (form.$invalid && !skipValidate) {
-            $log.debug('Form is invalid', form);
-            deferred.reject('Form is invalid');
-        } else {
-            deferred.resolve();
-        }
-        return deferred.promise;
     }
 
     function login(form, formModel) {
@@ -69,34 +55,36 @@ function UserService($log, $http, $rootScope, $q, $location) {
             $log.warn('Possible autocomplete detected, formModel contains no password.');
             formModel.password = $('#password').val();
         }
-        return validateForm(form, true)
-            .then(function () {
-                return $http({
-                    method: 'POST',
-                    url: 'login',
-                    data: $.param(formModel),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-            })
-            .then(function (response) {
-                return $http.get('/rest/user');
-            })
-            .then(function (response) {
-                $location.path('/garden-planner');
-                setUser(response.data);
-            })
-            .catch(function (errorReason) {
-                $log.log('Login failed, reason:', errorReason);
-                form.objectErrors = errorReason.data;
-                form.processing = false;
-            });
+
+        form.objectErrors = [];
+        form.submitted = true;
+        form.processing = true;
+        return $http({
+            method: 'POST',
+            url: 'login',
+            data: $.param(formModel),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            $log.info('Login succesful', response);
+            return $http.get('/rest/user');
+        }).then(function (response) {
+            $log.info('User retrieved after login', response);
+            setUser(response.data);
+            $location.path('/garden-planner');
+        }).catch(function (errorReason) {
+            $log.log('Login failed, reason:', errorReason);
+            form.objectErrors = errorReason.data;
+            form.processing = false;
+        });
     }
 
     return {
-        logout:function () {
-            $http.post('/rest/logout').then(function () {
-                $location.url('/welcome-back');
+        logout: function () {
+            $http.post('/rest/logout', {}).then(function () {
                 setUser(null);
+                $location.url('/welcome-back');
+            }).catch(function (response) {
+                $log.error('Logout failed', response);
             });
         },
         changePassword: function (form, passwordBean) {
@@ -127,18 +115,22 @@ function UserService($log, $http, $rootScope, $q, $location) {
             });
         },
         register: function (form, formModel) {
-            validateForm(form)
-                .then(function () {
-                    $log.log('Registering');
-                    return $http.post('/rest/user', formModel);
-                })
-                .then(function () {
-                    return login(form, formModel);
-                }).catch(function (errorReason) {
-                    $log.log('Login failed', errorReason);
-                    form.objectErrors = errorReason.data;
-                    form.processing = false;
-                });
+            form.objectErrors = [];
+            form.submitted = true;
+            form.processing = true;
+            if (form.$invalid) {
+                $log.warn('Form is invalid', form);
+                return;
+            }
+            $log.log('Registering');
+            $http.post('/rest/user', formModel).then(function (response) {
+                $log.info('Register success', response);
+                login(form, formModel);
+            }).catch(function (response) {
+                $log.error('Register failed', response);
+                form.objectErrors = response.data;
+                form.processing = false;
+            });
         },
         login: login,
         updateUser: function updateUser(form, userBean, redirectOnSuccess) {
