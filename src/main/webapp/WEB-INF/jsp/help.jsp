@@ -33,7 +33,8 @@
         <div><spring:message code="msg.answer.howdoesitwork2"/></div>
         <div><spring:message code="msg.answer.howdoesitwork3"/></div>
         <div><spring:message code="msg.answer.howdoesitwork4"/></div>
-        <div><spring:message code="msg.viewexample" arguments="<a href=\"/gardener/example\">,</a>"/></div>
+        <div>
+            <spring:message code="msg.viewexample" arguments="<a href=\"/gardener/example\">,</a>,<a href=\"https://youtu.be/3HhEkv2oLzA\">,</a>"/></div>
     </div>
 
     <h3><spring:message code="msg.question.howaddspecies"/></h3>
