@@ -22,7 +22,8 @@
         <p>
             <spring:message code="msg.front.intro"/>
         </p>
-        <p><a class="btn btn-primary btn-lg" href="/garden-planner" role="button"><spring:message code="msg.front.tryit"/></a>
+        <p>
+            <a class="btn btn-primary btn-lg" href="/garden-planner" role="button"><spring:message code="msg.front.tryit"/></a>
         </p>
     </div>
 </div>
@@ -49,6 +50,16 @@
             <h2><spring:message code="msg.front.head3"/></h2>
             <p><spring:message code="msg.front.desc3a"/></p>
             <p><spring:message code="msg.front.desc3b"/></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2><spring:message code="msg.front.headvideo"/></h2>
+            <p><spring:message code="msg.front.descvideo"/></p>
+
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe style="border-radius: 5px;" src="https://www.youtube.com/embed/3HhEkv2oLzA" class="embed-responsive-item" allowfullscreen></iframe>
+            </div>
         </div>
     </div>
     <jsp:include page="nav-bottom.jsp"/>
