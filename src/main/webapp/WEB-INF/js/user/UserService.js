@@ -117,11 +117,11 @@ function UserService($log, $http, $rootScope, $q, $location) {
         register: function (form, formModel) {
             form.objectErrors = [];
             form.submitted = true;
-            form.processing = true;
             if (form.$invalid) {
                 $log.warn('Form is invalid', form);
                 return;
             }
+            form.processing = true;
             $log.log('Registering');
             $http.post('/rest/user', formModel).then(function (response) {
                 $log.info('Register success', response);

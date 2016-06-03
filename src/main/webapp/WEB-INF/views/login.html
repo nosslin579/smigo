@@ -84,7 +84,7 @@
                     <input type="password" class="form-control" id="password-again" name="passwordagain" so-msg-attr="placeholder=passwordagain"
                            ng-model="passwordAgain" equals="{{formModel.password}}"/>
 
-                    <div ng-if="loginOrRegisterform.passwordagain.$dirty">
+                    <div ng-if="loginOrRegisterform.passwordagain.$dirty || loginOrRegisterform.submitted">
                         <span ng-show="loginOrRegisterform.passwordagain.$error.equals" class="help-block" so-msg="msg.entersamevalueagain"></span>
                     </div>
                 </div>
