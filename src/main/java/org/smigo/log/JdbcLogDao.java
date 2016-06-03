@@ -96,7 +96,7 @@ class JdbcLogDao implements LogDao {
 
     @Override
     public QueryReport getReferrerReport() {
-        String sql = "SELECT REGEXP_REPLACE(REFERER,'(?<=.{150}).+','...'),COUNT(REFERER) FROM VISITLOG \n" +
+        String sql = "SELECT REGEXP_REPLACE(REFERER,'(?<=.{100}).+','...'),COUNT(REFERER),GROUP_CONCAT(DISTINCT HOST) FROM VISITLOG \n" +
                 "WHERE REFERER != '' AND REFERER NOT REGEXP '^http:.{2,5}smigo.org' AND current_timestamp() < dateadd('DAY',8,createdate) AND XFORWARDEDFOR IN (SELECT XFORWARDEDFOR FROM VISITLOG WHERE REQUESTEDURL = '/rest/plant' AND XFORWARDEDFOR != '' AND METHOD = 'POST' GROUP BY XFORWARDEDFOR)\n" +
                 "GROUP BY REFERER ORDER BY COUNT(REFERER) DESC;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
