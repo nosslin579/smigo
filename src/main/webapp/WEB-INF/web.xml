@@ -6,7 +6,7 @@
          version="3.1">
     <display-name>Smigo garden planner</display-name>
 
-<jsp-config>
+    <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>
             <default-content-type>UTF-8</default-content-type>
@@ -17,4 +17,8 @@
     <error-page>
         <location>/error</location>
     </error-page>
+
+    <session-config>
+        <session-timeout>90</session-timeout>
+    </session-config>
 </web-app>
