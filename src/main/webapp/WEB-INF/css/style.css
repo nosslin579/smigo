@@ -134,15 +134,6 @@ body > .angular-view {
     height: 24px;
 }
 
-/*Chrome gird background position*/
-/*
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    #grid::before {
-        background-position: 40px 40px !important;
-    }
-}
-*/
-
 .square-container {
     background-position: 40px 40px;
     background-image: url('/static/icon/gridbackground.png');
@@ -152,6 +143,15 @@ body > .angular-view {
     margin-left: -99600px;
     margin-top: -99800px;
     cursor: crosshair;
+}
+
+@media all and (-ms-high-contrast: none) {
+    /* IE11 doesn't scroll background so we remove it here
+    see http://stackoverflow.com/a/22085269/859514 */
+    *::-ms-backdrop, .square-container {
+        background: none;
+        border: 1px solid;
+    }
 }
 
 .peephole {
