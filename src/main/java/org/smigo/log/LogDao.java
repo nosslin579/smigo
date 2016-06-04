@@ -40,4 +40,6 @@ interface LogDao {
     QueryReport getUrlReport();
 
     QueryReport getPopularNewVernaculars();
+
+    QueryReport getActivityReport();
 }

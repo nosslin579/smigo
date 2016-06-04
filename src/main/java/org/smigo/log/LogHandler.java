@@ -98,7 +98,7 @@ public class LogHandler {
     @Scheduled(cron = "0 0 12 * * FRI")
     public void sendWeeklyReport() throws MessagingException {
         StringBuilder mail = new StringBuilder();
-        mail.append("<html><body>");
+        mail.append("<html><head><meta charset=\"utf-8\"/></head><body>");
 
         mail.append("<h1>Weekly report</h1>");
 
@@ -111,6 +111,7 @@ public class LogHandler {
 
         mail.append(getHtmlTable(logDao.getUserReport()));
         mail.append(getHtmlTable(logDao.getUserAgentReport()));
+        mail.append(getHtmlTable(logDao.getActivityReport()));
         mail.append(getHtmlTable(logDao.getReferrerReport()));
         mail.append(getHtmlTable(logDao.getPopularNewVernaculars()));
         mail.append(getHtmlTable(logDao.getSpeciesReport()));
@@ -133,8 +134,15 @@ public class LogHandler {
         ret.append("</tr>");
         for (Map<String, Object> row : tableRows) {
             ret.append("<tr>");
-            for (String column : columnNames) {
-                ret.append("<td nowrap>").append(row.get(column)).append("</td>");
+            for (String columnName : columnNames) {
+                ret.append("<td nowrap>");
+                Object column = row.get(columnName);
+                if (column instanceof Boolean) {
+                    ret.append(((Boolean) column) ? "✓" : "");
+                } else {
+                    ret.append(column);
+                }
+                ret.append("</td>");
             }
             ret.append("</tr>");
         }

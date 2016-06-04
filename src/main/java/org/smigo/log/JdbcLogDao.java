@@ -200,4 +200,30 @@ class JdbcLogDao implements LogDao {
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         return new QueryReport(sql, maps);
     }
+
+    @Override
+    public QueryReport getActivityReport() {
+        String sql = "SELECT\n" +
+                "  group_concat(DISTINCT USERNAME SEPARATOR ' ')                        AS User,\n" +
+                "  bool_or(METHOD = 'POST' AND REQUESTEDURL = '/rest/user')             AS Reg,\n" +
+                "  max(SESSIONAGE)                                                      AS MaxAge,\n" +
+                "  datediff('MINUTE', min(CREATEDATE), MAX(CREATEDATE))                 AS DiffMin,\n" +
+                "  count(XFORWARDEDFOR)                                                 AS Req,\n" +
+                "  count(CASE REQUESTEDURL\n" +
+                "        WHEN '/rest/plant' THEN 1 ELSE NULL END)                       AS Add,\n" +
+                "  count(CASE METHOD\n" +
+                "        WHEN 'DELETE' THEN 1 ELSE NULL END)                            AS Del,\n" +
+                "  count(DISTINCT SESSIONID)                                            AS Ses,\n" +
+                "  substring(group_concat(DISTINCT REFERER ORDER BY CREATEDATE), 0, 50) AS Referer,\n" +
+                "  group_concat(DISTINCT LOCALES)                                       AS Locale,\n" +
+                "  replace(group_concat(DISTINCT USERAGENT), 'Mozilla/5.0 ')            AS UserAgent\n" +
+                "FROM VISITLOG\n" +
+                "WHERE current_timestamp() < dateadd('DAY', 8, createdate) and USERAGENT not like '%compatible%'\n" +
+                "GROUP BY XFORWARDEDFOR\n" +
+                "HAVING count(DISTINCT REFERER) > 1\n" +
+                "ORDER BY group_concat(DISTINCT USERNAME SEPARATOR ' ') DESC ,count(XFORWARDEDFOR) DESC\n" +
+                "LIMIT 40";
+        final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        return new QueryReport(sql, maps);
+    }
 }

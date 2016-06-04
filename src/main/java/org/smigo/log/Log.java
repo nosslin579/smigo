@@ -22,6 +22,8 @@ package org.smigo.log;
  * #L%
  */
 
+import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -70,13 +72,14 @@ class Log {
         final HttpSession session = req.getSession(false);
         final long age = session == null ? 0 : (System.currentTimeMillis() - session.getCreationTime());
         final long ageSeconds = TimeUnit.MILLISECONDS.toSeconds(age);
+        String requestedSessionId = StringUtils.isEmpty(req.getRequestedSessionId()) ? null : req.getRequestedSessionId();
         return new Log(truncate(req.getRemoteUser()),
                 truncate(getRequestURI(req, response)),
                 truncate(locales.toString()),
                 truncate(req.getHeader("user-agent")),
                 truncate(req.getHeader("host")),
                 truncate(req.getHeader("referer")),
-                truncate(req.getRequestedSessionId()),
+                truncate(requestedSessionId),
                 req.getMethod(),
                 truncate(req.getRemoteAddr()),
                 response.getStatus(),
