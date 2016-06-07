@@ -37,11 +37,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 /**
  * Install kga to local maven repo:
- * ./mvn install:install-file -Dfile=KitchenGardenAid.1.7.jar -DgroupId=kga -DartifactId=kga -Dversion=1.7 -Dpackaging=jar
+ * ./mvn install:install-file -Dfile=KitchenGardenAid.1.8.1.jar -DgroupId=kga -DartifactId=kga -Dversion=1.8.1 -Dpackaging=jar
  */
 @ContextConfiguration(classes = {SpeciesTestConfiguration.class})
 public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
@@ -63,6 +64,10 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
     @Test(enabled = true)
     public void testDataIsComplete() throws Exception {
         List<String> sqlStatement = new ArrayList<>();
+
+        String speciesPath = "resources/species.xml";
+        InputStream stream = PlantList.class.getResourceAsStream("/" + speciesPath);
+        PlantList.initialize(stream);
 
         final Collection<Plant> plants = PlantList.getResources().getPlants();
         for (Plant plant : plants) {
@@ -100,7 +105,7 @@ public class KitchenGardenAidDataTest extends AbstractTestNGSpringContextTests {
                 log.error("Could not map plant:" + plant, e);
             }
             FileUtils.writeLines(new File("/tmp/data.sql"), sqlStatement);
-            Assert.assertTrue(sqlStatement.isEmpty());
+            Assert.assertEquals(sqlStatement, new ArrayList<String>(), sqlStatement.toString());
         }
     }
 
