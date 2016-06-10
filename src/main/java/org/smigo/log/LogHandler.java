@@ -161,9 +161,10 @@ public class LogHandler {
         text.append("Uri:").append(uri).append(separator);
         text.append("Exception:").append(getStackTrace(ex)).append(separator);
 
-
         log.error("Error during request" + subject, ex);
-        mailHandler.sendAdminNotification("error during request " + subject, text);
+        if (!Log.create(request, response).getUseragent().contains("compatible")) {
+            mailHandler.sendAdminNotification("error during request " + subject, text);
+        }
     }
 
     private String getStackTrace(Exception ex) {
