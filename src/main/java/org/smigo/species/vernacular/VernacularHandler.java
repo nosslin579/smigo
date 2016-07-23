@@ -79,8 +79,7 @@ public class VernacularHandler {
             return ret.stream().filter(localeMatcher).collect(Collectors.toList());
         }
 
-        //return english vernaculars
-        ret.removeIf(vernacular -> !vernacular.getLanguage().equals("en") || !vernacular.getCountry().isEmpty());
+        //no translation available, return everything
         return ret;
     }
 
