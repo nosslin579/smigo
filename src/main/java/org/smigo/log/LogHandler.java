@@ -122,10 +122,16 @@ public class LogHandler {
     }
 
     private String getHtmlTable(QueryReport queryReport) {
-        final List<Map<String, Object>> tableRows = queryReport.getResult();
         StringBuilder ret = new StringBuilder();
-        List<String> columnNames = Lists.newArrayList(tableRows.iterator().next().keySet());
         ret.append("<p>").append(queryReport.getSql()).append("</p>");
+
+        final List<Map<String, Object>> tableRows = queryReport.getResult();
+        if (tableRows.isEmpty()) {
+            ret.append("<div>").append("Nothing to report").append("</div>");
+            return ret.toString();
+        }
+
+        List<String> columnNames = Lists.newArrayList(tableRows.iterator().next().keySet());
         ret.append("<table border='1'>");
         ret.append("<tr>");
         for (String tableHeader : columnNames) {
