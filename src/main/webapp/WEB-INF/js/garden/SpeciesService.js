@@ -158,7 +158,8 @@ function SpeciesService($anchorScroll, $uibModal, $timeout, $http, translateFilt
             state.action = 'add';
         },
         deleteSpecies: function (species) {
-            return $http.delete('/rest/species/' + species.id).then(function (response) {
+            var replaceSpeciesId = prompt("Replace with (id)", "0");
+            return $http.delete('/rest/species/' + species.id + '/' + replaceSpeciesId).then(function (response) {
                 $log.log('Response from delete species', [response, species]);
                 var indexOfDeleted = state.speciesArray.indexOf(species);
                 state.speciesArray.splice(indexOfDeleted, 1);

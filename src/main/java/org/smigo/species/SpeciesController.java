@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -96,10 +95,10 @@ public class SpeciesController implements Serializable {
     }
 
     @PreAuthorize("hasAuthority('" + AuthenticatedUser.MOD_AUTHORITY + "')")
-    @RequestMapping(value = "/rest/species/{id:\\d+}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/rest/species/{id:\\d+}/{replace:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteSpecies(Locale locale, @PathVariable int id) {
-        speciesHandler.deleteSpecies(id);
+    public void deleteSpecies(Locale locale, @PathVariable int id, @PathVariable("replace") int replace) {
+        speciesHandler.deleteSpecies(id, replace);
     }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)

@@ -24,6 +24,8 @@ package org.smigo.species;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.plants.Plant;
+import org.smigo.plants.PlantHandler;
 import org.smigo.user.AuthenticatedUser;
 import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +48,22 @@ public class SpeciesHandler {
     private RuleDao ruleDao;
     @Autowired
     private FamilyDao familyDao;
+    @Autowired
+    private PlantHandler plantHandler;
 
     public int addSpecies(Species vernacularName, AuthenticatedUser user, Locale locale) {
         return speciesDao.addSpecies(user.getId());
     }
 
-    public void deleteSpecies(int speciesId) {
-        speciesDao.deleteSpecies(speciesId);
+    public void deleteSpecies(int deleteId, int replaceId) {
+        if (replaceId != 0) {
+            List<Plant> restore = plantHandler.getPlants(deleteId);
+            mailHandler.sendAdminNotification("plants replaced", "Old:" + deleteId + " New:" + replaceId + System.lineSeparator() + restore.toString());
+            plantHandler.replaceSpecies(deleteId, replaceId);
+        }
+        speciesDao.deleteSpecies(deleteId);
     }
+
 
     public List<Species> getDefaultSpecies() {
         return speciesDao.getDefaultSpecies();

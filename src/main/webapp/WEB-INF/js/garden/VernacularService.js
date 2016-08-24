@@ -120,10 +120,7 @@ function VernacularService($http, $rootScope, $log, $q) {
         deleteVernacular: function (species, updateObj, vernacular) {
             $log.info('deleteVernacular', [species, updateObj, vernacular]);
             updateObj.displayModReview = false;
-            if (getVernaculars(species.id).length === 1) {
-                updateObj.objectErrors = [{defaultMessage: 'msg.unknownerror'}];
-                return;
-            }
+
             return $http.delete('/rest/vernacular/' + vernacular.id).then(function (response) {
                 $log.log('Response from delete /rest/verncular/' + vernacular.id, [response, state]);
                 if (response.status === 200) {
