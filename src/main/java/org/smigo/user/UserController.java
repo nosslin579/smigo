@@ -127,7 +127,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = {"/rest/logout"}, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = {"/rest/logout"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void logout(HttpServletRequest request) throws ServletException {
         request.logout();
