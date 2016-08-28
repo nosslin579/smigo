@@ -75,7 +75,11 @@ public class SpeciesHandler {
 
     public List<Species> searchSpecies(String query, Locale locale) {
         //todo add search on translated family
-        return speciesDao.searchSpecies(query, locale);
+        List<Species> species = speciesDao.searchSpecies(query, locale);
+        if (species.isEmpty()) {
+            return speciesDao.searchSpecies(query, Locale.ENGLISH);
+        }
+        return species;
     }
 
     public List<Rule> getRules() {
