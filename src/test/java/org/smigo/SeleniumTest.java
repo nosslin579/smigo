@@ -49,6 +49,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
@@ -454,6 +455,10 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     @Test(enabled = true)
     public void uploadFromKitchenGardenAidTest() throws InterruptedException, IOException {
+        String speciesPath = "resources/species.xml";
+        InputStream stream = PlantList.class.getResourceAsStream("/" + speciesPath);
+        PlantList.initialize(stream);
+
         File htmlFile = Files.createTempFile("upload", ".html").toFile();
         PrintWriter printWriter = new PrintWriter(htmlFile);
         printWriter.print("<!DOCTYPE html>\n<html>\n<head lang=\"en\">\n<meta charset=\"UTF-8\">\n</head>\n<body>\n<form name=\"uploadform\" method=\"post\" action=\"" + HOST_URL + "/plant/upload\">\n");
