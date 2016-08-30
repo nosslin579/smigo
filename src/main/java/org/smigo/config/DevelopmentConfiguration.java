@@ -72,11 +72,12 @@ public class DevelopmentConfiguration {
             @Override
             public void send(SimpleMailMessage simpleMessage) throws MailException {
                 try {
+                    Thread.sleep(2000);
                     String text = simpleMessage.getText();
                     String subject = simpleMessage.getSubject();
                     FileUtils.writeStringToFile(MAIL_FILE, text, Charset.defaultCharset());
                     FileUtils.writeStringToFile(MAIL_FILE_TXT, subject + System.lineSeparator() + text, Charset.defaultCharset());
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new MailSendException("Error sending email to " + simpleMessage.getFrom(), e);
                 }
             }

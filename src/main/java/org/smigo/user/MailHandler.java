@@ -36,6 +36,8 @@ import javax.annotation.PreDestroy;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Component
@@ -50,6 +52,8 @@ public class MailHandler {
     private String mailSenderUsername;
     @Value("${notifierEmail}")
     private String notifierEmail;
+
+    private Executor senderExecutor = Executors.newSingleThreadExecutor();
 
     @PostConstruct
     public void sendStartupAdminNotification() {
@@ -68,7 +72,7 @@ public class MailHandler {
         simpleMailMessage.setFrom(mailSenderUsername);
         simpleMailMessage.setSubject("[SMIGO] " + subject);
         simpleMailMessage.setText(text.toString());
-        mailSender.send(simpleMailMessage);
+        senderExecutor.execute(() -> mailSender.send(simpleMailMessage));
     }
 
     public void sendAdminNotificationHtml(String subject, String text) {
@@ -79,7 +83,7 @@ public class MailHandler {
             helper.setTo(notifierEmail);
             helper.setFrom(mailSenderUsername);
             helper.setSubject("[SMIGO] " + subject);
-            mailSender.send(message);
+            senderExecutor.execute(() -> mailSender.send(message));
         } catch (MessagingException e) {
             log.error("Send message failed:" + text, e);
         }
@@ -91,7 +95,7 @@ public class MailHandler {
         simpleMailMessage.setFrom(mailSenderUsername);
         simpleMailMessage.setSubject("Smigo " + subject);
         simpleMailMessage.setText(text);
-        mailSender.send(simpleMailMessage);
+        senderExecutor.execute(() -> mailSender.send(simpleMailMessage));
     }
 
     public void sendReviewRequest(String title, List<?> current, Object edit, AuthenticatedUser user) {
