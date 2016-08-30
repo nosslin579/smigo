@@ -195,6 +195,7 @@ class JdbcLogDao implements LogDao {
                 "  LEFT JOIN VERNACULARS ON VERNACULARS.SPECIES_ID = PLANTS.SPECIES_ID\n" +
                 "WHERE PLANTS.SPECIES_ID > 10000\n" +
                 "GROUP BY PLANTS.SPECIES_ID\n" +
+                "HAVING COUNT(DISTINCT VERNACULAR_NAME) <= 1\n" +
                 "ORDER BY COUNT(DISTINCT USER_ID) DESC\n" +
                 "LIMIT 10;";
         final List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
