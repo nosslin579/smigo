@@ -36,8 +36,10 @@ import javax.annotation.PreDestroy;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
@@ -53,7 +55,7 @@ public class MailHandler {
     @Value("${notifierEmail}")
     private String notifierEmail;
 
-    private Executor senderExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService senderExecutor = Executors.newSingleThreadExecutor(new DaemonThreadFactory());
 
     @PostConstruct
     public void sendStartupAdminNotification() {
@@ -62,7 +64,12 @@ public class MailHandler {
 
     @PreDestroy
     public void sendShutdownAdminNotification() {
-        sendAdminNotification("Server", "Server shutdown");
+        final SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(notifierEmail);
+        simpleMailMessage.setFrom(mailSenderUsername);
+        simpleMailMessage.setSubject("[SMIGO] Server");
+        simpleMailMessage.setText("Server shutdown");
+        mailSender.send(simpleMailMessage);
     }
 
 
@@ -114,5 +121,15 @@ public class MailHandler {
         sb.append("Requested by user:").append(System.lineSeparator());
         sb.append(indentation).append(u);
         sendAdminNotification("review request", sb.toString());
+    }
+
+    private static class DaemonThreadFactory implements ThreadFactory {
+        private final AtomicInteger threadNumber = new AtomicInteger(1);
+
+        public Thread newThread(Runnable r) {
+            Thread ret = new Thread(Thread.currentThread().getThreadGroup(), r, "MailSenderThread-" + threadNumber.getAndIncrement(), 0);
+            ret.setDaemon(true);
+            return ret;
+        }
     }
 }

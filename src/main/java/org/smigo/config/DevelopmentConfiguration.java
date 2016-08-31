@@ -72,6 +72,7 @@ public class DevelopmentConfiguration {
             @Override
             public void send(SimpleMailMessage simpleMessage) throws MailException {
                 try {
+                    //Thread.sleep(2000);
                     String text = simpleMessage.getText();
                     String subject = simpleMessage.getSubject();
                     FileUtils.writeStringToFile(MAIL_FILE, text, Charset.defaultCharset());
