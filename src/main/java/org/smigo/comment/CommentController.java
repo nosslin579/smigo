@@ -25,16 +25,18 @@ package org.smigo.comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class CommentController implements Serializable {
@@ -43,8 +45,6 @@ public class CommentController implements Serializable {
 
     @Autowired
     private CommentHandler commentHandler;
-    @Autowired
-    private MailHandler mailHandler;
 
     @RequestMapping(value = "/rest/comment", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
@@ -52,15 +52,15 @@ public class CommentController implements Serializable {
         return commentHandler.getComments(receiver);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/comment", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    public int addMessage(@RequestBody Comment comment, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response, Locale locale) {
-//        mailHandler.sendAdminNotification("message added to forum", message);
-//        if (user == null) {
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return 0;
-//        }
-//        return commentHandler.addMessage(message, user, locale);
-        return 0;
+    public Object addMessage(@Valid @RequestBody Comment comment, BindingResult result,
+                             @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return result.getAllErrors();
+        }
+        return commentHandler.addComment(comment, user);
     }
 }

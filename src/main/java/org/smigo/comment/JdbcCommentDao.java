@@ -25,7 +25,7 @@ package org.smigo.comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -67,7 +67,12 @@ class JdbcCommentDao implements CommentDao {
     }
 
     @Override
-    public int addMessage(Comment message) {
-        return insert.executeAndReturnKey(new BeanPropertySqlParameterSource(message)).intValue();
+    public int addComment(Comment message, int submitter, int receiver) {
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("TEXT", message.getText());
+        parameterSource.addValue("SUBMITTER_USER_ID", submitter);
+        parameterSource.addValue("RECEIVER_USER_ID", receiver);
+        parameterSource.addValue("YEAR", message.getYear());
+        return insert.executeAndReturnKey(parameterSource).intValue();
     }
 }

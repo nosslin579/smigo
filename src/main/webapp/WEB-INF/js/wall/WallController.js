@@ -9,6 +9,19 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
     });
 
     $scope.garden = GardenService.getGarden($routeParams.username, true);
+    $scope.comment = {};
+
+    $scope.addComment = function (comment) {
+        $http.post('/rest/comment', comment).then(function (response) {
+            $log.info('A ok', response, $scope);
+            $scope.comment.text = '';
+            $http.get('/rest/comment', {params: {receiver: $routeParams.username}}).then(function (response) {
+                $scope.comments = response.data;
+            });
+        }).catch(function (error) {
+            $log.error('Not ok', error);
+        });
+    };
 }
 
 angular.module('smigoModule').controller('WallController', WallController);

@@ -27,5 +27,6 @@ import java.util.List;
 public interface CommentDao {
     List<Comment> getComments(String receiverUserId);
 
-    int addMessage(Comment message);
+    int addComment(Comment message, int submitter, int receiver);
+
 }

@@ -22,13 +22,16 @@ package org.smigo.comment;
  * #L%
  */
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class Comment {
     private int id;
-    private int submitterUserId;
-    private int receiverUserId, year;
-    private String text, submitter;
+    private int year;
+    @Size(min = 1, max = 1000)
+    private String text;
+    private String submitter;
+    private String receiver;
     private Date createdate;
 
     public Comment() {
@@ -48,22 +51,6 @@ public class Comment {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getSubmitterUserId() {
-        return submitterUserId;
-    }
-
-    public void setSubmitterUserId(int submitterUserId) {
-        this.submitterUserId = submitterUserId;
-    }
-
-    public int getReceiverUserId() {
-        return receiverUserId;
-    }
-
-    public void setReceiverUserId(int receiverUserId) {
-        this.receiverUserId = receiverUserId;
     }
 
     public String getText() {
@@ -96,5 +83,13 @@ public class Comment {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

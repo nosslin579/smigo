@@ -16,6 +16,11 @@
                 <span style="color: #3e3f3a;" ng-bind-html="m.text"></span>
             </div>
             <hr/>
+            <form class="navbar-form" ng-submit="addComment({text:comment.text, year:garden.selectedYear, receiver:hostUser.username})">
+                <input class="form-control" type="text" id="add-comment-input" autocomplete="off"
+                       so-msg-attr="placeholder=msg.addcomment" ng-model="comment.text">
+            </form>
+            <hr/>
         </div>
         <div class="col-lg-9 view-grid-wrapper full-height" so-grid="garden" so-grid-mutable="false">
         </div>
