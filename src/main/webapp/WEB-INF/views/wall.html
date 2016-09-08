@@ -10,7 +10,12 @@
                 <li ng-repeat="year in garden.getAvailableYears()" ng-class="{active: year == garden.selectedYear}">
                     <a href="" ng-click="garden.selectedYear = year">{{year}}</a></li>
             </ul>
-
+            <hr/>
+            <div ng-repeat="m in comments |filter:{year:garden.selectedYear}">
+                <a href="/gardener/{{m.submitter}}">{{m.submitter}}</a><span>:</span>
+                <span style="color: #3e3f3a;" ng-bind-html="m.text"></span>
+            </div>
+            <hr/>
         </div>
         <div class="col-lg-9 view-grid-wrapper full-height" so-grid="garden" so-grid-mutable="false">
         </div>
