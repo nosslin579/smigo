@@ -102,12 +102,11 @@ public class VernacularController implements Serializable {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/rest/vernacular/{id:\\d+}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Object deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
+    public void deleteVernacular(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, Locale locale, HttpServletResponse response) {
         log.info("Deleting vernacular. Name:" + id);
         Review review = vernacularHandler.deleteVernacular(id, user, locale);
         if (review == Review.MODERATOR) {
             response.setStatus(HttpStatus.ACCEPTED.value());
         }
-        return null;
     }
 }

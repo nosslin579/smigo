@@ -75,4 +75,10 @@ class JdbcCommentDao implements CommentDao {
         parameterSource.addValue("YEAR", message.getYear());
         return insert.executeAndReturnKey(parameterSource).intValue();
     }
+
+    @Override
+    public void deleteComment(int id) {
+        String sql = "DELETE FROM COMMENTS WHERE ID = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }

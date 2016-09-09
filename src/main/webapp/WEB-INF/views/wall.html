@@ -11,9 +11,10 @@
                     <a href="" ng-click="garden.selectedYear = year">{{year}}</a></li>
             </ul>
             <hr/>
-            <div ng-repeat="m in comments |filter:{year:garden.selectedYear}">
-                <a href="/gardener/{{m.submitter}}">{{m.submitter}}</a><span>:</span>
-                <span style="color: #3e3f3a;" ng-bind-html="m.text"></span>
+            <div ng-repeat="c in comments |filter:{year:garden.selectedYear}" ng-mouseenter="showDeleteIcon=true" ng-mouseleave="showDeleteIcon=false">
+                <a href="/gardener/{{c.submitter}}">{{c.submitter}}</a><span>:</span>
+                <span style="color: #3e3f3a;" ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon"></span>
+                <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-if="showDeleteIcon" ng-click="deleteComment(c)"></span>
             </div>
             <hr/>
             <div class="has-error">

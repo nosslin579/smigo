@@ -4,9 +4,7 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
         $scope.hostUser = response.data;
     });
 
-    $http.get('/rest/comment', {params: {receiver: $routeParams.username}}).then(function (response) {
-        $scope.comments = response.data;
-    });
+    reloadComments();
 
     $scope.garden = GardenService.getGarden($routeParams.username, true);
     $scope.comment = {};
@@ -16,14 +14,27 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
         $http.post('/rest/comment', comment).then(function (response) {
             $log.info('A ok', response, $scope);
             $scope.comment.text = '';
-            $http.get('/rest/comment', {params: {receiver: $routeParams.username}}).then(function (response) {
-                $scope.comments = response.data;
-            });
+            reloadComments();
         }).catch(function (error) {
             $log.error('Not ok', error);
             $scope.objectErrors = error.data;
         });
     };
+
+    $scope.deleteComment = function (comment) {
+        $http.delete('/rest/comment/' + comment.id).then(function (response) {
+            reloadComments();
+        }).catch(function (error) {
+            $scope.objectErrors = error.data;
+        });
+    };
+
+    function reloadComments() {
+        return $http.get('/rest/comment', {params: {receiver: $routeParams.username}}).then(function (response) {
+            $scope.comments = response.data;
+        });
+
+    }
 }
 
 angular.module('smigoModule').controller('WallController', WallController);

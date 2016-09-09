@@ -29,6 +29,7 @@ import org.smigo.user.User;
 import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -55,5 +56,15 @@ public class CommentHandler {
         }
         int id = commentDao.addComment(comment, user.getId(), usersByUsername.get(0).getId());
         return id;
+    }
+
+    public HttpStatus removeComment(int id, AuthenticatedUser user) {
+        List<Comment> comments = commentDao.getComments(user.getUsername());
+        boolean isReceiver = comments.stream().anyMatch(comment -> comment.getId() == id);
+        if (user.isModerator() && isReceiver) {
+            commentDao.deleteComment(id);
+            return HttpStatus.OK;
+        }
+        return HttpStatus.FORBIDDEN;
     }
 }

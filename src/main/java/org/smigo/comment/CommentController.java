@@ -63,4 +63,12 @@ public class CommentController implements Serializable {
         }
         return commentHandler.addComment(comment, user);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/rest/comment/{id}", produces = "application/json", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void removeMessage(@PathVariable int id, @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        HttpStatus httpStatus = commentHandler.removeComment(id, user);
+        response.setStatus(httpStatus.value());
+    }
 }
