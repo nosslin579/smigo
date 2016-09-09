@@ -12,6 +12,7 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
     $scope.comment = {};
 
     $scope.addComment = function (comment) {
+        $scope.objectErrors = [];
         $http.post('/rest/comment', comment).then(function (response) {
             $log.info('A ok', response, $scope);
             $scope.comment.text = '';
@@ -20,6 +21,7 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
             });
         }).catch(function (error) {
             $log.error('Not ok', error);
+            $scope.objectErrors = error.data;
         });
     };
 }
