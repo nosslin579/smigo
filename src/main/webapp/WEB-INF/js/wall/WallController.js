@@ -20,6 +20,9 @@ function WallController($scope, $http, $log, $routeParams, GardenService, UserSe
 
     $scope.garden = GardenService.getGarden($routeParams.username, true);
     $scope.comment = {};
+    $scope.isOwnGarden = function () {
+        return UserService.isUser($routeParams.username);
+    };
 
     $scope.addComment = function (comment) {
         $scope.objectErrors = [];

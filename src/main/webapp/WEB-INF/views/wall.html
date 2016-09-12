@@ -18,7 +18,8 @@
                 <a href="/gardener/{{c.submitter}}">{{c.submitter}}</a><span>:</span>
                 <span ng-if="c.highlightNew">*</span>
                 <span ng-style="{}" ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon"></span>
-                <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-if="showDeleteIcon" ng-click="deleteComment(c)"></span>
+                <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"
+                      ng-if="showDeleteIcon && isOwnGarden()" ng-click="deleteComment(c)"></span>
             </div>
             <hr/>
             <div class="has-error">
