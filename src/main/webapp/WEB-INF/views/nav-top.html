@@ -11,6 +11,9 @@
         </div>
         <div class="navbar-collapse collapse" uib-collapse="menuIsCollapsed">
             <ul class="nav navbar-nav navbar-right">
+                <li ng-class="{hidden: !userState.currentUser}">
+                    <a href="/gardener/{{userState.currentUser.username}}" so-msg-scope="msg.comments" id="comments">{{msg['msg.comments'] +' ('+ unreadComments+')'}}</a>
+                </li>
                 <li><a href="/garden-planner" so-msg="garden"></a></li>
                 <li><a href="/forum" id="forum-link" so-msg="msg.forum"></a></li>
                 <li><a href="/help" so-msg="help"></a></li>

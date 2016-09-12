@@ -54,7 +54,7 @@ class JdbcCommentDao implements CommentDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.insert = new SimpleJdbcInsert(dataSource).withTableName("COMMENTS").usingGeneratedKeyColumns("ID").usingColumns("TEXT", "SUBMITTER_USER_ID", "RECEIVER_USER_ID", "YEAR");
+        this.insert = new SimpleJdbcInsert(dataSource).withTableName("COMMENTS").usingGeneratedKeyColumns("ID").usingColumns("TEXT", "SUBMITTER_USER_ID", "RECEIVER_USER_ID", "YEAR", "UNREAD");
     }
 
     @Override
@@ -68,12 +68,13 @@ class JdbcCommentDao implements CommentDao {
     }
 
     @Override
-    public int addComment(Comment message, int submitter, int receiver) {
+    public int addComment(Comment comment, int submitter, int receiver) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("TEXT", message.getText());
+        parameterSource.addValue("TEXT", comment.getText());
         parameterSource.addValue("SUBMITTER_USER_ID", submitter);
         parameterSource.addValue("RECEIVER_USER_ID", receiver);
-        parameterSource.addValue("YEAR", message.getYear());
+        parameterSource.addValue("YEAR", comment.getYear());
+        parameterSource.addValue("UNREAD", comment.isUnread());
         return insert.executeAndReturnKey(parameterSource).intValue();
     }
 

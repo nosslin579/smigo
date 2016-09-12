@@ -9,6 +9,9 @@
             <a class="navbar-brand" href="/">Smigo<span class="hidden-sm hidden-xs"> - <spring:message code="general.smigoslogan"/></span></a>
         </div>
         <ul class="nav navbar-nav navbar-right">
+            <sec:authorize access="isAuthenticated()">
+                <li><a href="/gardener/${pageContext.request.userPrincipal.name}" id="comments"><spring:message code="msg.comments"/></a></li>
+            </sec:authorize>
             <li><a href="/garden-planner"><spring:message code="garden"/></a></li>
             <li><a href="/forum" id="forum-link"><spring:message code="msg.forum"/></a></li>
             <li><a href="/help" target="_self"><spring:message code="help"/></a></li>
