@@ -1,10 +1,22 @@
-function WallController($scope, $http, $log, $routeParams, GardenService) {
+function WallController($scope, $http, $log, $routeParams, GardenService, UserService) {
     'use strict';
     $http.get('/rest/user/' + $routeParams.username).then(function (response) {
         $scope.hostUser = response.data;
     });
 
-    reloadComments();
+
+    reloadComments().then(function (comments) {
+        if (UserService.isUser($routeParams.username)) {
+            angular.forEach(comments, function (comment) {
+                if (comment.unread) {
+                    comment.highlightNew = true;
+                    comment.unread = false;
+                    $http.put('/rest/comment', comment);
+                }
+            });
+        }
+    });
+
 
     $scope.garden = GardenService.getGarden($routeParams.username, true);
     $scope.comment = {};
@@ -32,6 +44,7 @@ function WallController($scope, $http, $log, $routeParams, GardenService) {
     function reloadComments() {
         return $http.get('/rest/comment', {params: {receiver: $routeParams.username}}).then(function (response) {
             $scope.comments = response.data;
+            return response.data;
         });
 
     }

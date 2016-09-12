@@ -67,4 +67,14 @@ public class CommentHandler {
         }
         return HttpStatus.FORBIDDEN;
     }
+
+    public void updateComment(Comment comment, AuthenticatedUser user) {
+        List<Comment> comments = commentDao.getComments(user.getUsername());
+        boolean isReceiver = comments.stream().anyMatch(c -> c.getId() == comment.getId());
+        if (isReceiver) {
+            commentDao.update(comment);
+        } else {
+            throw new IllegalArgumentException("Can not update other ppl comment");
+        }
+    }
 }

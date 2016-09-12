@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -62,6 +63,19 @@ public class CommentController implements Serializable {
             return result.getAllErrors();
         }
         return commentHandler.addComment(comment, user);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/rest/comment", produces = "application/json", method = RequestMethod.PUT)
+    @ResponseBody
+    public Object updateComment(@Valid @RequestBody Comment comment, BindingResult result,
+                                @AuthenticationPrincipal AuthenticatedUser user, HttpServletResponse response) {
+        if (result.hasErrors()) {
+            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            return result.getAllErrors();
+        }
+        commentHandler.updateComment(comment, user);
+        return Collections.emptyList();
     }
 
     @PreAuthorize("isAuthenticated()")

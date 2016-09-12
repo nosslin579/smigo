@@ -32,17 +32,19 @@ public class Comment {
     private String text;
     private String submitter;
     private String receiver;
+    private boolean unread;
     private Date createdate;
 
     public Comment() {
     }
 
-    public Comment(int id, String text, String username, int year, Date createdate) {
+    public Comment(int id, String text, String username, int year, Date createdate, boolean unread) {
         this.id = id;
         this.text = text;
         this.submitter = username;
         this.year = year;
         this.createdate = createdate;
+        this.unread = unread;
     }
 
     public int getId() {
@@ -91,5 +93,13 @@ public class Comment {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public boolean isUnread() {
+        return unread;
+    }
+
+    public void setUnread(boolean unread) {
+        this.unread = unread;
     }
 }

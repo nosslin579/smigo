@@ -6,27 +6,33 @@
 
             <p>{{hostUser.about}}</p>
 
+            <!-- #### Years ####-->
             <ul class="nav nav-pills">
                 <li ng-repeat="year in garden.getAvailableYears()" ng-class="{active: year == garden.selectedYear}">
                     <a href="" ng-click="garden.selectedYear = year">{{year}}</a></li>
             </ul>
             <hr/>
-            <div ng-repeat="c in comments |filter:{year:garden.selectedYear}" ng-mouseenter="showDeleteIcon=true" ng-mouseleave="showDeleteIcon=false">
+            <!--#### Comments ####-->
+            <div ng-repeat="c in comments |filter:{year:garden.selectedYear}"
+                 ng-mouseenter="showDeleteIcon=true" ng-mouseleave="showDeleteIcon=false">
                 <a href="/gardener/{{c.submitter}}">{{c.submitter}}</a><span>:</span>
-                <span style="color: #3e3f3a;" ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon"></span>
+                <span ng-if="c.highlightNew">*</span>
+                <span ng-style="{}" ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon"></span>
                 <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-if="showDeleteIcon" ng-click="deleteComment(c)"></span>
             </div>
             <hr/>
             <div class="has-error">
                 <span ng-repeat="error in objectErrors" class="help-block">{{error.defaultMessage | translate:error.arguments}}</span>
             </div>
+            <!-- #### Add new comment ####-->
             <form class="navbar-form form-inline" ng-submit="addComment({text:comment.text, year:garden.selectedYear, receiver:hostUser.username})">
                 <input class="form-control" type="text" id="add-comment-input" autocomplete="off"
                        so-msg-attr="placeholder=msg.addcomment" ng-model="comment.text">
-                <button type="submit" class="btn btn-default">{{'ok' | translate }}</button>
+                <button type="submit" class="btn btn-default" so-msg="ok"></button>
             </form>
             <hr/>
         </div>
+        <!-- #### Grid ####-->
         <div class="col-lg-9 view-grid-wrapper full-height" so-grid="garden" so-grid-mutable="false">
         </div>
     </div>

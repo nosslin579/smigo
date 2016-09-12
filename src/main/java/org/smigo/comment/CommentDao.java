@@ -30,4 +30,6 @@ public interface CommentDao {
     int addComment(Comment message, int submitter, int receiver);
 
     void deleteComment(int id);
+
+    void update(Comment comment);
 }

@@ -41,7 +41,8 @@ class JdbcCommentDao implements CommentDao {
             "COMMENTS.TEXT,\n" +
             "SU.USERNAME AS SUBMITTER,\n" +
             "COMMENTS.CREATEDATE,\n" +
-            "COMMENTS.YEAR\n" +
+            "COMMENTS.YEAR,\n" +
+            "COMMENTS.UNREAD\n" +
             "FROM COMMENTS\n" +
             "JOIN USERS SU ON SU.ID = COMMENTS.SUBMITTER_USER_ID\n" +
             "JOIN USERS RU ON RU.ID = COMMENTS.RECEIVER_USER_ID\n" +
@@ -61,7 +62,7 @@ class JdbcCommentDao implements CommentDao {
         return jdbcTemplate.query(SELECT, new Object[]{receiver}, new RowMapper<Comment>() {
             @Override
             public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Comment(rs.getInt("ID"), rs.getString("TEXT"), rs.getString("SUBMITTER"), rs.getInt("YEAR"), rs.getDate("CREATEDATE"));
+                return new Comment(rs.getInt("ID"), rs.getString("TEXT"), rs.getString("SUBMITTER"), rs.getInt("YEAR"), rs.getDate("CREATEDATE"), rs.getBoolean("UNREAD"));
             }
         });
     }
@@ -80,5 +81,12 @@ class JdbcCommentDao implements CommentDao {
     public void deleteComment(int id) {
         String sql = "DELETE FROM COMMENTS WHERE ID = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public void update(Comment comment) {
+        String sql = "UPDATE COMMENTS SET UNREAD = ? WHERE ID = ?;";
+        jdbcTemplate.update(sql, comment.isUnread(), comment.getId());
+
     }
 }

@@ -79,6 +79,9 @@ function UserService($log, $http, $rootScope, $q, $location) {
     }
 
     return {
+        isUser: function (username) {
+            return state.currentUser && state.currentUser.username === username;
+        },
         logout: function () {
             $http.post('/rest/logout', {}).then(function () {
                 setUser(null);
