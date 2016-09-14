@@ -16,8 +16,8 @@
             <div ng-repeat="c in comments |filter:{year:garden.selectedYear}"
                  ng-mouseenter="showDeleteIcon=true" ng-mouseleave="showDeleteIcon=false">
                 <a href="/gardener/{{c.submitter}}">{{c.submitter}}</a><span>:</span>
-                <span ng-if="c.highlightNew">*</span>
-                <span ng-style="{}" ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon"></span>
+                <span ng-if="c.highlightNew && isOwnGarden()">*</span>
+                <span ng-bind-html="c.text" ng-click="showDeleteIcon=!showDeleteIcon" class="comment-text"></span>
                 <span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer"
                       ng-if="showDeleteIcon && isOwnGarden()" ng-click="deleteComment(c)"></span>
             </div>

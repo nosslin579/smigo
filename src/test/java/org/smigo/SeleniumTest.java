@@ -24,6 +24,7 @@ package org.smigo;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -134,6 +135,37 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         d.findElement(By.name("password")).sendKeys(password);
         d.findElement(By.id("submit-login-register-form")).click();
         Thread.sleep(2000);
+    }
+
+    @Test(enabled = true)
+    public void addAndDeleteComment() throws Exception {
+        String receiver = addUser();
+        String submitter = addUser();
+        login(submitter, PASSWORD);
+
+        //Comment receivers garden
+        d.navigate().to(HOST_URL + "/gardener/" + receiver);
+        d.findElement(By.id("add-comment-input")).sendKeys(NON_LATIN_LETTERS);
+        d.findElement(By.tagName("form")).submit();
+
+        //Assert comment added
+        List<WebElement> comments = d.findElements(By.className("comment-text"));
+        Assert.assertEquals(comments.size(), 1, "One comment expected");
+        Assert.assertEquals(comments.get(0).getText(), NON_LATIN_LETTERS, "Comment text mismatch");
+
+        d.findElement(ACCOUNT_LINK).click();
+        d.findElement(LOGOUT_LINK).click();
+
+        //View comment with receiver account
+        login(receiver, PASSWORD);
+        d.findElement(By.id("comments-link")).click();
+        WebElement comment = d.findElement(By.className("comment-text"));
+        Assert.assertEquals(comment.getText(), NON_LATIN_LETTERS, "Comment text mismatch");
+
+        //Delete comment
+        ((JavascriptExecutor) d).executeScript("arguments[0].click();", comment);
+        d.findElement(By.className("glyphicon-trash")).click();
+        Assert.assertTrue(d.findElements(By.className("comment-text")).isEmpty(), "Comment not deleted");
     }
 
     @Test(enabled = true)

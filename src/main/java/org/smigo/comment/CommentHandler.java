@@ -61,7 +61,7 @@ public class CommentHandler {
     public HttpStatus removeComment(int id, AuthenticatedUser user) {
         List<Comment> comments = commentDao.getComments(user.getUsername());
         boolean isReceiver = comments.stream().anyMatch(comment -> comment.getId() == id);
-        if (user.isModerator() && isReceiver) {
+        if (user.isModerator() || isReceiver) {
             commentDao.deleteComment(id);
             return HttpStatus.OK;
         }
