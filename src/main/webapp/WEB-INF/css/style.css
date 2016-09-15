@@ -44,6 +44,10 @@ body > .angular-view {
     vertical-align: middle;
 }
 
+.badge {
+    background-color: #cc3838;;
+}
+
 /* ############### login  ##################################*/
 .social-sprite.facebook {
     background-position: -1px 0;
