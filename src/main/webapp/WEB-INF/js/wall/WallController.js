@@ -33,7 +33,7 @@ function WallController($rootScope, $scope, $http, $log, $routeParams, GardenSer
                 text: comment.text,
                 id: response.data,
                 submitter: UserService.getState().currentUser.username,
-                receiver: comment.receiver,
+                receiverUserId: comment.receiver,
                 year: comment.year,
                 unread: false,
                 createdate: new Date().toDateString()

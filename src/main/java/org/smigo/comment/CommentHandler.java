@@ -25,8 +25,6 @@ package org.smigo.comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.User;
-import org.smigo.user.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -41,8 +39,6 @@ public class CommentHandler {
     private MessageSource messageSource;
     @Autowired
     private CommentDao commentDao;
-    @Autowired
-    private UserDao userDao;
 
 
     public List<Comment> getComments(String receiver) {
@@ -50,12 +46,7 @@ public class CommentHandler {
     }
 
     public int addComment(Comment comment, AuthenticatedUser user) {
-        List<User> usersByUsername = userDao.getUsersByUsername(comment.getReceiver());
-        if (usersByUsername.size() != 1) {
-            throw new IllegalArgumentException("Can not add comment to non existing user:" + comment.getReceiver());
-        }
-        int id = commentDao.addComment(comment, user.getId(), usersByUsername.get(0).getId());
-        return id;
+        return commentDao.addComment(comment, user.getId());
     }
 
     public HttpStatus removeComment(int id, AuthenticatedUser user) {

@@ -32,6 +32,7 @@ public class Comment {
     private String text;
     private String submitter;
     private String receiver;
+    private int receiverUserId;
     private boolean unread;
     private Date createdate;
 
@@ -101,5 +102,13 @@ public class Comment {
 
     public void setUnread(boolean unread) {
         this.unread = unread;
+    }
+
+    public int getReceiverUserId() {
+        return receiverUserId;
+    }
+
+    public void setReceiverUserId(int receiverUserId) {
+        this.receiverUserId = receiverUserId;
     }
 }

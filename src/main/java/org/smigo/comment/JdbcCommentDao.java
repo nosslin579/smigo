@@ -68,11 +68,11 @@ class JdbcCommentDao implements CommentDao {
     }
 
     @Override
-    public int addComment(Comment comment, int submitter, int receiver) {
+    public int addComment(Comment comment, int submitter) {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("TEXT", comment.getText());
         parameterSource.addValue("SUBMITTER_USER_ID", submitter);
-        parameterSource.addValue("RECEIVER_USER_ID", receiver);
+        parameterSource.addValue("RECEIVER_USER_ID", comment.getReceiverUserId());
         parameterSource.addValue("YEAR", comment.getYear());
         parameterSource.addValue("UNREAD", comment.isUnread());
         return insert.executeAndReturnKey(parameterSource).intValue();

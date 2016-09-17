@@ -23,16 +23,20 @@ package org.smigo.user;
  */
 
 public class UserPublic {
-    private String displayName;
-
-    private String username;
-
-    private String about;
+    private final int id;
+    private final String displayName;
+    private final String username;
+    private final String about;
 
     public UserPublic(User user) {
+        this.id = user.getId();
         this.displayName = user.getDisplayName();
         this.username = user.getUsername();
         this.about = user.getAbout();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getDisplayName() {
