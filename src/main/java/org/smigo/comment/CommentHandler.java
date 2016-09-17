@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -36,17 +35,14 @@ import java.util.List;
 public class CommentHandler {
     private static final Logger log = LoggerFactory.getLogger(CommentHandler.class);
     @Autowired
-    private MessageSource messageSource;
-    @Autowired
     private CommentDao commentDao;
-
 
     public List<Comment> getComments(String receiver) {
         return commentDao.getComments(receiver);
     }
 
-    public int addComment(Comment comment, AuthenticatedUser user) {
-        return commentDao.addComment(comment, user.getId());
+    public int addComment(Comment comment, int user) {
+        return commentDao.addComment(comment, user);
     }
 
     public HttpStatus removeComment(int id, AuthenticatedUser user) {

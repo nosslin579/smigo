@@ -24,17 +24,22 @@ package org.smigo.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smigo.comment.Comment;
+import org.smigo.comment.CommentHandler;
 import org.smigo.message.MessageHandler;
 import org.smigo.plants.Plant;
 import org.smigo.plants.PlantHandler;
 import org.smigo.plants.PlantHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,7 +62,13 @@ public class UserHandler {
     @Autowired
     private MessageHandler messageHandler;
     @Autowired
+    private CommentHandler commentHandler;
+    @Autowired
     private MailHandler mailHandler;
+    @Autowired
+    private MessageSource messageSource;
+    @Value("${welcomeCommentSubmitter}")
+    private int welcomeCommentSubmitter;
 
     public User createUser() {
         for (int tries = 0; tries < 5; tries++) {
@@ -94,6 +105,12 @@ public class UserHandler {
         plantHandler.addPlants(plants, userId);
 
         messageHandler.addWelcomeNewsMessage(newUser, plants.size());
+
+        String text = messageSource.getMessage("msg.commenttonewuser", new Object[]{}, locale);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        final Comment comment = new Comment(text, userId, year);
+        commentHandler.addComment(comment, welcomeCommentSubmitter);
+
         return newUser;
     }
 

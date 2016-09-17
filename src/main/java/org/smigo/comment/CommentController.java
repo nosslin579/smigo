@@ -62,7 +62,7 @@ public class CommentController implements Serializable {
             response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
             return result.getAllErrors();
         }
-        return commentHandler.addComment(comment, user);
+        return commentHandler.addComment(comment, user.getId());
     }
 
     @PreAuthorize("isAuthenticated()")

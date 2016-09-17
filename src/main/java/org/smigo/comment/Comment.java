@@ -33,12 +33,15 @@ public class Comment {
     private String submitter;
     private String receiver;
     private int receiverUserId;
-    private boolean unread;
+    private boolean unread = true;
     private Date createdate;
 
     public Comment() {
     }
 
+    /**
+     * For getting comment
+     */
     public Comment(int id, String text, String username, int year, Date createdate, boolean unread) {
         this.id = id;
         this.text = text;
@@ -46,6 +49,15 @@ public class Comment {
         this.year = year;
         this.createdate = createdate;
         this.unread = unread;
+    }
+
+    /**
+     * For adding comment
+     */
+    public Comment(String text, int receiver, int year) {
+        this.text = text;
+        this.receiverUserId = receiver;
+        this.year = year;
     }
 
     public int getId() {
