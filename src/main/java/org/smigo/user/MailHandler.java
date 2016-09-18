@@ -106,7 +106,7 @@ public class MailHandler {
     }
 
     public void sendReviewRequest(String title, List<?> current, Object edit, AuthenticatedUser user) {
-        User u = userHandler.getUser(user);
+        User u = user == null ? null : userHandler.getUserById(user.getId());
         String indentation = "  ";
         StringBuilder sb = new StringBuilder(title);
         sb.append(System.lineSeparator());

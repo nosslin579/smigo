@@ -25,7 +25,11 @@ package org.smigo.comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.user.AuthenticatedUser;
+import org.smigo.user.MailHandler;
+import org.smigo.user.User;
+import org.smigo.user.UserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -36,13 +40,33 @@ public class CommentHandler {
     private static final Logger log = LoggerFactory.getLogger(CommentHandler.class);
     @Autowired
     private CommentDao commentDao;
+    @Autowired
+    private MailHandler mailHandler;
+    @Autowired
+    private UserHandler userHandler;
+    @Autowired
+    private MessageSource messageSource;
+
 
     public List<Comment> getComments(String receiver) {
         return commentDao.getComments(receiver);
     }
 
-    public int addComment(Comment comment, int user) {
-        return commentDao.addComment(comment, user);
+    public int addComment(Comment comment, int submitterUserId) {
+        int commentId = commentDao.addComment(comment, submitterUserId);
+        if (comment.getReceiverUserId() != submitterUserId) {
+            User receiver = userHandler.getUserById(comment.getReceiverUserId());
+            User submitter = userHandler.getUserById(submitterUserId);
+
+            String subject = messageSource.getMessage("msg.newcomment", new Object[]{}, receiver.getLocale());
+            String newCommentMessage = messageSource.getMessage("msg.newcomment", new Object[]{}, receiver.getLocale());
+            String text = newCommentMessage + "\n" + submitter.getUsername() + ": " + comment.getText() + "\n" + "http://smigo.org/gardener/" + receiver.getUsername();
+            String email = receiver.getEmail();
+            if (email != null) {
+                mailHandler.sendClientMessage(email, subject, text);
+            }
+        }
+        return commentId;
     }
 
     public HttpStatus removeComment(int id, AuthenticatedUser user) {

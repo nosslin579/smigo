@@ -75,7 +75,7 @@ public class UserController {
     @RequestMapping(value = "/rest/user", method = RequestMethod.GET)
     @ResponseBody
     public User getUser(@AuthenticationPrincipal AuthenticatedUser user) {
-        return userHandler.getUser(user);
+        return user == null ? null : userHandler.getUserById(user.getId());
     }
 
 
@@ -117,7 +117,7 @@ public class UserController {
     @RequestMapping(value = "/locales", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public java.util.Map<String, String> getLocales(HttpServletRequest request, Locale locale) {
-        return Language.getLanguagesForDisplay(request.getLocales(),locale);
+        return Language.getLanguagesForDisplay(request.getLocales(), locale);
     }
 
     @RequestMapping(value = {"/rest/translation"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

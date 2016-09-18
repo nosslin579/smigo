@@ -125,11 +125,8 @@ public class UserHandler {
         return user.isEmpty() ? null : new UserPublic(user.get(0));
     }
 
-    public User getUser(AuthenticatedUser user) {
-        if (user == null) {
-            return null;
-        }
-        return userDao.getUserById(user.getId());
+    public User getUserById(int id) {
+        return userDao.getUserById(id);
     }
 
     public AuthenticatedUser getCurrentUser() {
