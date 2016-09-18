@@ -139,7 +139,7 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
 
     @Test(enabled = true)
     public void addAndDeleteComment() throws Exception {
-        String receiver = addUser();
+        String receiver = addUser(true).getUsername();
         String submitter = addUser();
         login(submitter, PASSWORD);
 
@@ -152,6 +152,8 @@ public class SeleniumTest extends AbstractTestNGSpringContextTests {
         List<WebElement> comments = d.findElements(By.className("comment-text"));
         Assert.assertEquals(comments.size(), 1, "One comment expected");
         Assert.assertEquals(comments.get(0).getText(), NON_LATIN_LETTERS, "Comment text mismatch");
+        String mail = FileUtils.readFileToString(DevelopmentConfiguration.MAIL_FILE);
+        Assert.assertTrue(mail.contains(NON_LATIN_LETTERS), "Incorrect mail sent");
 
         d.findElement(ACCOUNT_LINK).click();
         d.findElement(LOGOUT_LINK).click();

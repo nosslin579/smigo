@@ -5,12 +5,14 @@ function MainMenuController($log, $scope, $http, UserService) {
     $scope.unreadComments = 0;
 
     $scope.$on('current-user-changed', function (event, newUser) {
-        var username = newUser && newUser.username;
-        $http.get('/rest/comment', {params: {receiver: username}}).then(function (response) {
-            angular.forEach(response.data, function (comment) {
-                comment.unread && $scope.unreadComments++;
+        if (newUser) {
+            var username = newUser && newUser.username;
+            $http.get('/rest/comment', {params: {receiver: username}}).then(function (response) {
+                angular.forEach(response.data, function (comment) {
+                    comment.unread && $scope.unreadComments++;
+                });
             });
-        });
+        }
     });
 
     $scope.$on('commentsRead', function (event, comments) {
