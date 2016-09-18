@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smigo.plants.Plant;
 import org.smigo.user.AuthenticatedUser;
-import org.smigo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -56,18 +55,6 @@ public class MessageHandler {
         message.setSubmitterUserId(user.getId());
         message.setLocale(locale.toLanguageTag());
         return messageDao.addMessage(message);
-    }
-
-    public void addWelcomeNewsMessage(User user, int plants) {
-        if (plants == 0) {
-            return;
-        }
-        final MessageAdd message = new MessageAdd();
-        final String text = messageSource.getMessage("msg.welcomenewusermessage", new Object[]{user.getUsername()}, user.getLocale());
-        message.setText(text);
-        message.setSubmitterUserId(1);
-        message.setLocale(user.getLocale().toLanguageTag());
-        messageDao.addMessage(message);
     }
 
     public void addNewYearNewsMessage(Optional<AuthenticatedUser> optionalUser, int year, List<Plant> plants, Locale locale) {

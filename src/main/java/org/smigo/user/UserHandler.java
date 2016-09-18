@@ -104,8 +104,6 @@ public class UserHandler {
         List<Plant> plants = plantHolder.getPlants();
         plantHandler.addPlants(plants, userId);
 
-        messageHandler.addWelcomeNewsMessage(newUser, plants.size());
-
         String text = messageSource.getMessage("msg.commenttonewuser", new Object[]{}, locale);
         int year = Calendar.getInstance().get(Calendar.YEAR);
         final Comment comment = new Comment(text, userId, year);
